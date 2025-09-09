@@ -130,9 +130,9 @@ function App() {
               {/* Logo Section */}
               <div className="relative w-20 h-20 flex items-center justify-center">
                 <img 
-                  src="https://customer-assets.emergentagent.com/job_fiquant-taxpro/artifacts/mlyv27wb_Fiquant%20Consult%20Logo%20%28Adj%29%202%20-%20Green.jpeg" 
+                  src="https://customer-assets.emergentagent.com/job_fiquant-taxpro/artifacts/l4o43c21_Fiquant%20Consult%20Logo%20%28Adj%29%203%20-%20Black.jpeg" 
                   alt="Fiquant Consult Logo" 
-                  className="w-20 h-20 object-contain"
+                  className="w-20 h-20 object-contain filter invert"
                 />
               </div>
               
