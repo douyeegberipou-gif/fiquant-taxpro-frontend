@@ -607,7 +607,20 @@ function App() {
             </div>
           </TabsContent>
 
-          {/* Tax Brackets Tab */}
+          {/* CIT Calculator Tab */}
+          <TabsContent value="cit" className="space-y-6">
+            <CITCalculator
+              citInput={citInput}
+              citResult={citResult}
+              citLoading={citLoading}
+              handleCitInputChange={handleCitInputChange}
+              calculateCitTax={calculateCitTax}
+              resetCitForm={resetCitForm}
+              formatCurrency={formatCurrency}
+            />
+          </TabsContent>
+
+          {/* Tax Information Tab */}
           <TabsContent value="brackets">
             {taxBrackets && (
               <div className="space-y-6">
