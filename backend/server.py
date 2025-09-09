@@ -490,6 +490,77 @@ async def get_calculation_history(limit: int = 20):
         result.append(TaxCalculationResult(**calc))
     return result
 
+@api_router.post("/calculate-cit", response_model=CITCalculationResult)
+async def calculate_cit_tax(cit_input: CITInput):
+    """Calculate Nigerian Corporate Income Tax based on 2026 tax laws"""
+    try:
+        result = calculate_nigerian_cit_2026(cit_input)
+        
+        # Save calculation to database
+        calculation_dict = result.dict()
+        # Convert datetime to ISO string for MongoDB
+        calculation_dict['timestamp'] = result.timestamp.isoformat()
+        await db.cit_calculations.insert_one(calculation_dict)
+        
+        return result
+    except Exception as e:
+        logging.error(f"CIT calculation error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"CIT calculation failed: {str(e)}")
+
+@api_router.get("/cit-info")
+async def get_cit_info():
+    """Get Nigerian 2026 CIT information"""
+    return {
+        "tax_year": 2026,
+        "currency": "NGN",
+        "company_classifications": {
+            "small": {
+                "criteria": "Turnover ≤ ₦100M AND Fixed Assets ≤ ₦250M",
+                "cit_rate": "0%",
+                "development_levy": "0%",
+                "exemptions": "Excludes professional service firms"
+            },
+            "medium": {
+                "criteria": "Above small thresholds, Turnover < ₦50B",
+                "cit_rate": "30%",
+                "development_levy": "4%",
+                "minimum_etr": "Not applicable"
+            },
+            "large": {
+                "criteria": "Turnover ≥ ₦50B or MNE with €750M+ global revenue",
+                "cit_rate": "30%",
+                "development_levy": "4%",
+                "minimum_etr": "15% (for qualifying MNEs)"
+            }
+        },
+        "thin_capitalization": {
+            "interest_deduction_limit": "30% of EBITDA",
+            "applies_to": "Related party interest payments",
+            "excess_treatment": "Non-deductible"
+        },
+        "development_levy": {
+            "rate": "4%",
+            "replaces": "Tertiary Education Tax, IT Levy, NASENI Levy",
+            "exemptions": "Small companies and non-residents"
+        },
+        "compliance_deadlines": {
+            "filing": "90 days after year-end",
+            "payment": "60 days after year-end",
+            "installments": "Quarterly advance payments required"
+        }
+    }
+
+@api_router.get("/cit-calculations/history", response_model=List[CITCalculationResult])
+async def get_cit_calculation_history(limit: int = 20):
+    """Get recent CIT calculations"""
+    calculations = await db.cit_calculations.find().sort("timestamp", -1).limit(limit).to_list(length=None)
+    result = []
+    for calc in calculations:
+        # Convert ISO string back to datetime
+        calc['timestamp'] = datetime.fromisoformat(calc['timestamp'])
+        result.append(CITCalculationResult(**calc))
+    return result
+
 
 # Include the router in the main app
 app.include_router(api_router)
