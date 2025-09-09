@@ -167,7 +167,163 @@ class TaxHistory(BaseModel):
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
-# Tax calculation logic
+# CIT calculation logic
+def calculate_nigerian_cit_2026(cit_input: CITInput) -> CITCalculationResult:
+    """Calculate Nigerian Corporate Income Tax based on 2026 tax laws"""
+    
+    # Classify company size
+    is_small = (cit_input.annual_turnover <= 100_000_000 and 
+                cit_input.total_fixed_assets <= 250_000_000 and 
+                not cit_input.is_professional_service)
+    
+    is_large = cit_input.annual_turnover > 50_000_000_000  # ₦50 billion threshold for minimum ETR
+    
+    if is_small:
+        company_size = "Small"
+    elif is_large:
+        company_size = "Large"
+    else:
+        company_size = "Medium"
+    
+    # Calculate total deductible expenses (before thin cap adjustments)
+    total_deductible_before_thin_cap = (
+        cit_input.cost_of_goods_sold +
+        cit_input.staff_costs +
+        cit_input.rent_expenses +
+        cit_input.professional_fees +
+        cit_input.depreciation +
+        cit_input.interest_paid_unrelated +
+        cit_input.interest_paid_related +
+        cit_input.other_deductible_expenses
+    )
+    
+    # Calculate total non-deductible expenses
+    total_non_deductible = (
+        cit_input.entertainment_expenses +
+        cit_input.fines_penalties +
+        cit_input.personal_expenses +
+        cit_input.excessive_interest +
+        cit_input.other_non_deductible
+    )
+    
+    # Apply thin capitalization rules (30% of EBITDA limit for related party interest)
+    total_interest_related = cit_input.interest_paid_related
+    ebitda = cit_input.ebitda
+    
+    # Auto-calculate EBITDA if not provided
+    if ebitda == 0:
+        gross_profit = cit_input.gross_income + cit_input.other_income - cit_input.cost_of_goods_sold
+        ebitda = max(0, gross_profit - cit_input.staff_costs - cit_input.rent_expenses - cit_input.professional_fees)
+    
+    # Thin cap calculation - interest deduction limited to 30% of EBITDA
+    max_deductible_interest = ebitda * 0.30
+    allowed_interest_deduction = min(total_interest_related, max_deductible_interest)
+    disallowed_interest = max(0, total_interest_related - allowed_interest_deduction)
+    thin_cap_applied = disallowed_interest > 0
+    
+    # Adjust total deductible expenses for thin cap
+    total_deductible_expenses = (
+        total_deductible_before_thin_cap - 
+        cit_input.interest_paid_related + 
+        allowed_interest_deduction
+    )
+    
+    # Calculate debt-to-equity ratio
+    debt_to_equity_ratio = 0
+    if cit_input.total_equity > 0:
+        debt_to_equity_ratio = cit_input.total_debt / cit_input.total_equity
+    
+    # Calculate taxable profit
+    total_income = cit_input.gross_income + cit_input.other_income
+    taxable_profit = max(0, total_income - total_deductible_expenses)
+    
+    # Determine CIT rate and calculate tax
+    if is_small:
+        cit_rate = 0.0  # Small companies exempt
+        cit_due = 0
+    else:
+        cit_rate = 0.30  # 30% for medium and large companies
+        cit_due = taxable_profit * cit_rate
+    
+    # Development Levy (4% for non-small companies)
+    development_levy_rate = 0.0 if is_small else 0.04
+    development_levy = taxable_profit * development_levy_rate
+    
+    # Minimum Effective Tax Rate (15% for large multinationals)
+    minimum_etr_rate = 0.0
+    minimum_etr_tax = 0.0
+    if (is_large and cit_input.is_multinational and 
+        cit_input.global_revenue_eur >= 750_000_000):  # €750 million threshold
+        minimum_etr_rate = 0.15
+        minimum_required_tax = taxable_profit * minimum_etr_rate
+        current_tax = cit_due + development_levy
+        if current_tax < minimum_required_tax:
+            minimum_etr_tax = minimum_required_tax - current_tax
+    
+    # Total tax due
+    total_tax_due = cit_due + development_levy + minimum_etr_tax
+    
+    # Calculate effective tax rate
+    effective_tax_rate = 0.0
+    if taxable_profit > 0:
+        effective_tax_rate = total_tax_due / taxable_profit
+    
+    # Generate compliance deadlines (simplified - actual dates depend on company year-end)
+    filing_deadline = "90 days after year-end"
+    payment_deadline = "60 days after year-end"
+    
+    # Expense breakdown
+    expense_breakdown = {
+        "deductible_expenses": {
+            "cost_of_goods_sold": cit_input.cost_of_goods_sold,
+            "staff_costs": cit_input.staff_costs,
+            "rent_expenses": cit_input.rent_expenses,
+            "professional_fees": cit_input.professional_fees,
+            "depreciation": cit_input.depreciation,
+            "interest_unrelated": cit_input.interest_paid_unrelated,
+            "interest_related_allowed": allowed_interest_deduction,
+            "other_deductible": cit_input.other_deductible_expenses
+        },
+        "non_deductible_expenses": {
+            "entertainment": cit_input.entertainment_expenses,
+            "fines_penalties": cit_input.fines_penalties,
+            "personal_expenses": cit_input.personal_expenses,
+            "interest_disallowed": disallowed_interest,
+            "other_non_deductible": cit_input.other_non_deductible
+        }
+    }
+    
+    return CITCalculationResult(
+        id=cit_input.id,
+        company_name=cit_input.company_name,
+        company_size=company_size,
+        qualifies_small_exemption=is_small,
+        annual_turnover=cit_input.annual_turnover,
+        total_fixed_assets=cit_input.total_fixed_assets,
+        gross_income=total_income,
+        total_deductible_expenses=total_deductible_expenses,
+        total_non_deductible_expenses=total_non_deductible + disallowed_interest,
+        debt_to_equity_ratio=debt_to_equity_ratio,
+        allowed_interest_deduction=allowed_interest_deduction,
+        disallowed_interest=disallowed_interest,
+        thin_cap_applied=thin_cap_applied,
+        taxable_profit=taxable_profit,
+        cit_rate=cit_rate,
+        cit_due=cit_due,
+        development_levy_rate=development_levy_rate,
+        development_levy=development_levy,
+        minimum_etr_rate=minimum_etr_rate,
+        minimum_etr_tax=minimum_etr_tax,
+        total_tax_due=total_tax_due,
+        effective_tax_rate=effective_tax_rate,
+        filing_deadline=filing_deadline,
+        payment_deadline=payment_deadline,
+        expense_breakdown=expense_breakdown,
+        timestamp=cit_input.timestamp
+    )
+
+
+# PAYE calculation logic
 def calculate_nigerian_paye_2026(tax_input: TaxInput) -> TaxCalculationResult:
     """Calculate Nigerian PAYE tax based on 2026 tax laws"""
     
