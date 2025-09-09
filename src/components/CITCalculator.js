@@ -657,9 +657,35 @@ const CITCalculator = ({
               </div>
             </div>
 
+            {/* Capital Allowances Breakdown */}
+            {citResult.total_capital_allowances > 0 && (
+              <div className="space-y-3">
+                <h4 className="font-semibold text-gray-900">Capital Allowances Breakdown</h4>
+                <div className="space-y-2 text-sm">
+                  {Object.entries(citResult.capital_allowance_breakdown || {}).map(([asset, details]) => {
+                    if (details.allowance > 0) {
+                      return (
+                        <div key={asset} className="flex justify-between">
+                          <span className="text-gray-600 capitalize">
+                            {asset.replace('_', ' & ')} ({details.rate}):
+                          </span>
+                          <span className="font-medium">{formatCurrency(details.allowance)}</span>
+                        </div>
+                      );
+                    }
+                    return null;
+                  })}
+                  <div className="flex justify-between font-semibold border-t pt-2">
+                    <span>Total Capital Allowances:</span>
+                    <span className="text-indigo-600">{formatCurrency(citResult.total_capital_allowances)}</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Tax Breakdown */}
             <div className="space-y-3">
-              <h4 className="font-semibold text-gray-900">Tax Breakdown</h4>
+              <h4 className="font-semibold text-gray-900">Tax Computation</h4>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-600">CIT ({(citResult.cit_rate * 100).toFixed(0)}%):</span>
@@ -675,12 +701,44 @@ const CITCalculator = ({
                     <span className="font-medium">{formatCurrency(citResult.minimum_etr_tax)}</span>
                   </div>
                 )}
-                <div className="flex justify-between font-semibold text-lg border-t pt-2">
+                <div className="flex justify-between font-semibold border-t pt-2">
                   <span>Total Tax Due:</span>
                   <span className="text-red-600">{formatCurrency(citResult.total_tax_due)}</span>
                 </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Less: WHT Credits:</span>
+                  <span className="font-medium text-green-600">-{formatCurrency(citResult.total_wht_credits || 0)}</span>
+                </div>
+                <div className="flex justify-between font-bold text-lg border-t pt-2 bg-red-50 px-2 py-1 rounded">
+                  <span>Net Tax Payable:</span>
+                  <span className="text-red-700">{formatCurrency(citResult.net_tax_payable || 0)}</span>
+                </div>
               </div>
             </div>
+
+            {/* WHT Credits Breakdown */}
+            {citResult.total_wht_credits > 0 && (
+              <div className="space-y-3">
+                <h4 className="font-semibold text-gray-900">WHT Credits Breakdown</h4>
+                <div className="space-y-2 text-sm">
+                  {Object.entries(citResult.wht_credits_breakdown || {}).map(([source, amount]) => {
+                    if (amount > 0) {
+                      return (
+                        <div key={source} className="flex justify-between">
+                          <span className="text-gray-600 capitalize">WHT on {source}:</span>
+                          <span className="font-medium">{formatCurrency(amount)}</span>
+                        </div>
+                      );
+                    }
+                    return null;
+                  })}
+                  <div className="flex justify-between font-semibold border-t pt-2">
+                    <span>Total WHT Credits:</span>
+                    <span className="text-green-600">{formatCurrency(citResult.total_wht_credits)}</span>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Compliance Deadlines */}
             <div className="space-y-3">
