@@ -697,6 +697,15 @@ function App() {
                 </Card>
               )}
             </div>
+            )}
+
+            {/* Bulk Payroll Calculator */}
+            {payeMode === 'bulk' && (
+              <BulkPayrollCalculator
+                formatCurrency={formatCurrency}
+                calculatePayeTax={calculatePayeTax}
+              />
+            )}
           </TabsContent>
 
           {/* CIT Calculator Tab */}
