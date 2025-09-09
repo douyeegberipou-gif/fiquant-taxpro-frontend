@@ -92,6 +92,24 @@ function App() {
     }
   };
 
+  const fetchCitInfo = async () => {
+    try {
+      const response = await axios.get(`${API}/cit-info`);
+      setCitInfo(response.data);
+    } catch (error) {
+      console.error('Error fetching CIT info:', error);
+    }
+  };
+
+  const fetchCitHistory = async () => {
+    try {
+      const response = await axios.get(`${API}/cit-calculations/history?limit=5`);
+      setCitHistory(response.data);
+    } catch (error) {
+      console.error('Error fetching CIT history:', error);
+    }
+  };
+
   const handleInputChange = (field, value) => {
     setTaxInput(prev => ({
       ...prev,
