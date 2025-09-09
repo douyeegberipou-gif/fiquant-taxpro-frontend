@@ -34,6 +34,39 @@ function App() {
   const [taxBrackets, setTaxBrackets] = useState(null);
   const [history, setHistory] = useState([]);
 
+  // CIT Calculator state
+  const [citInput, setCitInput] = useState({
+    company_name: '',
+    annual_turnover: '',
+    total_fixed_assets: '',
+    gross_income: '',
+    other_income: '',
+    cost_of_goods_sold: '',
+    staff_costs: '',
+    rent_expenses: '',
+    professional_fees: '',
+    depreciation: '',
+    interest_paid_unrelated: '',
+    interest_paid_related: '',
+    other_deductible_expenses: '',
+    entertainment_expenses: '',
+    fines_penalties: '',
+    personal_expenses: '',
+    excessive_interest: '',
+    other_non_deductible: '',
+    total_debt: '',
+    total_equity: '',
+    ebitda: '',
+    is_professional_service: false,
+    is_multinational: false,
+    global_revenue_eur: ''
+  });
+
+  const [citResult, setCitResult] = useState(null);
+  const [citLoading, setCitLoading] = useState(false);
+  const [citInfo, setCitInfo] = useState(null);
+  const [citHistory, setCitHistory] = useState([]);
+
   useEffect(() => {
     fetchTaxBrackets();
     fetchHistory();
