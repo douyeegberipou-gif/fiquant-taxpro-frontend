@@ -162,6 +162,69 @@ function App() {
     setResult(null);
   };
 
+  // CIT calculator functions
+  const handleCitInputChange = (field, value) => {
+    setCitInput(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const calculateCitTax = async () => {
+    setCitLoading(true);
+    try {
+      const numericInput = {};
+      Object.keys(citInput).forEach(key => {
+        if (key === 'company_name') {
+          numericInput[key] = citInput[key];
+        } else if (key === 'is_professional_service' || key === 'is_multinational') {
+          numericInput[key] = citInput[key];
+        } else {
+          numericInput[key] = parseFloat(citInput[key]) || 0;
+        }
+      });
+
+      const response = await axios.post(`${API}/calculate-cit`, numericInput);
+      setCitResult(response.data);
+      fetchCitHistory(); // Refresh history
+    } catch (error) {
+      console.error('Error calculating CIT:', error);
+      alert('Error calculating CIT. Please check your input values.');
+    } finally {
+      setCitLoading(false);
+    }
+  };
+
+  const resetCitForm = () => {
+    setCitInput({
+      company_name: '',
+      annual_turnover: '',
+      total_fixed_assets: '',
+      gross_income: '',
+      other_income: '',
+      cost_of_goods_sold: '',
+      staff_costs: '',
+      rent_expenses: '',
+      professional_fees: '',
+      depreciation: '',
+      interest_paid_unrelated: '',
+      interest_paid_related: '',
+      other_deductible_expenses: '',
+      entertainment_expenses: '',
+      fines_penalties: '',
+      personal_expenses: '',
+      excessive_interest: '',
+      other_non_deductible: '',
+      total_debt: '',
+      total_equity: '',
+      ebitda: '',
+      is_professional_service: false,
+      is_multinational: false,
+      global_revenue_eur: ''
+    });
+    setCitResult(null);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50">
       {/* Header */}
