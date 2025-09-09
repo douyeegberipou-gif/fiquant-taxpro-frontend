@@ -10,6 +10,7 @@ import { Badge } from './components/ui/badge';
 import { Separator } from './components/ui/separator';
 import { Alert, AlertDescription } from './components/ui/alert';
 import CITCalculator from './components/CITCalculator';
+import BulkPayrollCalculator from './components/BulkPayrollCalculator';
 import './App.css';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
