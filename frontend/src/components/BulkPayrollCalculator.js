@@ -311,6 +311,51 @@ const BulkPayrollCalculator = ({ formatCurrency, calculatePayeTax }) => {
                     <td className="px-4 py-3 whitespace-nowrap">
                       <Input
                         type="number"
+                        placeholder="Auto (8%)"
+                        value={employee.pension_contribution}
+                        onChange={(e) => updateEmployee(employee.id, 'pension_contribution', e.target.value)}
+                        className="w-full"
+                      />
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <Input
+                        type="number"
+                        placeholder="Auto (2.5%)"
+                        value={employee.nhf_contribution}
+                        onChange={(e) => updateEmployee(employee.id, 'nhf_contribution', e.target.value)}
+                        className="w-full"
+                      />
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <Input
+                        type="number"
+                        placeholder="10,000"
+                        value={employee.life_insurance_premium}
+                        onChange={(e) => updateEmployee(employee.id, 'life_insurance_premium', e.target.value)}
+                        className="w-full"
+                      />
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <Input
+                        type="number"
+                        placeholder="15,000"
+                        value={employee.health_insurance_premium}
+                        onChange={(e) => updateEmployee(employee.id, 'health_insurance_premium', e.target.value)}
+                        className="w-full"
+                      />
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <Input
+                        type="number"
+                        placeholder="5,000"
+                        value={employee.nhis_contribution}
+                        onChange={(e) => updateEmployee(employee.id, 'nhis_contribution', e.target.value)}
+                        className="w-full"
+                      />
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <Input
+                        type="number"
                         placeholder="1,200,000"
                         value={employee.annual_rent}
                         onChange={(e) => updateEmployee(employee.id, 'annual_rent', e.target.value)}
