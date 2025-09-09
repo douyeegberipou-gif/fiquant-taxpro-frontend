@@ -360,7 +360,52 @@ function App() {
 
           {/* PAYE Calculator Tab */}
           <TabsContent value="calculator" className="space-y-6">
-            <div className="grid lg:grid-cols-2 gap-8">
+            {/* PAYE Mode Selection */}
+            <Card className="bg-white border-emerald-100 shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Users className="h-5 w-5 text-emerald-600" />
+                  <span>PAYE Tax Calculator</span>
+                </CardTitle>
+                <CardDescription>
+                  Choose between individual or bulk payroll tax calculation
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="flex space-x-4">
+                  <Button
+                    onClick={() => setPayeMode('single')}
+                    variant={payeMode === 'single' ? 'default' : 'outline'}
+                    className={`flex-1 h-20 flex flex-col items-center justify-center space-y-2 ${
+                      payeMode === 'single' ? 'bg-emerald-600 hover:bg-emerald-700' : ''
+                    }`}
+                  >
+                    <Users className="h-6 w-6" />
+                    <div className="text-center">
+                      <p className="font-medium">Single Employee</p>
+                      <p className="text-xs opacity-75">Calculate tax for one person</p>
+                    </div>
+                  </Button>
+                  <Button
+                    onClick={() => setPayeMode('bulk')}
+                    variant={payeMode === 'bulk' ? 'default' : 'outline'}
+                    className={`flex-1 h-20 flex flex-col items-center justify-center space-y-2 ${
+                      payeMode === 'bulk' ? 'bg-blue-600 hover:bg-blue-700' : ''
+                    }`}
+                  >
+                    <Building2 className="h-6 w-6" />
+                    <div className="text-center">
+                      <p className="font-medium">Bulk Payroll</p>
+                      <p className="text-xs opacity-75">Calculate for multiple employees</p>
+                    </div>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Single Employee Calculator */}
+            {payeMode === 'single' && (
+              <div className="grid lg:grid-cols-2 gap-8">
               {/* Input Form */}
               <Card className="bg-white border-emerald-100 shadow-lg">
                 <CardHeader className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-t-lg">
