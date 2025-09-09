@@ -228,6 +228,14 @@ const BulkPayrollCalculator = ({ formatCurrency, calculatePayeTax }) => {
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
+          <div className="p-6 pb-0">
+            <Alert className="bg-blue-50 border-blue-200 mb-4">
+              <AlertDescription className="text-blue-800 text-sm">
+                <strong>Relief Fields:</strong> Leave pension and NHF empty for auto-calculation (8% and 2.5% of basic salary respectively). 
+                Other reliefs are optional but help reduce taxable income.
+              </AlertDescription>
+            </Alert>
+          </div>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
