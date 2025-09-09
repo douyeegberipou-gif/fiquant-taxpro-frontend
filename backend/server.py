@@ -43,6 +43,89 @@ class TaxInput(BaseModel):
     annual_rent: float = Field(default=0, description="Annual rent paid")
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+# Corporate Income Tax Models
+class CITInput(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    company_name: str = Field(description="Company name")
+    annual_turnover: float = Field(gt=0, description="Annual gross turnover")
+    total_fixed_assets: float = Field(default=0, description="Total fixed assets value")
+    
+    # Revenue and Income
+    gross_income: float = Field(gt=0, description="Total gross income/revenue")
+    other_income: float = Field(default=0, description="Other income (dividends, rental, etc.)")
+    
+    # Deductible Expenses
+    cost_of_goods_sold: float = Field(default=0, description="Cost of goods sold")
+    staff_costs: float = Field(default=0, description="Staff salaries and benefits")
+    rent_expenses: float = Field(default=0, description="Rent and utilities")
+    professional_fees: float = Field(default=0, description="Professional and legal fees")
+    depreciation: float = Field(default=0, description="Depreciation allowances")
+    interest_paid_unrelated: float = Field(default=0, description="Interest to unrelated parties")
+    interest_paid_related: float = Field(default=0, description="Interest to related parties")
+    other_deductible_expenses: float = Field(default=0, description="Other allowable deductions")
+    
+    # Non-deductible Expenses
+    entertainment_expenses: float = Field(default=0, description="Entertainment and gifts")
+    fines_penalties: float = Field(default=0, description="Fines and penalties")
+    personal_expenses: float = Field(default=0, description="Personal/non-business expenses")
+    excessive_interest: float = Field(default=0, description="Interest above thin cap limits")
+    other_non_deductible: float = Field(default=0, description="Other non-deductible expenses")
+    
+    # Financial info for thin cap calculation
+    total_debt: float = Field(default=0, description="Total debt outstanding")
+    total_equity: float = Field(default=0, description="Total equity")
+    ebitda: float = Field(default=0, description="EBITDA (auto-calculated if 0)")
+    
+    # Company type indicators
+    is_professional_service: bool = Field(default=False, description="Professional service firm")
+    is_multinational: bool = Field(default=False, description="Part of multinational group")
+    global_revenue_eur: float = Field(default=0, description="Global group revenue in EUR")
+    
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class CITCalculationResult(BaseModel):
+    id: str
+    company_name: str
+    
+    # Company classification
+    company_size: str  # "Small", "Medium", "Large"
+    qualifies_small_exemption: bool
+    
+    # Financial summary
+    annual_turnover: float
+    total_fixed_assets: float
+    gross_income: float
+    total_deductible_expenses: float
+    total_non_deductible_expenses: float
+    
+    # Thin capitalization
+    debt_to_equity_ratio: float
+    allowed_interest_deduction: float
+    disallowed_interest: float
+    thin_cap_applied: bool
+    
+    # Tax calculations
+    taxable_profit: float
+    cit_rate: float
+    cit_due: float
+    development_levy_rate: float
+    development_levy: float
+    minimum_etr_rate: float
+    minimum_etr_tax: float
+    total_tax_due: float
+    
+    # Effective rates
+    effective_tax_rate: float
+    
+    # Compliance info
+    filing_deadline: str
+    payment_deadline: str
+    
+    # Expense breakdown
+    expense_breakdown: dict
+    
+    timestamp: datetime
+
 class TaxCalculationResult(BaseModel):
     id: str
     # Input values (annualized)
