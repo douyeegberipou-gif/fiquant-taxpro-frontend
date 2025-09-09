@@ -145,6 +145,12 @@ const BulkPayrollCalculator = ({ formatCurrency, calculatePayeTax }) => {
         emp.housing_allowance,
         emp.meal_allowance,
         emp.other_allowances,
+        emp.pension_contribution,
+        emp.nhf_contribution,
+        emp.life_insurance_premium,
+        emp.health_insurance_premium,
+        emp.nhis_contribution,
+        emp.annual_rent,
         emp.result.monthly_gross_income,
         emp.result.monthly_tax,
         emp.result.monthly_net_income
