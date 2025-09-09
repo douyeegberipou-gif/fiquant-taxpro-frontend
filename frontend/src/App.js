@@ -115,13 +115,17 @@ function App() {
       <div className="bg-white border-b border-emerald-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
-            <div className="flex items-center space-x-3">
-              <div className="bg-emerald-600 p-2 rounded-xl">
-                <Calculator className="h-8 w-8 text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">Fiquant TaxPro</h1>
-                <p className="text-sm text-emerald-600">Nigerian Tax Calculator 2026</p>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-3">
+                <img 
+                  src="https://customer-assets.emergentagent.com/job_fiquant-taxpro/artifacts/mlyv27wb_Fiquant%20Consult%20Logo%20%28Adj%29%202%20-%20Green.jpeg" 
+                  alt="Fiquant Consult Logo" 
+                  className="h-12 w-auto object-contain"
+                />
+                <div>
+                  <h1 className="text-2xl font-bold text-gray-900">Fiquant TaxPro</h1>
+                  <p className="text-sm text-emerald-600">Nigerian Tax Calculator 2026</p>
+                </div>
               </div>
             </div>
             <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200">
