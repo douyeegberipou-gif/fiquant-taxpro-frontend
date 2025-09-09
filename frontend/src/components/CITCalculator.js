@@ -573,24 +573,44 @@ const CITCalculator = ({
                   {formatCurrency(citResult.taxable_profit)}
                 </p>
               </div>
+              <div className="bg-indigo-50 p-4 rounded-lg border border-indigo-200">
+                <p className="text-sm text-indigo-600 font-medium">Capital Allowances</p>
+                <p className="text-xl font-bold text-indigo-800">
+                  {formatCurrency(citResult.total_capital_allowances || 0)}
+                </p>
+              </div>
               <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                <p className="text-sm text-blue-600 font-medium">CIT Due</p>
+                <p className="text-sm text-blue-600 font-medium">Total Tax Due</p>
                 <p className="text-xl font-bold text-blue-800">
-                  {formatCurrency(citResult.cit_due)}
-                </p>
-              </div>
-              <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                <p className="text-sm text-purple-600 font-medium">Development Levy</p>
-                <p className="text-xl font-bold text-purple-800">
-                  {formatCurrency(citResult.development_levy)}
-                </p>
-              </div>
-              <div className="bg-red-50 p-4 rounded-lg border border-red-200">
-                <p className="text-sm text-red-600 font-medium">Total Tax Due</p>
-                <p className="text-xl font-bold text-red-800">
                   {formatCurrency(citResult.total_tax_due)}
                 </p>
               </div>
+              <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
+                <p className="text-sm text-orange-600 font-medium">WHT Credits</p>
+                <p className="text-xl font-bold text-orange-800">
+                  {formatCurrency(citResult.total_wht_credits || 0)}
+                </p>
+              </div>
+            </div>
+
+            {/* Net Tax Payable - Prominent Display */}
+            <div className="bg-gradient-to-r from-red-100 to-pink-100 p-6 rounded-lg border-2 border-red-200">
+              <div className="flex justify-between items-center">
+                <div>
+                  <p className="text-lg text-red-700 font-semibold">Net Tax Payable</p>
+                  <p className="text-sm text-red-600">Total Tax Due - WHT Credits</p>
+                </div>
+                <p className="text-3xl font-bold text-red-800">
+                  {formatCurrency(citResult.net_tax_payable || 0)}
+                </p>
+              </div>
+              {citResult.total_wht_credits > citResult.total_tax_due && (
+                <div className="mt-2 p-2 bg-green-100 rounded border border-green-300">
+                  <p className="text-sm text-green-700 font-medium">
+                    ✅ Excess WHT Credits: {formatCurrency(citResult.total_wht_credits - citResult.total_tax_due)} (Refundable)
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Effective Tax Rate */}
