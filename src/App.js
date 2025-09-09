@@ -1105,6 +1105,53 @@ function App() {
                   </div>
                 </CardContent>
               </Card>
+
+              {/* WHT Compliance */}
+              <Card className="bg-white border-orange-100 shadow-lg">
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <CreditCard className="h-5 w-5 text-orange-600" />
+                    <span>WHT Compliance</span>
+                  </CardTitle>
+                  <CardDescription>
+                    Withholding tax obligations and requirements
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-3">
+                    <div className="p-4 bg-orange-50 rounded-lg border border-orange-200">
+                      <h4 className="font-medium text-orange-800 mb-2">Deduction Requirements</h4>
+                      <p className="text-sm text-orange-700">Deduct at payment or when liability arises</p>
+                      <p className="text-xs text-orange-600">Applies to all qualifying transactions above threshold</p>
+                    </div>
+                    <div className="p-4 bg-red-50 rounded-lg border border-red-200">
+                      <h4 className="font-medium text-red-800 mb-2">FIRS Remittance</h4>
+                      <p className="text-sm text-red-700">Due: 21st of following month</p>
+                      <p className="text-xs text-red-600">Federal transactions and non-resident payments</p>
+                    </div>
+                    <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                      <h4 className="font-medium text-yellow-800 mb-2">SIRS Remittance</h4>
+                      <p className="text-sm text-yellow-700">Due: 30th of following month</p>
+                      <p className="text-xs text-yellow-600">State transactions and resident entities</p>
+                    </div>
+                    <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
+                      <h4 className="font-medium text-purple-800 mb-2">WHT Certificate</h4>
+                      <p className="text-sm text-purple-700">Issue within 30 days of deduction</p>
+                      <p className="text-xs text-purple-600">Required for beneficiary tax credit claims</p>
+                    </div>
+                    <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                      <h4 className="font-medium text-blue-800 mb-2">Tax Clearance Certificate</h4>
+                      <p className="text-sm text-blue-700">WHT compliance required for TCC</p>
+                      <p className="text-xs text-blue-600">Essential for business operations and contracts</p>
+                    </div>
+                    <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                      <h4 className="font-medium text-gray-800 mb-2">Record Keeping</h4>
+                      <p className="text-sm text-gray-700">Maintain detailed transaction records</p>
+                      <p className="text-xs text-gray-600">Minimum 6 years retention period</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </TabsContent>
         </Tabs>
