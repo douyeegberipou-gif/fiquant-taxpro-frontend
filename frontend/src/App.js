@@ -182,6 +182,17 @@ function App() {
     setResult(null);
   };
 
+  // Function for bulk payroll calculator to use existing PAYE calculation
+  const calculatePayeTax = async (taxInput) => {
+    try {
+      const response = await axios.post(`${API}/calculate-paye`, taxInput);
+      return response.data;
+    } catch (error) {
+      console.error('Error calculating PAYE tax:', error);
+      throw error;
+    }
+  };
+
   // CIT calculator functions
   const handleCitInputChange = (field, value) => {
     setCitInput(prev => ({
