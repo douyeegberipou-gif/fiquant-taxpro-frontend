@@ -732,48 +732,167 @@ function App() {
 
           {/* History Tab */}
           <TabsContent value="history">
-            <Card className="bg-white border-emerald-100 shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <FileText className="h-5 w-5 text-emerald-600" />
-                  <span>Recent Calculations</span>
-                </CardTitle>
-                <CardDescription>
-                  Your recent tax calculations
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {history.length > 0 ? (
-                  <div className="space-y-4">
-                    {history.map((calc, index) => (
-                      <div key={calc.id} className="p-4 border border-gray-200 rounded-lg">
-                        <div className="flex justify-between items-start">
-                          <div className="space-y-1">
-                            <p className="font-medium">
-                              Monthly Gross: {formatCurrency(calc.monthly_gross_income)}
-                            </p>
-                            <p className="text-sm text-gray-600">
-                              Tax: {formatCurrency(calc.monthly_tax)} | 
-                              Net: {formatCurrency(calc.monthly_net_income)}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {new Date(calc.timestamp).toLocaleString()}
-                            </p>
+            <div className="grid lg:grid-cols-2 gap-6">
+              {/* PAYE History */}
+              <Card className="bg-white border-emerald-100 shadow-lg">
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Users className="h-5 w-5 text-emerald-600" />
+                    <span>PAYE Calculations</span>
+                  </CardTitle>
+                  <CardDescription>
+                    Recent personal tax calculations
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {history.length > 0 ? (
+                    <div className="space-y-4">
+                      {history.map((calc, index) => (
+                        <div key={calc.id} className="p-4 border border-gray-200 rounded-lg">
+                          <div className="flex justify-between items-start">
+                            <div className="space-y-1">
+                              <p className="font-medium">
+                                Monthly Gross: {formatCurrency(calc.monthly_gross_income)}
+                              </p>
+                              <p className="text-sm text-gray-600">
+                                Tax: {formatCurrency(calc.monthly_tax)} | 
+                                Net: {formatCurrency(calc.monthly_net_income)}
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                {new Date(calc.timestamp).toLocaleString()}
+                              </p>
+                            </div>
+                            <Badge variant="outline">
+                              PAYE
+                            </Badge>
                           </div>
-                          <Badge variant="outline">
-                            Saved
-                          </Badge>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-gray-500 text-center py-8">
+                      No PAYE calculations yet.
+                    </p>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* CIT History */}
+              <Card className="bg-white border-blue-100 shadow-lg">
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Building2 className="h-5 w-5 text-blue-600" />
+                    <span>CIT Calculations</span>
+                  </CardTitle>
+                  <CardDescription>
+                    Recent corporate tax calculations
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {citHistory.length > 0 ? (
+                    <div className="space-y-4">
+                      {citHistory.map((calc, index) => (
+                        <div key={calc.id} className="p-4 border border-gray-200 rounded-lg">
+                          <div className="flex justify-between items-start">
+                            <div className="space-y-1">
+                              <p className="font-medium">{calc.company_name}</p>
+                              <p className="text-sm text-gray-600">
+                                Profit: {formatCurrency(calc.taxable_profit)} | 
+                                Tax: {formatCurrency(calc.total_tax_due)}
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                {new Date(calc.timestamp).toLocaleString()}
+                              </p>
+                            </div>
+                            <Badge variant="outline">
+                              {calc.company_size}
+                            </Badge>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-gray-500 text-center py-8">
+                      No CIT calculations yet.
+                    </p>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Compliance Tab */}
+          <TabsContent value="compliance">
+            <div className="grid lg:grid-cols-2 gap-6">
+              {/* PAYE Compliance */}
+              <Card className="bg-white border-emerald-100 shadow-lg">
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Users className="h-5 w-5 text-emerald-600" />
+                    <span>PAYE Compliance</span>
+                  </CardTitle>
+                  <CardDescription>
+                    Personal income tax requirements
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-3">
+                    <div className="p-4 bg-emerald-50 rounded-lg border border-emerald-200">
+                      <h4 className="font-medium text-emerald-800 mb-2">Annual Tax Return</h4>
+                      <p className="text-sm text-emerald-700">Due: March 31st following tax year</p>
+                      <p className="text-xs text-emerald-600">File with FIRS or State Board of Internal Revenue</p>
+                    </div>
+                    <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                      <h4 className="font-medium text-yellow-800 mb-2">Monthly PAYE Remittance</h4>
+                      <p className="text-sm text-yellow-700">Due: 10th of following month</p>
+                      <p className="text-xs text-yellow-600">Employers must remit withheld tax</p>
+                    </div>
+                    <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                      <h4 className="font-medium text-blue-800 mb-2">Tax Identification Number</h4>
+                      <p className="text-sm text-blue-700">Required for all taxpayers</p>
+                      <p className="text-xs text-blue-600">Obtain from FIRS or State tax office</p>
+                    </div>
                   </div>
-                ) : (
-                  <p className="text-gray-500 text-center py-8">
-                    No calculations yet. Start by calculating your tax!
-                  </p>
-                )}
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+
+              {/* CIT Compliance */}
+              <Card className="bg-white border-blue-100 shadow-lg">
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Building2 className="h-5 w-5 text-blue-600" />
+                    <span>CIT Compliance</span>
+                  </CardTitle>
+                  <CardDescription>
+                    Corporate income tax requirements
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-3">
+                    <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                      <h4 className="font-medium text-blue-800 mb-2">Annual CIT Return</h4>
+                      <p className="text-sm text-blue-700">Due: 90 days after year-end</p>
+                      <p className="text-xs text-blue-600">File with FIRS</p>
+                    </div>
+                    <div className="p-4 bg-red-50 rounded-lg border border-red-200">
+                      <h4 className="font-medium text-red-800 mb-2">Tax Payment</h4>
+                      <p className="text-sm text-red-700">Due: 60 days after year-end</p>
+                      <p className="text-xs text-red-600">Quarterly advance payments required</p>
+                    </div>
+                    <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
+                      <h4 className="font-medium text-purple-800 mb-2">Development Levy</h4>
+                      <p className="text-sm text-purple-700">4% on assessable profits</p>
+                      <p className="text-xs text-purple-600">Replaces Education Tax, IT Levy, NASENI</p>
+                    </div>
+                    <div className="p-4 bg-orange-50 rounded-lg border border-orange-200">
+                      <h4 className="font-medium text-orange-800 mb-2">Thin Capitalization</h4>
+                      <p className="text-sm text-orange-700">Interest limited to 30% of EBITDA</p>
+                      <p className="text-xs text-orange-600">Related party debt restrictions</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
         </Tabs>
       </div>
