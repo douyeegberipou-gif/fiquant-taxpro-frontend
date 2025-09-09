@@ -1036,7 +1036,7 @@ function App() {
 
           {/* Compliance Tab */}
           <TabsContent value="compliance">
-            <div className="grid lg:grid-cols-2 gap-6">
+            <div className="grid lg:grid-cols-3 gap-6">
               {/* PAYE Compliance */}
               <Card className="bg-white border-emerald-100 shadow-lg">
                 <CardHeader>
