@@ -279,11 +279,11 @@ function App() {
               {/* Logo Section */}
               <div className="relative w-20 h-20 flex items-center justify-center">
                 <img 
-                  src="https://customer-assets.emergentagent.com/job_fiquant-taxpro/artifacts/nv8p6mt3_Fiquant%20Consult%20Logo%20%28Adj%29%203%20-%20Black.jpeg" 
+                  src="https://customer-assets.emergentagent.com/job_fiquant-taxpro/artifacts/mlyv27wb_Fiquant%20Consult%20Logo%20%28Adj%29%202%20-%20Green.jpeg" 
                   alt="Fiquant Consult Logo" 
                   className="w-20 h-20 object-contain"
                   style={{
-                    filter: 'invert(1) sepia(1) saturate(3) hue-rotate(30deg) brightness(1.2)'
+                    filter: 'hue-rotate(25deg) saturate(1.5) brightness(1.3)'
                   }}
                 />
               </div>
