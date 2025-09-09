@@ -130,7 +130,9 @@ const BulkPayrollCalculator = ({ formatCurrency, calculatePayeTax }) => {
     
     const headers = [
       'Employee Name', 'TIN', 'Basic Salary', 'Transport Allowance', 'Housing Allowance',
-      'Meal Allowance', 'Other Allowances', 'Monthly Gross', 'Monthly Tax', 'Monthly Net'
+      'Meal Allowance', 'Other Allowances', 'Pension Contribution', 'NHF Contribution',
+      'Life Insurance', 'Health Insurance', 'NHIS', 'Annual Rent', 
+      'Monthly Gross', 'Monthly Tax', 'Monthly Net'
     ];
 
     const csvContent = [
