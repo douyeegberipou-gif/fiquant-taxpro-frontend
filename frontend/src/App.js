@@ -70,6 +70,8 @@ function App() {
   useEffect(() => {
     fetchTaxBrackets();
     fetchHistory();
+    fetchCitInfo();
+    fetchCitHistory();
   }, []);
 
   const fetchTaxBrackets = async () => {
