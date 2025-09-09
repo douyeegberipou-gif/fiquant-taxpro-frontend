@@ -348,6 +348,27 @@ def calculate_nigerian_cit_2026(cit_input: CITInput) -> CITCalculationResult:
     # Total tax due
     total_tax_due = cit_due + development_levy + minimum_etr_tax
     
+    # Calculate Withholding Tax Credits
+    total_wht_credits = (
+        cit_input.wht_on_contracts +
+        cit_input.wht_on_dividends +
+        cit_input.wht_on_rent +
+        cit_input.wht_on_interest +
+        cit_input.other_wht_credits
+    )
+    
+    # WHT Credits Breakdown
+    wht_credits_breakdown = {
+        "contracts": cit_input.wht_on_contracts,
+        "dividends": cit_input.wht_on_dividends,
+        "rent": cit_input.wht_on_rent,
+        "interest": cit_input.wht_on_interest,
+        "other": cit_input.other_wht_credits
+    }
+    
+    # Calculate Net Tax Payable (Total Tax Due - WHT Credits)
+    net_tax_payable = max(0, total_tax_due - total_wht_credits)
+    
     # Calculate effective tax rate
     effective_tax_rate = 0.0
     if taxable_profit > 0:
