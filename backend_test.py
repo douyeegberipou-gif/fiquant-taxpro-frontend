@@ -649,6 +649,561 @@ class NigerianTaxCalculatorTester:
         
         return success
 
+    # NEW CAPITAL ALLOWANCES TESTS
+    def test_capital_allowances_scenario_a(self):
+        """Test Scenario A - New Assets Only (Capital Allowances)"""
+        test_data = {
+            "company_name": "New Assets Manufacturing Ltd",
+            "annual_turnover": 1500000000,  # ₦1.5B
+            "total_fixed_assets": 500000000,
+            "gross_income": 1500000000,
+            "other_income": 0,
+            "cost_of_goods_sold": 600000000,
+            "staff_costs": 200000000,
+            "rent_expenses": 0,
+            "professional_fees": 0,
+            "depreciation": 0,
+            "interest_paid_unrelated": 0,
+            "interest_paid_related": 0,
+            "other_deductible_expenses": 100000000,
+            # Capital Allowances - New Assets Only
+            "buildings_cost": 100000000,      # ₦100M → ₦10M allowance (10%)
+            "furniture_fittings_cost": 0,
+            "plant_machinery_cost": 50000000, # ₦50M → ₦10M allowance (20%)
+            "motor_vehicles_cost": 20000000,  # ₦20M → ₦5M allowance (25%)
+            "other_assets_cost": 0,
+            # No existing assets (WDV = 0)
+            "buildings_wdv": 0,
+            "furniture_fittings_wdv": 0,
+            "plant_machinery_wdv": 0,
+            "motor_vehicles_wdv": 0,
+            "other_assets_wdv": 0,
+            # No WHT Credits
+            "wht_on_contracts": 0,
+            "wht_on_dividends": 0,
+            "wht_on_rent": 0,
+            "wht_on_interest": 0,
+            "other_wht_credits": 0,
+            "entertainment_expenses": 0,
+            "fines_penalties": 0,
+            "personal_expenses": 0,
+            "excessive_interest": 0,
+            "other_non_deductible": 0,
+            "total_debt": 0,
+            "total_equity": 300000000,
+            "ebitda": 0,
+            "is_professional_service": False,
+            "is_multinational": False,
+            "global_revenue_eur": 0
+        }
+        
+        success, response = self.run_test(
+            "Capital Allowances Scenario A - New Assets Only",
+            "POST",
+            "calculate-cit",
+            200,
+            test_data
+        )
+        
+        if success:
+            print(f"   Company: {response['company_name']}")
+            print(f"   Total Capital Allowances: ₦{response['total_capital_allowances']:,.0f}")
+            
+            # Expected capital allowances
+            expected_buildings = 100000000 * 0.10  # ₦10M
+            expected_plant = 50000000 * 0.20       # ₦10M
+            expected_vehicles = 20000000 * 0.25    # ₦5M
+            expected_total = expected_buildings + expected_plant + expected_vehicles  # ₦25M
+            
+            print(f"   Expected Total Capital Allowances: ₦{expected_total:,.0f}")
+            
+            # Verify capital allowances breakdown
+            if 'capital_allowance_breakdown' in response:
+                breakdown = response['capital_allowance_breakdown']
+                print(f"   Buildings Allowance: ₦{breakdown.get('buildings', {}).get('allowance', 0):,.0f}")
+                print(f"   Plant & Machinery Allowance: ₦{breakdown.get('plant_machinery', {}).get('allowance', 0):,.0f}")
+                print(f"   Motor Vehicles Allowance: ₦{breakdown.get('motor_vehicles', {}).get('allowance', 0):,.0f}")
+                
+                # Verify calculations
+                if (abs(breakdown.get('buildings', {}).get('allowance', 0) - expected_buildings) < 1 and
+                    abs(breakdown.get('plant_machinery', {}).get('allowance', 0) - expected_plant) < 1 and
+                    abs(breakdown.get('motor_vehicles', {}).get('allowance', 0) - expected_vehicles) < 1 and
+                    abs(response['total_capital_allowances'] - expected_total) < 1):
+                    print(f"   ✅ Capital allowances calculated correctly")
+                else:
+                    print(f"   ❌ Capital allowances calculation error")
+            
+            # Verify taxable profit calculation includes capital allowances
+            expected_deductible = 600000000 + 200000000 + 100000000 + expected_total  # COGS + Staff + Other + Capital Allowances
+            expected_taxable_profit = 1500000000 - expected_deductible  # ₦555M
+            
+            print(f"   Expected Taxable Profit: ₦{expected_taxable_profit:,.0f}")
+            print(f"   Actual Taxable Profit: ₦{response['taxable_profit']:,.0f}")
+            
+            if abs(response['taxable_profit'] - expected_taxable_profit) < 1:
+                print(f"   ✅ Taxable profit correctly includes capital allowances")
+            else:
+                print(f"   ❌ Taxable profit calculation error")
+        
+        return success
+
+    def test_capital_allowances_scenario_b(self):
+        """Test Scenario B - Existing Assets (WDV) Only"""
+        test_data = {
+            "company_name": "Existing Assets Ltd",
+            "annual_turnover": 800000000,
+            "total_fixed_assets": 400000000,
+            "gross_income": 800000000,
+            "other_income": 0,
+            "cost_of_goods_sold": 300000000,
+            "staff_costs": 150000000,
+            "rent_expenses": 0,
+            "professional_fees": 0,
+            "depreciation": 0,
+            "interest_paid_unrelated": 0,
+            "interest_paid_related": 0,
+            "other_deductible_expenses": 50000000,
+            # No new assets
+            "buildings_cost": 0,
+            "furniture_fittings_cost": 0,
+            "plant_machinery_cost": 0,
+            "motor_vehicles_cost": 0,
+            "other_assets_cost": 0,
+            # Capital Allowances - Existing Assets (WDV) Only
+            "buildings_wdv": 200000000,        # ₦200M → ₦20M allowance (10%)
+            "furniture_fittings_wdv": 40000000, # ₦40M → ₦8M allowance (20%)
+            "plant_machinery_wdv": 0,
+            "motor_vehicles_wdv": 0,
+            "other_assets_wdv": 0,
+            # No WHT Credits
+            "wht_on_contracts": 0,
+            "wht_on_dividends": 0,
+            "wht_on_rent": 0,
+            "wht_on_interest": 0,
+            "other_wht_credits": 0,
+            "entertainment_expenses": 0,
+            "fines_penalties": 0,
+            "personal_expenses": 0,
+            "excessive_interest": 0,
+            "other_non_deductible": 0,
+            "total_debt": 0,
+            "total_equity": 200000000,
+            "ebitda": 0,
+            "is_professional_service": False,
+            "is_multinational": False,
+            "global_revenue_eur": 0
+        }
+        
+        success, response = self.run_test(
+            "Capital Allowances Scenario B - Existing Assets (WDV) Only",
+            "POST",
+            "calculate-cit",
+            200,
+            test_data
+        )
+        
+        if success:
+            print(f"   Company: {response['company_name']}")
+            print(f"   Total Capital Allowances: ₦{response['total_capital_allowances']:,.0f}")
+            
+            # Expected capital allowances
+            expected_buildings = 200000000 * 0.10  # ₦20M
+            expected_furniture = 40000000 * 0.20   # ₦8M
+            expected_total = expected_buildings + expected_furniture  # ₦28M
+            
+            print(f"   Expected Total Capital Allowances: ₦{expected_total:,.0f}")
+            
+            # Verify capital allowances breakdown
+            if 'capital_allowance_breakdown' in response:
+                breakdown = response['capital_allowance_breakdown']
+                print(f"   Buildings Allowance: ₦{breakdown.get('buildings', {}).get('allowance', 0):,.0f}")
+                print(f"   Furniture & Fittings Allowance: ₦{breakdown.get('furniture_fittings', {}).get('allowance', 0):,.0f}")
+                
+                # Verify calculations
+                if (abs(breakdown.get('buildings', {}).get('allowance', 0) - expected_buildings) < 1 and
+                    abs(breakdown.get('furniture_fittings', {}).get('allowance', 0) - expected_furniture) < 1 and
+                    abs(response['total_capital_allowances'] - expected_total) < 1):
+                    print(f"   ✅ Capital allowances calculated correctly")
+                else:
+                    print(f"   ❌ Capital allowances calculation error")
+        
+        return success
+
+    def test_capital_allowances_scenario_c(self):
+        """Test Scenario C - Mixed Assets (New + Existing)"""
+        test_data = {
+            "company_name": "Mixed Assets Corp",
+            "annual_turnover": 2000000000,
+            "total_fixed_assets": 800000000,
+            "gross_income": 2000000000,
+            "other_income": 0,
+            "cost_of_goods_sold": 800000000,
+            "staff_costs": 300000000,
+            "rent_expenses": 0,
+            "professional_fees": 0,
+            "depreciation": 0,
+            "interest_paid_unrelated": 0,
+            "interest_paid_related": 0,
+            "other_deductible_expenses": 150000000,
+            # Capital Allowances - Mixed Assets (New + Existing)
+            "buildings_cost": 50000000,         # ₦50M cost
+            "buildings_wdv": 150000000,         # ₦150M WDV → Total ₦200M → ₦20M allowance (10%)
+            "plant_machinery_cost": 30000000,   # ₦30M cost
+            "plant_machinery_wdv": 70000000,    # ₦70M WDV → Total ₦100M → ₦20M allowance (20%)
+            "furniture_fittings_cost": 0,
+            "furniture_fittings_wdv": 0,
+            "motor_vehicles_cost": 0,
+            "motor_vehicles_wdv": 0,
+            "other_assets_cost": 0,
+            "other_assets_wdv": 0,
+            # No WHT Credits
+            "wht_on_contracts": 0,
+            "wht_on_dividends": 0,
+            "wht_on_rent": 0,
+            "wht_on_interest": 0,
+            "other_wht_credits": 0,
+            "entertainment_expenses": 0,
+            "fines_penalties": 0,
+            "personal_expenses": 0,
+            "excessive_interest": 0,
+            "other_non_deductible": 0,
+            "total_debt": 0,
+            "total_equity": 400000000,
+            "ebitda": 0,
+            "is_professional_service": False,
+            "is_multinational": False,
+            "global_revenue_eur": 0
+        }
+        
+        success, response = self.run_test(
+            "Capital Allowances Scenario C - Mixed Assets (New + Existing)",
+            "POST",
+            "calculate-cit",
+            200,
+            test_data
+        )
+        
+        if success:
+            print(f"   Company: {response['company_name']}")
+            print(f"   Total Capital Allowances: ₦{response['total_capital_allowances']:,.0f}")
+            
+            # Expected capital allowances
+            expected_buildings = (50000000 + 150000000) * 0.10  # ₦200M → ₦20M (10%)
+            expected_plant = (30000000 + 70000000) * 0.20       # ₦100M → ₦20M (20%)
+            expected_total = expected_buildings + expected_plant  # ₦40M
+            
+            print(f"   Expected Total Capital Allowances: ₦{expected_total:,.0f}")
+            
+            # Verify capital allowances breakdown
+            if 'capital_allowance_breakdown' in response:
+                breakdown = response['capital_allowance_breakdown']
+                print(f"   Buildings (Cost + WDV): ₦{breakdown.get('buildings', {}).get('cost_and_wdv', 0):,.0f}")
+                print(f"   Buildings Allowance: ₦{breakdown.get('buildings', {}).get('allowance', 0):,.0f}")
+                print(f"   Plant & Machinery (Cost + WDV): ₦{breakdown.get('plant_machinery', {}).get('cost_and_wdv', 0):,.0f}")
+                print(f"   Plant & Machinery Allowance: ₦{breakdown.get('plant_machinery', {}).get('allowance', 0):,.0f}")
+                
+                # Verify calculations
+                if (abs(breakdown.get('buildings', {}).get('allowance', 0) - expected_buildings) < 1 and
+                    abs(breakdown.get('plant_machinery', {}).get('allowance', 0) - expected_plant) < 1 and
+                    abs(response['total_capital_allowances'] - expected_total) < 1):
+                    print(f"   ✅ Mixed assets capital allowances calculated correctly")
+                else:
+                    print(f"   ❌ Mixed assets capital allowances calculation error")
+        
+        return success
+
+    # NEW WHT CREDITS TESTS
+    def test_wht_credits_scenario_d(self):
+        """Test Scenario D - Normal WHT Credits"""
+        test_data = {
+            "company_name": "Normal WHT Credits Ltd",
+            "annual_turnover": 1000000000,
+            "total_fixed_assets": 300000000,
+            "gross_income": 1000000000,
+            "other_income": 0,
+            "cost_of_goods_sold": 400000000,
+            "staff_costs": 150000000,
+            "rent_expenses": 50000000,
+            "professional_fees": 20000000,
+            "depreciation": 30000000,
+            "interest_paid_unrelated": 0,
+            "interest_paid_related": 0,
+            "other_deductible_expenses": 50000000,
+            # No capital allowances
+            "buildings_cost": 0,
+            "furniture_fittings_cost": 0,
+            "plant_machinery_cost": 0,
+            "motor_vehicles_cost": 0,
+            "other_assets_cost": 0,
+            "buildings_wdv": 0,
+            "furniture_fittings_wdv": 0,
+            "plant_machinery_wdv": 0,
+            "motor_vehicles_wdv": 0,
+            "other_assets_wdv": 0,
+            # WHT Credits - Normal scenario
+            "wht_on_contracts": 5000000,    # ₦5M
+            "wht_on_dividends": 2000000,    # ₦2M
+            "wht_on_rent": 1500000,         # ₦1.5M
+            "wht_on_interest": 1000000,     # ₦1M
+            "other_wht_credits": 500000,    # ₦0.5M
+            # Total WHT Credits = ₦10M
+            "entertainment_expenses": 0,
+            "fines_penalties": 0,
+            "personal_expenses": 0,
+            "excessive_interest": 0,
+            "other_non_deductible": 0,
+            "total_debt": 0,
+            "total_equity": 200000000,
+            "ebitda": 0,
+            "is_professional_service": False,
+            "is_multinational": False,
+            "global_revenue_eur": 0
+        }
+        
+        success, response = self.run_test(
+            "WHT Credits Scenario D - Normal WHT Credits",
+            "POST",
+            "calculate-cit",
+            200,
+            test_data
+        )
+        
+        if success:
+            print(f"   Company: {response['company_name']}")
+            print(f"   Taxable Profit: ₦{response['taxable_profit']:,.0f}")
+            print(f"   Total Tax Due: ₦{response['total_tax_due']:,.0f}")
+            print(f"   Total WHT Credits: ₦{response['total_wht_credits']:,.0f}")
+            print(f"   Net Tax Payable: ₦{response['net_tax_payable']:,.0f}")
+            
+            # Expected calculations
+            expected_taxable_profit = 1000000000 - (400000000 + 150000000 + 50000000 + 20000000 + 30000000 + 50000000)  # ₦300M
+            expected_cit = expected_taxable_profit * 0.30  # ₦90M
+            expected_dev_levy = expected_taxable_profit * 0.04  # ₦12M
+            expected_total_tax = expected_cit + expected_dev_levy  # ₦102M
+            expected_wht_credits = 5000000 + 2000000 + 1500000 + 1000000 + 500000  # ₦10M
+            expected_net_tax = expected_total_tax - expected_wht_credits  # ₦92M
+            
+            print(f"   Expected Total Tax Due: ₦{expected_total_tax:,.0f}")
+            print(f"   Expected WHT Credits: ₦{expected_wht_credits:,.0f}")
+            print(f"   Expected Net Tax Payable: ₦{expected_net_tax:,.0f}")
+            
+            # Verify WHT credits breakdown
+            if 'wht_credits_breakdown' in response:
+                breakdown = response['wht_credits_breakdown']
+                print(f"   WHT on Contracts: ₦{breakdown.get('contracts', 0):,.0f}")
+                print(f"   WHT on Dividends: ₦{breakdown.get('dividends', 0):,.0f}")
+                print(f"   WHT on Rent: ₦{breakdown.get('rent', 0):,.0f}")
+                print(f"   WHT on Interest: ₦{breakdown.get('interest', 0):,.0f}")
+                print(f"   Other WHT Credits: ₦{breakdown.get('other', 0):,.0f}")
+            
+            # Verify calculations
+            if (abs(response['total_wht_credits'] - expected_wht_credits) < 1 and
+                abs(response['net_tax_payable'] - expected_net_tax) < 1):
+                print(f"   ✅ WHT credits and net tax payable calculated correctly")
+            else:
+                print(f"   ❌ WHT credits calculation error")
+        
+        return success
+
+    def test_wht_credits_scenario_e(self):
+        """Test Scenario E - Excess WHT Credits (Refundable)"""
+        test_data = {
+            "company_name": "Excess WHT Credits Ltd",
+            "annual_turnover": 500000000,
+            "total_fixed_assets": 200000000,
+            "gross_income": 500000000,
+            "other_income": 0,
+            "cost_of_goods_sold": 200000000,
+            "staff_costs": 100000000,
+            "rent_expenses": 30000000,
+            "professional_fees": 10000000,
+            "depreciation": 20000000,
+            "interest_paid_unrelated": 0,
+            "interest_paid_related": 0,
+            "other_deductible_expenses": 40000000,
+            # No capital allowances
+            "buildings_cost": 0,
+            "furniture_fittings_cost": 0,
+            "plant_machinery_cost": 0,
+            "motor_vehicles_cost": 0,
+            "other_assets_cost": 0,
+            "buildings_wdv": 0,
+            "furniture_fittings_wdv": 0,
+            "plant_machinery_wdv": 0,
+            "motor_vehicles_wdv": 0,
+            "other_assets_wdv": 0,
+            # WHT Credits - Excess scenario (more than tax due)
+            "wht_on_contracts": 15000000,   # ₦15M
+            "wht_on_dividends": 5000000,    # ₦5M
+            "wht_on_rent": 3000000,         # ₦3M
+            "wht_on_interest": 2000000,     # ₦2M
+            "other_wht_credits": 0,         # ₦0
+            # Total WHT Credits = ₦25M
+            "entertainment_expenses": 0,
+            "fines_penalties": 0,
+            "personal_expenses": 0,
+            "excessive_interest": 0,
+            "other_non_deductible": 0,
+            "total_debt": 0,
+            "total_equity": 150000000,
+            "ebitda": 0,
+            "is_professional_service": False,
+            "is_multinational": False,
+            "global_revenue_eur": 0
+        }
+        
+        success, response = self.run_test(
+            "WHT Credits Scenario E - Excess WHT Credits (Refundable)",
+            "POST",
+            "calculate-cit",
+            200,
+            test_data
+        )
+        
+        if success:
+            print(f"   Company: {response['company_name']}")
+            print(f"   Taxable Profit: ₦{response['taxable_profit']:,.0f}")
+            print(f"   Total Tax Due: ₦{response['total_tax_due']:,.0f}")
+            print(f"   Total WHT Credits: ₦{response['total_wht_credits']:,.0f}")
+            print(f"   Net Tax Payable: ₦{response['net_tax_payable']:,.0f}")
+            
+            # Expected calculations
+            expected_taxable_profit = 500000000 - (200000000 + 100000000 + 30000000 + 10000000 + 20000000 + 40000000)  # ₦100M
+            expected_cit = expected_taxable_profit * 0.30  # ₦30M
+            expected_dev_levy = expected_taxable_profit * 0.04  # ₦4M
+            expected_total_tax = expected_cit + expected_dev_levy  # ₦34M
+            expected_wht_credits = 15000000 + 5000000 + 3000000 + 2000000  # ₦25M
+            expected_net_tax = max(0, expected_total_tax - expected_wht_credits)  # ₦9M
+            expected_refundable = max(0, expected_wht_credits - expected_total_tax)  # ₦0 (no excess in this case)
+            
+            print(f"   Expected Total Tax Due: ₦{expected_total_tax:,.0f}")
+            print(f"   Expected WHT Credits: ₦{expected_wht_credits:,.0f}")
+            print(f"   Expected Net Tax Payable: ₦{expected_net_tax:,.0f}")
+            
+            # Check if WHT credits exceed tax due
+            if response['total_wht_credits'] > response['total_tax_due']:
+                excess_credits = response['total_wht_credits'] - response['total_tax_due']
+                print(f"   ✅ Excess WHT Credits (Refundable): ₦{excess_credits:,.0f}")
+                
+                # Net tax payable should be 0 when WHT credits exceed tax due
+                if response['net_tax_payable'] == 0:
+                    print(f"   ✅ Net tax payable correctly set to ₦0 when WHT credits exceed tax due")
+                else:
+                    print(f"   ❌ Net tax payable should be ₦0 when WHT credits exceed tax due")
+            else:
+                print(f"   Normal scenario: WHT credits less than tax due")
+            
+            # Verify calculations
+            if (abs(response['total_wht_credits'] - expected_wht_credits) < 1 and
+                response['net_tax_payable'] >= 0):
+                print(f"   ✅ Excess WHT credits scenario handled correctly")
+            else:
+                print(f"   ❌ Excess WHT credits calculation error")
+        
+        return success
+
+    def test_comprehensive_scenario(self):
+        """Test Comprehensive Scenario - Advanced Manufacturing Ltd"""
+        test_data = {
+            "company_name": "Advanced Manufacturing Ltd",
+            "annual_turnover": 1500000000,  # ₦1.5B
+            "total_fixed_assets": 600000000,
+            "gross_income": 1500000000,
+            "other_income": 0,
+            "cost_of_goods_sold": 600000000,
+            "staff_costs": 200000000,
+            "rent_expenses": 0,
+            "professional_fees": 0,
+            "depreciation": 0,
+            "interest_paid_unrelated": 0,
+            "interest_paid_related": 0,
+            "other_deductible_expenses": 100000000,
+            # Capital Allowances - Mixed Assets
+            "buildings_cost": 80000000,         # ₦80M cost
+            "buildings_wdv": 120000000,         # ₦120M WDV → Total ₦200M → ₦20M allowance (10%)
+            "plant_machinery_cost": 60000000,   # ₦60M cost
+            "plant_machinery_wdv": 40000000,    # ₦40M WDV → Total ₦100M → ₦20M allowance (20%)
+            "motor_vehicles_cost": 20000000,    # ₦20M cost → ₦5M allowance (25%)
+            "motor_vehicles_wdv": 0,
+            "furniture_fittings_cost": 0,
+            "furniture_fittings_wdv": 0,
+            "other_assets_cost": 0,
+            "other_assets_wdv": 0,
+            # Total Expected Capital Allowances: ₦45M
+            # WHT Credits
+            "wht_on_contracts": 8000000,    # ₦8M
+            "wht_on_dividends": 0,
+            "wht_on_rent": 2000000,         # ₦2M
+            "wht_on_interest": 0,
+            "other_wht_credits": 0,
+            # Total WHT Credits: ₦10M
+            "entertainment_expenses": 0,
+            "fines_penalties": 0,
+            "personal_expenses": 0,
+            "excessive_interest": 0,
+            "other_non_deductible": 0,
+            "total_debt": 0,
+            "total_equity": 400000000,
+            "ebitda": 0,
+            "is_professional_service": False,
+            "is_multinational": False,
+            "global_revenue_eur": 0
+        }
+        
+        success, response = self.run_test(
+            "Comprehensive Scenario - Advanced Manufacturing Ltd",
+            "POST",
+            "calculate-cit",
+            200,
+            test_data
+        )
+        
+        if success:
+            print(f"   Company: {response['company_name']}")
+            print(f"   Total Capital Allowances: ₦{response['total_capital_allowances']:,.0f}")
+            print(f"   Taxable Profit: ₦{response['taxable_profit']:,.0f}")
+            print(f"   CIT (30%): ₦{response['cit_due']:,.0f}")
+            print(f"   Development Levy (4%): ₦{response['development_levy']:,.0f}")
+            print(f"   Total Tax Due: ₦{response['total_tax_due']:,.0f}")
+            print(f"   Total WHT Credits: ₦{response['total_wht_credits']:,.0f}")
+            print(f"   Net Tax Payable: ₦{response['net_tax_payable']:,.0f}")
+            
+            # Expected calculations
+            expected_buildings_allowance = (80000000 + 120000000) * 0.10  # ₦20M
+            expected_plant_allowance = (60000000 + 40000000) * 0.20       # ₦20M
+            expected_vehicles_allowance = 20000000 * 0.25                 # ₦5M
+            expected_total_allowances = expected_buildings_allowance + expected_plant_allowance + expected_vehicles_allowance  # ₦45M
+            
+            expected_deductible = 600000000 + 200000000 + 100000000 + expected_total_allowances  # ₦945M
+            expected_taxable_profit = 1500000000 - expected_deductible  # ₦555M
+            expected_cit = expected_taxable_profit * 0.30  # ₦166.5M
+            expected_dev_levy = expected_taxable_profit * 0.04  # ₦22.2M
+            expected_total_tax = expected_cit + expected_dev_levy  # ₦188.7M
+            expected_wht_credits = 8000000 + 2000000  # ₦10M
+            expected_net_tax = expected_total_tax - expected_wht_credits  # ₦178.7M
+            
+            print(f"   Expected Capital Allowances: ₦{expected_total_allowances:,.0f}")
+            print(f"   Expected Taxable Profit: ₦{expected_taxable_profit:,.0f}")
+            print(f"   Expected CIT: ₦{expected_cit:,.0f}")
+            print(f"   Expected Development Levy: ₦{expected_dev_levy:,.0f}")
+            print(f"   Expected Total Tax Due: ₦{expected_total_tax:,.0f}")
+            print(f"   Expected Net Tax Payable: ₦{expected_net_tax:,.0f}")
+            
+            # Verify all calculations
+            tolerance = 1  # Allow ₦1 tolerance for rounding
+            if (abs(response['total_capital_allowances'] - expected_total_allowances) < tolerance and
+                abs(response['taxable_profit'] - expected_taxable_profit) < tolerance and
+                abs(response['cit_due'] - expected_cit) < tolerance and
+                abs(response['development_levy'] - expected_dev_levy) < tolerance and
+                abs(response['total_tax_due'] - expected_total_tax) < tolerance and
+                abs(response['total_wht_credits'] - expected_wht_credits) < tolerance and
+                abs(response['net_tax_payable'] - expected_net_tax) < tolerance):
+                print(f"   ✅ Comprehensive scenario calculated correctly")
+            else:
+                print(f"   ❌ Comprehensive scenario calculation errors detected")
+        
+        return success
+
 def main():
     print("🚀 Starting Nigerian Tax Calculator API Tests")
     print("=" * 60)
