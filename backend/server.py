@@ -76,6 +76,27 @@ class CITInput(BaseModel):
     total_equity: float = Field(default=0, description="Total equity")
     ebitda: float = Field(default=0, description="EBITDA (auto-calculated if 0)")
     
+    # Capital Allowances (2026 - Annual allowances only, initial allowances abolished)
+    buildings_cost: float = Field(default=0, description="Cost of buildings (industrial & non-industrial)")
+    furniture_fittings_cost: float = Field(default=0, description="Cost of furniture and fittings")
+    plant_machinery_cost: float = Field(default=0, description="Cost of plant and machinery")
+    motor_vehicles_cost: float = Field(default=0, description="Cost of motor vehicles")
+    other_assets_cost: float = Field(default=0, description="Cost of other qualifying assets")
+    
+    # Existing written down values (for continuing assets)
+    buildings_wdv: float = Field(default=0, description="Written down value of buildings")
+    furniture_fittings_wdv: float = Field(default=0, description="Written down value of furniture & fittings")
+    plant_machinery_wdv: float = Field(default=0, description="Written down value of plant & machinery")
+    motor_vehicles_wdv: float = Field(default=0, description="Written down value of motor vehicles")
+    other_assets_wdv: float = Field(default=0, description="Written down value of other assets")
+    
+    # Withholding Tax Credits
+    wht_on_contracts: float = Field(default=0, description="WHT deducted on contract payments")
+    wht_on_dividends: float = Field(default=0, description="WHT deducted on dividend income")
+    wht_on_rent: float = Field(default=0, description="WHT deducted on rent payments")
+    wht_on_interest: float = Field(default=0, description="WHT deducted on interest income")
+    other_wht_credits: float = Field(default=0, description="Other WHT credits available")
+    
     # Company type indicators
     is_professional_service: bool = Field(default=False, description="Professional service firm")
     is_multinational: bool = Field(default=False, description="Part of multinational group")
