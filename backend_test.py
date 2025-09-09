@@ -286,6 +286,369 @@ class NigerianTaxCalculatorTester:
         
         return success
 
+    # CIT Testing Methods
+    def test_cit_info_endpoint(self):
+        """Test CIT information endpoint"""
+        success, response = self.run_test(
+            "CIT Information Endpoint",
+            "GET",
+            "cit-info",
+            200
+        )
+        if success:
+            print(f"   Tax Year: {response.get('tax_year')}")
+            print(f"   Currency: {response.get('currency')}")
+            
+            # Verify company classifications
+            classifications = response.get('company_classifications', {})
+            expected_classifications = ['small', 'medium', 'large']
+            for classification in expected_classifications:
+                if classification in classifications:
+                    info = classifications[classification]
+                    print(f"   ✅ {classification.title()} company: CIT {info.get('cit_rate')}, Dev Levy {info.get('development_levy')}")
+                else:
+                    print(f"   ❌ Missing {classification} company classification")
+            
+            # Verify thin capitalization info
+            thin_cap = response.get('thin_capitalization', {})
+            if thin_cap.get('interest_deduction_limit') == '30% of EBITDA':
+                print(f"   ✅ Thin cap limit: {thin_cap.get('interest_deduction_limit')}")
+            else:
+                print(f"   ❌ Incorrect thin cap limit: {thin_cap.get('interest_deduction_limit')}")
+        
+        return success
+
+    def test_small_company_exempt(self):
+        """Test Scenario 1 - Small Company (Exempt)"""
+        test_data = {
+            "company_name": "Small Tech Ltd",
+            "annual_turnover": 80000000,  # ₦80M
+            "total_fixed_assets": 200000000,  # ₦200M
+            "gross_income": 80000000,
+            "other_income": 0,
+            "cost_of_goods_sold": 30000000,
+            "staff_costs": 20000000,
+            "rent_expenses": 5000000,
+            "professional_fees": 2000000,
+            "depreciation": 3000000,
+            "interest_paid_unrelated": 0,
+            "interest_paid_related": 0,
+            "other_deductible_expenses": 5000000,
+            "entertainment_expenses": 0,
+            "fines_penalties": 0,
+            "personal_expenses": 0,
+            "excessive_interest": 0,
+            "other_non_deductible": 0,
+            "total_debt": 0,
+            "total_equity": 100000000,
+            "ebitda": 0,  # Auto-calculate
+            "is_professional_service": False,
+            "is_multinational": False,
+            "global_revenue_eur": 0
+        }
+        
+        success, response = self.run_test(
+            "Small Company CIT Calculation (Tax Exempt)",
+            "POST",
+            "calculate-cit",
+            200,
+            test_data
+        )
+        
+        if success:
+            print(f"   Company: {response['company_name']}")
+            print(f"   Classification: {response['company_size']}")
+            print(f"   Qualifies for exemption: {response['qualifies_small_exemption']}")
+            print(f"   Annual Turnover: ₦{response['annual_turnover']:,.0f}")
+            print(f"   Fixed Assets: ₦{response['total_fixed_assets']:,.0f}")
+            print(f"   Taxable Profit: ₦{response['taxable_profit']:,.0f}")
+            print(f"   CIT Due: ₦{response['cit_due']:,.0f}")
+            print(f"   Development Levy: ₦{response['development_levy']:,.0f}")
+            print(f"   Total Tax Due: ₦{response['total_tax_due']:,.0f}")
+            
+            # Verify small company exemption
+            if (response['company_size'] == 'Small' and 
+                response['qualifies_small_exemption'] and 
+                response['cit_due'] == 0 and 
+                response['development_levy'] == 0):
+                print(f"   ✅ Small company correctly exempt from CIT and Development Levy")
+            else:
+                print(f"   ❌ Small company exemption not working correctly")
+        
+        return success
+
+    def test_medium_company_calculation(self):
+        """Test Scenario 2 - Medium Company"""
+        test_data = {
+            "company_name": "Medium Manufacturing Ltd",
+            "annual_turnover": 500000000,  # ₦500M
+            "total_fixed_assets": 300000000,  # ₦300M
+            "gross_income": 500000000,
+            "other_income": 0,
+            "cost_of_goods_sold": 200000000,
+            "staff_costs": 100000000,
+            "rent_expenses": 20000000,
+            "professional_fees": 10000000,
+            "depreciation": 15000000,
+            "interest_paid_unrelated": 5000000,
+            "interest_paid_related": 0,
+            "other_deductible_expenses": 10000000,
+            "entertainment_expenses": 2000000,
+            "fines_penalties": 500000,
+            "personal_expenses": 1000000,
+            "excessive_interest": 0,
+            "other_non_deductible": 500000,
+            "total_debt": 100000000,
+            "total_equity": 200000000,
+            "ebitda": 0,  # Auto-calculate
+            "is_professional_service": False,
+            "is_multinational": False,
+            "global_revenue_eur": 0
+        }
+        
+        success, response = self.run_test(
+            "Medium Company CIT Calculation",
+            "POST",
+            "calculate-cit",
+            200,
+            test_data
+        )
+        
+        if success:
+            print(f"   Company: {response['company_name']}")
+            print(f"   Classification: {response['company_size']}")
+            print(f"   Annual Turnover: ₦{response['annual_turnover']:,.0f}")
+            print(f"   Taxable Profit: ₦{response['taxable_profit']:,.0f}")
+            print(f"   CIT Rate: {response['cit_rate'] * 100:.0f}%")
+            print(f"   CIT Due: ₦{response['cit_due']:,.0f}")
+            print(f"   Development Levy Rate: {response['development_levy_rate'] * 100:.0f}%")
+            print(f"   Development Levy: ₦{response['development_levy']:,.0f}")
+            print(f"   Total Tax Due: ₦{response['total_tax_due']:,.0f}")
+            print(f"   Effective Tax Rate: {response['effective_tax_rate'] * 100:.2f}%")
+            
+            # Verify medium company taxation
+            if (response['company_size'] == 'Medium' and 
+                not response['qualifies_small_exemption'] and 
+                response['cit_rate'] == 0.30 and 
+                response['development_levy_rate'] == 0.04):
+                print(f"   ✅ Medium company correctly taxed at 30% CIT + 4% Development Levy")
+            else:
+                print(f"   ❌ Medium company taxation incorrect")
+                
+            # Calculate expected values
+            expected_taxable_profit = 500000000 - (200000000 + 100000000 + 20000000 + 10000000 + 15000000 + 5000000 + 10000000)
+            expected_cit = expected_taxable_profit * 0.30
+            expected_dev_levy = expected_taxable_profit * 0.04
+            
+            print(f"   Expected taxable profit: ₦{expected_taxable_profit:,.0f}")
+            print(f"   Expected CIT: ₦{expected_cit:,.0f}")
+            print(f"   Expected Dev Levy: ₦{expected_dev_levy:,.0f}")
+        
+        return success
+
+    def test_large_company_thin_cap(self):
+        """Test Scenario 3 - Large Company with Thin Capitalization"""
+        test_data = {
+            "company_name": "Large Corp Ltd",
+            "annual_turnover": 60000000000,  # ₦60B
+            "total_fixed_assets": 5000000000,  # ₦5B
+            "gross_income": 60000000000,
+            "other_income": 0,
+            "cost_of_goods_sold": 30000000000,
+            "staff_costs": 10000000000,
+            "rent_expenses": 2000000000,
+            "professional_fees": 500000000,
+            "depreciation": 1000000000,
+            "interest_paid_unrelated": 10000000,
+            "interest_paid_related": 50000000,  # ₦50M related party interest
+            "other_deductible_expenses": 1000000000,
+            "entertainment_expenses": 100000000,
+            "fines_penalties": 50000000,
+            "personal_expenses": 25000000,
+            "excessive_interest": 0,
+            "other_non_deductible": 25000000,
+            "total_debt": 20000000000,
+            "total_equity": 15000000000,
+            "ebitda": 100000000,  # ₦100M EBITDA
+            "is_professional_service": False,
+            "is_multinational": False,
+            "global_revenue_eur": 0
+        }
+        
+        success, response = self.run_test(
+            "Large Company CIT with Thin Capitalization",
+            "POST",
+            "calculate-cit",
+            200,
+            test_data
+        )
+        
+        if success:
+            print(f"   Company: {response['company_name']}")
+            print(f"   Classification: {response['company_size']}")
+            print(f"   Annual Turnover: ₦{response['annual_turnover']:,.0f}")
+            print(f"   EBITDA: ₦{test_data['ebitda']:,.0f}")
+            print(f"   Related Party Interest: ₦{test_data['interest_paid_related']:,.0f}")
+            print(f"   Allowed Interest Deduction: ₦{response['allowed_interest_deduction']:,.0f}")
+            print(f"   Disallowed Interest: ₦{response['disallowed_interest']:,.0f}")
+            print(f"   Thin Cap Applied: {response['thin_cap_applied']}")
+            print(f"   Debt-to-Equity Ratio: {response['debt_to_equity_ratio']:.2f}")
+            print(f"   Taxable Profit: ₦{response['taxable_profit']:,.0f}")
+            print(f"   Total Tax Due: ₦{response['total_tax_due']:,.0f}")
+            
+            # Verify thin capitalization rules
+            max_deductible_interest = test_data['ebitda'] * 0.30  # 30% of EBITDA = ₦30M
+            expected_disallowed = test_data['interest_paid_related'] - max_deductible_interest  # ₦50M - ₦30M = ₦20M
+            
+            if (response['company_size'] == 'Large' and 
+                response['thin_cap_applied'] and 
+                abs(response['allowed_interest_deduction'] - max_deductible_interest) < 1 and
+                abs(response['disallowed_interest'] - expected_disallowed) < 1):
+                print(f"   ✅ Thin capitalization rules correctly applied")
+                print(f"   ✅ Interest limited to 30% of EBITDA (₦{max_deductible_interest:,.0f})")
+                print(f"   ✅ Excess interest (₦{expected_disallowed:,.0f}) correctly disallowed")
+            else:
+                print(f"   ❌ Thin capitalization rules not working correctly")
+                print(f"   Expected allowed: ₦{max_deductible_interest:,.0f}, Got: ₦{response['allowed_interest_deduction']:,.0f}")
+                print(f"   Expected disallowed: ₦{expected_disallowed:,.0f}, Got: ₦{response['disallowed_interest']:,.0f}")
+        
+        return success
+
+    def test_large_multinational_minimum_etr(self):
+        """Test Large Multinational with Minimum ETR"""
+        test_data = {
+            "company_name": "Global MNE Ltd",
+            "annual_turnover": 100000000000,  # ₦100B
+            "total_fixed_assets": 10000000000,  # ₦10B
+            "gross_income": 100000000000,
+            "other_income": 0,
+            "cost_of_goods_sold": 60000000000,
+            "staff_costs": 15000000000,
+            "rent_expenses": 3000000000,
+            "professional_fees": 1000000000,
+            "depreciation": 2000000000,
+            "interest_paid_unrelated": 500000000,
+            "interest_paid_related": 0,
+            "other_deductible_expenses": 2000000000,
+            "entertainment_expenses": 200000000,
+            "fines_penalties": 100000000,
+            "personal_expenses": 50000000,
+            "excessive_interest": 0,
+            "other_non_deductible": 50000000,
+            "total_debt": 30000000000,
+            "total_equity": 25000000000,
+            "ebitda": 0,  # Auto-calculate
+            "is_professional_service": False,
+            "is_multinational": True,
+            "global_revenue_eur": 1000000000  # €1B (above €750M threshold)
+        }
+        
+        success, response = self.run_test(
+            "Large Multinational with Minimum ETR",
+            "POST",
+            "calculate-cit",
+            200,
+            test_data
+        )
+        
+        if success:
+            print(f"   Company: {response['company_name']}")
+            print(f"   Classification: {response['company_size']}")
+            print(f"   Is Multinational: {test_data['is_multinational']}")
+            print(f"   Global Revenue: €{test_data['global_revenue_eur']:,.0f}")
+            print(f"   Taxable Profit: ₦{response['taxable_profit']:,.0f}")
+            print(f"   CIT Due: ₦{response['cit_due']:,.0f}")
+            print(f"   Development Levy: ₦{response['development_levy']:,.0f}")
+            print(f"   Minimum ETR Rate: {response['minimum_etr_rate'] * 100:.0f}%")
+            print(f"   Minimum ETR Tax: ₦{response['minimum_etr_tax']:,.0f}")
+            print(f"   Total Tax Due: ₦{response['total_tax_due']:,.0f}")
+            print(f"   Effective Tax Rate: {response['effective_tax_rate'] * 100:.2f}%")
+            
+            # Verify minimum ETR application
+            if (response['company_size'] == 'Large' and 
+                response['minimum_etr_rate'] == 0.15 and
+                response['effective_tax_rate'] >= 0.15):
+                print(f"   ✅ Minimum ETR (15%) correctly applied to large multinational")
+            else:
+                print(f"   ❌ Minimum ETR not working correctly")
+        
+        return success
+
+    def test_professional_service_firm(self):
+        """Test Professional Service Firm (should not qualify for small company exemption)"""
+        test_data = {
+            "company_name": "Professional Services Ltd",
+            "annual_turnover": 80000000,  # ₦80M (would qualify as small if not professional service)
+            "total_fixed_assets": 200000000,  # ₦200M
+            "gross_income": 80000000,
+            "other_income": 0,
+            "cost_of_goods_sold": 0,  # Professional services typically have no COGS
+            "staff_costs": 40000000,
+            "rent_expenses": 10000000,
+            "professional_fees": 5000000,
+            "depreciation": 2000000,
+            "interest_paid_unrelated": 1000000,
+            "interest_paid_related": 0,
+            "other_deductible_expenses": 5000000,
+            "entertainment_expenses": 1000000,
+            "fines_penalties": 0,
+            "personal_expenses": 500000,
+            "excessive_interest": 0,
+            "other_non_deductible": 0,
+            "total_debt": 20000000,
+            "total_equity": 50000000,
+            "ebitda": 0,  # Auto-calculate
+            "is_professional_service": True,  # This should disqualify from small company exemption
+            "is_multinational": False,
+            "global_revenue_eur": 0
+        }
+        
+        success, response = self.run_test(
+            "Professional Service Firm (No Small Company Exemption)",
+            "POST",
+            "calculate-cit",
+            200,
+            test_data
+        )
+        
+        if success:
+            print(f"   Company: {response['company_name']}")
+            print(f"   Classification: {response['company_size']}")
+            print(f"   Is Professional Service: {test_data['is_professional_service']}")
+            print(f"   Qualifies for Small Exemption: {response['qualifies_small_exemption']}")
+            print(f"   CIT Due: ₦{response['cit_due']:,.0f}")
+            print(f"   Development Levy: ₦{response['development_levy']:,.0f}")
+            
+            # Professional service firms should not qualify for small company exemption
+            if (not response['qualifies_small_exemption'] and 
+                response['cit_due'] > 0 and 
+                response['development_levy'] > 0):
+                print(f"   ✅ Professional service firm correctly excluded from small company exemption")
+            else:
+                print(f"   ❌ Professional service firm incorrectly qualified for exemption")
+        
+        return success
+
+    def test_cit_history_endpoint(self):
+        """Test CIT calculation history endpoint"""
+        success, response = self.run_test(
+            "CIT Calculation History Endpoint",
+            "GET",
+            "cit-calculations/history?limit=5",
+            200
+        )
+        
+        if success:
+            if isinstance(response, list):
+                print(f"   Retrieved {len(response)} CIT calculations from history")
+                if len(response) > 0:
+                    latest = response[0]
+                    print(f"   Latest calculation: {latest.get('company_name', 'Unknown')} - ₦{latest.get('total_tax_due', 0):,.0f} tax due")
+            else:
+                print(f"   ❌ Expected list response, got {type(response)}")
+        
+        return success
+
 def main():
     print("🚀 Starting Nigerian Tax Calculator API Tests")
     print("=" * 60)
