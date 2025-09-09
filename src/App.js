@@ -622,53 +622,112 @@ function App() {
 
           {/* Tax Information Tab */}
           <TabsContent value="brackets">
-            {taxBrackets && (
-              <div className="space-y-6">
-                <Card className="bg-white border-emerald-100 shadow-lg">
-                  <CardHeader>
-                    <CardTitle className="flex items-center space-x-2">
-                      <TrendingUp className="h-5 w-5 text-emerald-600" />
-                      <span>Nigerian Tax Brackets 2026</span>
-                    </CardTitle>
-                    <CardDescription>
-                      Progressive tax rates under the new tax administration act
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="grid gap-3">
-                      {taxBrackets.brackets.map((bracket, index) => (
-                        <div key={index} className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-                          <div>
-                            <p className="font-medium text-gray-900">{bracket.range}</p>
-                            <p className="text-sm text-gray-600">{bracket.description}</p>
+            <div className="grid lg:grid-cols-2 gap-6">
+              {/* PAYE Information */}
+              {taxBrackets && (
+                <div className="space-y-6">
+                  <Card className="bg-white border-emerald-100 shadow-lg">
+                    <CardHeader>
+                      <CardTitle className="flex items-center space-x-2">
+                        <Users className="h-5 w-5 text-emerald-600" />
+                        <span>PAYE Tax Brackets 2026</span>
+                      </CardTitle>
+                      <CardDescription>
+                        Personal income tax rates
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="grid gap-3">
+                        {taxBrackets.brackets.map((bracket, index) => (
+                          <div key={index} className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                            <div>
+                              <p className="font-medium text-gray-900">{bracket.range}</p>
+                              <p className="text-sm text-gray-600">{bracket.description}</p>
+                            </div>
+                            <Badge variant={index === 0 ? "secondary" : "outline"} className="text-lg px-3 py-1">
+                              {bracket.rate}
+                            </Badge>
                           </div>
-                          <Badge variant={index === 0 ? "secondary" : "outline"} className="text-lg px-3 py-1">
-                            {bracket.rate}
-                          </Badge>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-white border-emerald-100 shadow-lg">
+                    <CardHeader>
+                      <CardTitle className="flex items-center space-x-2">
+                        <Shield className="h-5 w-5 text-emerald-600" />
+                        <span>PAYE Tax Reliefs</span>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      {Object.entries(taxBrackets.reliefs).map(([key, value]) => (
+                        <div key={key} className="flex justify-between items-center">
+                          <span className="text-gray-700 capitalize">{key.replace('_', ' ')}</span>
+                          <span className="font-medium text-emerald-600">{value}</span>
                         </div>
                       ))}
-                    </div>
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
 
-                <Card className="bg-white border-emerald-100 shadow-lg">
-                  <CardHeader>
-                    <CardTitle className="flex items-center space-x-2">
-                      <Shield className="h-5 w-5 text-emerald-600" />
-                      <span>Available Tax Reliefs</span>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    {Object.entries(taxBrackets.reliefs).map(([key, value]) => (
-                      <div key={key} className="flex justify-between items-center">
-                        <span className="text-gray-700 capitalize">{key.replace('_', ' ')}</span>
-                        <span className="font-medium text-emerald-600">{value}</span>
+              {/* CIT Information */}
+              {citInfo && (
+                <div className="space-y-6">
+                  <Card className="bg-white border-blue-100 shadow-lg">
+                    <CardHeader>
+                      <CardTitle className="flex items-center space-x-2">
+                        <Building2 className="h-5 w-5 text-blue-600" />
+                        <span>Corporate Income Tax 2026</span>
+                      </CardTitle>
+                      <CardDescription>
+                        Company tax rates and classifications
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="grid gap-3">
+                        {Object.entries(citInfo.company_classifications).map(([size, info]) => (
+                          <div key={size} className="p-4 bg-gray-50 rounded-lg">
+                            <div className="flex justify-between items-start mb-2">
+                              <h4 className="font-medium text-gray-900 capitalize">{size} Companies</h4>
+                              <Badge variant="outline" className="text-sm">
+                                CIT: {info.cit_rate}
+                              </Badge>
+                            </div>
+                            <p className="text-sm text-gray-600 mb-1">{info.criteria}</p>
+                            <p className="text-xs text-blue-600">Development Levy: {info.development_levy}</p>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </CardContent>
-                </Card>
-              </div>
-            )}
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-white border-blue-100 shadow-lg">
+                    <CardHeader>
+                      <CardTitle className="flex items-center space-x-2">
+                        <AlertTriangle className="h-5 w-5 text-blue-600" />
+                        <span>Thin Capitalization Rules</span>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="flex justify-between items-center">
+                        <span className="text-gray-700">Interest Deduction Limit</span>
+                        <span className="font-medium text-blue-600">{citInfo.thin_capitalization.interest_deduction_limit}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-gray-700">Applies To</span>
+                        <span className="font-medium text-blue-600">{citInfo.thin_capitalization.applies_to}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-gray-700">Excess Treatment</span>
+                        <span className="font-medium text-red-600">{citInfo.thin_capitalization.excess_treatment}</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
+            </div>
           </TabsContent>
 
           {/* History Tab */}
