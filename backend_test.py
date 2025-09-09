@@ -655,8 +655,10 @@ def main():
     
     tester = NigerianTaxCalculatorTester()
     
-    # Run all tests
-    tests = [
+    # Run PAYE tests first
+    print("\n📋 PAYE CALCULATOR TESTS")
+    print("-" * 40)
+    paye_tests = [
         tester.test_root_endpoint,
         tester.test_tax_brackets_endpoint,
         tester.test_low_income_calculation,
@@ -666,7 +668,23 @@ def main():
         tester.test_invalid_input
     ]
     
-    for test in tests:
+    for test in paye_tests:
+        test()
+    
+    # Run CIT tests
+    print("\n🏢 CORPORATE INCOME TAX (CIT) TESTS")
+    print("-" * 40)
+    cit_tests = [
+        tester.test_cit_info_endpoint,
+        tester.test_small_company_exempt,
+        tester.test_medium_company_calculation,
+        tester.test_large_company_thin_cap,
+        tester.test_large_multinational_minimum_etr,
+        tester.test_professional_service_firm,
+        tester.test_cit_history_endpoint
+    ]
+    
+    for test in cit_tests:
         test()
     
     # Print final results
