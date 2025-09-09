@@ -311,7 +311,7 @@ function App() {
             </TabsTrigger>
           </TabsList>
 
-          {/* Calculator Tab */}
+          {/* PAYE Calculator Tab */}
           <TabsContent value="calculator" className="space-y-6">
             <div className="grid lg:grid-cols-2 gap-8">
               {/* Input Form */}
