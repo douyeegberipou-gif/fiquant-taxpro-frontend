@@ -287,18 +287,26 @@ function App() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs defaultValue="calculator" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 bg-white border border-emerald-100">
+          <TabsList className="grid w-full grid-cols-5 bg-white border border-emerald-100">
             <TabsTrigger value="calculator" className="flex items-center space-x-2">
-              <Calculator className="h-4 w-4" />
-              <span>Calculator</span>
+              <Users className="h-4 w-4" />
+              <span>PAYE</span>
+            </TabsTrigger>
+            <TabsTrigger value="cit" className="flex items-center space-x-2">
+              <Building2 className="h-4 w-4" />
+              <span>Corporate</span>
             </TabsTrigger>
             <TabsTrigger value="brackets" className="flex items-center space-x-2">
               <TrendingUp className="h-4 w-4" />
-              <span>Tax Brackets</span>
+              <span>Tax Info</span>
             </TabsTrigger>
             <TabsTrigger value="history" className="flex items-center space-x-2">
               <FileText className="h-4 w-4" />
               <span>History</span>
+            </TabsTrigger>
+            <TabsTrigger value="compliance" className="flex items-center space-x-2">
+              <Briefcase className="h-4 w-4" />
+              <span>Compliance</span>
             </TabsTrigger>
           </TabsList>
 
