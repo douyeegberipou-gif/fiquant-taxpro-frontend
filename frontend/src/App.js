@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Calculator, TrendingUp, FileText, Info, Wallet, Receipt, PiggyBank, Home, Heart, Shield, Building2, Users, Briefcase, AlertTriangle } from 'lucide-react';
+import { Calculator, TrendingUp, FileText, Info, Wallet, Receipt, PiggyBank, Home, Heart, Shield, Building2, Users, Briefcase, AlertTriangle, CreditCard } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './components/ui/card';
 import { Input } from './components/ui/input';
 import { Label } from './components/ui/label';
