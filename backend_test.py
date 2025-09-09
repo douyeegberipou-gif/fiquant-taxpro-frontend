@@ -1242,6 +1242,39 @@ def main():
     for test in cit_tests:
         test()
     
+    # Run Capital Allowances tests
+    print("\n🏗️ CAPITAL ALLOWANCES TESTS (2026 Rules)")
+    print("-" * 40)
+    capital_allowances_tests = [
+        tester.test_capital_allowances_scenario_a,
+        tester.test_capital_allowances_scenario_b,
+        tester.test_capital_allowances_scenario_c
+    ]
+    
+    for test in capital_allowances_tests:
+        test()
+    
+    # Run WHT Credits tests
+    print("\n💳 WITHHOLDING TAX CREDITS TESTS")
+    print("-" * 40)
+    wht_tests = [
+        tester.test_wht_credits_scenario_d,
+        tester.test_wht_credits_scenario_e
+    ]
+    
+    for test in wht_tests:
+        test()
+    
+    # Run Comprehensive test
+    print("\n🎯 COMPREHENSIVE INTEGRATION TEST")
+    print("-" * 40)
+    comprehensive_tests = [
+        tester.test_comprehensive_scenario
+    ]
+    
+    for test in comprehensive_tests:
+        test()
+    
     # Print final results
     print("\n" + "=" * 60)
     print(f"📊 FINAL RESULTS: {tester.tests_passed}/{tester.tests_run} tests passed")
