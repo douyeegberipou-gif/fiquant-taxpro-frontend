@@ -1,0 +1,490 @@
+import React from 'react';
+import { Building2, DollarSign, TrendingDown, TrendingUp, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { Button } from './ui/button';
+import { Badge } from './ui/badge';
+import { Separator } from './ui/separator';
+import { Alert, AlertDescription } from './ui/alert';
+import { Switch } from './ui/switch';
+
+const CITCalculator = ({ 
+  citInput, 
+  citResult, 
+  citLoading, 
+  handleCitInputChange, 
+  calculateCitTax, 
+  resetCitForm,
+  formatCurrency 
+}) => {
+  return (
+    <div className="grid lg:grid-cols-2 gap-8">
+      {/* Input Form */}
+      <Card className="bg-white border-emerald-100 shadow-lg">
+        <CardHeader className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-t-lg">
+          <CardTitle className="flex items-center space-x-2">
+            <Building2 className="h-5 w-5" />
+            <span>Company Information</span>
+          </CardTitle>
+          <CardDescription className="text-blue-100">
+            Enter your company's financial details for CIT calculation
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="p-6 space-y-6">
+          {/* Company Basic Info */}
+          <div className="space-y-4">
+            <h3 className="font-semibold text-gray-900 flex items-center">
+              <Building2 className="h-4 w-4 mr-2 text-blue-600" />
+              Company Details
+            </h3>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="space-y-2 sm:col-span-2">
+                <Label htmlFor="company_name">Company Name *</Label>
+                <Input
+                  id="company_name"
+                  type="text"
+                  placeholder="ABC Nigeria Limited"
+                  value={citInput.company_name}
+                  onChange={(e) => handleCitInputChange('company_name', e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="annual_turnover">Annual Turnover (₦) *</Label>
+                <Input
+                  id="annual_turnover"
+                  type="number"
+                  placeholder="500,000,000"
+                  value={citInput.annual_turnover}
+                  onChange={(e) => handleCitInputChange('annual_turnover', e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="total_fixed_assets">Total Fixed Assets (₦)</Label>
+                <Input
+                  id="total_fixed_assets"
+                  type="number"
+                  placeholder="200,000,000"
+                  value={citInput.total_fixed_assets}
+                  onChange={(e) => handleCitInputChange('total_fixed_assets', e.target.value)}
+                />
+              </div>
+            </div>
+
+            {/* Company Type Switches */}
+            <div className="grid sm:grid-cols-2 gap-4 p-4 bg-blue-50 rounded-lg">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="is_professional_service" className="text-sm">Professional Service Firm</Label>
+                <Switch
+                  id="is_professional_service"
+                  checked={citInput.is_professional_service}
+                  onCheckedChange={(checked) => handleCitInputChange('is_professional_service', checked)}
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="is_multinational" className="text-sm">Multinational Enterprise</Label>
+                <Switch
+                  id="is_multinational"
+                  checked={citInput.is_multinational}
+                  onCheckedChange={(checked) => handleCitInputChange('is_multinational', checked)}
+                />
+              </div>
+              {citInput.is_multinational && (
+                <div className="space-y-2 sm:col-span-2">
+                  <Label htmlFor="global_revenue_eur">Global Group Revenue (EUR)</Label>
+                  <Input
+                    id="global_revenue_eur"
+                    type="number"
+                    placeholder="750000000"
+                    value={citInput.global_revenue_eur}
+                    onChange={(e) => handleCitInputChange('global_revenue_eur', e.target.value)}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* Revenue Section */}
+          <div className="space-y-4">
+            <h3 className="font-semibold text-gray-900 flex items-center">
+              <TrendingUp className="h-4 w-4 mr-2 text-green-600" />
+              Revenue & Income
+            </h3>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="gross_income">Gross Income/Revenue (₦) *</Label>
+                <Input
+                  id="gross_income"
+                  type="number"
+                  placeholder="500,000,000"
+                  value={citInput.gross_income}
+                  onChange={(e) => handleCitInputChange('gross_income', e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="other_income">Other Income (₦)</Label>
+                <Input
+                  id="other_income"
+                  type="number"
+                  placeholder="10,000,000"
+                  value={citInput.other_income}
+                  onChange={(e) => handleCitInputChange('other_income', e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* Deductible Expenses */}
+          <div className="space-y-4">
+            <h3 className="font-semibold text-gray-900 flex items-center">
+              <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
+              Deductible Expenses
+            </h3>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="cost_of_goods_sold">Cost of Goods Sold (₦)</Label>
+                <Input
+                  id="cost_of_goods_sold"
+                  type="number"
+                  placeholder="200,000,000"
+                  value={citInput.cost_of_goods_sold}
+                  onChange={(e) => handleCitInputChange('cost_of_goods_sold', e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="staff_costs">Staff Costs (₦)</Label>
+                <Input
+                  id="staff_costs"
+                  type="number"
+                  placeholder="50,000,000"
+                  value={citInput.staff_costs}
+                  onChange={(e) => handleCitInputChange('staff_costs', e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="rent_expenses">Rent & Utilities (₦)</Label>
+                <Input
+                  id="rent_expenses"
+                  type="number"
+                  placeholder="12,000,000"
+                  value={citInput.rent_expenses}
+                  onChange={(e) => handleCitInputChange('rent_expenses', e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="professional_fees">Professional Fees (₦)</Label>
+                <Input
+                  id="professional_fees"
+                  type="number"
+                  placeholder="5,000,000"
+                  value={citInput.professional_fees}
+                  onChange={(e) => handleCitInputChange('professional_fees', e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="depreciation">Depreciation (₦)</Label>
+                <Input
+                  id="depreciation"
+                  type="number"
+                  placeholder="15,000,000"
+                  value={citInput.depreciation}
+                  onChange={(e) => handleCitInputChange('depreciation', e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="interest_paid_unrelated">Interest (Unrelated Parties) (₦)</Label>
+                <Input
+                  id="interest_paid_unrelated"
+                  type="number"
+                  placeholder="8,000,000"
+                  value={citInput.interest_paid_unrelated}
+                  onChange={(e) => handleCitInputChange('interest_paid_unrelated', e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="interest_paid_related">Interest (Related Parties) (₦)</Label>
+                <Input
+                  id="interest_paid_related"
+                  type="number"
+                  placeholder="3,000,000"
+                  value={citInput.interest_paid_related}
+                  onChange={(e) => handleCitInputChange('interest_paid_related', e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="other_deductible_expenses">Other Deductible (₦)</Label>
+                <Input
+                  id="other_deductible_expenses"
+                  type="number"
+                  placeholder="7,000,000"
+                  value={citInput.other_deductible_expenses}
+                  onChange={(e) => handleCitInputChange('other_deductible_expenses', e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* Non-deductible Expenses */}
+          <div className="space-y-4">
+            <h3 className="font-semibold text-gray-900 flex items-center">
+              <AlertTriangle className="h-4 w-4 mr-2 text-red-600" />
+              Non-deductible Expenses
+            </h3>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="entertainment_expenses">Entertainment & Gifts (₦)</Label>
+                <Input
+                  id="entertainment_expenses"
+                  type="number"
+                  placeholder="2,000,000"
+                  value={citInput.entertainment_expenses}
+                  onChange={(e) => handleCitInputChange('entertainment_expenses', e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="fines_penalties">Fines & Penalties (₦)</Label>
+                <Input
+                  id="fines_penalties"
+                  type="number"
+                  placeholder="500,000"
+                  value={citInput.fines_penalties}
+                  onChange={(e) => handleCitInputChange('fines_penalties', e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="personal_expenses">Personal Expenses (₦)</Label>
+                <Input
+                  id="personal_expenses"
+                  type="number"
+                  placeholder="1,000,000"
+                  value={citInput.personal_expenses}
+                  onChange={(e) => handleCitInputChange('personal_expenses', e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="other_non_deductible">Other Non-deductible (₦)</Label>
+                <Input
+                  id="other_non_deductible"
+                  type="number"
+                  placeholder="500,000"
+                  value={citInput.other_non_deductible}
+                  onChange={(e) => handleCitInputChange('other_non_deductible', e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* Financial Ratios */}
+          <div className="space-y-4">
+            <h3 className="font-semibold text-gray-900 flex items-center">
+              <TrendingDown className="h-4 w-4 mr-2 text-purple-600" />
+              Financial Information (For Thin Cap Analysis)
+            </h3>
+            <Alert>
+              <AlertDescription className="text-sm text-blue-800">
+                Used for thin capitalization analysis. Leave EBITDA empty for auto-calculation.
+              </AlertDescription>
+            </Alert>
+            <div className="grid sm:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="total_debt">Total Debt (₦)</Label>
+                <Input
+                  id="total_debt"
+                  type="number"
+                  placeholder="100,000,000"
+                  value={citInput.total_debt}
+                  onChange={(e) => handleCitInputChange('total_debt', e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="total_equity">Total Equity (₦)</Label>
+                <Input
+                  id="total_equity"
+                  type="number"
+                  placeholder="200,000,000"
+                  value={citInput.total_equity}
+                  onChange={(e) => handleCitInputChange('total_equity', e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="ebitda">EBITDA (₦)</Label>
+                <Input
+                  id="ebitda"
+                  type="number"
+                  placeholder="Auto-calculated"
+                  value={citInput.ebitda}
+                  onChange={(e) => handleCitInputChange('ebitda', e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex space-x-3 pt-4">
+            <Button 
+              onClick={calculateCitTax} 
+              disabled={citLoading || !citInput.company_name || !citInput.annual_turnover || !citInput.gross_income}
+              className="flex-1 bg-blue-600 hover:bg-blue-700"
+            >
+              {citLoading ? 'Calculating...' : 'Calculate CIT'}
+            </Button>
+            <Button 
+              onClick={resetCitForm} 
+              variant="outline"
+              className="border-blue-200 text-blue-700 hover:bg-blue-50"
+            >
+              Reset
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Results */}
+      {citResult && (
+        <Card className="bg-white border-blue-100 shadow-lg">
+          <CardHeader className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-t-lg">
+            <CardTitle>CIT Calculation Results</CardTitle>
+            <CardDescription className="text-indigo-100">
+              {citResult.company_name} - {citResult.company_size} Company
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-6 space-y-6">
+            {/* Company Classification */}
+            <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+              <div className="flex justify-between items-center">
+                <div>
+                  <p className="font-semibold text-blue-800">Company Classification</p>
+                  <p className="text-sm text-blue-600">{citResult.company_size} Company</p>
+                </div>
+                <Badge variant={citResult.qualifies_small_exemption ? "secondary" : "outline"}>
+                  {citResult.qualifies_small_exemption ? "Tax Exempt" : "Taxable"}
+                </Badge>
+              </div>
+            </div>
+
+            {/* Tax Summary Cards */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                <p className="text-sm text-green-600 font-medium">Taxable Profit</p>
+                <p className="text-xl font-bold text-green-800">
+                  {formatCurrency(citResult.taxable_profit)}
+                </p>
+              </div>
+              <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                <p className="text-sm text-blue-600 font-medium">CIT Due</p>
+                <p className="text-xl font-bold text-blue-800">
+                  {formatCurrency(citResult.cit_due)}
+                </p>
+              </div>
+              <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                <p className="text-sm text-purple-600 font-medium">Development Levy</p>
+                <p className="text-xl font-bold text-purple-800">
+                  {formatCurrency(citResult.development_levy)}
+                </p>
+              </div>
+              <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+                <p className="text-sm text-red-600 font-medium">Total Tax Due</p>
+                <p className="text-xl font-bold text-red-800">
+                  {formatCurrency(citResult.total_tax_due)}
+                </p>
+              </div>
+            </div>
+
+            {/* Effective Tax Rate */}
+            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+              <div className="flex justify-between items-center">
+                <span className="font-medium text-gray-700">Effective Tax Rate</span>
+                <span className="text-lg font-bold text-gray-900">
+                  {(citResult.effective_tax_rate * 100).toFixed(2)}%
+                </span>
+              </div>
+            </div>
+
+            {/* Thin Capitalization */}
+            {citResult.thin_cap_applied && (
+              <Alert className="border-yellow-200 bg-yellow-50">
+                <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                <AlertDescription className="text-yellow-800">
+                  <strong>Thin Capitalization Applied:</strong> Interest deduction limited to {formatCurrency(citResult.allowed_interest_deduction)}. 
+                  Disallowed: {formatCurrency(citResult.disallowed_interest)}
+                </AlertDescription>
+              </Alert>
+            )}
+
+            {/* Financial Summary */}
+            <div className="space-y-3">
+              <h4 className="font-semibold text-gray-900">Financial Summary</h4>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Gross Income:</span>
+                  <span className="font-medium">{formatCurrency(citResult.gross_income)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Total Deductible Expenses:</span>
+                  <span className="font-medium text-green-600">-{formatCurrency(citResult.total_deductible_expenses)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Non-deductible Expenses:</span>
+                  <span className="font-medium text-red-600">{formatCurrency(citResult.total_non_deductible_expenses)}</span>
+                </div>
+                <div className="flex justify-between border-t pt-2">
+                  <span className="text-gray-600">Taxable Profit:</span>
+                  <span className="font-medium">{formatCurrency(citResult.taxable_profit)}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Tax Breakdown */}
+            <div className="space-y-3">
+              <h4 className="font-semibold text-gray-900">Tax Breakdown</h4>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">CIT ({(citResult.cit_rate * 100).toFixed(0)}%):</span>
+                  <span className="font-medium">{formatCurrency(citResult.cit_due)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Development Levy ({(citResult.development_levy_rate * 100).toFixed(0)}%):</span>
+                  <span className="font-medium">{formatCurrency(citResult.development_levy)}</span>
+                </div>
+                {citResult.minimum_etr_tax > 0 && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Minimum ETR Top-up:</span>
+                    <span className="font-medium">{formatCurrency(citResult.minimum_etr_tax)}</span>
+                  </div>
+                )}
+                <div className="flex justify-between font-semibold text-lg border-t pt-2">
+                  <span>Total Tax Due:</span>
+                  <span className="text-red-600">{formatCurrency(citResult.total_tax_due)}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Compliance Deadlines */}
+            <div className="space-y-3">
+              <h4 className="font-semibold text-gray-900">Compliance Deadlines</h4>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-yellow-50 p-3 rounded-lg border border-yellow-200">
+                  <p className="text-sm text-yellow-600 font-medium">Filing Deadline</p>
+                  <p className="font-semibold text-yellow-800">{citResult.filing_deadline}</p>
+                </div>
+                <div className="bg-red-50 p-3 rounded-lg border border-red-200">
+                  <p className="text-sm text-red-600 font-medium">Payment Deadline</p>
+                  <p className="font-semibold text-red-800">{citResult.payment_deadline}</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  );
+};
+
+export default CITCalculator;
