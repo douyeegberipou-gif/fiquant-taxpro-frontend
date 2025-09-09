@@ -1,5 +1,5 @@
 import React from 'react';
-import { Building2, DollarSign, TrendingDown, TrendingUp, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Building2, DollarSign, TrendingDown, TrendingUp, AlertTriangle, CheckCircle, Settings, CreditCard } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
