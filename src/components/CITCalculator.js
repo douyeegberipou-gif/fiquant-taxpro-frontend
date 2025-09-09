@@ -282,6 +282,202 @@ const CITCalculator = ({
 
           <Separator />
 
+          {/* Capital Allowances Section */}
+          <div className="space-y-4">
+            <h3 className="font-semibold text-gray-900 flex items-center">
+              <Settings className="h-4 w-4 mr-2 text-indigo-600" />
+              Capital Allowances (2026 - Annual Allowances Only)
+            </h3>
+            <Alert className="bg-indigo-50 border-indigo-200">
+              <AlertDescription className="text-indigo-800 text-sm">
+                Initial allowances have been abolished. Enter cost of new assets and written down values of existing assets.
+              </AlertDescription>
+            </Alert>
+            
+            {/* New Assets */}
+            <div className="space-y-3">
+              <h4 className="font-medium text-gray-800">New Assets (Cost)</h4>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="buildings_cost">Buildings (10% rate) (₦)</Label>
+                  <Input
+                    id="buildings_cost"
+                    type="number"
+                    placeholder="50,000,000"
+                    value={citInput.buildings_cost}
+                    onChange={(e) => handleCitInputChange('buildings_cost', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="furniture_fittings_cost">Furniture & Fittings (20% rate) (₦)</Label>
+                  <Input
+                    id="furniture_fittings_cost"
+                    type="number"
+                    placeholder="10,000,000"
+                    value={citInput.furniture_fittings_cost}
+                    onChange={(e) => handleCitInputChange('furniture_fittings_cost', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="plant_machinery_cost">Plant & Machinery (20% rate) (₦)</Label>
+                  <Input
+                    id="plant_machinery_cost"
+                    type="number"
+                    placeholder="30,000,000"
+                    value={citInput.plant_machinery_cost}
+                    onChange={(e) => handleCitInputChange('plant_machinery_cost', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="motor_vehicles_cost">Motor Vehicles (25% rate) (₦)</Label>
+                  <Input
+                    id="motor_vehicles_cost"
+                    type="number"
+                    placeholder="15,000,000"
+                    value={citInput.motor_vehicles_cost}
+                    onChange={(e) => handleCitInputChange('motor_vehicles_cost', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2 sm:col-span-2">
+                  <Label htmlFor="other_assets_cost">Other Assets (20% rate) (₦)</Label>
+                  <Input
+                    id="other_assets_cost"
+                    type="number"
+                    placeholder="5,000,000"
+                    value={citInput.other_assets_cost}
+                    onChange={(e) => handleCitInputChange('other_assets_cost', e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Existing Assets WDV */}
+            <div className="space-y-3">
+              <h4 className="font-medium text-gray-800">Existing Assets (Written Down Value)</h4>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="buildings_wdv">Buildings WDV (₦)</Label>
+                  <Input
+                    id="buildings_wdv"
+                    type="number"
+                    placeholder="100,000,000"
+                    value={citInput.buildings_wdv}
+                    onChange={(e) => handleCitInputChange('buildings_wdv', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="furniture_fittings_wdv">Furniture & Fittings WDV (₦)</Label>
+                  <Input
+                    id="furniture_fittings_wdv"
+                    type="number"
+                    placeholder="20,000,000"
+                    value={citInput.furniture_fittings_wdv}
+                    onChange={(e) => handleCitInputChange('furniture_fittings_wdv', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="plant_machinery_wdv">Plant & Machinery WDV (₦)</Label>
+                  <Input
+                    id="plant_machinery_wdv"
+                    type="number"
+                    placeholder="80,000,000"
+                    value={citInput.plant_machinery_wdv}
+                    onChange={(e) => handleCitInputChange('plant_machinery_wdv', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="motor_vehicles_wdv">Motor Vehicles WDV (₦)</Label>
+                  <Input
+                    id="motor_vehicles_wdv"
+                    type="number"
+                    placeholder="25,000,000"
+                    value={citInput.motor_vehicles_wdv}
+                    onChange={(e) => handleCitInputChange('motor_vehicles_wdv', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2 sm:col-span-2">
+                  <Label htmlFor="other_assets_wdv">Other Assets WDV (₦)</Label>
+                  <Input
+                    id="other_assets_wdv"
+                    type="number"
+                    placeholder="10,000,000"
+                    value={citInput.other_assets_wdv}
+                    onChange={(e) => handleCitInputChange('other_assets_wdv', e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* Withholding Tax Credits */}
+          <div className="space-y-4">
+            <h3 className="font-semibold text-gray-900 flex items-center">
+              <CreditCard className="h-4 w-4 mr-2 text-green-600" />
+              Withholding Tax Credits Available
+            </h3>
+            <Alert className="bg-green-50 border-green-200">
+              <AlertDescription className="text-green-800 text-sm">
+                Enter WHT deducted at source that can be credited against your CIT liability.
+              </AlertDescription>
+            </Alert>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="wht_on_contracts">WHT on Contracts (₦)</Label>
+                <Input
+                  id="wht_on_contracts"
+                  type="number"
+                  placeholder="2,500,000"
+                  value={citInput.wht_on_contracts}
+                  onChange={(e) => handleCitInputChange('wht_on_contracts', e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="wht_on_dividends">WHT on Dividends (₦)</Label>
+                <Input
+                  id="wht_on_dividends"
+                  type="number"
+                  placeholder="1,000,000"
+                  value={citInput.wht_on_dividends}
+                  onChange={(e) => handleCitInputChange('wht_on_dividends', e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="wht_on_rent">WHT on Rent (₦)</Label>
+                <Input
+                  id="wht_on_rent"
+                  type="number"
+                  placeholder="800,000"
+                  value={citInput.wht_on_rent}
+                  onChange={(e) => handleCitInputChange('wht_on_rent', e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="wht_on_interest">WHT on Interest (₦)</Label>
+                <Input
+                  id="wht_on_interest"
+                  type="number"
+                  placeholder="500,000"
+                  value={citInput.wht_on_interest}
+                  onChange={(e) => handleCitInputChange('wht_on_interest', e.target.value)}
+                />
+              </div>
+              <div className="space-y-2 sm:col-span-2">
+                <Label htmlFor="other_wht_credits">Other WHT Credits (₦)</Label>
+                <Input
+                  id="other_wht_credits"
+                  type="number"
+                  placeholder="700,000"
+                  value={citInput.other_wht_credits}
+                  onChange={(e) => handleCitInputChange('other_wht_credits', e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+
+          <Separator />
+
           {/* Financial Ratios */}
           <div className="space-y-4">
             <h3 className="font-semibold text-gray-900 flex items-center">
