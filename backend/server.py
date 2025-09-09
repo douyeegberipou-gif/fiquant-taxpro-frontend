@@ -125,6 +125,10 @@ class CITCalculationResult(BaseModel):
     disallowed_interest: float
     thin_cap_applied: bool
     
+    # Capital Allowances
+    total_capital_allowances: float
+    capital_allowance_breakdown: dict
+    
     # Tax calculations
     taxable_profit: float
     cit_rate: float
@@ -134,6 +138,11 @@ class CITCalculationResult(BaseModel):
     minimum_etr_rate: float
     minimum_etr_tax: float
     total_tax_due: float
+    
+    # Withholding Tax Credits
+    total_wht_credits: float
+    wht_credits_breakdown: dict
+    net_tax_payable: float
     
     # Effective rates
     effective_tax_rate: float
