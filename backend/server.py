@@ -27,7 +27,7 @@ app = FastAPI(title="Fiquant TaxPro API", description="Nigerian Tax Calculator A
 api_router = APIRouter(prefix="/api")
 
 
-# Tax Models
+# PAYE Tax Models
 class TaxInput(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     basic_salary: float = Field(gt=0, description="Basic salary per month")
