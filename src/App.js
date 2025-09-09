@@ -350,7 +350,7 @@ function App() {
               <Card className="bg-white border-emerald-100 shadow-lg">
                 <CardHeader className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-t-lg">
                   <CardTitle className="flex items-center space-x-2">
-                    <DollarSign className="h-5 w-5" />
+                    <Wallet className="h-5 w-5" />
                     <span>Income Details</span>
                   </CardTitle>
                   <CardDescription className="text-emerald-100">
