@@ -283,7 +283,7 @@ function App() {
                   alt="Fiquant Consult Logo" 
                   className="w-20 h-20 object-contain"
                   style={{
-                    filter: 'hue-rotate(-65deg) saturate(1.8) brightness(1.4)'
+                    filter: 'hue-rotate(-45deg) saturate(2.2) brightness(1.6) contrast(1.1)'
                   }}
                 />
               </div>
