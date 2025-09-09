@@ -215,7 +215,61 @@ def calculate_nigerian_cit_2026(cit_input: CITInput) -> CITCalculationResult:
     else:
         company_size = "Medium"
     
-    # Calculate total deductible expenses (before thin cap adjustments)
+    # Calculate Capital Allowances (2026 rates - annual allowances only)
+    # Buildings: 10% annual allowance
+    buildings_allowance = (cit_input.buildings_cost + cit_input.buildings_wdv) * 0.10
+    
+    # Furniture & Fittings: 20% annual allowance
+    furniture_allowance = (cit_input.furniture_fittings_cost + cit_input.furniture_fittings_wdv) * 0.20
+    
+    # Plant & Machinery: 20% annual allowance
+    plant_machinery_allowance = (cit_input.plant_machinery_cost + cit_input.plant_machinery_wdv) * 0.20
+    
+    # Motor Vehicles: 25% annual allowance (standard rate)
+    motor_vehicles_allowance = (cit_input.motor_vehicles_cost + cit_input.motor_vehicles_wdv) * 0.25
+    
+    # Other Assets: 20% annual allowance (default rate)
+    other_assets_allowance = (cit_input.other_assets_cost + cit_input.other_assets_wdv) * 0.20
+    
+    # Total Capital Allowances
+    total_capital_allowances = (
+        buildings_allowance +
+        furniture_allowance +
+        plant_machinery_allowance +
+        motor_vehicles_allowance +
+        other_assets_allowance
+    )
+    
+    # Capital Allowance Breakdown
+    capital_allowance_breakdown = {
+        "buildings": {
+            "cost_and_wdv": cit_input.buildings_cost + cit_input.buildings_wdv,
+            "rate": "10%",
+            "allowance": buildings_allowance
+        },
+        "furniture_fittings": {
+            "cost_and_wdv": cit_input.furniture_fittings_cost + cit_input.furniture_fittings_wdv,
+            "rate": "20%",
+            "allowance": furniture_allowance
+        },
+        "plant_machinery": {
+            "cost_and_wdv": cit_input.plant_machinery_cost + cit_input.plant_machinery_wdv,
+            "rate": "20%",
+            "allowance": plant_machinery_allowance
+        },
+        "motor_vehicles": {
+            "cost_and_wdv": cit_input.motor_vehicles_cost + cit_input.motor_vehicles_wdv,
+            "rate": "25%",
+            "allowance": motor_vehicles_allowance
+        },
+        "other_assets": {
+            "cost_and_wdv": cit_input.other_assets_cost + cit_input.other_assets_wdv,
+            "rate": "20%",
+            "allowance": other_assets_allowance
+        }
+    }
+    
+    # Calculate total deductible expenses (before thin cap adjustments, including capital allowances)
     total_deductible_before_thin_cap = (
         cit_input.cost_of_goods_sold +
         cit_input.staff_costs +
@@ -224,7 +278,8 @@ def calculate_nigerian_cit_2026(cit_input: CITInput) -> CITCalculationResult:
         cit_input.depreciation +
         cit_input.interest_paid_unrelated +
         cit_input.interest_paid_related +
-        cit_input.other_deductible_expenses
+        cit_input.other_deductible_expenses +
+        total_capital_allowances
     )
     
     # Calculate total non-deductible expenses
