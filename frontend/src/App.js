@@ -113,14 +113,14 @@ function App() {
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50">
       {/* Header */}
       <div className="relative overflow-hidden">
-        {/* Background with gradient and pattern */}
-        <div className="absolute inset-0 bg-gradient-to-r from-emerald-800 via-emerald-700 to-emerald-600"></div>
-        <div className="absolute inset-0 opacity-10">
+        {/* Background with black and gold gradient */}
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-black to-gray-800"></div>
+        <div className="absolute inset-0 opacity-20">
           <div className="absolute top-0 right-0 w-96 h-96 transform translate-x-32 -translate-y-32">
-            <div className="w-full h-full border-4 border-white opacity-20 transform rotate-45"></div>
+            <div className="w-full h-full border-4 border-yellow-400 opacity-15 transform rotate-45"></div>
           </div>
           <div className="absolute bottom-0 left-0 w-64 h-64 transform -translate-x-16 translate-y-16">
-            <div className="w-full h-full border-2 border-white opacity-15 transform rotate-12"></div>
+            <div className="w-full h-full border-2 border-yellow-500 opacity-10 transform rotate-12"></div>
           </div>
         </div>
         
@@ -128,42 +128,37 @@ function App() {
           <div className="flex justify-between items-center py-8">
             <div className="flex items-center space-x-6">
               {/* Logo Section */}
-              <div className="relative">
-                <div className="w-20 h-20 bg-white rounded-2xl shadow-xl flex items-center justify-center relative overflow-hidden">
-                  <img 
-                    src="https://customer-assets.emergentagent.com/job_fiquant-taxpro/artifacts/mlyv27wb_Fiquant%20Consult%20Logo%20%28Adj%29%202%20-%20Green.jpeg" 
-                    alt="Fiquant Consult Logo" 
-                    className="w-16 h-16 object-contain"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-emerald-50 opacity-30"></div>
-                </div>
-                {/* Geometric accent */}
-                <div className="absolute -top-1 -right-1 w-6 h-6 bg-cyan-400 rounded-md transform rotate-45 shadow-lg"></div>
+              <div className="relative w-20 h-20 flex items-center justify-center">
+                <img 
+                  src="https://customer-assets.emergentagent.com/job_fiquant-taxpro/artifacts/mlyv27wb_Fiquant%20Consult%20Logo%20%28Adj%29%202%20-%20Green.jpeg" 
+                  alt="Fiquant Consult Logo" 
+                  className="w-20 h-20 object-contain"
+                />
               </div>
               
               {/* Brand Text */}
               <div className="text-white">
                 <div className="flex items-baseline space-x-3">
-                  <h1 className="text-4xl font-bold tracking-tight">Fiquant</h1>
-                  <span className="text-2xl font-light text-emerald-200">TaxPro</span>
+                  <h1 className="text-4xl font-bold tracking-tight text-white">Fiquant</h1>
+                  <span className="text-2xl font-light text-yellow-400">TaxPro</span>
                 </div>
-                <p className="text-emerald-100 mt-1 font-medium tracking-wide">Nigerian Tax Calculator 2026</p>
+                <p className="text-gray-300 mt-1 font-medium tracking-wide">Nigerian Tax Calculator 2026</p>
                 <div className="flex items-center space-x-2 mt-2">
-                  <div className="w-12 h-0.5 bg-gradient-to-r from-cyan-400 to-transparent"></div>
-                  <span className="text-xs text-emerald-200 font-medium uppercase tracking-wider">Professional Edition</span>
+                  <div className="w-12 h-0.5 bg-gradient-to-r from-yellow-400 to-transparent"></div>
+                  <span className="text-xs text-yellow-300 font-medium uppercase tracking-wider">Professional Edition</span>
                 </div>
               </div>
             </div>
             
             {/* Status Badge */}
             <div className="flex flex-col items-end space-y-2">
-              <Badge variant="outline" className="bg-white/10 text-white border-white/20 backdrop-blur-sm">
+              <Badge variant="outline" className="bg-yellow-400/10 text-yellow-300 border-yellow-400/30 backdrop-blur-sm">
                 <span className="inline-flex items-center">
-                  <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+                  <div className="w-2 h-2 bg-yellow-400 rounded-full mr-2 animate-pulse"></div>
                   2026 Tax Laws
                 </span>
               </Badge>
-              <div className="text-emerald-100 text-xs font-medium">
+              <div className="text-gray-400 text-xs font-medium">
                 Powered by FIRS Guidelines
               </div>
             </div>
@@ -171,7 +166,7 @@ function App() {
         </div>
         
         {/* Bottom accent line */}
-        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-400 via-emerald-300 to-cyan-400"></div>
+        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-yellow-600 via-yellow-400 to-yellow-600"></div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
