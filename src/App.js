@@ -281,7 +281,10 @@ function App() {
                 <img 
                   src="https://customer-assets.emergentagent.com/job_fiquant-taxpro/artifacts/l4o43c21_Fiquant%20Consult%20Logo%20%28Adj%29%203%20-%20Black.jpeg" 
                   alt="Fiquant Consult Logo" 
-                  className="w-20 h-20 object-contain filter invert"
+                  className="w-20 h-20 object-contain"
+                  style={{
+                    filter: 'brightness(0) saturate(100%) invert(68%) sepia(69%) saturate(1952%) hue-rotate(11deg) brightness(101%) contrast(101%)'
+                  }}
                 />
               </div>
               
