@@ -388,7 +388,8 @@ def calculate_nigerian_cit_2026(cit_input: CITInput) -> CITCalculationResult:
             "depreciation": cit_input.depreciation,
             "interest_unrelated": cit_input.interest_paid_unrelated,
             "interest_related_allowed": allowed_interest_deduction,
-            "other_deductible": cit_input.other_deductible_expenses
+            "other_deductible": cit_input.other_deductible_expenses,
+            "capital_allowances": total_capital_allowances
         },
         "non_deductible_expenses": {
             "entertainment": cit_input.entertainment_expenses,
