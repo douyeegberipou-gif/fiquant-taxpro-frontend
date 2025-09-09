@@ -86,6 +86,9 @@ function App() {
   const [citInfo, setCitInfo] = useState(null);
   const [citHistory, setCitHistory] = useState([]);
 
+  // PAYE Calculator Mode State
+  const [payeMode, setPayeMode] = useState('single'); // 'single' or 'bulk'
+
   useEffect(() => {
     fetchTaxBrackets();
     fetchHistory();
