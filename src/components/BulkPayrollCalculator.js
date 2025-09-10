@@ -171,75 +171,189 @@ const BulkPayrollCalculator = ({ formatCurrency, calculatePayeTax }) => {
 
   const downloadExcelTemplate = () => {
     try {
-      console.log('Download template clicked');
+      console.log('Creating Excel template...');
       
-      // Create Excel template data
+      // Create a new workbook
+      const workbook = XLSX.utils.book_new();
+      
+      // Create the main data worksheet
+      const worksheetData = [];
+      
+      // Title and header information with Fiquant Consult branding
+      worksheetData.push(['FIQUANT CONSULT - PAYE BULK UPLOAD TEMPLATE']);
+      worksheetData.push(['Generated on:', new Date().toLocaleDateString()]);
+      worksheetData.push(['']);
+      worksheetData.push(['INSTRUCTIONS:']);
+      worksheetData.push(['1. Fill in employee details in the rows below']);
+      worksheetData.push(['2. Fields marked with * are required']);
+      worksheetData.push(['3. Leave Pension and NHF empty for auto-calculation (8% and 2.5% respectively)']);
+      worksheetData.push(['4. All amounts should be in Nigerian Naira (₦)']);
+      worksheetData.push(['5. Save the file and upload it back to Fiquant TaxPro']);
+      worksheetData.push(['6. DO NOT modify the watermark or template structure']);
+      worksheetData.push(['']);
+      worksheetData.push(['SAMPLE DATA PROVIDED BELOW - REPLACE WITH YOUR ACTUAL DATA:']);
+      worksheetData.push(['']);
+      
+      // Headers row
       const headers = [
         'Employee Name*', 'TIN', 'Basic Salary*', 'Transport Allowance', 'Housing Allowance',
         'Meal Allowance', 'Other Allowances', 'Pension Contribution', 'NHF Contribution',
         'Life Insurance Premium', 'Health Insurance Premium', 'NHIS Contribution', 'Annual Rent'
       ];
-
-      const sampleData = [
-        ['John Doe', '12345678', '500000', '50000', '200000', '30000', '25000', '', '', '10000', '15000', '5000', '1200000'],
-        ['Jane Smith', '87654321', '400000', '40000', '150000', '25000', '20000', '', '', '8000', '12000', '4000', '1000000'],
-        ['Mike Johnson', '11223344', '600000', '60000', '250000', '35000', '30000', '', '', '12000', '18000', '6000', '1500000']
-      ];
-
-      const instructions = [
-        'INSTRUCTIONS:',
-        '1. Fill in employee details in the rows below',
-        '2. Fields marked with * are required',
-        '3. Leave Pension and NHF empty for auto-calculation (8% and 2.5% respectively)',
-        '4. All amounts should be in Nigerian Naira (₦)',
-        '5. Save the file and upload it back to the app',
-        '',
-        'SAMPLE DATA PROVIDED BELOW - REPLACE WITH YOUR ACTUAL DATA:'
-      ];
-
-      // Create CSV content for Excel compatibility
-      const csvContent = [
-        'Fiquant TaxPro - PAYE Bulk Upload Template',
-        `Generated on: ${new Date().toLocaleDateString()}`,
-        '',
-        ...instructions,
-        '',
-        headers.join(','),
-        ...sampleData.map(row => row.join(','))
-      ].join('\n');
-
-      console.log('CSV content created');
-
-      // Add BOM for proper Excel UTF-8 handling
-      const BOM = '\uFEFF';
-      const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8' });
+      worksheetData.push(headers);
       
-      console.log('Blob created');
-
-      // Create download link
+      // Sample data
+      const sampleData = [
+        ['John Doe', '12345678', 500000, 50000, 200000, 30000, 25000, '', '', 10000, 15000, 5000, 1200000],
+        ['Jane Smith', '87654321', 400000, 40000, 150000, 25000, 20000, '', '', 8000, 12000, 4000, 1000000],
+        ['Mike Johnson', '11223344', 600000, 60000, 250000, 35000, 30000, '', '', 12000, 18000, 6000, 1500000],
+        ['', '', '', '', '', '', '', '', '', '', '', '', ''], // Empty row for user data
+        ['', '', '', '', '', '', '', '', '', '', '', '', ''], // Empty row for user data
+        ['', '', '', '', '', '', '', '', '', '', '', '', ''], // Empty row for user data
+        ['', '', '', '', '', '', '', '', '', '', '', '', ''], // Empty row for user data
+        ['', '', '', '', '', '', '', '', '', '', '', '', ''], // Empty row for user data
+      ];
+      
+      // Add sample data
+      sampleData.forEach(row => {
+        worksheetData.push(row);
+      });
+      
+      // Add more empty rows for user data
+      for (let i = 0; i < 15; i++) {
+        worksheetData.push(['', '', '', '', '', '', '', '', '', '', '', '', '']);
+      }
+      
+      // Add permanent watermark rows at the bottom (protected)
+      worksheetData.push(['']);
+      worksheetData.push(['']);
+      worksheetData.push(['© FIQUANT CONSULT - TEMPLATE PROTECTED']);
+      worksheetData.push(['This template is provided by Fiquant Consult']);
+      worksheetData.push(['For support: contact@fiquantconsult.com']);
+      worksheetData.push(['Template Version: 1.0']);
+      worksheetData.push(['Generated: ' + new Date().toISOString()]);
+      
+      // Create worksheet
+      const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+      
+      // Set column widths
+      const columnWidths = [
+        { wch: 20 }, // Employee Name
+        { wch: 15 }, // TIN
+        { wch: 15 }, // Basic Salary
+        { wch: 15 }, // Transport
+        { wch: 15 }, // Housing
+        { wch: 12 }, // Meal
+        { wch: 12 }, // Other
+        { wch: 15 }, // Pension
+        { wch: 12 }, // NHF
+        { wch: 15 }, // Life Insurance
+        { wch: 15 }, // Health Insurance
+        { wch: 12 }, // NHIS
+        { wch: 15 }  // Annual Rent
+      ];
+      worksheet['!cols'] = columnWidths;
+      
+      // Add the worksheet to workbook
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'PAYE Template');
+      
+      // Create a second worksheet with instructions
+      const instructionsData = [
+        ['FIQUANT CONSULT - PAYE CALCULATOR INSTRUCTIONS'],
+        [''],
+        ['HOW TO USE THIS TEMPLATE:'],
+        [''],
+        ['1. DOWNLOAD & OPEN:'],
+        ['   - This file is already downloaded to your computer'],
+        ['   - Open it in Microsoft Excel or Google Sheets'],
+        [''],
+        ['2. FILL IN DATA:'],
+        ['   - Replace sample data with your actual employee information'],
+        ['   - Employee Name and Basic Salary are required fields (marked with *)'],
+        ['   - Leave Pension and NHF empty for automatic calculation'],
+        [''],
+        ['3. SAVE & UPLOAD:'],
+        ['   - Save the file (keep it as .xlsx format)'],
+        ['   - Return to Fiquant TaxPro website'],
+        ['   - Click "Upload File" button'],
+        ['   - Select this saved file'],
+        [''],
+        ['4. CALCULATE:'],
+        ['   - Click "Calculate All" to process all employee taxes'],
+        ['   - Review results and export if needed'],
+        [''],
+        ['FIELD DESCRIPTIONS:'],
+        [''],
+        ['• Employee Name*: Full name (Required)'],
+        ['• TIN: Tax Identification Number'],
+        ['• Basic Salary*: Monthly basic salary in Naira (Required)'],
+        ['• Transport Allowance: Monthly transport allowance'],
+        ['• Housing Allowance: Monthly housing allowance'],
+        ['• Meal Allowance: Monthly meal allowance'],
+        ['• Other Allowances: Any other monthly allowances'],
+        ['• Pension Contribution: Leave empty for 8% auto-calculation'],
+        ['• NHF Contribution: Leave empty for 2.5% auto-calculation'],
+        ['• Life Insurance Premium: Monthly life insurance premium'],
+        ['• Health Insurance Premium: Monthly health insurance premium'],
+        ['• NHIS Contribution: Monthly NHIS contribution'],
+        ['• Annual Rent: Total annual rent paid (for rent relief)'],
+        [''],
+        ['TAX CALCULATION FEATURES:'],
+        [''],
+        ['• Automatic PAYE calculation based on 2026 Nigerian tax laws'],
+        ['• Progressive tax brackets applied'],
+        ['• All applicable reliefs and deductions included'],
+        ['• Pension relief: 8% of basic salary'],
+        ['• NHF relief: 2.5% of basic salary'],
+        ['• Rent relief: 20% of annual rent (max ₦500,000)'],
+        ['• Life insurance, health insurance, and NHIS reliefs'],
+        [''],
+        ['SUPPORT:'],
+        ['For technical support or questions about tax calculations,'],
+        ['please contact Fiquant Consult at info@fiquantconsult.com'],
+        [''],
+        ['© 2024 FIQUANT CONSULT - ALL RIGHTS RESERVED'],
+        ['This template and tax calculator are proprietary to Fiquant Consult'],
+      ];
+      
+      const instructionsSheet = XLSX.utils.aoa_to_sheet(instructionsData);
+      instructionsSheet['!cols'] = [{ wch: 70 }]; // Wide column for instructions
+      XLSX.utils.book_append_sheet(workbook, instructionsSheet, 'Instructions');
+      
+      // Generate Excel file
+      const excelBuffer = XLSX.write(workbook, { 
+        bookType: 'xlsx', 
+        type: 'array',
+        bookSST: false,
+        cellStyles: true
+      });
+      
+      // Create blob and download
+      const blob = new Blob([excelBuffer], { 
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
+      });
+      
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `Fiquant_PAYE_Template_${new Date().toISOString().split('T')[0]}.csv`;
+      link.download = `Fiquant_Consult_PAYE_Template_${new Date().toISOString().split('T')[0]}.xlsx`;
       
-      // Append to body, click, and remove
+      // Trigger download
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      
-      console.log('Download triggered');
       
       // Clean up
       setTimeout(() => {
         window.URL.revokeObjectURL(url);
       }, 1000);
       
-      // Show success message
-      alert('Template downloaded successfully! Open the file in Excel, fill in your employee data, then upload it back.');
+      console.log('Excel template downloaded successfully');
+      alert('Excel template downloaded successfully! Open the file, fill in your employee data, then upload it back to calculate PAYE taxes.');
       
     } catch (error) {
-      console.error('Error downloading template:', error);
-      alert('Error downloading template. Please try again.');
+      console.error('Error creating Excel template:', error);
+      alert('Error creating Excel template. Please try again or contact support.');
     }
   };
 
