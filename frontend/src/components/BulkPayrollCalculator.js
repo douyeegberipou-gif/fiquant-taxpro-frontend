@@ -169,50 +169,77 @@ const BulkPayrollCalculator = ({ formatCurrency, calculatePayeTax }) => {
   };
 
   const downloadExcelTemplate = () => {
-    // Create Excel template data
-    const headers = [
-      'Employee Name*', 'TIN', 'Basic Salary*', 'Transport Allowance', 'Housing Allowance',
-      'Meal Allowance', 'Other Allowances', 'Pension Contribution', 'NHF Contribution',
-      'Life Insurance Premium', 'Health Insurance Premium', 'NHIS Contribution', 'Annual Rent'
-    ];
+    try {
+      console.log('Download template clicked');
+      
+      // Create Excel template data
+      const headers = [
+        'Employee Name*', 'TIN', 'Basic Salary*', 'Transport Allowance', 'Housing Allowance',
+        'Meal Allowance', 'Other Allowances', 'Pension Contribution', 'NHF Contribution',
+        'Life Insurance Premium', 'Health Insurance Premium', 'NHIS Contribution', 'Annual Rent'
+      ];
 
-    const sampleData = [
-      ['John Doe', '12345678', '500000', '50000', '200000', '30000', '25000', '', '', '10000', '15000', '5000', '1200000'],
-      ['Jane Smith', '87654321', '400000', '40000', '150000', '25000', '20000', '', '', '8000', '12000', '4000', '1000000'],
-      ['Mike Johnson', '11223344', '600000', '60000', '250000', '35000', '30000', '', '', '12000', '18000', '6000', '1500000']
-    ];
+      const sampleData = [
+        ['John Doe', '12345678', '500000', '50000', '200000', '30000', '25000', '', '', '10000', '15000', '5000', '1200000'],
+        ['Jane Smith', '87654321', '400000', '40000', '150000', '25000', '20000', '', '', '8000', '12000', '4000', '1000000'],
+        ['Mike Johnson', '11223344', '600000', '60000', '250000', '35000', '30000', '', '', '12000', '18000', '6000', '1500000']
+      ];
 
-    const instructions = [
-      'INSTRUCTIONS:',
-      '1. Fill in employee details in the rows below',
-      '2. Fields marked with * are required',
-      '3. Leave Pension and NHF empty for auto-calculation (8% and 2.5% respectively)',
-      '4. All amounts should be in Nigerian Naira (₦)',
-      '5. Save the file and upload it back to the app',
-      '',
-      'SAMPLE DATA PROVIDED BELOW - REPLACE WITH YOUR ACTUAL DATA:'
-    ];
+      const instructions = [
+        'INSTRUCTIONS:',
+        '1. Fill in employee details in the rows below',
+        '2. Fields marked with * are required',
+        '3. Leave Pension and NHF empty for auto-calculation (8% and 2.5% respectively)',
+        '4. All amounts should be in Nigerian Naira (₦)',
+        '5. Save the file and upload it back to the app',
+        '',
+        'SAMPLE DATA PROVIDED BELOW - REPLACE WITH YOUR ACTUAL DATA:'
+      ];
 
-    // Create CSV content for Excel compatibility
-    const csvContent = [
-      'Fiquant TaxPro - PAYE Bulk Upload Template',
-      `Generated on: ${new Date().toLocaleDateString()}`,
-      '',
-      ...instructions,
-      '',
-      headers.join(','),
-      ...sampleData.map(row => row.join(','))
-    ].join('\n');
+      // Create CSV content for Excel compatibility
+      const csvContent = [
+        'Fiquant TaxPro - PAYE Bulk Upload Template',
+        `Generated on: ${new Date().toLocaleDateString()}`,
+        '',
+        ...instructions,
+        '',
+        headers.join(','),
+        ...sampleData.map(row => row.join(','))
+      ].join('\n');
 
-    // Add BOM for proper Excel UTF-8 handling
-    const BOM = '\uFEFF';
-    const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `Fiquant_PAYE_Template_${new Date().toISOString().split('T')[0]}.csv`;
-    a.click();
-    window.URL.revokeObjectURL(url);
+      console.log('CSV content created');
+
+      // Add BOM for proper Excel UTF-8 handling
+      const BOM = '\uFEFF';
+      const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8' });
+      
+      console.log('Blob created');
+
+      // Create download link
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Fiquant_PAYE_Template_${new Date().toISOString().split('T')[0]}.csv`;
+      
+      // Append to body, click, and remove
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      console.log('Download triggered');
+      
+      // Clean up
+      setTimeout(() => {
+        window.URL.revokeObjectURL(url);
+      }, 1000);
+      
+      // Show success message
+      alert('Template downloaded successfully! Open the file in Excel, fill in your employee data, then upload it back.');
+      
+    } catch (error) {
+      console.error('Error downloading template:', error);
+      alert('Error downloading template. Please try again.');
+    }
   };
 
   const handleFileUpload = (event) => {
