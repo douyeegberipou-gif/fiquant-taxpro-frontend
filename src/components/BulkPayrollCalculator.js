@@ -628,6 +628,18 @@ If the problem persists, please contact Fiquant Consult support with this error 
                 </div>
               </div>
             </div>
+            
+            {/* Troubleshooting Tips */}
+            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-sm text-blue-800 font-medium mb-2">💡 Download Not Working?</p>
+              <div className="text-xs text-blue-700 space-y-1">
+                <p>• Check your browser's download folder or notifications</p>
+                <p>• Disable popup blocker for this site</p>
+                <p>• Try a different browser (Chrome, Firefox, Safari, Edge)</p>
+                <p>• Ensure downloads are enabled in browser settings</p>
+                <p>• Some corporate networks may restrict downloads</p>
+              </div>
+            </div>
           </div>
         </CardContent>
       </Card>
