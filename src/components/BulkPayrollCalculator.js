@@ -326,12 +326,40 @@ const BulkPayrollCalculator = ({ formatCurrency, calculatePayeTax }) => {
       XLSX.writeFile(workbook, `Fiquant_Consult_PAYE_Template_${new Date().toISOString().split('T')[0]}.xlsx`);
       
       console.log('Excel template downloaded successfully');
-      alert('Excel template downloaded successfully! Open the file, fill in your employee data, then upload it back to calculate PAYE taxes.');
+      
+      // Show success message with troubleshooting tips
+      const successMessage = `Excel template download initiated successfully! 
+
+📁 File: Fiquant_Consult_PAYE_Template_${new Date().toISOString().split('T')[0]}.xlsx
+
+If you don't see the download:
+• Check your browser's download folder or notifications
+• Ensure popup blocker is disabled for this site
+• Try a different browser (Chrome, Firefox, Safari, Edge)
+• Check if downloads are blocked in browser settings
+• Look for download notification in browser's bottom bar
+• Some corporate networks may block downloads
+
+Need help? Contact Fiquant Consult support.`;
+      
+      alert(successMessage);
       
     } catch (error) {
       console.error('Error creating Excel template:', error);
       console.error('Error stack:', error.stack);
-      alert('Error creating Excel template: ' + error.message + '. Please try again or contact support.');
+      
+      const errorMessage = `Error creating Excel template: ${error.message}
+
+Troubleshooting steps:
+1. Refresh the page and try again
+2. Clear your browser cache and cookies
+3. Try a different browser
+4. Disable browser extensions temporarily
+5. Check if JavaScript is enabled
+
+If the problem persists, please contact Fiquant Consult support with this error message.`;
+      
+      alert(errorMessage);
     }
   };
 
