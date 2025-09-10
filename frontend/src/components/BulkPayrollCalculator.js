@@ -555,12 +555,8 @@ If the problem persists, please contact Fiquant Consult support with this error 
         </CardHeader>
         <CardContent className="p-6">
           <div className="flex justify-between items-center mb-4">
-            {/* Left side - Manual Entry */}
+            {/* Left side - Excel Upload Actions */}
             <div className="flex space-x-3">
-              <Button onClick={addEmployee} variant="outline" className="flex items-center space-x-2">
-                <Plus className="h-4 w-4" />
-                <span>Add Employee</span>
-              </Button>
               <Button 
                 onClick={calculateBulkPayroll} 
                 disabled={loading || employees.every(emp => !emp.name || !emp.basic_salary)}
