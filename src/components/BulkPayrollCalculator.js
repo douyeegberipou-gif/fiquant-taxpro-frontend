@@ -644,10 +644,27 @@ If the problem persists, please contact Fiquant Consult support with this error 
       <Card className="bg-white border-emerald-100 shadow-lg">
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
-            <span>Employee Information</span>
-            <Badge variant="outline">
-              {employees.length} Employee{employees.length !== 1 ? 's' : ''}
-            </Badge>
+            <span>Bulk upload - Direct Entry</span>
+            <div className="flex items-center space-x-3">
+              <Badge variant="outline">
+                {employees.length} Employee{employees.length !== 1 ? 's' : ''}
+              </Badge>
+              <div className="flex space-x-2">
+                <Button onClick={addEmployee} variant="outline" size="sm" className="flex items-center space-x-2">
+                  <Plus className="h-4 w-4" />
+                  <span>Add Employee</span>
+                </Button>
+                <Button 
+                  onClick={calculateBulkPayroll} 
+                  disabled={loading || employees.every(emp => !emp.name || !emp.basic_salary)}
+                  size="sm"
+                  className="bg-blue-600 hover:bg-blue-700"
+                >
+                  <Calculator className="h-4 w-4 mr-2" />
+                  {loading ? 'Calculating...' : 'Calculate All'}
+                </Button>
+              </div>
+            </div>
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
