@@ -325,7 +325,8 @@ const BulkPayrollCalculator = ({ formatCurrency, calculatePayeTax }) => {
           </CardDescription>
         </CardHeader>
         <CardContent className="p-6">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center mb-4">
+            {/* Left side - Manual Entry */}
             <div className="flex space-x-3">
               <Button onClick={addEmployee} variant="outline" className="flex items-center space-x-2">
                 <Plus className="h-4 w-4" />
@@ -340,6 +341,8 @@ const BulkPayrollCalculator = ({ formatCurrency, calculatePayeTax }) => {
                 {loading ? 'Calculating...' : 'Calculate All'}
               </Button>
             </div>
+
+            {/* Right side - Results & Export */}
             <div className="flex space-x-2">
               <Button
                 onClick={() => setShowResults(!showResults)}
@@ -355,6 +358,46 @@ const BulkPayrollCalculator = ({ formatCurrency, calculatePayeTax }) => {
                   <span>Export CSV</span>
                 </Button>
               )}
+            </div>
+          </div>
+
+          {/* Excel Template Section */}
+          <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg p-4 mb-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <FileSpreadsheet className="h-6 w-6 text-green-600" />
+                <div>
+                  <h3 className="font-semibold text-green-800">Excel Template Upload</h3>
+                  <p className="text-sm text-green-700">Download template, fill employee data, then upload for bulk processing</p>
+                </div>
+              </div>
+              <div className="flex space-x-3">
+                <Button
+                  onClick={downloadExcelTemplate}
+                  variant="outline"
+                  className="bg-white border-green-300 text-green-700 hover:bg-green-50"
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  Download Template
+                </Button>
+                <div className="relative">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".csv,.xlsx,.xls"
+                    onChange={handleFileUpload}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    disabled={uploading}
+                  />
+                  <Button
+                    disabled={uploading}
+                    className="bg-green-600 hover:bg-green-700 text-white"
+                  >
+                    <Upload className="h-4 w-4 mr-2" />
+                    {uploading ? 'Uploading...' : 'Upload File'}
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </CardContent>
