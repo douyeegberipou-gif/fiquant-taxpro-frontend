@@ -168,6 +168,147 @@ const BulkPayrollCalculator = ({ formatCurrency, calculatePayeTax }) => {
     window.URL.revokeObjectURL(url);
   };
 
+  const downloadExcelTemplate = () => {
+    // Create Excel template data
+    const headers = [
+      'Employee Name*', 'TIN', 'Basic Salary*', 'Transport Allowance', 'Housing Allowance',
+      'Meal Allowance', 'Other Allowances', 'Pension Contribution', 'NHF Contribution',
+      'Life Insurance Premium', 'Health Insurance Premium', 'NHIS Contribution', 'Annual Rent'
+    ];
+
+    const sampleData = [
+      ['John Doe', '12345678', '500000', '50000', '200000', '30000', '25000', '', '', '10000', '15000', '5000', '1200000'],
+      ['Jane Smith', '87654321', '400000', '40000', '150000', '25000', '20000', '', '', '8000', '12000', '4000', '1000000'],
+      ['Mike Johnson', '11223344', '600000', '60000', '250000', '35000', '30000', '', '', '12000', '18000', '6000', '1500000']
+    ];
+
+    const instructions = [
+      'INSTRUCTIONS:',
+      '1. Fill in employee details in the rows below',
+      '2. Fields marked with * are required',
+      '3. Leave Pension and NHF empty for auto-calculation (8% and 2.5% respectively)',
+      '4. All amounts should be in Nigerian Naira (₦)',
+      '5. Save the file and upload it back to the app',
+      '',
+      'SAMPLE DATA PROVIDED BELOW - REPLACE WITH YOUR ACTUAL DATA:'
+    ];
+
+    // Create CSV content for Excel compatibility
+    const csvContent = [
+      'Fiquant TaxPro - PAYE Bulk Upload Template',
+      `Generated on: ${new Date().toLocaleDateString()}`,
+      '',
+      ...instructions,
+      '',
+      headers.join(','),
+      ...sampleData.map(row => row.join(','))
+    ].join('\n');
+
+    // Add BOM for proper Excel UTF-8 handling
+    const BOM = '\uFEFF';
+    const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Fiquant_PAYE_Template_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    setUploading(true);
+    const reader = new FileReader();
+    
+    reader.onload = (e) => {
+      try {
+        const text = e.target.result;
+        const lines = text.split('\n');
+        
+        // Find the header row (contains "Employee Name*")
+        let headerRowIndex = -1;
+        for (let i = 0; i < lines.length; i++) {
+          if (lines[i].includes('Employee Name*')) {
+            headerRowIndex = i;
+            break;
+          }
+        }
+
+        if (headerRowIndex === -1) {
+          alert('Invalid file format. Please use the downloaded template.');
+          setUploading(false);
+          return;
+        }
+
+        // Parse data rows (skip header and empty lines)
+        const dataRows = lines.slice(headerRowIndex + 1)
+          .filter(line => line.trim() && !line.startsWith(','))
+          .map(line => {
+            // Handle CSV parsing with potential commas in quoted fields
+            const values = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let char of line) {
+              if (char === '"') {
+                inQuotes = !inQuotes;
+              } else if (char === ',' && !inQuotes) {
+                values.push(current.trim());
+                current = '';
+              } else {
+                current += char;
+              }
+            }
+            values.push(current.trim());
+            return values;
+          });
+
+        // Convert to employee objects
+        const uploadedEmployees = dataRows.map((row, index) => ({
+          id: index + 1,
+          name: row[0] || '',
+          tin: row[1] || '',
+          basic_salary: row[2] || '',
+          transport_allowance: row[3] || '',
+          housing_allowance: row[4] || '',
+          meal_allowance: row[5] || '',
+          other_allowances: row[6] || '',
+          pension_contribution: row[7] || '',
+          nhf_contribution: row[8] || '',
+          life_insurance_premium: row[9] || '',
+          health_insurance_premium: row[10] || '',
+          nhis_contribution: row[11] || '',
+          annual_rent: row[12] || '',
+          calculated: false,
+          result: null
+        })).filter(emp => emp.name.trim() && emp.basic_salary.trim());
+
+        if (uploadedEmployees.length === 0) {
+          alert('No valid employee data found in the file. Please check the format.');
+          setUploading(false);
+          return;
+        }
+
+        setEmployees(uploadedEmployees);
+        alert(`Successfully imported ${uploadedEmployees.length} employees from the file.`);
+        
+      } catch (error) {
+        console.error('Error parsing file:', error);
+        alert('Error reading the file. Please ensure it\'s a valid CSV file created from our template.');
+      } finally {
+        setUploading(false);
+        // Reset file input
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
+      }
+    };
+
+    reader.readAsText(file);
+  };
+
   const totals = getTotals();
 
   return (
