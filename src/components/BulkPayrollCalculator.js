@@ -320,40 +320,18 @@ const BulkPayrollCalculator = ({ formatCurrency, calculatePayeTax }) => {
       instructionsSheet['!cols'] = [{ wch: 70 }]; // Wide column for instructions
       XLSX.utils.book_append_sheet(workbook, instructionsSheet, 'Instructions');
       
-      // Generate Excel file
-      const excelBuffer = XLSX.write(workbook, { 
-        bookType: 'xlsx', 
-        type: 'array',
-        bookSST: false,
-        cellStyles: true
-      });
+      console.log('Workbook created, generating Excel file...');
       
-      // Create blob and download
-      const blob = new Blob([excelBuffer], { 
-        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
-      });
-      
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `Fiquant_Consult_PAYE_Template_${new Date().toISOString().split('T')[0]}.xlsx`;
-      
-      // Trigger download
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      // Clean up
-      setTimeout(() => {
-        window.URL.revokeObjectURL(url);
-      }, 1000);
+      // Use writeFile method directly (more reliable in browsers)
+      XLSX.writeFile(workbook, `Fiquant_Consult_PAYE_Template_${new Date().toISOString().split('T')[0]}.xlsx`);
       
       console.log('Excel template downloaded successfully');
       alert('Excel template downloaded successfully! Open the file, fill in your employee data, then upload it back to calculate PAYE taxes.');
       
     } catch (error) {
       console.error('Error creating Excel template:', error);
-      alert('Error creating Excel template. Please try again or contact support.');
+      console.error('Error stack:', error.stack);
+      alert('Error creating Excel template: ' + error.message + '. Please try again or contact support.');
     }
   };
 
