@@ -366,89 +366,170 @@ const BulkPayrollCalculator = ({ formatCurrency, calculatePayeTax }) => {
     
     reader.onload = (e) => {
       try {
-        const text = e.target.result;
-        const lines = text.split('\n');
+        let workbook;
+        let worksheet;
         
-        // Find the header row (contains "Employee Name*")
-        let headerRowIndex = -1;
-        for (let i = 0; i < lines.length; i++) {
-          if (lines[i].includes('Employee Name*')) {
-            headerRowIndex = i;
-            break;
-          }
-        }
-
-        if (headerRowIndex === -1) {
-          alert('Invalid file format. Please use the downloaded template.');
-          setUploading(false);
-          return;
-        }
-
-        // Parse data rows (skip header and empty lines)
-        const dataRows = lines.slice(headerRowIndex + 1)
-          .filter(line => line.trim() && !line.startsWith(','))
-          .map(line => {
-            // Handle CSV parsing with potential commas in quoted fields
-            const values = [];
-            let current = '';
-            let inQuotes = false;
-            
-            for (let char of line) {
-              if (char === '"') {
-                inQuotes = !inQuotes;
-              } else if (char === ',' && !inQuotes) {
-                values.push(current.trim());
-                current = '';
-              } else {
-                current += char;
-              }
+        // Check file type and parse accordingly
+        if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls')) {
+          // Parse Excel file
+          const data = new Uint8Array(e.target.result);
+          workbook = XLSX.read(data, { type: 'array' });
+          
+          // Get the first worksheet (PAYE Template)
+          const sheetName = workbook.SheetNames[0];
+          worksheet = workbook.Sheets[sheetName];
+          
+          // Convert to array of arrays
+          const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, raw: false });
+          
+          // Find the header row (contains "Employee Name*")
+          let headerRowIndex = -1;
+          for (let i = 0; i < jsonData.length; i++) {
+            if (jsonData[i] && jsonData[i][0] && jsonData[i][0].includes('Employee Name*')) {
+              headerRowIndex = i;
+              break;
             }
-            values.push(current.trim());
-            return values;
-          });
+          }
+          
+          if (headerRowIndex === -1) {
+            alert('Invalid Excel file format. Please use the downloaded Fiquant Consult template.');
+            setUploading(false);
+            return;
+          }
+          
+          // Extract data rows (skip sample data and get only user-filled data)
+          const dataRows = jsonData.slice(headerRowIndex + 1)
+            .filter(row => {
+              // Filter out sample data and empty rows
+              if (!row || !row[0]) return false;
+              const name = row[0].toString().trim();
+              // Skip sample data
+              if (name === 'John Doe' || name === 'Jane Smith' || name === 'Mike Johnson') return false;
+              // Skip empty rows and watermark rows
+              if (name === '' || name.includes('FIQUANT CONSULT') || name.includes('©')) return false;
+              return true;
+            });
+          
+          // Convert to employee objects
+          const uploadedEmployees = dataRows.map((row, index) => ({
+            id: index + 1,
+            name: row[0] ? row[0].toString().trim() : '',
+            tin: row[1] ? row[1].toString().trim() : '',
+            basic_salary: row[2] ? row[2].toString().trim() : '',
+            transport_allowance: row[3] ? row[3].toString().trim() : '',
+            housing_allowance: row[4] ? row[4].toString().trim() : '',
+            meal_allowance: row[5] ? row[5].toString().trim() : '',
+            other_allowances: row[6] ? row[6].toString().trim() : '',
+            pension_contribution: row[7] ? row[7].toString().trim() : '',
+            nhf_contribution: row[8] ? row[8].toString().trim() : '',
+            life_insurance_premium: row[9] ? row[9].toString().trim() : '',
+            health_insurance_premium: row[10] ? row[10].toString().trim() : '',
+            nhis_contribution: row[11] ? row[11].toString().trim() : '',
+            annual_rent: row[12] ? row[12].toString().trim() : '',
+            calculated: false,
+            result: null
+          })).filter(emp => emp.name && emp.basic_salary);
+          
+          if (uploadedEmployees.length === 0) {
+            alert('No valid employee data found in the Excel file. Please fill in employee details and ensure at least Employee Name and Basic Salary are provided.');
+            setUploading(false);
+            return;
+          }
+          
+          setEmployees(uploadedEmployees);
+          alert(`Successfully imported ${uploadedEmployees.length} employees from Excel file!`);
+          
+        } else if (file.name.endsWith('.csv')) {
+          // Handle CSV files (legacy support)
+          const text = e.target.result;
+          const lines = text.split('\n');
+          
+          let headerRowIndex = -1;
+          for (let i = 0; i < lines.length; i++) {
+            if (lines[i].includes('Employee Name*')) {
+              headerRowIndex = i;
+              break;
+            }
+          }
 
-        // Convert to employee objects
-        const uploadedEmployees = dataRows.map((row, index) => ({
-          id: index + 1,
-          name: row[0] || '',
-          tin: row[1] || '',
-          basic_salary: row[2] || '',
-          transport_allowance: row[3] || '',
-          housing_allowance: row[4] || '',
-          meal_allowance: row[5] || '',
-          other_allowances: row[6] || '',
-          pension_contribution: row[7] || '',
-          nhf_contribution: row[8] || '',
-          life_insurance_premium: row[9] || '',
-          health_insurance_premium: row[10] || '',
-          nhis_contribution: row[11] || '',
-          annual_rent: row[12] || '',
-          calculated: false,
-          result: null
-        })).filter(emp => emp.name.trim() && emp.basic_salary.trim());
+          if (headerRowIndex === -1) {
+            alert('Invalid CSV file format. Please use the downloaded template.');
+            setUploading(false);
+            return;
+          }
 
-        if (uploadedEmployees.length === 0) {
-          alert('No valid employee data found in the file. Please check the format.');
+          const dataRows = lines.slice(headerRowIndex + 1)
+            .filter(line => line.trim() && !line.startsWith(','))
+            .map(line => {
+              const values = [];
+              let current = '';
+              let inQuotes = false;
+              
+              for (let char of line) {
+                if (char === '"') {
+                  inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                  values.push(current.trim());
+                  current = '';
+                } else {
+                  current += char;
+                }
+              }
+              values.push(current.trim());
+              return values;
+            });
+
+          const uploadedEmployees = dataRows.map((row, index) => ({
+            id: index + 1,
+            name: row[0] || '',
+            tin: row[1] || '',
+            basic_salary: row[2] || '',
+            transport_allowance: row[3] || '',
+            housing_allowance: row[4] || '',
+            meal_allowance: row[5] || '',
+            other_allowances: row[6] || '',
+            pension_contribution: row[7] || '',
+            nhf_contribution: row[8] || '',
+            life_insurance_premium: row[9] || '',
+            health_insurance_premium: row[10] || '',
+            nhis_contribution: row[11] || '',
+            annual_rent: row[12] || '',
+            calculated: false,
+            result: null
+          })).filter(emp => emp.name.trim() && emp.basic_salary.trim());
+
+          if (uploadedEmployees.length === 0) {
+            alert('No valid employee data found in the CSV file. Please check the format.');
+            setUploading(false);
+            return;
+          }
+
+          setEmployees(uploadedEmployees);
+          alert(`Successfully imported ${uploadedEmployees.length} employees from CSV file!`);
+          
+        } else {
+          alert('Unsupported file format. Please use the Excel template (.xlsx) downloaded from this site.');
           setUploading(false);
           return;
         }
-
-        setEmployees(uploadedEmployees);
-        alert(`Successfully imported ${uploadedEmployees.length} employees from the file.`);
         
       } catch (error) {
         console.error('Error parsing file:', error);
-        alert('Error reading the file. Please ensure it\'s a valid CSV file created from our template.');
+        alert('Error reading the file. Please ensure you are using the correct Fiquant Consult template format.');
       } finally {
         setUploading(false);
-        // Reset file input
         if (fileInputRef.current) {
           fileInputRef.current.value = '';
         }
       }
     };
 
-    reader.readAsText(file);
+    // Read file based on type
+    if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls')) {
+      reader.readAsArrayBuffer(file);
+    } else {
+      reader.readAsText(file);
+    }
   };
 
   const totals = getTotals();
