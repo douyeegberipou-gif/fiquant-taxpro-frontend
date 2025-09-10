@@ -30,6 +30,8 @@ const BulkPayrollCalculator = ({ formatCurrency, calculatePayeTax }) => {
 
   const [showResults, setShowResults] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef(null);
 
   const addEmployee = () => {
     const newEmployee = {
