@@ -601,7 +601,7 @@ const BulkPayrollCalculator = ({ formatCurrency, calculatePayeTax }) => {
                   className="bg-white border-green-300 text-green-700 hover:bg-green-50"
                 >
                   <Download className="h-4 w-4 mr-2" />
-                  Download Template
+                  Download Excel Template
                 </Button>
                 <div className="relative">
                   <input
