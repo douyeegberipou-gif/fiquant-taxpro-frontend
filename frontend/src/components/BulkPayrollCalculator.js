@@ -696,8 +696,13 @@ const BulkPayrollCalculator = ({ formatCurrency, calculatePayeTax }) => {
       {/* Instructions */}
       <Alert>
         <AlertDescription>
-          <strong>How to use:</strong> Add employees by clicking "Add Employee", fill in their details (name and basic salary are required), 
-          then click "Calculate All" to process the entire payroll. You can export results to CSV for further analysis.
+          <strong>How to use:</strong>
+          <br />
+          <strong>Method 1 (Manual):</strong> Add employees by clicking "Add Employee", fill in their details, then click "Calculate All".
+          <br />
+          <strong>Method 2 (Excel Upload):</strong> Download the Excel template, fill in your employee data offline, then upload the file for instant bulk processing.
+          <br />
+          Both methods support export to CSV for further analysis.
         </AlertDescription>
       </Alert>
     </div>
