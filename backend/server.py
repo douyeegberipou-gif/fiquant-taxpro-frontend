@@ -422,7 +422,7 @@ async def register_user(user_data: UserRegistration):
 
 @api_router.post("/auth/login", response_model=Token)
 async def login_user(login_data: UserLogin):
-    """Login user and return JWT token"""
+    """Login user and return JWT token (requires verified account)"""
     # Find user by email or phone
     query = {}
     if validate_email(login_data.email_or_phone):
@@ -444,10 +444,27 @@ async def login_user(login_data: UserLogin):
             detail="Invalid credentials"
         )
     
-    # Update last login
+    # Check verification status
+    user_profile = UserProfile(**user_data)
+    if not await is_account_verified(user_profile):
+        verification_status = []
+        if not user_profile.email_verified:
+            verification_status.append("email")
+        if user_profile.phone and not user_profile.phone_verified:
+            verification_status.append("phone")
+        
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"Account not verified. Please verify your {' and '.join(verification_status)} before logging in."
+        )
+    
+    # Update last login and account status
     await db.users.update_one(
         {"id": user_data["id"]},
-        {"$set": {"last_login": datetime.now(timezone.utc).isoformat()}}
+        {"$set": {
+            "last_login": datetime.now(timezone.utc).isoformat(),
+            "account_status": "active"
+        }}
     )
     
     # Create access token
