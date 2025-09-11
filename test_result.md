@@ -383,17 +383,21 @@ metadata:
 
 test_plan:
   current_focus:
-    - "PDF Generator Utility"
-    - "Single PAYE Print Report (PDF)"
-    - "Bulk PAYE Print Report (PDF)"
-    - "CIT Print Report (PDF)"
+    - "User Registration API"
+    - "User Verification API"
+    - "User Login API"
+    - "Authentication Middleware"
+    - "User Registration Form"
+    - "User Verification Page"
+    - "User Login Form"
+    - "Authentication Context"
   stuck_tasks:
     - "PDF Generator Utility"
     - "Single PAYE Print Report (PDF)"
     - "Bulk PAYE Print Report (PDF)"
     - "CIT Print Report (PDF)"
   test_all: false
-  test_priority: "stuck_first"
+  test_priority: "high_first"
 
 agent_communication:
   - agent: "main"
