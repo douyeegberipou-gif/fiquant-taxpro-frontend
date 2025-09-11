@@ -61,9 +61,16 @@ export const AuthProvider = ({ children }) => {
       return { success: true };
     } catch (error) {
       console.error('Login failed:', error);
+      const errorMessage = error.response?.data?.detail || 'Login failed';
+      
+      // Check if the error is about account verification
+      const needsVerification = error.response?.status === 403 && 
+        (errorMessage.includes('not verified') || errorMessage.includes('verification required'));
+      
       return { 
         success: false, 
-        error: error.response?.data?.detail || 'Login failed' 
+        error: errorMessage,
+        needsVerification: needsVerification
       };
     }
   };
