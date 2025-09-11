@@ -194,15 +194,18 @@ backend:
 
   - task: "Authentication Middleware"
     implemented: true
-    working: "NA"
+    working: true
     file: "server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Recently implemented JWT-based authentication middleware for protected routes. Need to test protected endpoints, token validation, and error handling for invalid/expired tokens."
+      - working: true
+        agent: "testing"
+        comment: "✅ AUTHENTICATION MIDDLEWARE TESTING COMPLETED: All protected endpoints working correctly. Tested protected endpoint access without token (403 error), protected endpoint access with invalid token (401 error), profile update without authentication (403 error), calculation history access without authentication (403 error). JWT token validation and error handling working perfectly. Fixed jwt.JWTError to jwt.InvalidTokenError for proper token validation."
 
 frontend:
   - task: "Excel Template Download for Bulk PAYE"
