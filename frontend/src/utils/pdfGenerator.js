@@ -70,9 +70,6 @@ const addFooter = (doc) => {
 export const generatePayeReport = (taxInput, result) => {
   const doc = new jsPDF();
   
-  // Apply the autoTable plugin
-  autoTable(doc, {});
-  
   let yPos = addHeader(doc, 'PAYE Tax Calculation Report');
   
   // Employee Information Section
