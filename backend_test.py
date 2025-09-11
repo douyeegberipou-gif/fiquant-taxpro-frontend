@@ -1982,13 +1982,14 @@ class NigerianTaxCalculatorTester:
             return True
         else:
             # Check if super admin already exists
-            if "Super admin already exists" in str(response):
+            response_text = str(response) if isinstance(response, dict) else response
+            if "Super admin already exists" in response_text:
                 print(f"   ✅ Super admin already exists (expected behavior)")
                 print(f"   📝 System correctly prevents duplicate super admin creation")
                 # Set a placeholder super admin email for other tests
                 self.super_admin_email = "existing.super.admin@fiquant.ng"
                 return True
-            elif "User not found" in str(response) or "Not Found" in str(response):
+            elif "User not found" in response_text or "Not Found" in response_text:
                 print(f"   🔍 User not found in database. Let's create a fresh user for admin promotion.")
                 return self.test_create_fresh_admin_user()
             else:
