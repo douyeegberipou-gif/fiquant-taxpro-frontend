@@ -717,7 +717,7 @@ function App() {
                     {/* Print Report Button */}
                     <div className="pt-4 border-t">
                       <Button
-                        onClick={async () => await generatePayeReport(taxInput, result)}
+                        onClick={() => generatePayeReport(taxInput, result)}
                         className="w-full bg-gray-900 hover:bg-gray-800 text-white flex items-center justify-center space-x-2"
                       >
                         <Printer className="h-4 w-4" />
