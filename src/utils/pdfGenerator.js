@@ -24,15 +24,15 @@ const addHeader = (doc, title) => {
   doc.setFillColor(0, 0, 0); // Black background
   doc.rect(0, 0, 220, 30, 'F');
   
-  // Company name
+  // Company name - Fix spacing between Fiquant and TaxPro
   doc.setTextColor(255, 255, 255); // White text
   doc.setFontSize(22);
   doc.setFont('helvetica', 'bold');
   doc.text('Fiquant', 20, 18);
   
-  // TaxPro in gold color (approximation)
+  // TaxPro in gold color (approximation) - proper spacing
   doc.setTextColor(255, 215, 0); // Gold color
-  doc.text('TaxPro', 65, 18);
+  doc.text('TaxPro', 70, 18);
   
   // Subtitle
   doc.setFontSize(10);
