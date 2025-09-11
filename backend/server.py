@@ -1931,35 +1931,45 @@ async def get_audit_logs(
 # Include admin router
 app.include_router(admin_router)
 
-# Initialize super admin (run once)
-async def initialize_super_admin():
-    """Initialize the first super admin account"""
+# Initialize super admin endpoint (public - use with caution)
+@api_router.post("/admin/initialize-super-admin")
+async def initialize_super_admin(email_data: dict):
+    """Initialize the first super admin account - use only once for setup"""
     try:
+        email = email_data.get("email")
+        if not email:
+            raise HTTPException(status_code=400, detail="Email is required")
+        
         # Check if any super admin exists
         super_admin = await db.users.find_one({"admin_role": "super_admin"})
         if super_admin:
-            print("Super admin already exists")
-            return
+            raise HTTPException(status_code=400, detail="Super admin already exists")
         
-        # Find user and promote to super admin (replace with actual email)
-        # This should be called manually or through environment variable
-        super_admin_email = os.getenv('SUPER_ADMIN_EMAIL')  # Set this in .env
-        if super_admin_email:
-            result = await db.users.update_one(
-                {"email": super_admin_email},
-                {"$set": {
-                    "admin_role": "super_admin",
-                    "admin_enabled": True,
-                    "updated_at": datetime.now(timezone.utc).isoformat()
-                }}
-            )
-            if result.matched_count > 0:
-                print(f"Super admin privileges granted to {super_admin_email}")
-            else:
-                print(f"User with email {super_admin_email} not found")
+        # Find user and promote to super admin
+        user_data = await db.users.find_one({"email": email})
+        if not user_data:
+            raise HTTPException(status_code=404, detail="User not found")
         
+        result = await db.users.update_one(
+            {"email": email},
+            {"$set": {
+                "admin_role": "super_admin",
+                "admin_enabled": True,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+        
+        if result.matched_count > 0:
+            print(f"Super admin privileges granted to {email}")
+            return {"message": f"Super admin privileges granted to {email}"}
+        else:
+            raise HTTPException(status_code=404, detail="Failed to update user")
+        
+    except HTTPException:
+        raise
     except Exception as e:
         print(f"Error initializing super admin: {e}")
+        raise HTTPException(status_code=500, detail="Failed to initialize super admin")
 
 # Start the app
 if __name__ == "__main__":
