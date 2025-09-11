@@ -541,70 +541,71 @@ If the problem persists, please contact Fiquant Consult support with this error 
   const totals = getTotals();
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 max-w-7xl mx-auto px-4">
       {/* Header */}
-      <Card className="bg-white border-blue-100 shadow-lg">
-        <CardHeader className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-t-lg">
-          <CardTitle className="flex items-center space-x-2">
-            <Users className="h-5 w-5" />
-            <span>Bulk Payroll Calculator</span>
-          </CardTitle>
-          <CardDescription className="text-blue-100">
-            Calculate PAYE tax for multiple employees in spreadsheet format
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="p-6">
-          <div className="flex justify-between items-center mb-4">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-gradient-to-r from-gray-900 to-black text-white px-8 py-6">
+          <div className="flex items-center space-x-3">
+            <Users className="h-6 w-6 text-yellow-400" />
+            <div>
+              <h1 className="text-2xl font-bold">Bulk Payroll Calculator</h1>
+              <p className="text-gray-300 text-sm mt-1">Calculate PAYE tax for multiple employees efficiently</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="p-8">
+          <div className="flex justify-between items-center">
             {/* Left side - Excel Upload Actions */}
-            <div className="flex space-x-3">
-              <Button 
+            <div className="flex space-x-4">
+              <button 
                 onClick={calculateBulkPayroll} 
                 disabled={loading || employees.every(emp => !emp.name || !emp.basic_salary)}
-                className="bg-blue-600 hover:bg-blue-700"
+                className="inline-flex items-center px-6 py-3 bg-gray-900 text-white text-sm font-medium rounded-xl hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-sm"
               >
                 <Calculator className="h-4 w-4 mr-2" />
                 {loading ? 'Calculating...' : 'Calculate All'}
-              </Button>
+              </button>
             </div>
 
             {/* Right side - Results & Export */}
-            <div className="flex space-x-2">
-              <Button
+            <div className="flex space-x-3">
+              <button
                 onClick={() => setShowResults(!showResults)}
-                variant="outline"
-                className="flex items-center space-x-2"
+                className="inline-flex items-center px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-xl hover:bg-gray-50 transition-all duration-200"
               >
-                {showResults ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                <span>{showResults ? 'Hide Results' : 'Show Results'}</span>
-              </Button>
+                {showResults ? <EyeOff className="h-4 w-4 mr-2" /> : <Eye className="h-4 w-4 mr-2" />}
+                {showResults ? 'Hide Results' : 'Show Results'}
+              </button>
               {totals.employeeCount > 0 && (
-                <Button onClick={exportToCSV} variant="outline" className="flex items-center space-x-2">
-                  <Download className="h-4 w-4" />
-                  <span>Export CSV</span>
-                </Button>
+                <button onClick={exportToCSV} className="inline-flex items-center px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-xl hover:bg-gray-50 transition-all duration-200">
+                  <Download className="h-4 w-4 mr-2" />
+                  Export CSV
+                </button>
               )}
             </div>
           </div>
 
           {/* Excel Template Section */}
-          <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg p-4 mb-6">
+          <div className="mt-8 bg-gradient-to-r from-yellow-50 to-amber-50 border border-yellow-200 rounded-2xl p-6">
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <FileSpreadsheet className="h-6 w-6 text-green-600" />
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center justify-center w-12 h-12 bg-yellow-400 rounded-xl">
+                  <FileSpreadsheet className="h-6 w-6 text-gray-900" />
+                </div>
                 <div>
-                  <h3 className="font-semibold text-green-800">Excel Template Upload</h3>
-                  <p className="text-sm text-green-700">Download template, fill employee data, then upload for bulk processing</p>
+                  <h3 className="text-lg font-semibold text-gray-900">Excel Template Upload</h3>
+                  <p className="text-sm text-gray-600 mt-1">Download template, fill employee data, then upload for bulk processing</p>
                 </div>
               </div>
               <div className="flex space-x-3">
-                <Button
+                <button
                   onClick={downloadExcelTemplate}
-                  variant="outline"
-                  className="bg-white border-green-300 text-green-700 hover:bg-green-50"
+                  className="inline-flex items-center px-5 py-2.5 bg-white border border-yellow-300 text-gray-700 text-sm font-medium rounded-xl hover:bg-yellow-50 transition-all duration-200 shadow-sm"
                 >
                   <Download className="h-4 w-4 mr-2" />
-                  Download Excel Template
-                </Button>
+                  Download Template
+                </button>
                 <div className="relative">
                   <input
                     ref={fileInputRef}
@@ -614,20 +615,20 @@ If the problem persists, please contact Fiquant Consult support with this error 
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                     disabled={uploading}
                   />
-                  <Button
+                  <button
                     disabled={uploading}
-                    className="bg-green-600 hover:bg-green-700 text-white"
+                    className="inline-flex items-center px-5 py-2.5 bg-yellow-400 text-gray-900 text-sm font-medium rounded-xl hover:bg-yellow-500 disabled:opacity-50 transition-all duration-200 shadow-sm"
                   >
                     <Upload className="h-4 w-4 mr-2" />
                     {uploading ? 'Uploading...' : 'Upload File'}
-                  </Button>
+                  </button>
                 </div>
               </div>
             </div>
             
             {/* Troubleshooting Tips */}
-            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-              <p className="text-sm text-blue-800 font-medium mb-2">💡 Download Not Working?</p>
+            <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+              <p className="text-sm text-blue-900 font-medium mb-2">💡 Download Not Working?</p>
               <div className="text-xs text-blue-700 space-y-1">
                 <p>• Check your browser's download folder or notifications</p>
                 <p>• Disable popup blocker for this site</p>
@@ -637,205 +638,212 @@ If the problem persists, please contact Fiquant Consult support with this error 
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Employee Input Table */}
-      <Card className="bg-white border-emerald-100 shadow-lg">
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <span>Bulk upload - Direct Entry</span>
-            <div className="flex items-center space-x-3">
-              <Badge variant="outline">
-                {employees.length} Employee{employees.length !== 1 ? 's' : ''}
-              </Badge>
-              <div className="flex space-x-2">
-                <Button onClick={addEmployee} variant="outline" size="sm" className="flex items-center space-x-2">
-                  <Plus className="h-4 w-4" />
-                  <span>Add Employee</span>
-                </Button>
-                <Button 
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="px-8 py-6 border-b border-gray-100">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-bold text-gray-900">Bulk upload - Direct Entry</h2>
+              <p className="text-sm text-gray-600 mt-1">Manually enter employee data for tax calculations</p>
+            </div>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-500">Employees:</span>
+                <span className="inline-flex items-center px-3 py-1 bg-gray-100 text-gray-800 text-sm font-medium rounded-full">
+                  {employees.length}
+                </span>
+              </div>
+              <div className="flex space-x-3">
+                <button onClick={addEmployee} className="inline-flex items-center px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-xl hover:bg-gray-50 transition-all duration-200">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Employee
+                </button>
+                <button 
                   onClick={calculateBulkPayroll} 
                   disabled={loading || employees.every(emp => !emp.name || !emp.basic_salary)}
-                  size="sm"
-                  className="bg-blue-600 hover:bg-blue-700"
+                  className="inline-flex items-center px-5 py-2.5 bg-gray-900 text-white text-sm font-medium rounded-xl hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-sm"
                 >
                   <Calculator className="h-4 w-4 mr-2" />
                   {loading ? 'Calculating...' : 'Calculate All'}
-                </Button>
+                </button>
               </div>
             </div>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-0">
-          <div className="p-6 pb-0">
-            <Alert className="bg-blue-50 border-blue-200 mb-4">
-              <AlertDescription className="text-blue-800 text-sm">
-                <strong>Relief Fields:</strong> Leave pension and NHF empty for auto-calculation (8% and 2.5% of basic salary respectively). 
-                Other reliefs are optional but help reduce taxable income.
-              </AlertDescription>
-            </Alert>
           </div>
+        </div>
+        
+        <div className="p-8">
+          <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+            <p className="text-sm text-blue-900">
+              <span className="font-medium">Relief Fields:</span> Leave pension and NHF empty for auto-calculation (8% and 2.5% of basic salary respectively). 
+              Other reliefs are optional but help reduce taxable income.
+            </p>
+          </div>
+          
           <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[40px]">#</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">Employee Name *</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">TIN</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">Basic Salary *</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">Transport</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">Housing</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">Meal</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">Other</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">Pension</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">NHF</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">Life Ins.</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">Health Ins.</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">NHIS</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">Annual Rent</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[80px]">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {employees.map((employee, index) => (
-                  <tr key={employee.id} className={employee.calculated ? 'bg-green-50' : ''}>
-                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
-                      {index + 1}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <Input
-                        placeholder="Employee Name"
-                        value={employee.name}
-                        onChange={(e) => updateEmployee(employee.id, 'name', e.target.value)}
-                        className="w-full"
-                      />
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <Input
-                        placeholder="TIN Number"
-                        value={employee.tin}
-                        onChange={(e) => updateEmployee(employee.id, 'tin', e.target.value)}
-                        className="w-full"
-                      />
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <Input
-                        type="number"
-                        placeholder="500,000"
-                        value={employee.basic_salary}
-                        onChange={(e) => updateEmployee(employee.id, 'basic_salary', e.target.value)}
-                        className="w-full"
-                      />
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <Input
-                        type="number"
-                        placeholder="50,000"
-                        value={employee.transport_allowance}
-                        onChange={(e) => updateEmployee(employee.id, 'transport_allowance', e.target.value)}
-                        className="w-full"
-                      />
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <Input
-                        type="number"
-                        placeholder="200,000"
-                        value={employee.housing_allowance}
-                        onChange={(e) => updateEmployee(employee.id, 'housing_allowance', e.target.value)}
-                        className="w-full"
-                      />
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <Input
-                        type="number"
-                        placeholder="30,000"
-                        value={employee.meal_allowance}
-                        onChange={(e) => updateEmployee(employee.id, 'meal_allowance', e.target.value)}
-                        className="w-full"
-                      />
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <Input
-                        type="number"
-                        placeholder="25,000"
-                        value={employee.other_allowances}
-                        onChange={(e) => updateEmployee(employee.id, 'other_allowances', e.target.value)}
-                        className="w-full"
-                      />
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <Input
-                        type="number"
-                        placeholder="Auto (8%)"
-                        value={employee.pension_contribution}
-                        onChange={(e) => updateEmployee(employee.id, 'pension_contribution', e.target.value)}
-                        className="w-full"
-                      />
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <Input
-                        type="number"
-                        placeholder="Auto (2.5%)"
-                        value={employee.nhf_contribution}
-                        onChange={(e) => updateEmployee(employee.id, 'nhf_contribution', e.target.value)}
-                        className="w-full"
-                      />
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <Input
-                        type="number"
-                        placeholder="10,000"
-                        value={employee.life_insurance_premium}
-                        onChange={(e) => updateEmployee(employee.id, 'life_insurance_premium', e.target.value)}
-                        className="w-full"
-                      />
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <Input
-                        type="number"
-                        placeholder="15,000"
-                        value={employee.health_insurance_premium}
-                        onChange={(e) => updateEmployee(employee.id, 'health_insurance_premium', e.target.value)}
-                        className="w-full"
-                      />
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <Input
-                        type="number"
-                        placeholder="5,000"
-                        value={employee.nhis_contribution}
-                        onChange={(e) => updateEmployee(employee.id, 'nhis_contribution', e.target.value)}
-                        className="w-full"
-                      />
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <Input
-                        type="number"
-                        placeholder="1,200,000"
-                        value={employee.annual_rent}
-                        onChange={(e) => updateEmployee(employee.id, 'annual_rent', e.target.value)}
-                        className="w-full"
-                      />
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <Button
-                        onClick={() => removeEmployee(employee.id)}
-                        disabled={employees.length === 1}
-                        variant="ghost"
-                        size="sm"
-                        className="text-red-600 hover:text-red-800"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </td>
+            <div className="inline-block min-w-full align-middle">
+              <table className="min-w-full">
+                <thead>
+                  <tr className="border-b border-gray-200">
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider min-w-[40px]">#</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider min-w-[150px]">Employee Name *</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider min-w-[120px]">TIN</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider min-w-[120px]">Basic Salary *</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider min-w-[120px]">Transport</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider min-w-[120px]">Housing</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider min-w-[120px]">Meal</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider min-w-[120px]">Other</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider min-w-[120px]">Pension</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider min-w-[120px]">NHF</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider min-w-[120px]">Life Ins.</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider min-w-[120px]">Health Ins.</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider min-w-[120px]">NHIS</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider min-w-[120px]">Annual Rent</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider min-w-[80px]">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {employees.map((employee, index) => (
+                    <tr key={employee.id} className={`${employee.calculated ? 'bg-green-50' : 'bg-white'} hover:bg-gray-50 transition-colors duration-150`}>
+                      <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
+                        {index + 1}
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <input
+                          type="text"
+                          placeholder="Employee Name"
+                          value={employee.name}
+                          onChange={(e) => updateEmployee(employee.id, 'name', e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200"
+                        />
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <input
+                          type="text"
+                          placeholder="TIN Number"
+                          value={employee.tin}
+                          onChange={(e) => updateEmployee(employee.id, 'tin', e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200"
+                        />
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <input
+                          type="number"
+                          placeholder="500,000"
+                          value={employee.basic_salary}
+                          onChange={(e) => updateEmployee(employee.id, 'basic_salary', e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200"
+                        />
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <input
+                          type="number"
+                          placeholder="50,000"
+                          value={employee.transport_allowance}
+                          onChange={(e) => updateEmployee(employee.id, 'transport_allowance', e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200"
+                        />
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <input
+                          type="number"
+                          placeholder="200,000"
+                          value={employee.housing_allowance}
+                          onChange={(e) => updateEmployee(employee.id, 'housing_allowance', e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200"
+                        />
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <input
+                          type="number"
+                          placeholder="30,000"
+                          value={employee.meal_allowance}
+                          onChange={(e) => updateEmployee(employee.id, 'meal_allowance', e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200"
+                        />
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <input
+                          type="number"
+                          placeholder="25,000"
+                          value={employee.other_allowances}
+                          onChange={(e) => updateEmployee(employee.id, 'other_allowances', e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200"
+                        />
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <input
+                          type="number"
+                          placeholder="Auto (8%)"
+                          value={employee.pension_contribution}
+                          onChange={(e) => updateEmployee(employee.id, 'pension_contribution', e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200"
+                        />
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <input
+                          type="number"
+                          placeholder="Auto (2.5%)"
+                          value={employee.nhf_contribution}
+                          onChange={(e) => updateEmployee(employee.id, 'nhf_contribution', e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200"
+                        />
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <input
+                          type="number"
+                          placeholder="10,000"
+                          value={employee.life_insurance_premium}
+                          onChange={(e) => updateEmployee(employee.id, 'life_insurance_premium', e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200"
+                        />
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <input
+                          type="number"
+                          placeholder="15,000"
+                          value={employee.health_insurance_premium}
+                          onChange={(e) => updateEmployee(employee.id, 'health_insurance_premium', e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200"
+                        />
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <input
+                          type="number"
+                          placeholder="5,000"
+                          value={employee.nhis_contribution}
+                          onChange={(e) => updateEmployee(employee.id, 'nhis_contribution', e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200"
+                        />
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <input
+                          type="number"
+                          placeholder="1,200,000"
+                          value={employee.annual_rent}
+                          onChange={(e) => updateEmployee(employee.id, 'annual_rent', e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200"
+                        />
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <button
+                          onClick={() => removeEmployee(employee.id)}
+                          disabled={employees.length === 1}
+                          className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      }
 
       {/* Results Table */}
       {showResults && totals.employeeCount > 0 && (
