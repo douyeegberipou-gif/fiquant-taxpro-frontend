@@ -561,7 +561,7 @@ function App() {
                         <Input
                           id="life_insurance_premium"
                           type="number"
-                          placeholder="10,000"
+                          placeholder="₦10,000"
                           value={taxInput.life_insurance_premium}
                           onChange={(e) => handleInputChange('life_insurance_premium', e.target.value)}
                         />
