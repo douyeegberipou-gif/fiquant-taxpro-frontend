@@ -20,7 +20,11 @@ import './App.css';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-function App() {
+function AppContent() {
+  const { user, logout, isAuthenticated } = useAuth();
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  
+  // Existing state variables
   const [taxInput, setTaxInput] = useState({
     basic_salary: '',
     transport_allowance: '',
