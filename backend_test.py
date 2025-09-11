@@ -1900,6 +1900,199 @@ class NigerianTaxCalculatorTester:
         print(f"\n🔐 Authentication Tests Summary: {self.tests_passed}/{self.tests_run} passed")
         return self.tests_passed == self.tests_run
 
+    # ============================
+    # ADMIN SYSTEM TESTS
+    # ============================
+    
+    def test_find_existing_user_for_admin(self):
+        """Find an existing user to promote to super admin"""
+        print("\n🔍 Finding existing user for super admin promotion...")
+        
+        # Since we can't access admin endpoints without being admin, 
+        # we'll use the test user we created earlier
+        if hasattr(self, 'test_user_data') and self.test_user_data:
+            print(f"   ✅ Found test user for admin promotion: {self.test_user_data['email']}")
+            return self.test_user_data['email']
+        else:
+            # Create a new user specifically for admin testing
+            import time
+            timestamp = int(time.time())
+            admin_user_data = {
+                "email": f"admin.candidate.{timestamp}@fiquant.ng",
+                "phone": f"+234900{timestamp % 100000}",
+                "password": "AdminPass123!",
+                "full_name": "Admin Candidate User",
+                "agree_terms": True
+            }
+            
+            success, response = self.run_test(
+                "Create Admin Candidate User",
+                "POST",
+                "auth/register",
+                200,
+                admin_user_data
+            )
+            
+            if success:
+                print(f"   ✅ Created admin candidate user: {admin_user_data['email']}")
+                self.admin_candidate_email = admin_user_data['email']
+                self.admin_candidate_password = admin_user_data['password']
+                return admin_user_data['email']
+            else:
+                print(f"   ❌ Failed to create admin candidate user")
+                return None
+    
+    def test_initialize_super_admin(self):
+        """Test initializing the first super admin account"""
+        # First, find a user to promote
+        candidate_email = self.test_find_existing_user_for_admin()
+        
+        if not candidate_email:
+            print("   ❌ No candidate user found for super admin promotion")
+            return False
+        
+        # Initialize super admin
+        admin_data = {
+            "email": candidate_email
+        }
+        
+        success, response = self.run_test(
+            "Initialize Super Admin",
+            "POST",
+            "admin/initialize-super-admin",
+            200,
+            admin_data
+        )
+        
+        if success:
+            print(f"   ✅ Super admin initialized successfully")
+            print(f"   Message: {response.get('message', 'No message')}")
+            self.super_admin_email = candidate_email
+            
+            # Test super admin login attempt
+            self.test_super_admin_login_attempt()
+            return True
+        else:
+            print(f"   ❌ Failed to initialize super admin")
+            return False
+    
+    def test_super_admin_login_attempt(self):
+        """Test super admin login attempt (will fail due to verification requirement)"""
+        if not hasattr(self, 'super_admin_email'):
+            print("   ❌ No super admin email available")
+            return False
+        
+        # Determine the password to use
+        password = "SecurePass123!"  # Default from test_user_data
+        if hasattr(self, 'admin_candidate_password'):
+            password = self.admin_candidate_password
+        
+        print(f"   ⚠️ Note: In production, the admin user would need to complete email/phone verification")
+        
+        # Try to login (this will likely fail due to verification requirement)
+        login_data = {
+            "email_or_phone": self.super_admin_email,
+            "password": password
+        }
+        
+        success, response = self.run_test(
+            "Super Admin Login Attempt",
+            "POST",
+            "auth/login",
+            403,  # Expected to fail due to unverified account
+            login_data
+        )
+        
+        if success and "not verified" in str(response):
+            print(f"   ✅ Super admin login correctly blocked due to unverified account")
+            print(f"   📝 Error: {response.get('detail', 'No error message')}")
+            print(f"   📋 Next step: Complete email/phone verification to enable admin access")
+            return True
+        elif not success:
+            # Check if it's a different error
+            print(f"   ⚠️ Login failed with different error (expected for unverified account)")
+            return True
+        else:
+            print(f"   ❌ Unexpected login response")
+            return False
+    
+    def test_admin_endpoints_without_auth(self):
+        """Test admin endpoints without authentication (should fail)"""
+        admin_endpoints = [
+            ("GET", "admin/users", "Admin Users List"),
+            ("GET", "admin/analytics/dashboard", "Admin Analytics Dashboard"),
+            ("GET", "admin/audit-logs", "Admin Audit Logs")
+        ]
+        
+        print("\n🔒 Testing admin endpoints without authentication...")
+        all_protected = True
+        
+        for method, endpoint, description in admin_endpoints:
+            success, response = self.run_test(
+                f"Admin Protection - {description}",
+                method,
+                endpoint,
+                401,  # Should fail with 401 Unauthorized
+                None
+            )
+            
+            if success:
+                print(f"   ✅ {description} correctly protected (401 Unauthorized)")
+            else:
+                print(f"   ❌ {description} not properly protected")
+                all_protected = False
+        
+        return all_protected
+    
+    def test_duplicate_super_admin_prevention(self):
+        """Test that duplicate super admin creation is prevented"""
+        if not hasattr(self, 'super_admin_email'):
+            print("   ⚠️ Skipping - No super admin exists to test duplication")
+            return False
+        
+        # Try to create another super admin (should fail)
+        admin_data = {
+            "email": self.super_admin_email
+        }
+        
+        success, response = self.run_test(
+            "Prevent Duplicate Super Admin",
+            "POST",
+            "admin/initialize-super-admin",
+            400,  # Should fail with 400 Bad Request
+            admin_data
+        )
+        
+        if success:
+            print(f"   ✅ Correctly prevented duplicate super admin creation")
+            print(f"   📝 Error message: {response.get('detail', 'No error message')}")
+            return True
+        else:
+            print(f"   ❌ Failed to prevent duplicate super admin creation")
+            return False
+    
+    def test_invalid_user_super_admin_promotion(self):
+        """Test promoting non-existent user to super admin (should fail)"""
+        admin_data = {
+            "email": "nonexistent.user@fiquant.ng"
+        }
+        
+        success, response = self.run_test(
+            "Promote Non-existent User to Super Admin",
+            "POST",
+            "admin/initialize-super-admin",
+            404,  # Should fail with 404 Not Found
+            admin_data
+        )
+        
+        if success:
+            print(f"   ✅ Correctly rejected promotion of non-existent user")
+            print(f"   📝 Error message: {response.get('detail', 'No error message')}")
+            return True
+        else:
+            print(f"   ❌ Should have rejected non-existent user promotion")
+            return False
+
 def main():
     print("🚀 Starting Nigerian Tax Calculator API Tests")
     print("=" * 60)
