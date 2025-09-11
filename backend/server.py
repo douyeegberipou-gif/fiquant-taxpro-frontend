@@ -645,10 +645,8 @@ async def resend_verification(verification_data: EmailVerification):
     user_data = await db.users.find_one({"email": verification_data.email})
     
     if not user_data:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found"
-        )
+        # Don't reveal if user exists or not for security
+        return {"message": "If the email exists in our system, a verification email has been sent."}
     
     if user_data.get("email_verified"):
         raise HTTPException(
@@ -678,12 +676,9 @@ async def resend_verification(verification_data: EmailVerification):
     )
     
     if not email_sent:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to send verification email"
-        )
+        print(f"Warning: Failed to send verification email to {verification_data.email}")
     
-    return {"message": "Verification email sent"}
+    return {"message": "If the email exists in our system, a verification email has been sent."}
 
 @api_router.post("/auth/resend-sms")
 async def resend_sms_verification(verification_data: EmailVerification):
