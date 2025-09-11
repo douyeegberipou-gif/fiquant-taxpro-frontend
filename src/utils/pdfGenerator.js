@@ -188,6 +188,9 @@ export const generatePayeReport = (taxInput, result) => {
 export const generateBulkPayeReport = (employees, totals) => {
   const doc = new jsPDF();
   
+  // Apply the autoTable plugin
+  autoTable(doc, {});
+  
   let yPos = addHeader(doc, 'Bulk PAYE Tax Calculation Report');
   
   // Summary Section
