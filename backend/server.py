@@ -71,6 +71,9 @@ class CITInput(BaseModel):
     excessive_interest: float = Field(default=0, description="Interest above thin cap limits")
     other_non_deductible: float = Field(default=0, description="Other non-deductible expenses")
     
+    # Loss Relief
+    carry_forward_losses: float = Field(default=0, description="Losses carried forward from previous years")
+    
     # Financial info for thin cap calculation
     total_debt: float = Field(default=0, description="Total debt outstanding")
     total_equity: float = Field(default=0, description="Total equity")
