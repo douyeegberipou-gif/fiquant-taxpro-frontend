@@ -88,6 +88,20 @@ class UserResponse(BaseModel):
     permissions: List[str]
     created_at: datetime
     last_login: Optional[datetime]
+    email_verified: bool
+    phone_verified: bool
+    account_status: str
+
+class EmailVerification(BaseModel):
+    email: EmailStr
+
+class PhoneVerification(BaseModel):
+    phone: str
+
+class VerifyCode(BaseModel):
+    email: EmailStr
+    verification_code: str
+    verification_type: str = Field(description="email or phone")
 
 # ============================
 # TAX CALCULATION HISTORY MODELS
