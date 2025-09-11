@@ -335,28 +335,47 @@ function App() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs defaultValue="calculator" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5 bg-white border border-emerald-100">
-            <TabsTrigger value="calculator" className="flex items-center space-x-2">
-              <Users className="h-4 w-4" />
-              <span>PAYE</span>
-            </TabsTrigger>
-            <TabsTrigger value="cit" className="flex items-center space-x-2">
-              <Building2 className="h-4 w-4" />
-              <span>Corporate</span>
-            </TabsTrigger>
-            <TabsTrigger value="brackets" className="flex items-center space-x-2">
-              <TrendingUp className="h-4 w-4" />
-              <span>Tax Info</span>
-            </TabsTrigger>
-            <TabsTrigger value="history" className="flex items-center space-x-2">
-              <FileText className="h-4 w-4" />
-              <span>History</span>
-            </TabsTrigger>
-            <TabsTrigger value="compliance" className="flex items-center space-x-2">
-              <Briefcase className="h-4 w-4" />
-              <span>Compliance</span>
-            </TabsTrigger>
-          </TabsList>
+          <div className="relative">
+            <TabsList className="grid w-full grid-cols-5 bg-transparent border-0 p-0 h-auto">
+              <TabsTrigger 
+                value="calculator" 
+                className="relative bg-white border border-gray-300 border-b-0 rounded-t-lg px-6 py-3 mx-0 data-[state=active]:bg-white data-[state=active]:border-gray-400 data-[state=inactive]:bg-gray-100 data-[state=inactive]:border-gray-200 data-[state=inactive]:text-gray-600 hover:bg-gray-50 transition-all duration-200 flex items-center space-x-2 shadow-sm"
+              >
+                <Users className="h-4 w-4" />
+                <span>PAYE</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="cit" 
+                className="relative bg-white border border-gray-300 border-b-0 rounded-t-lg px-6 py-3 mx-0 data-[state=active]:bg-white data-[state=active]:border-gray-400 data-[state=inactive]:bg-gray-100 data-[state=inactive]:border-gray-200 data-[state=inactive]:text-gray-600 hover:bg-gray-50 transition-all duration-200 flex items-center space-x-2 shadow-sm"
+              >
+                <Building2 className="h-4 w-4" />
+                <span>CIT</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="brackets" 
+                className="relative bg-white border border-gray-300 border-b-0 rounded-t-lg px-6 py-3 mx-0 data-[state=active]:bg-white data-[state=active]:border-gray-400 data-[state=inactive]:bg-gray-100 data-[state=inactive]:border-gray-200 data-[state=inactive]:text-gray-600 hover:bg-gray-50 transition-all duration-200 flex items-center space-x-2 shadow-sm"
+              >
+                <TrendingUp className="h-4 w-4" />
+                <span>Tax Info</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="history" 
+                className="relative bg-white border border-gray-300 border-b-0 rounded-t-lg px-6 py-3 mx-0 data-[state=active]:bg-white data-[state=active]:border-gray-400 data-[state=inactive]:bg-gray-100 data-[state=inactive]:border-gray-200 data-[state=inactive]:text-gray-600 hover:bg-gray-50 transition-all duration-200 flex items-center space-x-2 shadow-sm"
+              >
+                <FileText className="h-4 w-4" />
+                <span>History</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="compliance" 
+                className="relative bg-white border border-gray-300 border-b-0 rounded-t-lg px-6 py-3 mx-0 data-[state=active]:bg-white data-[state=active]:border-gray-400 data-[state=inactive]:bg-gray-100 data-[state=inactive]:border-gray-200 data-[state=inactive]:text-gray-600 hover:bg-gray-50 transition-all duration-200 flex items-center space-x-2 shadow-sm"
+              >
+                <Briefcase className="h-4 w-4" />
+                <span>Compliance</span>
+              </TabsTrigger>
+            </TabsList>
+            {/* Active tab bottom border */}
+            <div className="absolute bottom-0 left-0 right-0 h-px bg-gray-300"></div>
+          </div>
 
           {/* PAYE Calculator Tab */}
           <TabsContent value="calculator" className="space-y-6">
