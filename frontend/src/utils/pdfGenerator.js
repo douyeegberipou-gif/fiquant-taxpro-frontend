@@ -264,7 +264,9 @@ export const generateBulkPayeReport = async (employees, totals) => {
 };
 
 // Generate CIT Report
-export const generateCitReport = (citInput, citResult) => {
+export const generateCitReport = async (citInput, citResult) => {
+  await loadAutoTable();
+  
   const doc = new jsPDF();
   
   let yPos = addHeader(doc, 'Corporate Income Tax (CIT) Calculation Report');
