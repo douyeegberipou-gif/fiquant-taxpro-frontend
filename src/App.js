@@ -484,7 +484,7 @@ function App() {
                         <Input
                           id="transport_allowance"
                           type="number"
-                          placeholder="50,000"
+                          placeholder="₦50,000"
                           value={taxInput.transport_allowance}
                           onChange={(e) => handleInputChange('transport_allowance', e.target.value)}
                         />
