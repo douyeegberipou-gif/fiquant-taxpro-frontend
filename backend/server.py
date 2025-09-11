@@ -1968,6 +1968,9 @@ async def initialize_super_admin(email_data: dict):
         print(f"Error initializing super admin: {e}")
         raise HTTPException(status_code=500, detail="Failed to initialize super admin")
 
+# Include admin router
+app.include_router(admin_router)
+
 # Start the app
 if __name__ == "__main__":
     import uvicorn
