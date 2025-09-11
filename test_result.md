@@ -197,7 +197,7 @@ frontend:
     implemented: true
     working: false
     file: "App.js"
-    stuck_count: 1
+    stuck_count: 2
     priority: "high"
     needs_retesting: false
     status_history:
@@ -207,6 +207,9 @@ frontend:
       - working: false
         agent: "testing"
         comment: "CRITICAL ISSUE FOUND: jspdf-autotable plugin not loading properly. Error: 'doc.autoTable is not a function'. The jsPDF library is imported correctly, but the autoTable plugin is not attaching to the jsPDF instance. PDF buttons are present and clickable, but PDF generation fails due to missing autoTable function. This is a library compatibility/import issue that needs to be resolved."
+      - working: false
+        agent: "testing"
+        comment: "TESTED AFTER IMPORT FIX: Despite corrected imports (import { jsPDF } from 'jspdf'; import autoTable from 'jspdf-autotable';) and plugin initialization (autoTable(doc, {})), the same error persists: 'doc.autoTable is not a function'. UI works perfectly - Single PAYE calculation successful (₦750,000 gross, ₦108,050 tax, ₦641,950 net), PDF button appears and is clickable, but PDF generation fails at autoTable function call. This confirms a deeper library compatibility issue between jsPDF 3.0.2 and jspdf-autotable 5.0.2 that requires web search for solution."
 
   - task: "Bulk PAYE Print Report (PDF)"
     implemented: true
