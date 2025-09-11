@@ -731,7 +731,7 @@ If the problem persists, please contact Fiquant Consult support with this error 
                       <td className="px-4 py-4 whitespace-nowrap">
                         <input
                           type="number"
-                          placeholder="500,000"
+                          placeholder="₦500,000"
                           value={employee.basic_salary}
                           onChange={(e) => updateEmployee(employee.id, 'basic_salary', e.target.value)}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200"
