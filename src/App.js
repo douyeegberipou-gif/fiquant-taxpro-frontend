@@ -446,10 +446,33 @@ function AppContent() {
                       <Badge variant="outline" className="bg-yellow-400/10 text-yellow-300 border-yellow-400/30 backdrop-blur-sm text-xs">
                         {user?.account_tier?.toUpperCase()} Account
                       </Badge>
+                      {user?.admin_enabled && user?.admin_role && (
+                        <>
+                          <span className="text-gray-400 text-xs">•</span>
+                          <Badge variant="outline" className="bg-red-400/10 text-red-300 border-red-400/30 backdrop-blur-sm text-xs">
+                            <Shield className="h-3 w-3 mr-1" />
+                            {user?.admin_role?.replace('_', ' ').toUpperCase()}
+                          </Badge>
+                        </>
+                      )}
                       <span className="text-gray-400 text-xs">•</span>
                       <span className="text-gray-400 text-xs">{user?.account_type}</span>
                     </div>
                   </div>
+                  {user?.admin_enabled && user?.admin_role && (
+                    <Button
+                      onClick={() => {
+                        setShowAdminDashboard(true);
+                        window.history.pushState({}, '', '/admin');
+                      }}
+                      variant="outline"
+                      size="sm"
+                      className="border-red-600 text-red-300 hover:bg-red-800/50 backdrop-blur-sm"
+                    >
+                      <Settings className="h-4 w-4 mr-2" />
+                      Admin
+                    </Button>
+                  )}
                   <Button
                     onClick={() => logout()}
                     variant="outline"
