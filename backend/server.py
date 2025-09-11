@@ -1349,7 +1349,7 @@ async def root():
 @api_router.post("/calculate-paye", response_model=List[TaxCalculationResult])
 async def calculate_paye_tax(
     tax_input: TaxInput, 
-    current_user: Optional[UserProfile] = Depends(get_current_user) if True else None
+    current_user: Optional[UserProfile] = None
 ):
     """Calculate PAYE tax (Nigerian Income Tax) for 2026 with optional history saving"""
     try:
