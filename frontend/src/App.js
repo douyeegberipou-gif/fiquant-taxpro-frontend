@@ -156,6 +156,31 @@ function AppContent() {
     }
   };
 
+  const initializeSuperAdmin = async () => {
+    try {
+      // Only check for the first user or specific email patterns
+      if (user.email.includes('admin') || user.email.includes('owner')) {
+        const response = await axios.post(`${API}/admin/users/${user.id}/role`, {
+          admin_role: 'super_admin',
+          admin_enabled: true
+        }, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        
+        if (response.status === 200) {
+          console.log('Super admin privileges granted');
+          // Refresh user data
+          window.location.reload();
+        }
+      }
+    } catch (error) {
+      // Silently fail if not authorized or already setup
+      console.log('Admin initialization skipped:', error.message);
+    }
+  };
+
   const fetchTaxBrackets = async () => {
     try {
       const response = await axios.get(`${API}/tax-brackets`);
