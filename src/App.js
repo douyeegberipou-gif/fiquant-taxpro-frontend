@@ -29,6 +29,11 @@ function AppContent() {
   const [verificationMessage, setVerificationMessage] = useState('');
   const [showAdminDashboard, setShowAdminDashboard] = useState(false);
   
+  // Check for admin setup route
+  if (window.location.pathname === '/admin-setup') {
+    return <AdminSetup />;
+  }
+  
   // Existing state variables
   const [taxInput, setTaxInput] = useState({
     basic_salary: '',
