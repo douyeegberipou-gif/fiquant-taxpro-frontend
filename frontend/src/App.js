@@ -474,7 +474,7 @@ function App() {
                         <Input
                           id="basic_salary"
                           type="number"
-                          placeholder="500,000"
+                          placeholder="₦500,000"
                           value={taxInput.basic_salary}
                           onChange={(e) => handleInputChange('basic_salary', e.target.value)}
                         />
