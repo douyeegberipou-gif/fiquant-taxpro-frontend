@@ -146,7 +146,7 @@ class NigerianTaxCalculatorTester:
             "User Registration - Invalid Email Format",
             "POST",
             "auth/register",
-            400,  # Should fail with validation error
+            422,  # Pydantic validation error
             test_data
         )
         
