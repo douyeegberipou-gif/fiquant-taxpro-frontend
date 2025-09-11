@@ -119,7 +119,7 @@ const CITCalculator = ({
                 <Input
                   id="gross_income"
                   type="number"
-                  placeholder="500,000,000"
+                  placeholder="₦500,000,000"
                   value={citInput.gross_income}
                   onChange={(e) => handleCitInputChange('gross_income', e.target.value)}
                 />
