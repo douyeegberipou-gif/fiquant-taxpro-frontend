@@ -215,7 +215,7 @@ frontend:
     implemented: true
     working: false
     file: "BulkPayrollCalculator.js"
-    stuck_count: 1
+    stuck_count: 2
     priority: "high"
     needs_retesting: false
     status_history:
@@ -225,6 +225,9 @@ frontend:
       - working: false
         agent: "testing"
         comment: "CRITICAL ISSUE FOUND: Same jspdf-autotable plugin issue as Single PAYE. The bulk PDF generation functionality is implemented with proper button placement, but fails due to 'doc.autoTable is not a function' error. The generateBulkPayeReport function exists and is called correctly, but the underlying autoTable plugin is not functioning."
+      - working: false
+        agent: "testing"
+        comment: "SAME LIBRARY ISSUE: After import fixes, the same 'doc.autoTable is not a function' error persists. This confirms the library compatibility issue affects all PDF generation features across the application."
 
   - task: "CIT Print Report (PDF)"
     implemented: true
