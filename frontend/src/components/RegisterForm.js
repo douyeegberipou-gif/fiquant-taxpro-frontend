@@ -90,13 +90,84 @@ export const RegisterForm = ({ onSwitchToLogin, onClose, onRegistrationSuccess }
     const result = await register(registrationData);
     
     if (result.success) {
-      onClose(); // Close modal on successful registration
+      if (result.requiresVerification) {
+        setRegistrationComplete(true);
+        // Don't close modal immediately, show success message
+      } else {
+        onClose(); // Close modal on successful registration without verification
+      }
     } else {
       setError(result.error);
     }
     
     setLoading(false);
   };
+
+  // Show success message after registration
+  if (registrationComplete) {
+    return (
+      <Card className="w-full max-w-md mx-auto">
+        <CardHeader className="text-center">
+          <CardTitle className="flex items-center justify-center space-x-2 text-green-600">
+            <CheckCircle className="h-5 w-5" />
+            <span>Registration Successful!</span>
+          </CardTitle>
+          <CardDescription>
+            Your account has been created successfully.
+          </CardDescription>
+        </CardHeader>
+        
+        <CardContent className="space-y-4">
+          <Alert className="border-green-200 bg-green-50">
+            <Mail className="h-4 w-4" />
+            <AlertDescription className="text-green-700">
+              <strong>Verification Required:</strong><br />
+              We've sent a verification link to <strong>{formData.email}</strong>. 
+              Please check your email and click the verification link to activate your account.
+            </AlertDescription>
+          </Alert>
+          
+          {formData.phone && (
+            <Alert className="border-blue-200 bg-blue-50">
+              <Phone className="h-4 w-4" />
+              <AlertDescription className="text-blue-700">
+                We've also sent a verification code to <strong>{formData.phone}</strong> via SMS.
+              </AlertDescription>
+            </Alert>
+          )}
+          
+          <div className="space-y-3">
+            <Button
+              onClick={() => {
+                onClose();
+                // Optionally redirect to verification page
+                window.location.href = '/verify';
+              }}
+              className="w-full bg-green-600 hover:bg-green-700"
+            >
+              Continue to Verification
+            </Button>
+            
+            <div className="text-center">
+              <button
+                type="button"
+                onClick={onSwitchToLogin}
+                className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+              >
+                Back to Sign In
+              </button>
+            </div>
+          </div>
+          
+          <div className="text-xs text-gray-600 space-y-1">
+            <p>• Check your spam/junk folder if you don't see the email</p>
+            <p>• The verification link expires in 24 hours</p>
+            <p>• SMS codes expire in 10 minutes</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="w-full max-w-md mx-auto">
