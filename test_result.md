@@ -193,6 +193,54 @@ frontend:
         agent: "main"
         comment: "UI interface loads properly and is functional"
 
+  - task: "Single PAYE Print Report (PDF)"
+    implemented: true
+    working: "NA"
+    file: "App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "New PDF generation functionality added. Need to test single PAYE tax calculation and PDF report generation with jsPDF library."
+
+  - task: "Bulk PAYE Print Report (PDF)"
+    implemented: true
+    working: "NA"
+    file: "BulkPayrollCalculator.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "New PDF generation functionality added. Need to test bulk PAYE calculations and PDF report generation for multiple employees."
+
+  - task: "CIT Print Report (PDF)"
+    implemented: true
+    working: "NA"
+    file: "CITCalculator.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "New PDF generation functionality added. Need to test CIT tax calculation and PDF report generation with company details."
+
+  - task: "PDF Generator Utility"
+    implemented: true
+    working: "NA"
+    file: "utils/pdfGenerator.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "PDF generator utility with jsPDF and jspdf-autotable libraries. Contains generatePayeReport(), generateBulkPayeReport(), and generateCitReport() functions."
+
 metadata:
   created_by: "main_agent"
   version: "1.0"
