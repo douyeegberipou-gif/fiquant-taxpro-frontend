@@ -610,6 +610,15 @@ const CITCalculator = ({
                   {formatCurrency(citResult.total_capital_allowances || 0)}
                 </p>
               </div>
+              {citResult.carry_forward_losses_applied > 0 && (
+                <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
+                  <p className="text-sm text-orange-600 font-medium">Loss Relief Applied</p>
+                  <p className="text-xl font-bold text-orange-800">
+                    {formatCurrency(citResult.carry_forward_losses_applied)}
+                  </p>
+                  <p className="text-xs text-orange-600 mt-1">Losses carried forward from previous years</p>
+                </div>
+              )}
               <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
                 <p className="text-sm text-blue-600 font-medium">Total Tax Due</p>
                 <p className="text-xl font-bold text-blue-800">
