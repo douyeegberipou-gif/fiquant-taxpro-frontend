@@ -25,6 +25,8 @@ function AppContent() {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [verificationStatus, setVerificationStatus] = useState(null); // 'verifying', 'success', 'error'
   const [verificationMessage, setVerificationMessage] = useState('');
+  const [verificationStatus, setVerificationStatus] = useState(null); // 'verifying', 'success', 'error'
+  const [verificationMessage, setVerificationMessage] = useState('');
   
   // Existing state variables
   const [taxInput, setTaxInput] = useState({
