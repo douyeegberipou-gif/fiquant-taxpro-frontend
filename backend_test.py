@@ -1905,29 +1905,8 @@ def main():
     
     tester = NigerianTaxCalculatorTester()
     
-    # Run Authentication tests first
-    print("\n🔐 AUTHENTICATION & USER MANAGEMENT TESTS")
-    print("-" * 40)
-    auth_tests = [
-        tester.test_user_registration_valid_email,
-        tester.test_user_registration_duplicate_email,
-        tester.test_user_registration_invalid_email,
-        tester.test_user_registration_no_terms_agreement,
-        tester.test_user_login_unverified_account,
-        tester.test_email_verification_invalid_token,
-        tester.test_phone_verification_invalid_code,
-        tester.test_resend_verification_email,
-        tester.test_resend_sms_verification,
-        tester.test_create_verified_user_for_testing,
-        tester.test_user_login_invalid_credentials,
-        tester.test_protected_endpoint_without_token,
-        tester.test_protected_endpoint_invalid_token,
-        tester.test_user_profile_update_unauthorized,
-        tester.test_calculation_history_unauthorized
-    ]
-    
-    for test in auth_tests:
-        test()
+    # Run Comprehensive Authentication tests first
+    tester.run_comprehensive_authentication_tests()
     
     # Run PAYE tests
     print("\n📋 PAYE CALCULATOR TESTS")
