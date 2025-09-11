@@ -283,6 +283,36 @@ const CITCalculator = ({
 
           <Separator />
 
+          {/* Loss Relief Section */}
+          <div className="space-y-4">
+            <h3 className="font-semibold text-gray-900 flex items-center">
+              <TrendingDown className="h-4 w-4 mr-2 text-orange-600" />
+              Loss Relief (NTA Provisions)
+            </h3>
+            <Alert>
+              <AlertTriangle className="h-4 w-4" />
+              <AlertDescription className="text-sm">
+                <strong>Nigerian Tax Law:</strong> Companies can carry forward tax losses indefinitely to offset future taxable profits. 
+                Losses cannot be carried back to previous tax years.
+              </AlertDescription>
+            </Alert>
+            <div className="grid gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="carry_forward_losses">Carry Forward Losses from Previous Years (₦)</Label>
+                <Input
+                  id="carry_forward_losses"
+                  type="number"
+                  placeholder="5,000,000"
+                  value={citInput.carry_forward_losses}
+                  onChange={(e) => handleCitInputChange('carry_forward_losses', e.target.value)}
+                />
+                <p className="text-xs text-gray-600">Enter any accumulated losses from previous years that can be offset against current year profits</p>
+              </div>
+            </div>
+          </div>
+
+          <Separator />
+
           {/* Capital Allowances Section */}
           <div className="space-y-4">
             <h3 className="font-semibold text-gray-900 flex items-center">
