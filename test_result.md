@@ -161,6 +161,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ COMPREHENSIVE AUTHENTICATION TESTING COMPLETED: User registration API working perfectly. Tested valid email registration, duplicate email rejection (400 error), invalid email format rejection (422 validation error), terms agreement requirement enforcement. All scenarios working correctly with proper error handling and response structure."
+      - working: true
+        agent: "testing"
+        comment: "🔥 COMPLETE REGISTRATION & VERIFICATION FLOW TESTING COMPLETED: Comprehensive end-to-end testing of user registration and verification system completed successfully. ✅ USER REGISTRATION: Working perfectly with proper validation, error handling, and response structure. Creates users with correct default values (individual account, free tier, pending status). ✅ VERIFICATION CODE GENERATION: Email verification links and SMS codes are prominently displayed in backend console logs as requested. ✅ UNVERIFIED LOGIN PREVENTION: System correctly blocks login attempts from unverified accounts with 403 error and helpful message. ✅ RESEND FUNCTIONALITY: Both email and SMS verification resend working correctly. ✅ ERROR HANDLING: Invalid verification attempts properly rejected with appropriate error messages. All 33/33 authentication tests passed with 100% success rate."
 
   - task: "User Verification API"
     implemented: true
@@ -176,6 +179,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ VERIFICATION API TESTING COMPLETED: All verification endpoints working perfectly. Tested invalid verification token rejection, invalid verification code rejection, verification email resend functionality, SMS verification resend functionality. All scenarios handle errors gracefully and provide appropriate feedback."
+      - working: true
+        agent: "testing"
+        comment: "🔍 VERIFICATION CODE GENERATION & LOGGING TESTING COMPLETED: Comprehensive testing confirms that verification codes are properly generated and prominently logged in backend console. ✅ EMAIL VERIFICATION LINKS: Clearly displayed with full URL, token, and expiry information. ✅ SMS VERIFICATION CODES: 6-digit codes prominently shown with phone number and expiry time. ✅ RESEND FUNCTIONALITY: Generates new tokens/codes each time and logs them clearly. ✅ INVALID VERIFICATION HANDLING: Properly rejects invalid tokens and codes with appropriate error messages. Backend logs show verification information exactly as requested by user."
 
   - task: "User Login API"
     implemented: true
@@ -191,6 +197,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ LOGIN API TESTING COMPLETED: Login system working perfectly. Successfully tested unverified account login prevention (403 error), invalid login credentials rejection (401 error), and JWT token generation. All authentication flows working correctly with proper security enforcement."
+      - working: true
+        agent: "testing"
+        comment: "🔐 LOGIN WITH VERIFICATION CHECK TESTING COMPLETED: Comprehensive testing of login system with verification requirements completed successfully. ✅ UNVERIFIED ACCOUNT BLOCKING: System correctly prevents login for unverified accounts with 403 Forbidden status and clear error message: 'Account not verified. Please verify your email and phone before logging in.' ✅ INVALID CREDENTIALS: Properly rejects invalid login attempts with 401 Unauthorized. ✅ JWT TOKEN GENERATION: Working correctly for verified accounts. ✅ SECURITY ENFORCEMENT: All authentication flows properly secured with appropriate HTTP status codes and error messages."
 
   - task: "Authentication Middleware"
     implemented: true
@@ -206,6 +215,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ AUTHENTICATION MIDDLEWARE TESTING COMPLETED: All protected endpoints working correctly. Tested protected endpoint access without token (403 error), protected endpoint access with invalid token (401 error), profile update without authentication (403 error), calculation history access without authentication (403 error). JWT token validation and error handling working perfectly. Fixed jwt.JWTError to jwt.InvalidTokenError for proper token validation."
+      - working: true
+        agent: "testing"
+        comment: "🛡️ AUTHENTICATION MIDDLEWARE PROTECTION TESTING COMPLETED: Comprehensive testing of authentication middleware protection across all protected endpoints completed successfully. ✅ PROTECTED ENDPOINTS: All 5 protected endpoints (auth/me, profile/update, history/calculations, etc.) correctly require authentication. ✅ NO TOKEN HANDLING: Returns 403 Forbidden when no authentication token provided. ✅ INVALID TOKEN HANDLING: Returns 401 Unauthorized when invalid token provided. ✅ JWT VALIDATION: Proper token validation and error handling working correctly. ✅ SECURITY COMPLIANCE: All endpoints properly secured with correct HTTP status codes and security headers."
 
 frontend:
   - task: "Excel Template Download for Bulk PAYE"
