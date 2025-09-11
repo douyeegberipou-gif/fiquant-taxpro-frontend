@@ -81,7 +81,9 @@ const addFooter = (doc) => {
 };
 
 // Generate Single PAYE Report
-export const generatePayeReport = (taxInput, result) => {
+export const generatePayeReport = async (taxInput, result) => {
+  await loadAutoTable();
+  
   const doc = new jsPDF();
   
   let yPos = addHeader(doc, 'PAYE Tax Calculation Report');
