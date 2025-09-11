@@ -114,6 +114,50 @@ class VerifyCode(BaseModel):
     verification_code: str
     verification_type: str = Field(description="email or phone")
 
+class VerificationCode(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    verification_type: str  # "email" or "phone"
+    verification_token: Optional[str] = None  # For email verification
+    verification_code: Optional[str] = None   # For phone verification
+    verification_code_hash: Optional[str] = None
+    expires_at: datetime
+    verified: bool = False
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# Admin Models
+class AuditLog(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    admin_user_id: str
+    admin_email: str
+    action: str  # "user_created", "user_suspended", "role_assigned", "bulk_operation", etc.
+    target_type: str  # "user", "system", "report", etc.
+    target_id: Optional[str] = None
+    details: dict = Field(default_factory=dict)
+    ip_address: Optional[str] = None
+    user_agent: Optional[str] = None
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class AdminSession(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    session_token: str
+    two_factor_verified: bool = False
+    ip_address: Optional[str] = None
+    user_agent: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    expires_at: datetime
+    active: bool = True
+
+class SystemAnalytics(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    date: str  # YYYY-MM-DD format
+    metric_type: str  # "daily_users", "calculator_usage", "registrations", etc.
+    metric_data: dict = Field(default_factory=dict)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
 # ============================
 # TAX CALCULATION HISTORY MODELS
 # ============================
