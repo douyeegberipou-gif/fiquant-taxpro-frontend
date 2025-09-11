@@ -1,10 +1,19 @@
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
 
-// Ensure autoTable is available on jsPDF prototype
-if (typeof jsPDF.API.autoTable === 'undefined') {
-  console.warn('jspdf-autotable plugin not loaded properly');
-}
+// Dynamic import of jspdf-autotable to ensure proper loading
+let autoTableLoaded = false;
+
+const loadAutoTable = async () => {
+  if (!autoTableLoaded) {
+    try {
+      await import('jspdf-autotable');
+      autoTableLoaded = true;
+      console.log('jspdf-autotable loaded successfully');
+    } catch (error) {
+      console.error('Failed to load jspdf-autotable:', error);
+    }
+  }
+};
 
 // Utility function to format currency
 const formatCurrency = (amount) => {
