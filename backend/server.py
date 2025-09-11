@@ -322,9 +322,13 @@ def calculate_nigerian_cit_2026(cit_input: CITInput) -> CITCalculationResult:
     if cit_input.total_equity > 0:
         debt_to_equity_ratio = cit_input.total_debt / cit_input.total_equity
     
-    # Calculate taxable profit
+    # Calculate taxable profit before loss relief
     total_income = cit_input.gross_income + cit_input.other_income
-    taxable_profit = max(0, total_income - total_deductible_expenses)
+    profit_before_loss_relief = max(0, total_income - total_deductible_expenses)
+    
+    # Apply carry forward losses (Nigerian companies can carry forward losses indefinitely)
+    carry_forward_losses_applied = min(cit_input.carry_forward_losses, profit_before_loss_relief)
+    taxable_profit = max(0, profit_before_loss_relief - carry_forward_losses_applied)
     
     # Determine CIT rate and calculate tax
     if is_small:
