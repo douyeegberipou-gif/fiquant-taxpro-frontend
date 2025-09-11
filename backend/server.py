@@ -424,6 +424,7 @@ def calculate_nigerian_cit_2026(cit_input: CITInput) -> CITCalculationResult:
         thin_cap_applied=thin_cap_applied,
         total_capital_allowances=total_capital_allowances,
         capital_allowance_breakdown=capital_allowance_breakdown,
+        carry_forward_losses_applied=carry_forward_losses_applied,
         taxable_profit=taxable_profit,
         cit_rate=cit_rate,
         cit_due=cit_due,
