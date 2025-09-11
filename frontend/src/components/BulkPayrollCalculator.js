@@ -842,7 +842,7 @@ If the problem persists, please contact Fiquant Consult support with this error 
             </div>
           </div>
         </div>
-      }
+      </div>
 
       {/* Results Table */}
       {showResults && totals.employeeCount > 0 && (
