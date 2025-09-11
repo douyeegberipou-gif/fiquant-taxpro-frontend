@@ -223,6 +223,203 @@ app = FastAPI(title="Fiquant TaxPro API", description="Nigerian Tax Calculator A
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
+# ============================
+# AUTHENTICATION ENDPOINTS
+# ============================
+
+@api_router.post("/auth/register", response_model=UserResponse)
+async def register_user(user_data: UserRegistration):
+    """Register new user"""
+    # Validate input
+    if not validate_email(user_data.email):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid email format"
+        )
+    
+    if user_data.phone and not validate_phone(user_data.phone):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid phone number format"
+        )
+    
+    if not user_data.agree_terms:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Must agree to terms and conditions"
+        )
+    
+    # Check if user already exists
+    existing_user = await db.users.find_one({"email": user_data.email})
+    if existing_user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email already registered"
+        )
+    
+    if user_data.phone:
+        existing_phone = await db.users.find_one({"phone": user_data.phone})
+        if existing_phone:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Phone number already registered"
+            )
+    
+    # Create user profile
+    user_profile = UserProfile(
+        email=user_data.email,
+        phone=user_data.phone,
+        full_name=user_data.full_name,
+        account_type="individual",
+        employment_status="salaried",
+        account_tier="free",
+        permissions=["basic_calculator"]
+    )
+    
+    # Hash password and store user
+    hashed_password = hash_password(user_data.password)
+    user_doc = user_profile.dict()
+    user_doc["password_hash"] = hashed_password
+    
+    # Convert datetime fields to ISO strings for MongoDB
+    user_doc["created_at"] = user_doc["created_at"].isoformat()
+    user_doc["updated_at"] = user_doc["updated_at"].isoformat()
+    if user_doc["last_login"]:
+        user_doc["last_login"] = user_doc["last_login"].isoformat()
+    
+    await db.users.insert_one(user_doc)
+    
+    return UserResponse(
+        id=user_profile.id,
+        email=user_profile.email,
+        full_name=user_profile.full_name,
+        account_type=user_profile.account_type,
+        employment_status=user_profile.employment_status,
+        account_tier=user_profile.account_tier,
+        permissions=user_profile.permissions,
+        created_at=user_profile.created_at,
+        last_login=user_profile.last_login
+    )
+
+@api_router.post("/auth/login", response_model=Token)
+async def login_user(login_data: UserLogin):
+    """Login user and return JWT token"""
+    # Find user by email or phone
+    query = {}
+    if validate_email(login_data.email_or_phone):
+        query["email"] = login_data.email_or_phone
+    else:
+        query["phone"] = login_data.email_or_phone
+    
+    user_data = await db.users.find_one(query)
+    if not user_data:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentials"
+        )
+    
+    # Verify password
+    if not verify_password(login_data.password, user_data["password_hash"]):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentials"
+        )
+    
+    # Update last login
+    await db.users.update_one(
+        {"id": user_data["id"]},
+        {"$set": {"last_login": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    # Create access token
+    access_token = create_access_token(data={"sub": user_data["id"]})
+    
+    return Token(
+        access_token=access_token,
+        token_type="bearer",
+        expires_in=ACCESS_TOKEN_EXPIRE_MINUTES * 60,  # Convert to seconds
+        user_id=user_data["id"]
+    )
+
+@api_router.get("/auth/me", response_model=UserResponse)
+async def get_current_user_profile(current_user: UserProfile = Depends(get_current_user)):
+    """Get current user profile"""
+    return UserResponse(
+        id=current_user.id,
+        email=current_user.email,
+        full_name=current_user.full_name,
+        account_type=current_user.account_type,
+        employment_status=current_user.employment_status,
+        account_tier=current_user.account_tier,
+        permissions=current_user.permissions,
+        created_at=current_user.created_at,
+        last_login=current_user.last_login
+    )
+
+@api_router.put("/profile/update", response_model=UserResponse)
+async def update_user_profile(
+    profile_data: dict,
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Update user profile"""
+    allowed_fields = {
+        "full_name", "phone", "account_type", "employment_status", 
+        "income_streams", "default_reliefs", "tin", "company_name", 
+        "business_type", "email_notifications", "sms_notifications"
+    }
+    
+    # Filter allowed fields
+    update_data = {k: v for k, v in profile_data.items() if k in allowed_fields}
+    
+    if not update_data:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No valid fields to update"
+        )
+    
+    # Validate phone if provided
+    if "phone" in update_data and update_data["phone"]:
+        if not validate_phone(update_data["phone"]):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid phone number format"
+            )
+        
+        # Check phone uniqueness
+        existing_phone = await db.users.find_one({
+            "phone": update_data["phone"],
+            "id": {"$ne": current_user.id}
+        })
+        if existing_phone:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Phone number already registered"
+            )
+    
+    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    
+    # Update user profile
+    await db.users.update_one(
+        {"id": current_user.id},
+        {"$set": update_data}
+    )
+    
+    # Get updated user data
+    updated_user_data = await db.users.find_one({"id": current_user.id})
+    updated_user = UserProfile(**updated_user_data)
+    
+    return UserResponse(
+        id=updated_user.id,
+        email=updated_user.email,
+        full_name=updated_user.full_name,
+        account_type=updated_user.account_type,
+        employment_status=updated_user.employment_status,
+        account_tier=updated_user.account_tier,
+        permissions=updated_user.permissions,
+        created_at=updated_user.created_at,
+        last_login=updated_user.last_login
+    )
+
 
 # PAYE Tax Models
 class TaxInput(BaseModel):
