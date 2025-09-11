@@ -233,7 +233,7 @@ frontend:
     implemented: true
     working: false
     file: "CITCalculator.js"
-    stuck_count: 1
+    stuck_count: 2
     priority: "high"
     needs_retesting: false
     status_history:
@@ -243,6 +243,9 @@ frontend:
       - working: false
         agent: "testing"
         comment: "CRITICAL ISSUE FOUND: CIT calculations work perfectly and PDF button is present and clickable. However, PDF generation fails with 'doc.autoTable is not a function' error. The generateCitReport function is properly implemented and called, but the jspdf-autotable plugin is not loading correctly, preventing table generation in PDFs."
+      - working: false
+        agent: "testing"
+        comment: "SAME LIBRARY ISSUE: After import fixes, the same 'doc.autoTable is not a function' error persists. This confirms the library compatibility issue affects all PDF generation features across the application."
 
   - task: "PDF Generator Utility"
     implemented: true
