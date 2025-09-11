@@ -217,6 +217,103 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify password against hash"""
     return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
+# ============================
+# ADMIN UTILITY FUNCTIONS
+# ============================
+
+def log_admin_action(admin_user_id: str, admin_email: str, action: str, target_type: str, 
+                    target_id: str = None, details: dict = None, ip_address: str = None, 
+                    user_agent: str = None):
+    """Log admin actions for audit trail"""
+    try:
+        audit_log = AuditLog(
+            admin_user_id=admin_user_id,
+            admin_email=admin_email,
+            action=action,
+            target_type=target_type,
+            target_id=target_id,
+            details=details or {},
+            ip_address=ip_address,
+            user_agent=user_agent
+        )
+        
+        # Insert into database (async operation will be handled in endpoints)
+        return audit_log
+    except Exception as e:
+        print(f"Failed to create audit log: {e}")
+        return None
+
+def is_admin_user(user_data: dict) -> bool:
+    """Check if user has admin privileges"""
+    return user_data.get("admin_enabled", False) and user_data.get("admin_role") is not None
+
+def has_admin_permission(user_role: str, required_permission: str) -> bool:
+    """Check if admin role has specific permission"""
+    role_permissions = {
+        "super_admin": ["all"],
+        "user_manager": ["view_users", "edit_users", "suspend_users", "view_analytics"],
+        "analytics_viewer": ["view_analytics", "export_reports"],
+        "system_monitor": ["view_system", "view_logs", "view_analytics"]
+    }
+    
+    if user_role == "super_admin":
+        return True
+    
+    return required_permission in role_permissions.get(user_role, [])
+
+async def get_admin_middleware(request: Request):
+    """Middleware to verify admin access"""
+    try:
+        # Get token from Authorization header
+        auth_header = request.headers.get("Authorization")
+        if not auth_header or not auth_header.startswith("Bearer "):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Admin access token required"
+            )
+        
+        token = auth_header.split(" ")[1]
+        
+        # Verify JWT token
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            user_id = payload.get("sub")
+            if not user_id:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Invalid admin token"
+                )
+        except jwt.InvalidTokenError:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid admin token"
+            )
+        
+        # Get user data and verify admin status
+        user_data = await db.users.find_one({"id": user_id})
+        if not user_data:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Admin user not found"
+            )
+        
+        if not is_admin_user(user_data):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Admin access required"
+            )
+        
+        return user_data
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Admin middleware error: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Admin authentication error"
+        )
+
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     """Create JWT access token"""
     to_encode = data.copy()
