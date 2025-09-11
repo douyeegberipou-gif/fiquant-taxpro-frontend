@@ -953,22 +953,43 @@ def calculate_nigerian_paye_2026(tax_input: TaxInput) -> TaxCalculationResult:
 async def root():
     return {"message": "Fiquant TaxPro API - Nigerian Tax Calculator"}
 
-@api_router.post("/calculate-paye", response_model=TaxCalculationResult)
-async def calculate_paye_tax(tax_input: TaxInput):
-    """Calculate Nigerian PAYE tax based on 2026 tax laws"""
+@api_router.post("/calculate-paye", response_model=List[TaxCalculationResult])
+async def calculate_paye_tax(
+    tax_input: TaxInput, 
+    current_user: Optional[UserProfile] = Depends(get_current_user) if True else None
+):
+    """Calculate PAYE tax (Nigerian Income Tax) for 2026 with optional history saving"""
     try:
         result = calculate_nigerian_paye_2026(tax_input)
+        calculation_result = [result]
         
-        # Save calculation to database
+        # Save to history if user is authenticated
+        if current_user:
+            history_record = TaxCalculationHistory(
+                user_id=current_user.id,
+                calculation_type="paye",
+                input_data=tax_input.dict(),
+                result_data=result.dict(),
+                employee_count=1,
+                notes=f"PAYE calculation for {tax_input.basic_salary}"
+            )
+            
+            # Convert datetime to ISO string
+            history_doc = history_record.dict()
+            history_doc["calculation_date"] = history_doc["calculation_date"].isoformat()
+            
+            await db.tax_history.insert_one(history_doc)
+        
+        # Save calculation to database (existing functionality)
         calculation_dict = result.dict()
         # Convert datetime to ISO string for MongoDB
         calculation_dict['timestamp'] = result.timestamp.isoformat()
         await db.tax_calculations.insert_one(calculation_dict)
         
-        return result
+        return calculation_result
+    
     except Exception as e:
-        logging.error(f"Tax calculation error: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Tax calculation failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Calculation error: {str(e)}")
 
 @api_router.get("/tax-brackets")
 async def get_tax_brackets():
