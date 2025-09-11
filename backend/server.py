@@ -242,6 +242,69 @@ def require_permission(permission: str):
         return current_user
     return permission_checker
 
+def generate_verification_token() -> str:
+    """Generate secure verification token"""
+    return secrets.token_urlsafe(32)
+
+def generate_verification_code() -> str:
+    """Generate 6-digit verification code for SMS"""
+    return str(random.randint(100000, 999999))
+
+def send_verification_email(email: str, verification_token: str, full_name: str):
+    """Send verification email (simplified - in production use proper email service)"""
+    try:
+        # In production, use a proper email service like SendGrid, AWS SES, etc.
+        # For now, we'll just log the verification link
+        verification_link = f"http://localhost:3000/verify-email?token={verification_token}&email={email}"
+        
+        print(f"📧 EMAIL VERIFICATION LINK FOR {email}:")
+        print(f"   Link: {verification_link}")
+        print(f"   Token: {verification_token}")
+        print(f"   User: {full_name}")
+        print("   (In production, this would be sent via email service)")
+        
+        # TODO: Implement actual email sending
+        # For now, return success
+        return True
+    except Exception as e:
+        print(f"Failed to send verification email: {e}")
+        return False
+
+def send_verification_sms(phone: str, verification_code: str):
+    """Send verification SMS (simplified - in production use proper SMS service)"""
+    try:
+        # In production, use a proper SMS service like Twilio, AWS SNS, etc.
+        print(f"📱 SMS VERIFICATION CODE FOR {phone}:")
+        print(f"   Code: {verification_code}")
+        print(f"   Message: Your Fiquant TaxPro verification code is {verification_code}")
+        print("   (In production, this would be sent via SMS service)")
+        
+        # TODO: Implement actual SMS sending
+        return True
+    except Exception as e:
+        print(f"Failed to send verification SMS: {e}")
+        return False
+
+async def is_account_verified(user: UserProfile) -> bool:
+    """Check if user account is properly verified"""
+    if user.phone:
+        # If user has phone, both email and phone must be verified
+        return user.email_verified and user.phone_verified
+    else:
+        # If no phone, just email needs verification
+        return user.email_verified
+
+def require_verified_account():
+    """Decorator to require verified account"""
+    async def verified_account_checker(current_user: UserProfile = Depends(get_current_user)):
+        if not await is_account_verified(current_user):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Account verification required. Please verify your email and phone number."
+            )
+        return current_user
+    return verified_account_checker
+
 # ============================
 
 # Create the main app without a prefix
