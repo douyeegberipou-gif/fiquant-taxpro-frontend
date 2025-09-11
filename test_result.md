@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "The excel file download is still not working. When i click, nothing happens. There is no download action and no excel file. I need you to address this properly and fix it."
+user_problem_statement: "Complete testing of the newly implemented User Accounts & Profiles system with email/phone verification. The registration/verification flow has been implemented but needs comprehensive testing to ensure the authentication system works correctly."
 
 backend:
   - task: "PAYE Tax Calculation API"
