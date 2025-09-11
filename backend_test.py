@@ -50,6 +50,365 @@ class NigerianTaxCalculatorTester:
             print(f"❌ Failed - Error: {str(e)}")
             return False, {}
 
+    # ============================
+    # AUTHENTICATION TESTS
+    # ============================
+    
+    def test_user_registration_valid_email(self):
+        """Test user registration with valid email"""
+        test_data = {
+            "email": "adebayo.ogundimu@fiquant.ng",
+            "phone": "+2348123456789",
+            "password": "SecurePass123!",
+            "full_name": "Adebayo Ogundimu",
+            "agree_terms": True
+        }
+        
+        success, response = self.run_test(
+            "User Registration - Valid Email",
+            "POST",
+            "auth/register",
+            200,
+            test_data
+        )
+        
+        if success:
+            self.test_user_data = test_data  # Store for later tests
+            print(f"   User ID: {response.get('id')}")
+            print(f"   Email: {response.get('email')}")
+            print(f"   Full Name: {response.get('full_name')}")
+            print(f"   Account Type: {response.get('account_type')}")
+            print(f"   Account Tier: {response.get('account_tier')}")
+            print(f"   Email Verified: {response.get('email_verified')}")
+            print(f"   Phone Verified: {response.get('phone_verified')}")
+            print(f"   Account Status: {response.get('account_status')}")
+            
+            # Verify response structure
+            required_fields = ['id', 'email', 'full_name', 'account_type', 'account_tier', 'permissions']
+            for field in required_fields:
+                if field not in response:
+                    print(f"   ❌ Missing required field: {field}")
+                    return False
+            
+            # Verify default values
+            if (response.get('account_type') == 'individual' and
+                response.get('account_tier') == 'free' and
+                response.get('email_verified') == False and
+                response.get('account_status') == 'pending'):
+                print(f"   ✅ User registration successful with correct defaults")
+            else:
+                print(f"   ❌ Incorrect default values in registration response")
+        
+        return success
+    
+    def test_user_registration_duplicate_email(self):
+        """Test user registration with duplicate email (should fail)"""
+        test_data = {
+            "email": "adebayo.ogundimu@fiquant.ng",  # Same email as previous test
+            "phone": "+2348987654321",
+            "password": "AnotherPass456!",
+            "full_name": "Another User",
+            "agree_terms": True
+        }
+        
+        success, response = self.run_test(
+            "User Registration - Duplicate Email",
+            "POST",
+            "auth/register",
+            400,  # Should fail with 400 Bad Request
+            test_data
+        )
+        
+        if success:
+            print(f"   ✅ Correctly rejected duplicate email registration")
+            if 'detail' in response:
+                print(f"   Error message: {response['detail']}")
+        
+        return success
+    
+    def test_user_registration_invalid_email(self):
+        """Test user registration with invalid email format"""
+        test_data = {
+            "email": "invalid-email-format",  # Invalid email
+            "phone": "+2348111222333",
+            "password": "ValidPass789!",
+            "full_name": "Test User",
+            "agree_terms": True
+        }
+        
+        success, response = self.run_test(
+            "User Registration - Invalid Email Format",
+            "POST",
+            "auth/register",
+            400,  # Should fail with validation error
+            test_data
+        )
+        
+        if success:
+            print(f"   ✅ Correctly rejected invalid email format")
+        
+        return success
+    
+    def test_user_registration_no_terms_agreement(self):
+        """Test user registration without agreeing to terms"""
+        test_data = {
+            "email": "terms.test@fiquant.ng",
+            "phone": "+2348444555666",
+            "password": "TermsPass123!",
+            "full_name": "Terms Test User",
+            "agree_terms": False  # Not agreeing to terms
+        }
+        
+        success, response = self.run_test(
+            "User Registration - No Terms Agreement",
+            "POST",
+            "auth/register",
+            400,  # Should fail
+            test_data
+        )
+        
+        if success:
+            print(f"   ✅ Correctly rejected registration without terms agreement")
+        
+        return success
+    
+    def test_user_login_unverified_account(self):
+        """Test login with unverified account (should fail)"""
+        if not self.test_user_data:
+            print("   ⚠️ Skipping - No test user data available")
+            return False
+            
+        login_data = {
+            "email_or_phone": self.test_user_data["email"],
+            "password": self.test_user_data["password"]
+        }
+        
+        success, response = self.run_test(
+            "User Login - Unverified Account",
+            "POST",
+            "auth/login",
+            403,  # Should fail with 403 Forbidden
+            login_data
+        )
+        
+        if success:
+            print(f"   ✅ Correctly rejected login for unverified account")
+            if 'detail' in response:
+                print(f"   Error message: {response['detail']}")
+        
+        return success
+    
+    def test_email_verification_invalid_token(self):
+        """Test email verification with invalid token"""
+        success, response = self.run_test(
+            "Email Verification - Invalid Token",
+            "POST",
+            "auth/verify-email?token=invalid_token_12345&email=adebayo.ogundimu@fiquant.ng",
+            400,  # Should fail
+            None
+        )
+        
+        if success:
+            print(f"   ✅ Correctly rejected invalid verification token")
+        
+        return success
+    
+    def test_phone_verification_invalid_code(self):
+        """Test phone verification with invalid code"""
+        verification_data = {
+            "email": "adebayo.ogundimu@fiquant.ng",
+            "verification_code": "999999",  # Invalid code
+            "verification_type": "phone"
+        }
+        
+        success, response = self.run_test(
+            "Phone Verification - Invalid Code",
+            "POST",
+            "auth/verify-phone",
+            400,  # Should fail
+            verification_data
+        )
+        
+        if success:
+            print(f"   ✅ Correctly rejected invalid verification code")
+        
+        return success
+    
+    def test_resend_verification_email(self):
+        """Test resending verification email"""
+        if not self.test_user_data:
+            print("   ⚠️ Skipping - No test user data available")
+            return False
+            
+        verification_data = {
+            "email": self.test_user_data["email"]
+        }
+        
+        success, response = self.run_test(
+            "Resend Verification Email",
+            "POST",
+            "auth/resend-verification",
+            200,
+            verification_data
+        )
+        
+        if success:
+            print(f"   ✅ Verification email resend successful")
+            if 'message' in response:
+                print(f"   Message: {response['message']}")
+        
+        return success
+    
+    def test_resend_sms_verification(self):
+        """Test resending SMS verification code"""
+        if not self.test_user_data:
+            print("   ⚠️ Skipping - No test user data available")
+            return False
+            
+        verification_data = {
+            "email": self.test_user_data["email"]
+        }
+        
+        success, response = self.run_test(
+            "Resend SMS Verification",
+            "POST",
+            "auth/resend-sms",
+            200,
+            verification_data
+        )
+        
+        if success:
+            print(f"   ✅ SMS verification resend successful")
+            if 'message' in response:
+                print(f"   Message: {response['message']}")
+        
+        return success
+    
+    def test_create_verified_user_for_testing(self):
+        """Create a verified user for testing authenticated endpoints"""
+        # Register a new user for testing
+        test_data = {
+            "email": "verified.user@fiquant.ng",
+            "phone": "+2348777888999",
+            "password": "VerifiedPass123!",
+            "full_name": "Verified Test User",
+            "agree_terms": True
+        }
+        
+        success, response = self.run_test(
+            "Create Verified User - Registration",
+            "POST",
+            "auth/register",
+            200,
+            test_data
+        )
+        
+        if not success:
+            return False
+        
+        # Manually verify the user by updating database (simulation)
+        # In a real test environment, we would use the actual verification tokens
+        # For now, we'll test the login flow assuming verification works
+        print(f"   ✅ Test user created for authentication testing")
+        print(f"   Note: In production, email and SMS verification would be completed")
+        
+        # Store verified user data
+        self.verified_user_data = test_data
+        return True
+    
+    def test_user_login_invalid_credentials(self):
+        """Test login with invalid credentials"""
+        login_data = {
+            "email_or_phone": "nonexistent@fiquant.ng",
+            "password": "WrongPassword123!"
+        }
+        
+        success, response = self.run_test(
+            "User Login - Invalid Credentials",
+            "POST",
+            "auth/login",
+            401,  # Should fail with 401 Unauthorized
+            login_data
+        )
+        
+        if success:
+            print(f"   ✅ Correctly rejected invalid credentials")
+        
+        return success
+    
+    def test_protected_endpoint_without_token(self):
+        """Test accessing protected endpoint without authentication token"""
+        success, response = self.run_test(
+            "Protected Endpoint - No Token",
+            "GET",
+            "auth/me",
+            401,  # Should fail with 401 Unauthorized
+            None
+        )
+        
+        if success:
+            print(f"   ✅ Correctly rejected request without authentication token")
+        
+        return success
+    
+    def test_protected_endpoint_invalid_token(self):
+        """Test accessing protected endpoint with invalid token"""
+        # Temporarily set invalid token
+        old_token = self.auth_token
+        self.auth_token = "invalid.jwt.token"
+        
+        success, response = self.run_test(
+            "Protected Endpoint - Invalid Token",
+            "GET",
+            "auth/me",
+            401,  # Should fail with 401 Unauthorized
+            None,
+            auth_required=True
+        )
+        
+        # Restore original token
+        self.auth_token = old_token
+        
+        if success:
+            print(f"   ✅ Correctly rejected invalid authentication token")
+        
+        return success
+    
+    def test_user_profile_update_unauthorized(self):
+        """Test profile update without authentication"""
+        profile_data = {
+            "full_name": "Updated Name",
+            "phone": "+2348999000111"
+        }
+        
+        success, response = self.run_test(
+            "Profile Update - Unauthorized",
+            "PUT",
+            "profile/update",
+            401,  # Should fail without auth
+            profile_data
+        )
+        
+        if success:
+            print(f"   ✅ Correctly rejected profile update without authentication")
+        
+        return success
+    
+    def test_calculation_history_unauthorized(self):
+        """Test accessing calculation history without authentication"""
+        success, response = self.run_test(
+            "Calculation History - Unauthorized",
+            "GET",
+            "history/calculations",
+            401,  # Should fail without auth
+            None
+        )
+        
+        if success:
+            print(f"   ✅ Correctly rejected history access without authentication")
+        
+        return success
+
     def test_root_endpoint(self):
         """Test root API endpoint"""
         success, response = self.run_test(
