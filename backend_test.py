@@ -293,9 +293,11 @@ class NigerianTaxCalculatorTester:
     def test_create_verified_user_for_testing(self):
         """Create a verified user for testing authenticated endpoints"""
         # Register a new user for testing
+        import time
+        timestamp = int(time.time())
         test_data = {
-            "email": "verified.user@fiquant.ng",
-            "phone": "+2348777888999",
+            "email": f"verified.user.{timestamp}@fiquant.ng",
+            "phone": f"+234877788{timestamp % 10000}",
             "password": "VerifiedPass123!",
             "full_name": "Verified Test User",
             "agree_terms": True
