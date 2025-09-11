@@ -274,13 +274,14 @@ def send_verification_email(email: str, verification_token: str, full_name: str)
 def send_verification_sms(phone: str, verification_code: str):
     """Send verification SMS (simplified - in production use proper SMS service)"""
     try:
-        # In production, use a proper SMS service like Twilio, AWS SNS, etc.
-        print(f"📱 SMS VERIFICATION CODE FOR {phone}:")
-        print(f"   Code: {verification_code}")
-        print(f"   Message: Your Fiquant TaxPro verification code is {verification_code}")
-        print("   (In production, this would be sent via SMS service)")
+        print(f"\n📱 SMS VERIFICATION CODE FOR {phone}:")
+        print(f"🔢 CODE: {verification_code}")
+        print(f"💬 MESSAGE: 'Your Fiquant TaxPro verification code is {verification_code}'")
+        print(f"⏰ Code expires in 10 minutes")
+        print(f"Note: In production, this would be sent via SMS service like Twilio")
+        print(f"=" * 60)
         
-        # TODO: Implement actual SMS sending
+        # TODO: Implement actual SMS sending using service like Twilio
         return True
     except Exception as e:
         print(f"Failed to send verification SMS: {e}")
