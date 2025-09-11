@@ -1928,9 +1928,6 @@ async def get_audit_logs(
         print(f"Error getting audit logs: {e}")
         raise HTTPException(status_code=500, detail="Failed to retrieve audit logs")
 
-# Include admin router
-app.include_router(admin_router)
-
 # Initialize super admin endpoint (public - use with caution)
 @admin_router.post("/initialize-super-admin")
 async def initialize_super_admin(email_data: dict):
