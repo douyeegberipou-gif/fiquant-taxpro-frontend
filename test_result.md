@@ -249,11 +249,13 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Excel Template Download for Bulk PAYE"
-  stuck_tasks:
-    - "Excel Template Download for Bulk PAYE"
+    - "Single PAYE Print Report (PDF)"
+    - "Bulk PAYE Print Report (PDF)"
+    - "CIT Print Report (PDF)"
+    - "PDF Generator Utility"
+  stuck_tasks: []
   test_all: false
-  test_priority: "stuck_first"
+  test_priority: "high_first"
 
 agent_communication:
   - agent: "main"
