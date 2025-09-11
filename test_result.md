@@ -147,6 +147,54 @@ backend:
         agent: "testing"
         comment: "Health check endpoints tested and working. Root API endpoint returns proper JSON response with service identification. All endpoints responding with correct HTTP status codes and proper error handling for invalid inputs."
 
+  - task: "User Registration API"
+    implemented: true
+    working: "NA"
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Recently implemented user registration endpoint with email/phone verification code generation. Need to test registration process, verification code creation, and email/phone validation."
+
+  - task: "User Verification API"
+    implemented: true
+    working: "NA"
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Recently implemented verification code validation endpoint. Need to test code verification, account activation, and error handling for invalid/expired codes."
+
+  - task: "User Login API"
+    implemented: true
+    working: "NA"
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Recently implemented login endpoint with JWT token generation and verification status checking. Need to test login process, JWT token generation, and authentication middleware."
+
+  - task: "Authentication Middleware"
+    implemented: true
+    working: "NA"
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Recently implemented JWT-based authentication middleware for protected routes. Need to test protected endpoints, token validation, and error handling for invalid/expired tokens."
+
 frontend:
   - task: "Excel Template Download for Bulk PAYE"
     implemented: true
