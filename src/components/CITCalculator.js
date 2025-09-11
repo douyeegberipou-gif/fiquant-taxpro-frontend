@@ -302,7 +302,7 @@ const CITCalculator = ({
                 <Input
                   id="carry_forward_losses"
                   type="number"
-                  placeholder="5,000,000"
+                  placeholder="₦5,000,000"
                   value={citInput.carry_forward_losses}
                   onChange={(e) => handleCitInputChange('carry_forward_losses', e.target.value)}
                 />
