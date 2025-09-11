@@ -593,25 +593,26 @@ class NigerianTaxCalculatorTester:
         )
         
         if success:
-            print(f"   Annual Gross: ₦{response['annual_gross_income']:,.0f}")
-            print(f"   Total Reliefs: ₦{response['total_reliefs']:,.0f}")
-            print(f"   Taxable Income: ₦{response['taxable_income']:,.0f}")
-            print(f"   Tax Due: ₦{response['tax_due']:,.0f}")
-            print(f"   Monthly Tax: ₦{response['monthly_tax']:,.0f}")
+            result = response[0] if isinstance(response, list) else response
+            print(f"   Annual Gross: ₦{result['annual_gross_income']:,.0f}")
+            print(f"   Total Reliefs: ₦{result['total_reliefs']:,.0f}")
+            print(f"   Taxable Income: ₦{result['taxable_income']:,.0f}")
+            print(f"   Tax Due: ₦{result['tax_due']:,.0f}")
+            print(f"   Monthly Tax: ₦{result['monthly_tax']:,.0f}")
             
             # Verify rent relief is capped at ₦500,000
-            if response['rent_relief'] == 500000:
+            if result['rent_relief'] == 500000:
                 print(f"   ✅ Rent relief correctly capped at ₦500,000")
             else:
-                print(f"   ❌ Rent relief should be capped at ₦500,000, got ₦{response['rent_relief']:,.0f}")
+                print(f"   ❌ Rent relief should be capped at ₦500,000, got ₦{result['rent_relief']:,.0f}")
             
             # Should have multiple tax brackets
-            if 'tax_breakdown' in response and len(response['tax_breakdown']) >= 3:
-                print(f"   ✅ Multiple tax brackets applied ({len(response['tax_breakdown'])} brackets)")
-                for bracket in response['tax_breakdown']:
+            if 'tax_breakdown' in result and len(result['tax_breakdown']) >= 3:
+                print(f"   ✅ Multiple tax brackets applied ({len(result['tax_breakdown'])} brackets)")
+                for bracket in result['tax_breakdown']:
                     print(f"     {bracket['range']} ({bracket['rate']}): ₦{bracket['tax_amount']:,.0f}")
             else:
-                print(f"   ❌ Expected multiple tax brackets, got {len(response.get('tax_breakdown', []))}")
+                print(f"   ❌ Expected multiple tax brackets, got {len(result.get('tax_breakdown', []))}")
         
         return success
 
