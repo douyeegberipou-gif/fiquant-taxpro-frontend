@@ -915,17 +915,6 @@ If the problem persists, please contact Fiquant Consult support with this error 
             </div>
           </CardContent>
         </Card>
-        
-        {/* Print Report Button for Bulk PAYE */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <button
-            onClick={() => generateBulkPayeReport(employees, totals)}
-            className="w-full inline-flex items-center justify-center px-6 py-3 bg-gray-900 text-white text-sm font-medium rounded-xl hover:bg-gray-800 transition-all duration-200 shadow-sm"
-          >
-            <Printer className="h-4 w-4 mr-2" />
-            Print Bulk Report (PDF)
-          </button>
-        </div>
       )}
 
       {/* Summary Cards */}
