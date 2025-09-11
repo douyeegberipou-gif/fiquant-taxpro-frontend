@@ -276,7 +276,7 @@ async def get_admin_middleware(request: Request):
         
         # Verify JWT token
         try:
-            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
             user_id = payload.get("sub")
             if not user_id:
                 raise HTTPException(
