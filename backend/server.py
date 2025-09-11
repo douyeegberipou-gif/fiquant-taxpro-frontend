@@ -133,6 +133,7 @@ class CITCalculationResult(BaseModel):
     capital_allowance_breakdown: dict
     
     # Tax calculations
+    carry_forward_losses_applied: float
     taxable_profit: float
     cit_rate: float
     cit_due: float
