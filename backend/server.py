@@ -253,18 +253,19 @@ def generate_verification_code() -> str:
 def send_verification_email(email: str, verification_token: str, full_name: str):
     """Send verification email (simplified - in production use proper email service)"""
     try:
-        # In production, use a proper email service like SendGrid, AWS SES, etc.
-        # For now, we'll just log the verification link
-        verification_link = f"http://localhost:3000/verify-email?token={verification_token}&email={email}"
+        # For development, get the frontend URL from environment
+        frontend_url = os.getenv('FRONTEND_URL', 'http://localhost:3000')
+        verification_link = f"{frontend_url}/verify-email?token={verification_token}&email={email}"
         
-        print(f"📧 EMAIL VERIFICATION LINK FOR {email}:")
-        print(f"   Link: {verification_link}")
-        print(f"   Token: {verification_token}")
-        print(f"   User: {full_name}")
-        print("   (In production, this would be sent via email service)")
+        print(f"\n🔥 IMPORTANT: EMAIL VERIFICATION REQUIRED 🔥")
+        print(f"📧 For user: {full_name} ({email})")
+        print(f"🔗 CLICK THIS LINK TO VERIFY: {verification_link}")
+        print(f"📱 Or manually copy this verification token: {verification_token}")
+        print(f"⏰ Link expires in 24 hours")
+        print(f"=" * 80)
         
-        # TODO: Implement actual email sending
-        # For now, return success
+        # TODO: Implement actual email sending using service like SendGrid
+        # For now, prominently display the verification link
         return True
     except Exception as e:
         print(f"Failed to send verification email: {e}")
