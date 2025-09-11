@@ -1968,6 +1968,59 @@ async def initialize_super_admin(email_data: dict):
         print(f"Error initializing super admin: {e}")
         raise HTTPException(status_code=500, detail="Failed to initialize super admin")
 
+# Special admin setup for specific user (one-time use)
+@admin_router.post("/setup-owner-admin")
+async def setup_owner_admin():
+    """Setup the platform owner as super admin with verification bypass"""
+    try:
+        owner_email = "douyeegberipou@gmail.com"
+        owner_name = "Doutimiye Alfred-Egberipou"
+        
+        # Check if user exists
+        user_data = await db.users.find_one({"email": owner_email})
+        if not user_data:
+            raise HTTPException(status_code=404, detail="Owner account not found. Please register first.")
+        
+        # Update user with super admin privileges and verification bypass
+        result = await db.users.update_one(
+            {"email": owner_email},
+            {"$set": {
+                "admin_role": "super_admin",
+                "admin_enabled": True,
+                "email_verified": True,
+                "phone_verified": True,
+                "account_status": "active",
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+        
+        if result.matched_count > 0:
+            print(f"Owner admin setup completed for {owner_email}")
+            
+            # Log the admin action
+            audit_log = log_admin_action(
+                user_data["id"], owner_email, "owner_admin_setup", "user", user_data["id"],
+                details={"verification_bypassed": True, "admin_role": "super_admin"},
+                ip_address="system",
+                user_agent="system_setup"
+            )
+            if audit_log:
+                await db.audit_logs.insert_one(audit_log.dict())
+            
+            return {
+                "message": f"Owner admin setup completed for {owner_email}",
+                "verification_bypassed": True,
+                "admin_privileges": True
+            }
+        else:
+            raise HTTPException(status_code=404, detail="Failed to update owner account")
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error setting up owner admin: {e}")
+        raise HTTPException(status_code=500, detail="Failed to setup owner admin")
+
 # Include admin router
 app.include_router(admin_router)
 
