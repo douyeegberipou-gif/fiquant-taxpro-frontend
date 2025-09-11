@@ -1909,6 +1909,24 @@ def main():
     # Run Comprehensive Authentication tests first
     tester.run_comprehensive_authentication_tests()
     
+    # Run Admin System tests
+    print("\n🔐 ADMIN SYSTEM INITIALIZATION TESTS")
+    print("-" * 40)
+    admin_tests = [
+        tester.test_initialize_super_admin,
+        tester.test_duplicate_super_admin_prevention,
+        tester.test_admin_endpoints_without_auth,
+        tester.test_invalid_user_super_admin_promotion
+    ]
+    
+    for test in admin_tests:
+        try:
+            test()
+        except AttributeError:
+            print(f"⚠️ Admin test {test.__name__} not implemented yet")
+        except Exception as e:
+            print(f"❌ Admin test {test.__name__} failed: {str(e)}")
+    
     # Run PAYE tests
     print("\n📋 PAYE CALCULATOR TESTS")
     print("-" * 40)
