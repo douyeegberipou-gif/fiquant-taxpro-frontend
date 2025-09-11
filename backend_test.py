@@ -545,23 +545,24 @@ class NigerianTaxCalculatorTester:
         )
         
         if success:
-            print(f"   Annual Gross: ₦{response['annual_gross_income']:,.0f}")
-            print(f"   Total Reliefs: ₦{response['total_reliefs']:,.0f}")
-            print(f"   Taxable Income: ₦{response['taxable_income']:,.0f}")
-            print(f"   Tax Due: ₦{response['tax_due']:,.0f}")
-            print(f"   Monthly Tax: ₦{response['monthly_tax']:,.0f}")
+            result = response[0] if isinstance(response, list) else response
+            print(f"   Annual Gross: ₦{result['annual_gross_income']:,.0f}")
+            print(f"   Total Reliefs: ₦{result['total_reliefs']:,.0f}")
+            print(f"   Taxable Income: ₦{result['taxable_income']:,.0f}")
+            print(f"   Tax Due: ₦{result['tax_due']:,.0f}")
+            print(f"   Monthly Tax: ₦{result['monthly_tax']:,.0f}")
             
             # Verify rent relief calculation
             expected_rent_relief = 1200000 * 0.20  # 20% of annual rent
-            if abs(response['rent_relief'] - expected_rent_relief) < 1:
-                print(f"   ✅ Rent relief calculated correctly: ₦{response['rent_relief']:,.0f}")
+            if abs(result['rent_relief'] - expected_rent_relief) < 1:
+                print(f"   ✅ Rent relief calculated correctly: ₦{result['rent_relief']:,.0f}")
             else:
-                print(f"   ❌ Rent relief incorrect: Expected ₦{expected_rent_relief:,.0f}, Got ₦{response['rent_relief']:,.0f}")
+                print(f"   ❌ Rent relief incorrect: Expected ₦{expected_rent_relief:,.0f}, Got ₦{result['rent_relief']:,.0f}")
             
             # Check tax breakdown
-            if 'tax_breakdown' in response and len(response['tax_breakdown']) > 0:
+            if 'tax_breakdown' in result and len(result['tax_breakdown']) > 0:
                 print(f"   Tax breakdown:")
-                for bracket in response['tax_breakdown']:
+                for bracket in result['tax_breakdown']:
                     print(f"     {bracket['range']} ({bracket['rate']}): ₦{bracket['tax_amount']:,.0f}")
         
         return success
