@@ -14,6 +14,11 @@ from decimal import Decimal, ROUND_HALF_UP
 import jwt
 import bcrypt
 import re
+import secrets
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import random
 
 # ============================
 # USER AUTHENTICATION & PROFILE MODELS
