@@ -219,6 +219,18 @@ backend:
         agent: "testing"
         comment: "🛡️ AUTHENTICATION MIDDLEWARE PROTECTION TESTING COMPLETED: Comprehensive testing of authentication middleware protection across all protected endpoints completed successfully. ✅ PROTECTED ENDPOINTS: All 5 protected endpoints (auth/me, profile/update, history/calculations, etc.) correctly require authentication. ✅ NO TOKEN HANDLING: Returns 403 Forbidden when no authentication token provided. ✅ INVALID TOKEN HANDLING: Returns 401 Unauthorized when invalid token provided. ✅ JWT VALIDATION: Proper token validation and error handling working correctly. ✅ SECURITY COMPLIANCE: All endpoints properly secured with correct HTTP status codes and security headers."
 
+  - task: "Specific Admin Account Modification"
+    implemented: true
+    working: false
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "🎯 SPECIFIC ADMIN ACCOUNT MODIFICATION TESTING: Comprehensive testing completed for admin account 'Doutimiye Alfred-Egberipou' (douyeegberipou@gmail.com). ✅ ACCOUNT EXISTS: Target account confirmed in system. ✅ SUPER ADMIN ROLE: Account has admin_role: 'super_admin' and admin_enabled: true. ✅ ADMIN ENDPOINTS: All admin endpoints properly protected. ❌ VERIFICATION BYPASS NEEDED: Account requires email_verified: true and phone_verified: true to enable login. ❌ LOGIN ACCESS: Cannot access admin dashboard due to verification requirements. SOLUTION: Manual database update required to set email_verified: true, phone_verified: true, account_status: 'active'. Admin account setup is 90% complete - only verification bypass needed for full functionality."
+
 frontend:
   - task: "Excel Template Download for Bulk PAYE"
     implemented: true
