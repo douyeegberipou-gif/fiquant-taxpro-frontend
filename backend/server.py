@@ -15,6 +15,102 @@ import jwt
 import bcrypt
 import re
 
+# ============================
+# USER AUTHENTICATION & PROFILE MODELS
+# ============================
+
+class UserRegistration(BaseModel):
+    email: EmailStr
+    phone: Optional[str] = Field(None, description="Phone number with country code")
+    password: str = Field(min_length=8, description="Password (minimum 8 characters)")
+    full_name: str = Field(min_length=2, description="Full name")
+    agree_terms: bool = Field(description="User must agree to terms and conditions")
+
+class UserLogin(BaseModel):
+    email_or_phone: str = Field(description="Email address or phone number")
+    password: str = Field(description="Password")
+
+class UserProfile(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    email: EmailStr
+    phone: Optional[str] = None
+    full_name: str
+    
+    # Profile Information
+    account_type: str = Field(default="individual", description="individual or business")
+    employment_status: str = Field(default="salaried", description="salaried, self-employed, contractor, investor, multinational, sme")
+    
+    # Income Streams (for profile setup, not auto-fill)
+    income_streams: List[str] = Field(default_factory=list, description="salary, business_revenue, investment, property, digital")
+    
+    # Default Reliefs & Deductions (for reference, not auto-fill)
+    default_reliefs: dict = Field(default_factory=dict, description="User's typical reliefs")
+    
+    # Tax Information
+    tin: Optional[str] = Field(None, description="Tax Identification Number")
+    company_name: Optional[str] = Field(None, description="Company name for business accounts")
+    business_type: Optional[str] = Field(None, description="Type of business")
+    
+    # Account Settings
+    account_tier: str = Field(default="free", description="free, basic, premium, enterprise")
+    permissions: List[str] = Field(default_factory=lambda: ["basic_calculator"], description="Account permissions")
+    
+    # Timestamps
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    last_login: Optional[datetime] = None
+    
+    # Settings
+    email_notifications: bool = Field(default=True)
+    sms_notifications: bool = Field(default=False)
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+    expires_in: int
+    user_id: str
+
+class UserResponse(BaseModel):
+    id: str
+    email: str
+    full_name: str
+    account_type: str
+    employment_status: str
+    account_tier: str
+    permissions: List[str]
+    created_at: datetime
+    last_login: Optional[datetime]
+
+# ============================
+# TAX CALCULATION HISTORY MODELS
+# ============================
+
+class TaxCalculationHistory(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str = Field(description="User who performed the calculation")
+    calculation_type: str = Field(description="paye, cit, bulk_paye")
+    
+    # Calculation Data
+    input_data: dict = Field(description="Original input data")
+    result_data: dict = Field(description="Calculation results")
+    
+    # Metadata
+    calculation_date: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    notes: Optional[str] = None
+    tags: List[str] = Field(default_factory=list)
+    
+    # For bulk calculations
+    employee_count: Optional[int] = Field(default=1, description="Number of employees calculated")
+    
+class CalculationSummary(BaseModel):
+    id: str
+    calculation_type: str
+    calculation_date: datetime
+    employee_count: int
+    total_tax: Optional[float] = None
+    notes: Optional[str] = None
+
+# ============================
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
