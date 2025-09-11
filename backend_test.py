@@ -105,8 +105,12 @@ class NigerianTaxCalculatorTester:
     
     def test_user_registration_duplicate_email(self):
         """Test user registration with duplicate email (should fail)"""
+        if not self.test_user_data:
+            print("   ⚠️ Skipping - No test user data available")
+            return False
+            
         test_data = {
-            "email": "adebayo.ogundimu@fiquant.ng",  # Same email as previous test
+            "email": self.test_user_data["email"],  # Same email as previous test
             "phone": "+2348987654321",
             "password": "AnotherPass456!",
             "full_name": "Another User",
