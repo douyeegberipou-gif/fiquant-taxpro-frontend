@@ -52,16 +52,64 @@ export const AuthModal = ({ isOpen, onClose }) => {
         </button>
         
         <div className="p-4">
-          {currentForm === 'login' ? (
+          {currentForm === 'login' && (
             <LoginForm
               onSwitchToRegister={switchToRegister}
               onClose={onClose}
             />
-          ) : (
+          )}
+          
+          {currentForm === 'register' && (
             <RegisterForm
               onSwitchToLogin={switchToLogin}
               onClose={onClose}
+              onRegistrationSuccess={handleRegistrationSuccess}
             />
+          )}
+          
+          {currentForm === 'post-register' && (
+            <div className="text-center space-y-6">
+              <div className="flex items-center justify-center">
+                <CheckCircle className="h-16 w-16 text-green-500" />
+              </div>
+              
+              <div>
+                <h3 className="text-xl font-semibold text-green-700 mb-2">
+                  Registration Successful!
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Your account has been created successfully.
+                </p>
+              </div>
+              
+              <Alert className="border-green-200 bg-green-50 text-left">
+                <Mail className="h-4 w-4" />
+                <AlertDescription className="text-green-700">
+                  <strong>Verification Required:</strong><br />
+                  We've sent a verification link to <strong>{registeredEmail}</strong>. 
+                  Please check your email and click the verification link to activate your account.
+                  <div className="mt-2 text-sm">
+                    <p>• Check your spam/junk folder if you don't see the email</p>
+                    <p>• The verification link expires in 24 hours</p>
+                  </div>
+                </AlertDescription>
+              </Alert>
+              
+              <div className="flex space-x-3">
+                <button
+                  onClick={switchToLogin}
+                  className="flex-1 px-4 py-2 text-green-600 border border-green-300 rounded hover:bg-green-50"
+                >
+                  Back to Login
+                </button>
+                <button
+                  onClick={onClose}
+                  className="flex-1 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                >
+                  Continue
+                </button>
+              </div>
+            </div>
           )}
         </div>
       </div>
