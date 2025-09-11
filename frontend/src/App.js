@@ -23,6 +23,8 @@ const API = `${BACKEND_URL}/api`;
 function AppContent() {
   const { user, logout, isAuthenticated } = useAuth();
   const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [verificationStatus, setVerificationStatus] = useState(null); // 'verifying', 'success', 'error'
+  const [verificationMessage, setVerificationMessage] = useState('');
   
   // Existing state variables
   const [taxInput, setTaxInput] = useState({
