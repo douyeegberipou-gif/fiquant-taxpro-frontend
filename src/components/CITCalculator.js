@@ -1,5 +1,5 @@
 import React from 'react';
-import { Building2, TrendingDown, TrendingUp, AlertTriangle, CheckCircle, Settings, CreditCard } from 'lucide-react';
+import { Building2, TrendingDown, TrendingUp, AlertTriangle, CheckCircle, Settings, CreditCard, Printer } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
@@ -8,6 +8,7 @@ import { Badge } from './ui/badge';
 import { Separator } from './ui/separator';
 import { Alert, AlertDescription } from './ui/alert';
 import { Switch } from './ui/switch';
+import { generateCitReport } from '../utils/pdfGenerator';
 
 const CITCalculator = ({ 
   citInput, 
