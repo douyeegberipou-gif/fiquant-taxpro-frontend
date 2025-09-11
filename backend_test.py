@@ -490,31 +490,32 @@ class NigerianTaxCalculatorTester:
         )
         
         if success:
-            print(f"   Annual Gross: ₦{response['annual_gross_income']:,.0f}")
-            print(f"   Total Reliefs: ₦{response['total_reliefs']:,.0f}")
-            print(f"   Taxable Income: ₦{response['taxable_income']:,.0f}")
-            print(f"   Tax Due: ₦{response['tax_due']:,.0f}")
-            print(f"   Monthly Tax: ₦{response['monthly_tax']:,.0f}")
+            result = response[0] if isinstance(response, list) else response
+            print(f"   Annual Gross: ₦{result['annual_gross_income']:,.0f}")
+            print(f"   Total Reliefs: ₦{result['total_reliefs']:,.0f}")
+            print(f"   Taxable Income: ₦{result['taxable_income']:,.0f}")
+            print(f"   Tax Due: ₦{result['tax_due']:,.0f}")
+            print(f"   Monthly Tax: ₦{result['monthly_tax']:,.0f}")
             
             # Verify auto-calculated reliefs
             expected_pension = 50000 * 12 * 0.08  # 8% of basic salary
             expected_nhf = 50000 * 12 * 0.025     # 2.5% of basic salary
             
-            if abs(response['pension_relief'] - expected_pension) < 1:
-                print(f"   ✅ Pension relief auto-calculated correctly: ₦{response['pension_relief']:,.0f}")
+            if abs(result['pension_relief'] - expected_pension) < 1:
+                print(f"   ✅ Pension relief auto-calculated correctly: ₦{result['pension_relief']:,.0f}")
             else:
-                print(f"   ❌ Pension relief incorrect: Expected ₦{expected_pension:,.0f}, Got ₦{response['pension_relief']:,.0f}")
+                print(f"   ❌ Pension relief incorrect: Expected ₦{expected_pension:,.0f}, Got ₦{result['pension_relief']:,.0f}")
             
-            if abs(response['nhf_relief'] - expected_nhf) < 1:
-                print(f"   ✅ NHF relief auto-calculated correctly: ₦{response['nhf_relief']:,.0f}")
+            if abs(result['nhf_relief'] - expected_nhf) < 1:
+                print(f"   ✅ NHF relief auto-calculated correctly: ₦{result['nhf_relief']:,.0f}")
             else:
-                print(f"   ❌ NHF relief incorrect: Expected ₦{expected_nhf:,.0f}, Got ₦{response['nhf_relief']:,.0f}")
+                print(f"   ❌ NHF relief incorrect: Expected ₦{expected_nhf:,.0f}, Got ₦{result['nhf_relief']:,.0f}")
             
             # Should be tax-free since annual income (₦600,000) < ₦800,000 threshold
-            if response['tax_due'] == 0:
+            if result['tax_due'] == 0:
                 print(f"   ✅ Correctly tax-free (income below ₦800,000 threshold)")
             else:
-                print(f"   ❌ Should be tax-free but tax due is ₦{response['tax_due']:,.0f}")
+                print(f"   ❌ Should be tax-free but tax due is ₦{result['tax_due']:,.0f}")
         
         return success
 
