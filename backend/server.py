@@ -319,7 +319,7 @@ api_router = APIRouter(prefix="/api")
 
 @api_router.post("/auth/register", response_model=UserResponse)
 async def register_user(user_data: UserRegistration):
-    """Register new user"""
+    """Register new user with email/phone verification"""
     # Validate input
     if not validate_email(user_data.email):
         raise HTTPException(
@@ -355,6 +355,14 @@ async def register_user(user_data: UserRegistration):
                 detail="Phone number already registered"
             )
     
+    # Generate verification tokens
+    verification_token = generate_verification_token()
+    verification_expires = datetime.now(timezone.utc) + timedelta(hours=24)  # 24 hour expiry
+    
+    phone_verification_code = None
+    if user_data.phone:
+        phone_verification_code = generate_verification_code()
+    
     # Create user profile
     user_profile = UserProfile(
         email=user_data.email,
@@ -363,7 +371,13 @@ async def register_user(user_data: UserRegistration):
         account_type="individual",
         employment_status="salaried",
         account_tier="free",
-        permissions=["basic_calculator"]
+        permissions=["basic_calculator"],
+        email_verified=False,
+        phone_verified=False if user_data.phone else True,  # No phone = phone verified
+        account_status="pending",
+        verification_token=verification_token,
+        phone_verification_code=phone_verification_code,
+        verification_expires=verification_expires
     )
     
     # Hash password and store user
@@ -376,8 +390,20 @@ async def register_user(user_data: UserRegistration):
     user_doc["updated_at"] = user_doc["updated_at"].isoformat()
     if user_doc["last_login"]:
         user_doc["last_login"] = user_doc["last_login"].isoformat()
+    user_doc["verification_expires"] = user_doc["verification_expires"].isoformat()
     
     await db.users.insert_one(user_doc)
+    
+    # Send verification email
+    email_sent = send_verification_email(user_data.email, verification_token, user_data.full_name)
+    if not email_sent:
+        print(f"Warning: Failed to send verification email to {user_data.email}")
+    
+    # Send verification SMS if phone provided
+    if user_data.phone and phone_verification_code:
+        sms_sent = send_verification_sms(user_data.phone, phone_verification_code)
+        if not sms_sent:
+            print(f"Warning: Failed to send verification SMS to {user_data.phone}")
     
     return UserResponse(
         id=user_profile.id,
@@ -388,7 +414,10 @@ async def register_user(user_data: UserRegistration):
         account_tier=user_profile.account_tier,
         permissions=user_profile.permissions,
         created_at=user_profile.created_at,
-        last_login=user_profile.last_login
+        last_login=user_profile.last_login,
+        email_verified=user_profile.email_verified,
+        phone_verified=user_profile.phone_verified,
+        account_status=user_profile.account_status
     )
 
 @api_router.post("/auth/login", response_model=Token)
