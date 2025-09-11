@@ -182,9 +182,7 @@ export const generatePayeReport = (taxInput, result) => {
 };
 
 // Generate Bulk PAYE Report
-export const generateBulkPayeReport = async (employees, totals) => {
-  await loadAutoTable();
-  
+export const generateBulkPayeReport = (employees, totals) => {
   const doc = new jsPDF();
   
   let yPos = addHeader(doc, 'Bulk PAYE Tax Calculation Report');
