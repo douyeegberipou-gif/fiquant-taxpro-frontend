@@ -1353,22 +1353,8 @@ async def calculate_paye_tax(tax_input: TaxInput):
         result = calculate_nigerian_paye_2026(tax_input)
         calculation_result = [result]
         
-        # Save to history if user is authenticated
-        if current_user:
-            history_record = TaxCalculationHistory(
-                user_id=current_user.id,
-                calculation_type="paye",
-                input_data=tax_input.dict(),
-                result_data=result.dict(),
-                employee_count=1,
-                notes=f"PAYE calculation for {tax_input.basic_salary}"
-            )
-            
-            # Convert datetime to ISO string
-            history_doc = history_record.dict()
-            history_doc["calculation_date"] = history_doc["calculation_date"].isoformat()
-            
-            await db.tax_history.insert_one(history_doc)
+        # Note: History saving removed for now to keep endpoint simple
+        # In production, this would be handled by authenticated endpoints
         
         # Save calculation to database (existing functionality)
         calculation_dict = result.dict()
