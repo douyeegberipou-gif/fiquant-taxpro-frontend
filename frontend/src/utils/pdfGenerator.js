@@ -255,6 +255,9 @@ export const generateBulkPayeReport = (employees, totals) => {
 export const generateCitReport = (citInput, citResult) => {
   const doc = new jsPDF();
   
+  // Apply the autoTable plugin
+  autoTable(doc, {});
+  
   let yPos = addHeader(doc, 'Corporate Income Tax (CIT) Calculation Report');
   
   // Company Information Section
