@@ -122,6 +122,12 @@ function AppContent() {
     if (path === '/admin' || path.startsWith('/admin/')) {
       setShowAdminDashboard(true);
     }
+    
+    // Check for admin setup route
+    if (path === '/admin-setup') {
+      // Show setup page regardless of authentication
+      return;
+    }
   }, []);
 
   useEffect(() => {
