@@ -1,5 +1,6 @@
 import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+// Import jspdf-autotable plugin
+require('jspdf-autotable');
 
 // Utility function to format currency
 const formatCurrency = (amount) => {
