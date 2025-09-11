@@ -72,13 +72,12 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post(`${API_URL}/api/auth/register`, userData);
       
-      // Auto-login after registration
-      const loginResult = await login({
-        email_or_phone: userData.email,
-        password: userData.password
-      });
-      
-      return { success: true, user: response.data };
+      // Don't auto-login after registration - user needs to verify first
+      return { 
+        success: true, 
+        user: response.data,
+        requiresVerification: true 
+      };
     } catch (error) {
       console.error('Registration failed:', error);
       return { 
