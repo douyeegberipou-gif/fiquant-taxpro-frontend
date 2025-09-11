@@ -91,8 +91,12 @@ export const RegisterForm = ({ onSwitchToLogin, onClose, onRegistrationSuccess }
     
     if (result.success) {
       if (result.requiresVerification) {
-        setRegistrationComplete(true);
-        // Don't close modal immediately, show success message
+        // Call the parent's success handler to show verification message
+        if (onRegistrationSuccess) {
+          onRegistrationSuccess(formData.email);
+        } else {
+          setRegistrationComplete(true);
+        }
       } else {
         onClose(); // Close modal on successful registration without verification
       }
