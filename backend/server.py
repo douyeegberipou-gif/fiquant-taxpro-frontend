@@ -36,6 +36,14 @@ class UserProfile(BaseModel):
     phone: Optional[str] = None
     full_name: str
     
+    # Verification Status
+    email_verified: bool = Field(default=False)
+    phone_verified: bool = Field(default=False)
+    account_status: str = Field(default="pending", description="pending, verified, active, suspended")
+    verification_token: Optional[str] = Field(default=None, description="Email verification token")
+    phone_verification_code: Optional[str] = Field(default=None, description="SMS verification code")
+    verification_expires: Optional[datetime] = Field(default=None, description="Verification expiry time")
+    
     # Profile Information
     account_type: str = Field(default="individual", description="individual or business")
     employment_status: str = Field(default="salaried", description="salaried, self-employed, contractor, investor, multinational, sme")
