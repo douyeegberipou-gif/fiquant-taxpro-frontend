@@ -1848,7 +1848,7 @@ async def get_dashboard_analytics(
         })
         
         # Get calculation statistics
-        paye_calculations = await db.paye_calculations.count_documents({
+        paye_calculations = await db.tax_calculations.count_documents({
             "timestamp": {"$gte": start_date.isoformat()}
         })
         
