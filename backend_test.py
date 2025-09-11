@@ -385,7 +385,7 @@ class NigerianTaxCalculatorTester:
             "Profile Update - Unauthorized",
             "PUT",
             "profile/update",
-            401,  # Should fail without auth
+            403,  # FastAPI returns 403 for missing auth
             profile_data
         )
         
