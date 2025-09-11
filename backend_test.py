@@ -11,10 +11,14 @@ class NigerianTaxCalculatorTester:
         self.auth_token = None  # Store JWT token for authenticated requests
         self.test_user_data = None  # Store test user data
 
-    def run_test(self, name, method, endpoint, expected_status, data=None):
+    def run_test(self, name, method, endpoint, expected_status, data=None, auth_required=False):
         """Run a single API test"""
         url = f"{self.base_url}/{endpoint}"
         headers = {'Content-Type': 'application/json'}
+        
+        # Add authorization header if auth is required and token is available
+        if auth_required and self.auth_token:
+            headers['Authorization'] = f'Bearer {self.auth_token}'
 
         self.tests_run += 1
         print(f"\n🔍 Testing {name}...")
@@ -24,6 +28,10 @@ class NigerianTaxCalculatorTester:
                 response = requests.get(url, headers=headers, timeout=30)
             elif method == 'POST':
                 response = requests.post(url, json=data, headers=headers, timeout=30)
+            elif method == 'PUT':
+                response = requests.put(url, json=data, headers=headers, timeout=30)
+            elif method == 'DELETE':
+                response = requests.delete(url, headers=headers, timeout=30)
 
             success = response.status_code == expected_status
             if success:
