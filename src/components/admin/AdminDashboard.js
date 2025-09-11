@@ -130,6 +130,18 @@ export const AdminDashboard = () => {
                 {user?.admin_role?.replace('_', ' ').toUpperCase()}
               </Badge>
               <Button
+                onClick={() => {
+                  window.history.pushState({}, '', '/');
+                  window.location.reload();
+                }}
+                variant="outline"
+                size="sm"
+                className="border-green-600 text-green-300 hover:bg-green-800/50"
+              >
+                <TrendingUp className="h-4 w-4 mr-2" />
+                Main App
+              </Button>
+              <Button
                 onClick={handleRefresh}
                 disabled={refreshing}
                 variant="outline"
