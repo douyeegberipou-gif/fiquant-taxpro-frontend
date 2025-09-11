@@ -261,13 +261,17 @@ metadata:
 
 test_plan:
   current_focus:
+    - "PDF Generator Utility"
     - "Single PAYE Print Report (PDF)"
     - "Bulk PAYE Print Report (PDF)"
     - "CIT Print Report (PDF)"
+  stuck_tasks:
     - "PDF Generator Utility"
-  stuck_tasks: []
+    - "Single PAYE Print Report (PDF)"
+    - "Bulk PAYE Print Report (PDF)"
+    - "CIT Print Report (PDF)"
   test_all: false
-  test_priority: "high_first"
+  test_priority: "stuck_first"
 
 agent_communication:
   - agent: "main"
