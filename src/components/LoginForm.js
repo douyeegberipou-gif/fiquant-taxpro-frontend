@@ -42,10 +42,57 @@ export const LoginForm = ({ onSwitchToRegister, onClose }) => {
     if (result.success) {
       onClose(); // Close modal on successful login
     } else {
-      setError(result.error);
+      // Check if the error is due to unverified account
+      if (result.needsVerification) {
+        setError(
+          <div className="space-y-3">
+            <p>{result.error}</p>
+            <div className="flex space-x-2">
+              <button
+                type="button"
+                onClick={() => handleResendVerification(formData.email_or_phone)}
+                className="text-blue-600 hover:text-blue-700 font-medium text-sm underline"
+              >
+                Resend Verification Email
+              </button>
+            </div>
+          </div>
+        );
+      } else {
+        setError(result.error);
+      }
     }
     
     setLoading(false);
+  };
+
+  const handleResendVerification = async (emailOrPhone) => {
+    try {
+      setLoading(true);
+      const API_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
+      
+      // Try to resend verification email
+      await fetch(`${API_URL}/api/auth/resend-verification`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: emailOrPhone.includes('@') ? emailOrPhone : null
+        }),
+      });
+      
+      setError(
+        <div className="text-green-700">
+          <p>✅ Verification email sent! Please check your email and click the verification link.</p>
+          <p className="text-sm mt-1">Check your spam folder if you don't see the email.</p>
+        </div>
+      );
+    } catch (error) {
+      setError('Failed to resend verification email. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
