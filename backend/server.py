@@ -1932,7 +1932,7 @@ async def get_audit_logs(
 app.include_router(admin_router)
 
 # Initialize super admin endpoint (public - use with caution)
-@api_router.post("/admin/initialize-super-admin")
+@admin_router.post("/initialize-super-admin")
 async def initialize_super_admin(email_data: dict):
     """Initialize the first super admin account - use only once for setup"""
     try:
