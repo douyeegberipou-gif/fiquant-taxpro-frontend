@@ -56,9 +56,11 @@ class NigerianTaxCalculatorTester:
     
     def test_user_registration_valid_email(self):
         """Test user registration with valid email"""
+        import time
+        timestamp = int(time.time())
         test_data = {
-            "email": "adebayo.ogundimu@fiquant.ng",
-            "phone": "+2348123456789",
+            "email": f"adebayo.ogundimu.{timestamp}@fiquant.ng",
+            "phone": f"+234812345{timestamp % 10000}",
             "password": "SecurePass123!",
             "full_name": "Adebayo Ogundimu",
             "agree_terms": True
