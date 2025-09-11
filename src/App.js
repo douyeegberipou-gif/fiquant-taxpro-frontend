@@ -247,6 +247,8 @@ function App() {
       personal_expenses: '',
       excessive_interest: '',
       other_non_deductible: '',
+      // Loss Relief
+      carry_forward_losses: '',
       // Capital Allowances
       buildings_cost: '',
       furniture_fittings_cost: '',
