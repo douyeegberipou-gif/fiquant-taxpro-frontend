@@ -418,6 +418,33 @@ function AppContent() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Email Verification Status */}
+        {verificationStatus && (
+          <Alert className={`mb-6 ${
+            verificationStatus === 'success' ? 'border-green-200 bg-green-50' : 
+            verificationStatus === 'error' ? 'border-red-200 bg-red-50' : 
+            'border-blue-200 bg-blue-50'
+          }`}>
+            <AlertDescription className={
+              verificationStatus === 'success' ? 'text-green-700' : 
+              verificationStatus === 'error' ? 'text-red-700' : 
+              'text-blue-700'
+            }>
+              {verificationMessage}
+            </AlertDescription>
+            {verificationStatus !== 'verifying' && (
+              <Button
+                onClick={() => setVerificationStatus(null)}
+                variant="ghost"
+                size="sm"
+                className="mt-2 h-6 px-2 text-xs"
+              >
+                Dismiss
+              </Button>
+            )}
+          </Alert>
+        )}
+        
         <Tabs defaultValue="calculator" className="space-y-6">
           <div className="relative">
             <TabsList className="grid w-full grid-cols-6 bg-transparent border-0 p-0 h-auto">
