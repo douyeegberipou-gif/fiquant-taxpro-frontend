@@ -342,7 +342,7 @@ class NigerianTaxCalculatorTester:
             "Protected Endpoint - No Token",
             "GET",
             "auth/me",
-            401,  # Should fail with 401 Unauthorized
+            403,  # FastAPI returns 403 for missing auth
             None
         )
         
