@@ -7,6 +7,7 @@ const formatCurrency = (amount) => {
   return `₦${parseFloat(amount).toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 };
 };
+};
 
 // Utility function to format date
 const formatDate = () => {
