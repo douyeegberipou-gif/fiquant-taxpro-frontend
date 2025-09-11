@@ -556,7 +556,10 @@ async def update_user_profile(
         account_tier=updated_user.account_tier,
         permissions=updated_user.permissions,
         created_at=updated_user.created_at,
-        last_login=updated_user.last_login
+        last_login=updated_user.last_login,
+        email_verified=updated_user.email_verified,
+        phone_verified=updated_user.phone_verified,
+        account_status=updated_user.account_status
     )
 
 # ============================
