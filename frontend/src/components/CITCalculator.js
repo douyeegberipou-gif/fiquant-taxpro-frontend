@@ -757,6 +757,19 @@ const CITCalculator = ({
             </div>
           </CardContent>
         </Card>
+        
+        {/* Print Report Button for CIT */}
+        <Card className="bg-white border-gray-100 shadow-lg">
+          <CardContent className="p-6">
+            <Button
+              onClick={() => generateCitReport(citInput, citResult)}
+              className="w-full bg-gray-900 hover:bg-gray-800 text-white flex items-center justify-center space-x-2"
+            >
+              <Printer className="h-4 w-4" />
+              <span>Print CIT Report (PDF)</span>
+            </Button>
+          </CardContent>
+        </Card>
       )}
     </div>
   );
