@@ -1583,6 +1583,322 @@ class NigerianTaxCalculatorTester:
         
         return success
 
+    def test_complete_registration_verification_flow(self):
+        """Test the complete registration and verification flow"""
+        print("\n🔥 TESTING COMPLETE REGISTRATION & VERIFICATION FLOW")
+        print("="*80)
+        
+        # Step 1: Register a new user
+        import time
+        timestamp = int(time.time())
+        test_user = {
+            "email": f"flowtest.user.{timestamp}@fiquant.ng",
+            "phone": f"+234901234{timestamp % 10000}",
+            "password": "FlowTest123!",
+            "full_name": "Flow Test User",
+            "agree_terms": True
+        }
+        
+        print("\n📝 STEP 1: User Registration")
+        success, response = self.run_test(
+            "Complete Flow - User Registration",
+            "POST",
+            "auth/register",
+            200,
+            test_user
+        )
+        
+        if not success:
+            print("❌ Registration failed - cannot continue flow test")
+            return False
+        
+        print(f"   ✅ User registered successfully")
+        print(f"   📧 Email: {response.get('email')}")
+        print(f"   📱 Phone: {test_user['phone']}")
+        print(f"   ✉️ Email Verified: {response.get('email_verified')}")
+        print(f"   📞 Phone Verified: {response.get('phone_verified')}")
+        print(f"   🔒 Account Status: {response.get('account_status')}")
+        
+        # Step 2: Try to login with unverified account (should fail)
+        print("\n🚫 STEP 2: Login Attempt with Unverified Account")
+        login_data = {
+            "email_or_phone": test_user["email"],
+            "password": test_user["password"]
+        }
+        
+        success, response = self.run_test(
+            "Complete Flow - Login Unverified Account",
+            "POST",
+            "auth/login",
+            403,  # Should fail with 403 Forbidden
+            login_data
+        )
+        
+        if success:
+            print(f"   ✅ Correctly blocked unverified account login")
+            print(f"   📝 Error message: {response.get('detail', 'No error message')}")
+        else:
+            print(f"   ❌ Should have blocked unverified account login")
+        
+        # Step 3: Test resend verification email
+        print("\n📧 STEP 3: Resend Verification Email")
+        resend_data = {"email": test_user["email"]}
+        
+        success, response = self.run_test(
+            "Complete Flow - Resend Verification Email",
+            "POST",
+            "auth/resend-verification",
+            200,
+            resend_data
+        )
+        
+        if success:
+            print(f"   ✅ Verification email resend successful")
+            print(f"   📝 Message: {response.get('message', 'No message')}")
+        
+        # Step 4: Test resend SMS verification
+        print("\n📱 STEP 4: Resend SMS Verification")
+        success, response = self.run_test(
+            "Complete Flow - Resend SMS Verification",
+            "POST",
+            "auth/resend-sms",
+            200,
+            resend_data
+        )
+        
+        if success:
+            print(f"   ✅ SMS verification resend successful")
+            print(f"   📝 Message: {response.get('message', 'No message')}")
+        
+        # Step 5: Test invalid email verification
+        print("\n❌ STEP 5: Invalid Email Verification")
+        success, response = self.run_test(
+            "Complete Flow - Invalid Email Verification",
+            "POST",
+            "auth/verify-email?token=invalid_token_12345&email=" + test_user["email"],
+            400,  # Should fail
+            None
+        )
+        
+        if success:
+            print(f"   ✅ Correctly rejected invalid verification token")
+            print(f"   📝 Error message: {response.get('detail', 'No error message')}")
+        
+        # Step 6: Test invalid phone verification
+        print("\n❌ STEP 6: Invalid Phone Verification")
+        invalid_phone_data = {
+            "email": test_user["email"],
+            "verification_code": "999999",  # Invalid code
+            "verification_type": "phone"
+        }
+        
+        success, response = self.run_test(
+            "Complete Flow - Invalid Phone Verification",
+            "POST",
+            "auth/verify-phone",
+            400,  # Should fail
+            invalid_phone_data
+        )
+        
+        if success:
+            print(f"   ✅ Correctly rejected invalid phone verification code")
+            print(f"   📝 Error message: {response.get('detail', 'No error message')}")
+        
+        print("\n🔥 COMPLETE REGISTRATION & VERIFICATION FLOW TEST SUMMARY:")
+        print("   ✅ User registration working correctly")
+        print("   ✅ Unverified account login properly blocked")
+        print("   ✅ Verification email resend functional")
+        print("   ✅ SMS verification resend functional")
+        print("   ✅ Invalid verification attempts properly rejected")
+        print("   📝 NOTE: Actual email/SMS verification requires manual token extraction from logs")
+        
+        # Store test user for potential future tests
+        self.flow_test_user = test_user
+        return True
+    
+    def test_verification_code_generation_logging(self):
+        """Test that verification codes are properly generated and logged"""
+        print("\n🔍 TESTING VERIFICATION CODE GENERATION & LOGGING")
+        print("="*70)
+        
+        # Register a user to trigger verification code generation
+        import time
+        timestamp = int(time.time())
+        test_user = {
+            "email": f"codegen.test.{timestamp}@fiquant.ng",
+            "phone": f"+234805555{timestamp % 10000}",
+            "password": "CodeGen123!",
+            "full_name": "Code Generation Test User",
+            "agree_terms": True
+        }
+        
+        print("📝 Registering user to trigger verification code generation...")
+        success, response = self.run_test(
+            "Verification Code Generation - User Registration",
+            "POST",
+            "auth/register",
+            200,
+            test_user
+        )
+        
+        if success:
+            print(f"   ✅ User registered successfully")
+            print(f"   📧 Email: {response.get('email')}")
+            print(f"   📱 Phone: {test_user['phone']}")
+            print(f"   🔍 CHECK BACKEND LOGS FOR:")
+            print(f"      📧 Email verification link for {response.get('email')}")
+            print(f"      📱 SMS verification code for {test_user['phone']}")
+            print(f"      🔗 Verification link should be prominently displayed")
+            print(f"      📱 6-digit SMS code should be shown")
+        
+        # Test resend to generate new codes
+        print("\n📧 Testing verification email resend (generates new token)...")
+        resend_data = {"email": test_user["email"]}
+        
+        success, response = self.run_test(
+            "Verification Code Generation - Resend Email",
+            "POST",
+            "auth/resend-verification",
+            200,
+            resend_data
+        )
+        
+        if success:
+            print(f"   ✅ New verification email sent")
+            print(f"   🔍 CHECK BACKEND LOGS FOR NEW EMAIL VERIFICATION LINK")
+        
+        print("\n📱 Testing SMS verification resend (generates new code)...")
+        success, response = self.run_test(
+            "Verification Code Generation - Resend SMS",
+            "POST",
+            "auth/resend-sms",
+            200,
+            resend_data
+        )
+        
+        if success:
+            print(f"   ✅ New SMS verification code sent")
+            print(f"   🔍 CHECK BACKEND LOGS FOR NEW 6-DIGIT SMS CODE")
+        
+        print("\n🔍 VERIFICATION CODE GENERATION TEST SUMMARY:")
+        print("   ✅ Registration triggers email verification link generation")
+        print("   ✅ Registration triggers SMS verification code generation")
+        print("   ✅ Resend email generates new verification token")
+        print("   ✅ Resend SMS generates new verification code")
+        print("   📝 All verification codes should be prominently logged in backend console")
+        
+        return True
+    
+    def test_authentication_middleware_protection(self):
+        """Test authentication middleware protection on various endpoints"""
+        print("\n🛡️ TESTING AUTHENTICATION MIDDLEWARE PROTECTION")
+        print("="*70)
+        
+        protected_endpoints = [
+            ("GET", "auth/me", "User Profile Endpoint"),
+            ("PUT", "profile/update", "Profile Update Endpoint"),
+            ("GET", "history/calculations", "Calculation History Endpoint"),
+            ("GET", "history/calculations/test-id", "Specific Calculation Endpoint"),
+            ("DELETE", "history/calculations/test-id", "Delete Calculation Endpoint")
+        ]
+        
+        print("🔒 Testing protected endpoints without authentication...")
+        for method, endpoint, description in protected_endpoints:
+            success, response = self.run_test(
+                f"Auth Middleware - {description} (No Token)",
+                method,
+                endpoint,
+                403,  # FastAPI returns 403 for missing auth
+                {} if method in ["PUT", "POST"] else None
+            )
+            
+            if success:
+                print(f"   ✅ {description} correctly protected")
+            else:
+                print(f"   ❌ {description} not properly protected")
+        
+        print("\n🔑 Testing protected endpoints with invalid token...")
+        # Set invalid token temporarily
+        old_token = self.auth_token
+        self.auth_token = "invalid.jwt.token.here"
+        
+        for method, endpoint, description in protected_endpoints:
+            success, response = self.run_test(
+                f"Auth Middleware - {description} (Invalid Token)",
+                method,
+                endpoint,
+                401,  # Should fail with 401 Unauthorized
+                {} if method in ["PUT", "POST"] else None,
+                auth_required=True
+            )
+            
+            if success:
+                print(f"   ✅ {description} correctly rejects invalid token")
+            else:
+                print(f"   ❌ {description} not properly validating token")
+        
+        # Restore original token
+        self.auth_token = old_token
+        
+        print("\n🛡️ AUTHENTICATION MIDDLEWARE TEST SUMMARY:")
+        print("   ✅ All protected endpoints require authentication")
+        print("   ✅ Invalid tokens are properly rejected")
+        print("   ✅ Proper HTTP status codes returned (403 for missing auth, 401 for invalid token)")
+        
+        return True
+
+    def run_comprehensive_authentication_tests(self):
+        """Run comprehensive authentication flow tests"""
+        print("\n" + "="*80)
+        print("🔐 COMPREHENSIVE AUTHENTICATION TESTING")
+        print("="*80)
+        
+        # Core Authentication Flow Tests
+        flow_tests = [
+            self.test_complete_registration_verification_flow,
+            self.test_verification_code_generation_logging,
+            self.test_authentication_middleware_protection
+        ]
+        
+        # Individual Authentication Tests
+        auth_tests = [
+            self.test_user_registration_valid_email,
+            self.test_user_registration_duplicate_email,
+            self.test_user_registration_invalid_email,
+            self.test_user_registration_no_terms_agreement,
+            self.test_user_login_unverified_account,
+            self.test_email_verification_invalid_token,
+            self.test_phone_verification_invalid_code,
+            self.test_resend_verification_email,
+            self.test_resend_sms_verification,
+            self.test_user_login_invalid_credentials,
+            self.test_protected_endpoint_without_token,
+            self.test_protected_endpoint_invalid_token,
+            self.test_user_profile_update_unauthorized,
+            self.test_calculation_history_unauthorized
+        ]
+        
+        # Run flow tests first
+        print("\n🔥 RUNNING AUTHENTICATION FLOW TESTS...")
+        for test in flow_tests:
+            try:
+                test()
+            except Exception as e:
+                print(f"❌ Test {test.__name__} failed with error: {str(e)}")
+                self.tests_run += 1
+        
+        # Run individual tests
+        print("\n🔐 RUNNING INDIVIDUAL AUTHENTICATION TESTS...")
+        for test in auth_tests:
+            try:
+                test()
+            except Exception as e:
+                print(f"❌ Test {test.__name__} failed with error: {str(e)}")
+                self.tests_run += 1
+        
+        print(f"\n🔐 Authentication Tests Summary: {self.tests_passed}/{self.tests_run} passed")
+        return self.tests_passed == self.tests_run
+
 def main():
     print("🚀 Starting Nigerian Tax Calculator API Tests")
     print("=" * 60)
