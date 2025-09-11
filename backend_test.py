@@ -8,6 +8,8 @@ class NigerianTaxCalculatorTester:
         self.base_url = base_url
         self.tests_run = 0
         self.tests_passed = 0
+        self.auth_token = None  # Store JWT token for authenticated requests
+        self.test_user_data = None  # Store test user data
 
     def run_test(self, name, method, endpoint, expected_status, data=None):
         """Run a single API test"""
