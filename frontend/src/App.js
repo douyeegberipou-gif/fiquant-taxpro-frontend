@@ -340,42 +340,64 @@ function App() {
             <TabsList className="grid w-full grid-cols-5 bg-transparent border-0 p-0 h-auto">
               <TabsTrigger 
                 value="calculator" 
-                className="relative bg-white border border-gray-300 border-b-0 rounded-t-lg px-6 py-3 mx-0 data-[state=active]:bg-white data-[state=active]:border-gray-400 data-[state=inactive]:bg-gray-100 data-[state=inactive]:border-gray-200 data-[state=inactive]:text-gray-600 hover:bg-gray-50 transition-all duration-200 flex items-center space-x-2 shadow-sm"
+                className="relative bg-gradient-to-r from-gray-200 to-gray-300 border-0 px-6 py-3 mx-0 text-gray-700 font-medium transform skew-x-12 hover:from-gray-300 hover:to-gray-400 data-[state=active]:from-white data-[state=active]:to-gray-100 data-[state=active]:text-black data-[state=active]:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
+                style={{
+                  clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
+                  marginRight: '-10px',
+                  zIndex: 1
+                }}
               >
-                <Users className="h-4 w-4" />
-                <span>PAYE</span>
+                <Users className="h-4 w-4 transform -skew-x-12" />
+                <span className="transform -skew-x-12">PAYE</span>
               </TabsTrigger>
               <TabsTrigger 
                 value="cit" 
-                className="relative bg-white border border-gray-300 border-b-0 rounded-t-lg px-6 py-3 mx-0 data-[state=active]:bg-white data-[state=active]:border-gray-400 data-[state=inactive]:bg-gray-100 data-[state=inactive]:border-gray-200 data-[state=inactive]:text-gray-600 hover:bg-gray-50 transition-all duration-200 flex items-center space-x-2 shadow-sm"
+                className="relative bg-gradient-to-r from-gray-200 to-gray-300 border-0 px-6 py-3 mx-0 text-gray-700 font-medium transform skew-x-12 hover:from-gray-300 hover:to-gray-400 data-[state=active]:from-white data-[state=active]:to-gray-100 data-[state=active]:text-black data-[state=active]:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
+                style={{
+                  clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
+                  marginRight: '-10px',
+                  zIndex: 2
+                }}
               >
-                <Building2 className="h-4 w-4" />
-                <span>CIT</span>
+                <Building2 className="h-4 w-4 transform -skew-x-12" />
+                <span className="transform -skew-x-12">CIT</span>
               </TabsTrigger>
               <TabsTrigger 
                 value="brackets" 
-                className="relative bg-white border border-gray-300 border-b-0 rounded-t-lg px-6 py-3 mx-0 data-[state=active]:bg-white data-[state=active]:border-gray-400 data-[state=inactive]:bg-gray-100 data-[state=inactive]:border-gray-200 data-[state=inactive]:text-gray-600 hover:bg-gray-50 transition-all duration-200 flex items-center space-x-2 shadow-sm"
+                className="relative bg-gradient-to-r from-gray-200 to-gray-300 border-0 px-6 py-3 mx-0 text-gray-700 font-medium transform skew-x-12 hover:from-gray-300 hover:to-gray-400 data-[state=active]:from-white data-[state=active]:to-gray-100 data-[state=active]:text-black data-[state=active]:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
+                style={{
+                  clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
+                  marginRight: '-10px',
+                  zIndex: 3
+                }}
               >
-                <TrendingUp className="h-4 w-4" />
-                <span>Tax Info</span>
+                <TrendingUp className="h-4 w-4 transform -skew-x-12" />
+                <span className="transform -skew-x-12">Tax Info</span>
               </TabsTrigger>
               <TabsTrigger 
                 value="history" 
-                className="relative bg-white border border-gray-300 border-b-0 rounded-t-lg px-6 py-3 mx-0 data-[state=active]:bg-white data-[state=active]:border-gray-400 data-[state=inactive]:bg-gray-100 data-[state=inactive]:border-gray-200 data-[state=inactive]:text-gray-600 hover:bg-gray-50 transition-all duration-200 flex items-center space-x-2 shadow-sm"
+                className="relative bg-gradient-to-r from-gray-200 to-gray-300 border-0 px-6 py-3 mx-0 text-gray-700 font-medium transform skew-x-12 hover:from-gray-300 hover:to-gray-400 data-[state=active]:from-white data-[state=active]:to-gray-100 data-[state=active]:text-black data-[state=active]:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
+                style={{
+                  clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
+                  marginRight: '-10px',
+                  zIndex: 4
+                }}
               >
-                <FileText className="h-4 w-4" />
-                <span>History</span>
+                <FileText className="h-4 w-4 transform -skew-x-12" />
+                <span className="transform -skew-x-12">History</span>
               </TabsTrigger>
               <TabsTrigger 
                 value="compliance" 
-                className="relative bg-white border border-gray-300 border-b-0 rounded-t-lg px-6 py-3 mx-0 data-[state=active]:bg-white data-[state=active]:border-gray-400 data-[state=inactive]:bg-gray-100 data-[state=inactive]:border-gray-200 data-[state=inactive]:text-gray-600 hover:bg-gray-50 transition-all duration-200 flex items-center space-x-2 shadow-sm"
+                className="relative bg-gradient-to-r from-gray-200 to-gray-300 border-0 px-6 py-3 mx-0 text-gray-700 font-medium transform skew-x-12 hover:from-gray-300 hover:to-gray-400 data-[state=active]:from-white data-[state=active]:to-gray-100 data-[state=active]:text-black data-[state=active]:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
+                style={{
+                  clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
+                  zIndex: 5
+                }}
               >
-                <Briefcase className="h-4 w-4" />
-                <span>Compliance</span>
+                <Briefcase className="h-4 w-4 transform -skew-x-12" />
+                <span className="transform -skew-x-12">Compliance</span>
               </TabsTrigger>
             </TabsList>
-            {/* Active tab bottom border */}
-            <div className="absolute bottom-0 left-0 right-0 h-px bg-gray-300"></div>
           </div>
 
           {/* PAYE Calculator Tab */}
