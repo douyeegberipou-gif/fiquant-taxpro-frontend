@@ -55,7 +55,7 @@ const CITCalculator = ({
                 <Input
                   id="annual_turnover"
                   type="number"
-                  placeholder="500,000,000"
+                  placeholder="₦500,000,000"
                   value={citInput.annual_turnover}
                   onChange={(e) => handleCitInputChange('annual_turnover', e.target.value)}
                 />
