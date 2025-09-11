@@ -1347,10 +1347,7 @@ async def root():
     return {"message": "Fiquant TaxPro API - Nigerian Tax Calculator"}
 
 @api_router.post("/calculate-paye", response_model=List[TaxCalculationResult])
-async def calculate_paye_tax(
-    tax_input: TaxInput, 
-    current_user: Optional[UserProfile] = None
-):
+async def calculate_paye_tax(tax_input: TaxInput):
     """Calculate PAYE tax (Nigerian Income Tax) for 2026 with optional history saving"""
     try:
         result = calculate_nigerian_paye_2026(tax_input)
