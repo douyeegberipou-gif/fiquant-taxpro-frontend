@@ -336,6 +336,8 @@ export const generateCitReport = (citInput, citResult) => {
   yPos += 10;
   
   const citSummaryData = [
+    ['Profit Before Loss Relief', formatCurrency((citResult.taxable_profit || 0) + (citResult.carry_forward_losses_applied || 0))],
+    ['Loss Relief Applied', formatCurrency(citResult.carry_forward_losses_applied || 0)],
     ['Taxable Profit', formatCurrency(citResult.taxable_profit)],
     ['CIT Rate Applied', `${citResult.cit_rate}%`],
     ['CIT Due', formatCurrency(citResult.cit_due)],
