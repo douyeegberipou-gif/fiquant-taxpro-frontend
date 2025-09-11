@@ -50,7 +50,10 @@ class NigerianTaxCalculatorTester:
                 expected_str = str(expected_status) if not isinstance(expected_status, list) else f"one of {expected_status}"
                 print(f"❌ Failed - Expected {expected_str}, got {response.status_code}")
                 print(f"Response: {response.text}")
-                return False, {}
+                try:
+                    return False, response.json()
+                except:
+                    return False, response.text
 
         except Exception as e:
             print(f"❌ Failed - Error: {str(e)}")
