@@ -360,6 +360,41 @@ function AppContent() {
     setCitResult(null);
   };
 
+  // Show admin dashboard if accessing admin routes and user has admin privileges
+  if (showAdminDashboard && user?.admin_enabled && user?.admin_role) {
+    return <AdminDashboard />;
+  }
+
+  // Show admin access denied if accessing admin routes without privileges
+  if (showAdminDashboard && (!user?.admin_enabled || !user?.admin_role)) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center">
+        <Card className="max-w-md w-full">
+          <CardHeader>
+            <CardTitle className="text-red-800 flex items-center">
+              <Shield className="h-5 w-5 mr-2" />
+              Admin Access Required
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-red-700">
+              You need admin privileges to access the admin dashboard.
+            </p>
+            <Button
+              onClick={() => {
+                setShowAdminDashboard(false);
+                window.history.pushState({}, '', '/');
+              }}
+              className="w-full"
+            >
+              Back to Main App
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50">
       {/* Header */}
