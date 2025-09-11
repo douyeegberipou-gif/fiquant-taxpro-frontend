@@ -195,51 +195,63 @@ frontend:
 
   - task: "Single PAYE Print Report (PDF)"
     implemented: true
-    working: "NA"
+    working: false
     file: "App.js"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "New PDF generation functionality added. Need to test single PAYE tax calculation and PDF report generation with jsPDF library."
+      - working: false
+        agent: "testing"
+        comment: "CRITICAL ISSUE FOUND: jspdf-autotable plugin not loading properly. Error: 'doc.autoTable is not a function'. The jsPDF library is imported correctly, but the autoTable plugin is not attaching to the jsPDF instance. PDF buttons are present and clickable, but PDF generation fails due to missing autoTable function. This is a library compatibility/import issue that needs to be resolved."
 
   - task: "Bulk PAYE Print Report (PDF)"
     implemented: true
-    working: "NA"
+    working: false
     file: "BulkPayrollCalculator.js"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "New PDF generation functionality added. Need to test bulk PAYE calculations and PDF report generation for multiple employees."
+      - working: false
+        agent: "testing"
+        comment: "CRITICAL ISSUE FOUND: Same jspdf-autotable plugin issue as Single PAYE. The bulk PDF generation functionality is implemented with proper button placement, but fails due to 'doc.autoTable is not a function' error. The generateBulkPayeReport function exists and is called correctly, but the underlying autoTable plugin is not functioning."
 
   - task: "CIT Print Report (PDF)"
     implemented: true
-    working: "NA"
+    working: false
     file: "CITCalculator.js"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "New PDF generation functionality added. Need to test CIT tax calculation and PDF report generation with company details."
+      - working: false
+        agent: "testing"
+        comment: "CRITICAL ISSUE FOUND: CIT calculations work perfectly and PDF button is present and clickable. However, PDF generation fails with 'doc.autoTable is not a function' error. The generateCitReport function is properly implemented and called, but the jspdf-autotable plugin is not loading correctly, preventing table generation in PDFs."
 
   - task: "PDF Generator Utility"
     implemented: true
-    working: "NA"
+    working: false
     file: "utils/pdfGenerator.js"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "PDF generator utility with jsPDF and jspdf-autotable libraries. Contains generatePayeReport(), generateBulkPayeReport(), and generateCitReport() functions."
+      - working: false
+        agent: "testing"
+        comment: "CRITICAL LIBRARY ISSUE: The PDF generator utility is well-implemented with proper structure, formatting, and functions. However, the jspdf-autotable plugin (version 5.0.2) is not properly attaching to jsPDF (version 3.0.2). Multiple import methods tested: standard import, dynamic import, require() - all fail with 'doc.autoTable is not a function'. This appears to be a version compatibility issue between jsPDF 3.0.2 and jspdf-autotable 5.0.2."
 
 metadata:
   created_by: "main_agent"
