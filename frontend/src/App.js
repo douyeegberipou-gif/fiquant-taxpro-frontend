@@ -115,7 +115,20 @@ function AppContent() {
     if (token && email) {
       handleEmailVerification(token, email);
     }
+
+    // Check for admin route
+    const path = window.location.pathname;
+    if (path === '/admin' || path.startsWith('/admin/')) {
+      setShowAdminDashboard(true);
+    }
   }, []);
+
+  useEffect(() => {
+    // Initialize super admin if needed
+    if (user && user.email && !user.admin_role) {
+      initializeSuperAdmin();
+    }
+  }, [user]);
 
   const handleEmailVerification = async (token, email) => {
     setVerificationStatus('verifying');
