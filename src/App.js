@@ -324,14 +324,49 @@ function AppContent() {
               </div>
             </div>
             
-            {/* Status Badge */}
-            <div className="flex flex-col items-end space-y-2">
-              <Badge variant="outline" className="bg-yellow-400/10 text-yellow-300 border-yellow-400/30 backdrop-blur-sm">
-                <span className="inline-flex items-center">
-                  <div className="w-2 h-2 bg-yellow-400 rounded-full mr-2 animate-pulse"></div>
-                  2026 Tax Laws
-                </span>
-              </Badge>
+            {/* Authentication Section */}
+            <div className="flex flex-col items-end space-y-3">
+              {isAuthenticated() ? (
+                <div className="flex items-center space-x-4">
+                  <div className="text-right">
+                    <p className="text-white font-medium">{user?.full_name}</p>
+                    <div className="flex items-center space-x-2">
+                      <Badge variant="outline" className="bg-yellow-400/10 text-yellow-300 border-yellow-400/30 backdrop-blur-sm text-xs">
+                        {user?.account_tier?.toUpperCase()} Account
+                      </Badge>
+                      <span className="text-gray-400 text-xs">•</span>
+                      <span className="text-gray-400 text-xs">{user?.account_type}</span>
+                    </div>
+                  </div>
+                  <Button
+                    onClick={() => logout()}
+                    variant="outline"
+                    size="sm"
+                    className="border-gray-600 text-gray-300 hover:bg-gray-800/50 backdrop-blur-sm"
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Logout
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex items-center space-x-3">
+                  <Badge variant="outline" className="bg-yellow-400/10 text-yellow-300 border-yellow-400/30 backdrop-blur-sm">
+                    <span className="inline-flex items-center">
+                      <div className="w-2 h-2 bg-yellow-400 rounded-full mr-2 animate-pulse"></div>
+                      2026 Tax Laws
+                    </span>
+                  </Badge>
+                  <Button
+                    onClick={() => setAuthModalOpen(true)}
+                    variant="outline"
+                    size="sm"
+                    className="border-yellow-400/50 text-yellow-400 hover:bg-yellow-400/10 backdrop-blur-sm"
+                  >
+                    <LogIn className="h-4 w-4 mr-2" />
+                    Login
+                  </Button>
+                </div>
+              )}
               <div className="text-gray-400 text-xs font-medium">
                 Powered by FIRS Guidelines
               </div>
