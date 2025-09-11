@@ -400,7 +400,7 @@ class NigerianTaxCalculatorTester:
             "Calculation History - Unauthorized",
             "GET",
             "history/calculations",
-            401,  # Should fail without auth
+            403,  # FastAPI returns 403 for missing auth
             None
         )
         
