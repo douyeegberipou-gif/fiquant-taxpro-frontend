@@ -1376,8 +1376,21 @@ function AppContent() {
               </Card>
             </div>
           </TabsContent>
+
+          {/* Profile Tab */}
+          {isAuthenticated() && (
+            <TabsContent value="profile" className="space-y-6">
+              <UserProfile />
+            </TabsContent>
+          )}
         </Tabs>
       </div>
+      
+      {/* Authentication Modal */}
+      <AuthModal 
+        isOpen={authModalOpen} 
+        onClose={() => setAuthModalOpen(false)} 
+      />
     </div>
   );
 }
