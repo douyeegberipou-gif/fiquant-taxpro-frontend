@@ -1951,6 +1951,8 @@ class NigerianTaxCalculatorTester:
             print("   ❌ No candidate user found for super admin promotion")
             return False
         
+        print(f"   📧 Attempting to promote user: {candidate_email}")
+        
         # Initialize super admin
         admin_data = {
             "email": candidate_email
@@ -1974,6 +1976,67 @@ class NigerianTaxCalculatorTester:
             return True
         else:
             print(f"   ❌ Failed to initialize super admin")
+            print(f"   📝 Response: {response}")
+            
+            # If user not found, let's try with a different approach
+            if "User not found" in str(response) or "Not Found" in str(response):
+                print(f"   🔍 User not found in database. Let's create a fresh user for admin promotion.")
+                return self.test_create_fresh_admin_user()
+            
+            return False
+    
+    def test_create_fresh_admin_user(self):
+        """Create a fresh user specifically for admin promotion"""
+        import time
+        timestamp = int(time.time())
+        fresh_admin_data = {
+            "email": f"fresh.admin.{timestamp}@fiquant.ng",
+            "phone": f"+234800{timestamp % 100000}",
+            "password": "FreshAdmin123!",
+            "full_name": "Fresh Admin User",
+            "agree_terms": True
+        }
+        
+        # Create the user
+        success, response = self.run_test(
+            "Create Fresh Admin User",
+            "POST",
+            "auth/register",
+            200,
+            fresh_admin_data
+        )
+        
+        if not success:
+            print(f"   ❌ Failed to create fresh admin user")
+            return False
+        
+        print(f"   ✅ Created fresh admin user: {fresh_admin_data['email']}")
+        
+        # Now try to promote this user to super admin
+        admin_data = {
+            "email": fresh_admin_data['email']
+        }
+        
+        success, response = self.run_test(
+            "Initialize Super Admin (Fresh User)",
+            "POST",
+            "admin/initialize-super-admin",
+            200,
+            admin_data
+        )
+        
+        if success:
+            print(f"   ✅ Fresh user promoted to super admin successfully")
+            print(f"   Message: {response.get('message', 'No message')}")
+            self.super_admin_email = fresh_admin_data['email']
+            self.admin_candidate_password = fresh_admin_data['password']
+            
+            # Test super admin login attempt
+            self.test_super_admin_login_attempt()
+            return True
+        else:
+            print(f"   ❌ Failed to promote fresh user to super admin")
+            print(f"   📝 Response: {response}")
             return False
     
     def test_super_admin_login_attempt(self):
