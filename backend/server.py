@@ -24,6 +24,14 @@ mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
+# Authentication configuration
+JWT_SECRET = os.getenv('JWT_SECRET', 'your-super-secret-key-change-in-production-2024-fiquant')
+JWT_ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days
+
+# Security
+security = HTTPBearer()
+
 # Create the main app without a prefix
 app = FastAPI(title="Fiquant TaxPro API", description="Nigerian Tax Calculator API")
 
