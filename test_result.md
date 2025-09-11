@@ -251,7 +251,7 @@ frontend:
     implemented: true
     working: false
     file: "utils/pdfGenerator.js"
-    stuck_count: 1
+    stuck_count: 2
     priority: "high"
     needs_retesting: false
     status_history:
@@ -261,6 +261,9 @@ frontend:
       - working: false
         agent: "testing"
         comment: "CRITICAL LIBRARY ISSUE: The PDF generator utility is well-implemented with proper structure, formatting, and functions. However, the jspdf-autotable plugin (version 5.0.2) is not properly attaching to jsPDF (version 3.0.2). Multiple import methods tested: standard import, dynamic import, require() - all fail with 'doc.autoTable is not a function'. This appears to be a version compatibility issue between jsPDF 3.0.2 and jspdf-autotable 5.0.2."
+      - working: false
+        agent: "testing"
+        comment: "CONFIRMED LIBRARY COMPATIBILITY ISSUE: After implementing corrected imports (import { jsPDF } from 'jspdf'; import autoTable from 'jspdf-autotable';) and plugin initialization (autoTable(doc, {})), the error persists. Comprehensive testing shows UI works perfectly, calculations are accurate, PDF buttons are functional, but autoTable function is undefined. This is a definitive version compatibility issue requiring web search for compatible library versions or alternative implementation approach."
 
 metadata:
   created_by: "main_agent"
