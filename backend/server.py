@@ -420,6 +420,88 @@ async def update_user_profile(
         last_login=updated_user.last_login
     )
 
+# ============================
+# TAX CALCULATION HISTORY ENDPOINTS
+# ============================
+
+@api_router.get("/history/calculations", response_model=List[CalculationSummary])
+async def get_user_calculation_history(
+    calculation_type: Optional[str] = None,
+    limit: int = 50,
+    offset: int = 0,
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Get user's tax calculation history"""
+    query = {"user_id": current_user.id}
+    
+    if calculation_type:
+        query["calculation_type"] = calculation_type
+    
+    # Get calculations with pagination
+    cursor = db.tax_history.find(query).sort("calculation_date", -1).skip(offset).limit(limit)
+    history_records = await cursor.to_list(length=None)
+    
+    summaries = []
+    for record in history_records:
+        total_tax = None
+        if record["calculation_type"] == "paye":
+            total_tax = record["result_data"].get("monthly_tax", 0)
+        elif record["calculation_type"] == "cit":
+            total_tax = record["result_data"].get("net_tax_payable", 0)
+        elif record["calculation_type"] == "bulk_paye":
+            # Calculate total from bulk results
+            results = record["result_data"].get("results", [])
+            total_tax = sum(r.get("monthly_tax", 0) for r in results)
+        
+        summaries.append(CalculationSummary(
+            id=record["id"],
+            calculation_type=record["calculation_type"],
+            calculation_date=datetime.fromisoformat(record["calculation_date"]),
+            employee_count=record.get("employee_count", 1),
+            total_tax=total_tax,
+            notes=record.get("notes")
+        ))
+    
+    return summaries
+
+@api_router.get("/history/calculations/{calculation_id}", response_model=TaxCalculationHistory)
+async def get_calculation_details(
+    calculation_id: str,
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Get detailed calculation results"""
+    calculation = await db.tax_history.find_one({
+        "id": calculation_id,
+        "user_id": current_user.id
+    })
+    
+    if not calculation:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Calculation not found"
+        )
+    
+    return TaxCalculationHistory(**calculation)
+
+@api_router.delete("/history/calculations/{calculation_id}")
+async def delete_calculation_history(
+    calculation_id: str,
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Delete a calculation from history"""
+    result = await db.tax_history.delete_one({
+        "id": calculation_id,
+        "user_id": current_user.id
+    })
+    
+    if result.deleted_count == 0:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Calculation not found"
+        )
+    
+    return {"message": "Calculation deleted successfully"}
+
 
 # PAYE Tax Models
 class TaxInput(BaseModel):
