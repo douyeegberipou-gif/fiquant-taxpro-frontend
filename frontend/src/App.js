@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Calculator, TrendingUp, FileText, Info, Wallet, Receipt, PiggyBank, Home, Heart, Shield, Building2, Users, Briefcase, AlertTriangle, CreditCard, Banknote, Coins } from 'lucide-react';
+import { Calculator, TrendingUp, FileText, Info, Wallet, Receipt, PiggyBank, Home, Heart, Shield, Building2, Users, Briefcase, AlertTriangle, CreditCard, Banknote, Coins, Printer } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './components/ui/card';
 import { Input } from './components/ui/input';
 import { Label } from './components/ui/label';
@@ -11,6 +11,7 @@ import { Separator } from './components/ui/separator';
 import { Alert, AlertDescription } from './components/ui/alert';
 import CITCalculator from './components/CITCalculator';
 import BulkPayrollCalculator from './components/BulkPayrollCalculator';
+import { generatePayeReport, generateBulkPayeReport, generateCitReport } from './utils/pdfGenerator';
 import './App.css';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
