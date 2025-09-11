@@ -563,6 +563,175 @@ async def update_user_profile(
     )
 
 # ============================
+# VERIFICATION ENDPOINTS
+# ============================
+
+@api_router.post("/auth/verify-email")
+async def verify_email(token: str, email: EmailStr):
+    """Verify email address with token"""
+    user_data = await db.users.find_one({
+        "email": email,
+        "verification_token": token
+    })
+    
+    if not user_data:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid verification token or email"
+        )
+    
+    # Check if token expired
+    if user_data.get("verification_expires"):
+        expires = datetime.fromisoformat(user_data["verification_expires"])
+        if datetime.now(timezone.utc) > expires:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Verification token has expired. Please request a new one."
+            )
+    
+    # Update user verification status
+    await db.users.update_one(
+        {"id": user_data["id"]},
+        {"$set": {
+            "email_verified": True,
+            "verification_token": None,
+            "verification_expires": None,
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    return {"message": "Email verified successfully"}
+
+@api_router.post("/auth/verify-phone")
+async def verify_phone(verification_data: VerifyCode):
+    """Verify phone number with SMS code"""
+    user_data = await db.users.find_one({
+        "email": verification_data.email,
+        "phone_verification_code": verification_data.verification_code
+    })
+    
+    if not user_data:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid verification code"
+        )
+    
+    # Check if code expired (codes expire after 10 minutes)
+    if user_data.get("verification_expires"):
+        expires = datetime.fromisoformat(user_data["verification_expires"])
+        if datetime.now(timezone.utc) > expires:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Verification code has expired. Please request a new one."
+            )
+    
+    # Update user verification status
+    await db.users.update_one(
+        {"id": user_data["id"]},
+        {"$set": {
+            "phone_verified": True,
+            "phone_verification_code": None,
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    return {"message": "Phone number verified successfully"}
+
+@api_router.post("/auth/resend-verification")
+async def resend_verification(verification_data: EmailVerification):
+    """Resend verification email"""
+    user_data = await db.users.find_one({"email": verification_data.email})
+    
+    if not user_data:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+    
+    if user_data.get("email_verified"):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email is already verified"
+        )
+    
+    # Generate new verification token
+    new_token = generate_verification_token()
+    new_expires = datetime.now(timezone.utc) + timedelta(hours=24)
+    
+    # Update user with new token
+    await db.users.update_one(
+        {"id": user_data["id"]},
+        {"$set": {
+            "verification_token": new_token,
+            "verification_expires": new_expires.isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    # Send new verification email
+    email_sent = send_verification_email(
+        verification_data.email, 
+        new_token, 
+        user_data["full_name"]
+    )
+    
+    if not email_sent:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to send verification email"
+        )
+    
+    return {"message": "Verification email sent"}
+
+@api_router.post("/auth/resend-sms")
+async def resend_sms_verification(verification_data: EmailVerification):
+    """Resend SMS verification code"""
+    user_data = await db.users.find_one({"email": verification_data.email})
+    
+    if not user_data:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+    
+    if not user_data.get("phone"):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No phone number associated with account"
+        )
+    
+    if user_data.get("phone_verified"):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Phone number is already verified"
+        )
+    
+    # Generate new SMS code
+    new_code = generate_verification_code()
+    new_expires = datetime.now(timezone.utc) + timedelta(minutes=10)  # SMS codes expire faster
+    
+    # Update user with new code
+    await db.users.update_one(
+        {"id": user_data["id"]},
+        {"$set": {
+            "phone_verification_code": new_code,
+            "verification_expires": new_expires.isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    # Send new SMS code
+    sms_sent = send_verification_sms(user_data["phone"], new_code)
+    
+    if not sms_sent:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to send SMS verification code"
+        )
+    
+    return {"message": "SMS verification code sent"}
+
+# ============================
 # TAX CALCULATION HISTORY ENDPOINTS
 # ============================
 
