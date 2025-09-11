@@ -440,7 +440,7 @@ function App() {
                   {/* Basic Income Section */}
                   <div className="space-y-4">
                     <h3 className="font-semibold text-gray-900 flex items-center">
-                      <Receipt className="h-4 w-4 mr-2 text-emerald-600" />
+                      <Banknote className="h-4 w-4 mr-2 text-emerald-600" />
                       Monthly Income
                     </h3>
                     <div className="grid sm:grid-cols-2 gap-4">
