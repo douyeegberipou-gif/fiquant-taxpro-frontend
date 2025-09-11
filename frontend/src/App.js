@@ -106,7 +106,42 @@ function AppContent() {
     fetchHistory();
     fetchCitInfo();
     fetchCitHistory();
+    
+    // Check for email verification on page load
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    const email = urlParams.get('email');
+    
+    if (token && email) {
+      handleEmailVerification(token, email);
+    }
   }, []);
+
+  const handleEmailVerification = async (token, email) => {
+    setVerificationStatus('verifying');
+    setVerificationMessage('Verifying your email address...');
+    
+    try {
+      const response = await axios.post(`${API}/auth/verify-email`, null, {
+        params: { token, email }
+      });
+      
+      setVerificationStatus('success');
+      setVerificationMessage('✅ Email verified successfully! You can now log in to your account.');
+      
+      // Clear URL parameters
+      window.history.replaceState({}, document.title, window.location.pathname);
+      
+      // Auto-open login modal after successful verification
+      setTimeout(() => {
+        setAuthModalOpen(true);
+      }, 2000);
+      
+    } catch (error) {
+      setVerificationStatus('error');
+      setVerificationMessage(error.response?.data?.detail || 'Email verification failed. Please try again or contact support.');
+    }
+  };
 
   const fetchTaxBrackets = async () => {
     try {
