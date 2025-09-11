@@ -68,6 +68,12 @@ class UserProfile(BaseModel):
     account_tier: str = Field(default="free", description="free, basic, premium, enterprise")
     permissions: List[str] = Field(default_factory=lambda: ["basic_calculator"], description="Account permissions")
     
+    # Admin fields
+    admin_role: Optional[str] = Field(None, description="super_admin, user_manager, analytics_viewer, system_monitor")
+    admin_enabled: bool = Field(default=False)
+    two_factor_enabled: bool = Field(default=False)
+    two_factor_secret: Optional[str] = Field(None)
+    
     # Timestamps
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
