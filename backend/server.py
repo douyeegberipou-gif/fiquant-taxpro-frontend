@@ -1639,3 +1639,329 @@ logger = logging.getLogger(__name__)
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
+
+# ============================
+# ADMIN API ENDPOINTS
+# ============================
+
+admin_router = APIRouter(prefix="/api/admin", tags=["admin"])
+
+@admin_router.get("/users")
+async def get_all_users(
+    request: Request,
+    page: int = 1,
+    limit: int = 50,
+    search: Optional[str] = None,
+    status_filter: Optional[str] = None,
+    admin_user: dict = Depends(get_admin_middleware)
+):
+    """Get all users with pagination and filtering"""
+    try:
+        # Log admin action
+        audit_log = log_admin_action(
+            admin_user["id"], admin_user["email"], "view_users", "user",
+            details={"page": page, "limit": limit, "search": search, "status_filter": status_filter},
+            ip_address=request.client.host if request.client else None,
+            user_agent=request.headers.get("user-agent")
+        )
+        if audit_log:
+            await db.audit_logs.insert_one(audit_log.dict())
+        
+        # Build query
+        query = {}
+        if search:
+            query["$or"] = [
+                {"email": {"$regex": search, "$options": "i"}},
+                {"full_name": {"$regex": search, "$options": "i"}},
+                {"phone": {"$regex": search, "$options": "i"}}
+            ]
+        if status_filter:
+            query["account_status"] = status_filter
+        
+        # Get total count
+        total_count = await db.users.count_documents(query)
+        
+        # Get users with pagination
+        skip = (page - 1) * limit
+        users = await db.users.find(query).skip(skip).limit(limit).to_list(length=None)
+        
+        # Remove sensitive data
+        safe_users = []
+        for user in users:
+            safe_user = {
+                "id": user["id"],
+                "email": user["email"],
+                "phone": user.get("phone"),
+                "full_name": user["full_name"],
+                "account_type": user["account_type"],
+                "account_tier": user["account_tier"],
+                "account_status": user["account_status"],
+                "email_verified": user["email_verified"],
+                "phone_verified": user.get("phone_verified", False),
+                "admin_role": user.get("admin_role"),
+                "admin_enabled": user.get("admin_enabled", False),
+                "created_at": user["created_at"],
+                "last_login": user.get("last_login")
+            }
+            safe_users.append(safe_user)
+        
+        return {
+            "users": safe_users,
+            "total_count": total_count,
+            "page": page,
+            "limit": limit,
+            "total_pages": (total_count + limit - 1) // limit
+        }
+        
+    except Exception as e:
+        print(f"Error getting users: {e}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve users")
+
+@admin_router.post("/users/{user_id}/role")
+async def assign_admin_role(
+    user_id: str,
+    role_data: dict,
+    request: Request,
+    admin_user: dict = Depends(get_admin_middleware)
+):
+    """Assign admin role to a user"""
+    try:
+        # Check if current user is super admin
+        if admin_user.get("admin_role") != "super_admin":
+            raise HTTPException(status_code=403, detail="Only super admins can assign roles")
+        
+        admin_role = role_data.get("admin_role")
+        admin_enabled = role_data.get("admin_enabled", False)
+        
+        if admin_role not in ["super_admin", "user_manager", "analytics_viewer", "system_monitor", None]:
+            raise HTTPException(status_code=400, detail="Invalid admin role")
+        
+        # Update user
+        result = await db.users.update_one(
+            {"id": user_id},
+            {"$set": {
+                "admin_role": admin_role,
+                "admin_enabled": admin_enabled,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+        
+        if result.matched_count == 0:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        # Log admin action
+        audit_log = log_admin_action(
+            admin_user["id"], admin_user["email"], "role_assigned", "user", user_id,
+            details={"admin_role": admin_role, "admin_enabled": admin_enabled},
+            ip_address=request.client.host if request.client else None,
+            user_agent=request.headers.get("user-agent")
+        )
+        if audit_log:
+            await db.audit_logs.insert_one(audit_log.dict())
+        
+        return {"message": "Admin role assigned successfully"}
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error assigning role: {e}")
+        raise HTTPException(status_code=500, detail="Failed to assign admin role")
+
+@admin_router.post("/users/{user_id}/status")
+async def update_user_status(
+    user_id: str,
+    status_data: dict,
+    request: Request,
+    admin_user: dict = Depends(get_admin_middleware)
+):
+    """Update user account status"""
+    try:
+        # Check permission
+        if not has_admin_permission(admin_user.get("admin_role"), "edit_users"):
+            raise HTTPException(status_code=403, detail="Insufficient permissions")
+        
+        new_status = status_data.get("account_status")
+        if new_status not in ["active", "suspended", "inactive"]:
+            raise HTTPException(status_code=400, detail="Invalid account status")
+        
+        # Update user
+        result = await db.users.update_one(
+            {"id": user_id},
+            {"$set": {
+                "account_status": new_status,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+        
+        if result.matched_count == 0:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        # Log admin action
+        audit_log = log_admin_action(
+            admin_user["id"], admin_user["email"], "user_status_updated", "user", user_id,
+            details={"new_status": new_status},
+            ip_address=request.client.host if request.client else None,
+            user_agent=request.headers.get("user-agent")
+        )
+        if audit_log:
+            await db.audit_logs.insert_one(audit_log.dict())
+        
+        return {"message": "User status updated successfully"}
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error updating user status: {e}")
+        raise HTTPException(status_code=500, detail="Failed to update user status")
+
+@admin_router.get("/analytics/dashboard")
+async def get_dashboard_analytics(
+    request: Request,
+    period: str = "7d",  # 1d, 7d, 30d
+    admin_user: dict = Depends(get_admin_middleware)
+):
+    """Get dashboard analytics data"""
+    try:
+        # Check permission
+        if not has_admin_permission(admin_user.get("admin_role"), "view_analytics"):
+            raise HTTPException(status_code=403, detail="Insufficient permissions")
+        
+        # Calculate date range
+        now = datetime.now(timezone.utc)
+        if period == "1d":
+            start_date = now - timedelta(days=1)
+        elif period == "7d":
+            start_date = now - timedelta(days=7)
+        elif period == "30d":
+            start_date = now - timedelta(days=30)
+        else:
+            raise HTTPException(status_code=400, detail="Invalid period")
+        
+        # Get user statistics
+        total_users = await db.users.count_documents({})
+        active_users = await db.users.count_documents({"account_status": "active"})
+        verified_users = await db.users.count_documents({"email_verified": True})
+        
+        # Get recent registrations
+        recent_registrations = await db.users.count_documents({
+            "created_at": {"$gte": start_date.isoformat()}
+        })
+        
+        # Get calculation statistics
+        paye_calculations = await db.paye_calculations.count_documents({
+            "timestamp": {"$gte": start_date.isoformat()}
+        })
+        
+        cit_calculations = await db.cit_calculations.count_documents({
+            "timestamp": {"$gte": start_date.isoformat()}
+        })
+        
+        # Log admin action
+        audit_log = log_admin_action(
+            admin_user["id"], admin_user["email"], "view_analytics", "system",
+            details={"period": period},
+            ip_address=request.client.host if request.client else None,
+            user_agent=request.headers.get("user-agent")
+        )
+        if audit_log:
+            await db.audit_logs.insert_one(audit_log.dict())
+        
+        return {
+            "period": period,
+            "user_stats": {
+                "total_users": total_users,
+                "active_users": active_users,
+                "verified_users": verified_users,
+                "recent_registrations": recent_registrations
+            },
+            "calculation_stats": {
+                "paye_calculations": paye_calculations,
+                "cit_calculations": cit_calculations,
+                "total_calculations": paye_calculations + cit_calculations
+            },
+            "generated_at": now.isoformat()
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error getting analytics: {e}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve analytics")
+
+@admin_router.get("/audit-logs")
+async def get_audit_logs(
+    request: Request,
+    page: int = 1,
+    limit: int = 50,
+    action_filter: Optional[str] = None,
+    admin_user: dict = Depends(get_admin_middleware)
+):
+    """Get audit logs with pagination and filtering"""
+    try:
+        # Check permission
+        if not has_admin_permission(admin_user.get("admin_role"), "view_logs"):
+            raise HTTPException(status_code=403, detail="Insufficient permissions")
+        
+        # Build query
+        query = {}
+        if action_filter:
+            query["action"] = {"$regex": action_filter, "$options": "i"}
+        
+        # Get total count
+        total_count = await db.audit_logs.count_documents(query)
+        
+        # Get logs with pagination (newest first)
+        skip = (page - 1) * limit
+        logs = await db.audit_logs.find(query).sort("timestamp", -1).skip(skip).limit(limit).to_list(length=None)
+        
+        return {
+            "logs": logs,
+            "total_count": total_count,
+            "page": page,
+            "limit": limit,
+            "total_pages": (total_count + limit - 1) // limit
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error getting audit logs: {e}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve audit logs")
+
+# Include admin router
+app.include_router(admin_router)
+
+# Initialize super admin (run once)
+async def initialize_super_admin():
+    """Initialize the first super admin account"""
+    try:
+        # Check if any super admin exists
+        super_admin = await db.users.find_one({"admin_role": "super_admin"})
+        if super_admin:
+            print("Super admin already exists")
+            return
+        
+        # Find user and promote to super admin (replace with actual email)
+        # This should be called manually or through environment variable
+        super_admin_email = os.getenv('SUPER_ADMIN_EMAIL')  # Set this in .env
+        if super_admin_email:
+            result = await db.users.update_one(
+                {"email": super_admin_email},
+                {"$set": {
+                    "admin_role": "super_admin",
+                    "admin_enabled": True,
+                    "updated_at": datetime.now(timezone.utc).isoformat()
+                }}
+            )
+            if result.matched_count > 0:
+                print(f"Super admin privileges granted to {super_admin_email}")
+            else:
+                print(f"User with email {super_admin_email} not found")
+        
+    except Exception as e:
+        print(f"Error initializing super admin: {e}")
+
+# Start the app
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8001)
