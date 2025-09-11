@@ -1,5 +1,5 @@
 import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import 'jspdf-autotable';
 
 // Ensure autoTable is available on jsPDF prototype
 if (typeof jsPDF.API.autoTable === 'undefined') {
