@@ -485,15 +485,8 @@ metadata:
 
 test_plan:
   current_focus:
-    - "PDF Generator Utility"
-    - "Single PAYE Print Report (PDF)"
-    - "Bulk PAYE Print Report (PDF)"
-    - "CIT Print Report (PDF)"
-  stuck_tasks:
-    - "PDF Generator Utility"
-    - "Single PAYE Print Report (PDF)"
-    - "Bulk PAYE Print Report (PDF)"
-    - "CIT Print Report (PDF)"
+    - "PAYE Calculator Button Functionality"
+  stuck_tasks: []
   test_all: false
   test_priority: "high_first"
 
