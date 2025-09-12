@@ -305,10 +305,14 @@ export const RegisterForm = ({ onSwitchToLogin, onClose, onRegistrationSuccess, 
               onCheckedChange={(checked) => handleInputChange('agree_terms', checked)}
             />
             <label htmlFor="agree_terms" className="text-sm text-gray-600 leading-none cursor-pointer">
-              I agree to the{' '}
-              <span className="text-blue-600 hover:text-blue-700">Terms of Service</span>
-              {' '}and{' '}
-              <span className="text-blue-600 hover:text-blue-700">Privacy Policy</span>
+              I accept Fiquant's{' '}
+              <button
+                type="button"
+                onClick={() => setShowTerms(true)}
+                className="text-blue-600 hover:text-blue-800 underline"
+              >
+                Terms and Conditions
+              </button>
             </label>
           </div>
           
