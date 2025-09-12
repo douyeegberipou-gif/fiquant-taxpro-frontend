@@ -117,6 +117,11 @@ function AppContent() {
 
   // PAYE Calculator Mode State
   const [payeMode, setPayeMode] = useState('single'); // 'single' or 'bulk'
+  
+  // Terms and Conditions Acceptance State
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [citTermsAccepted, setCitTermsAccepted] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
 
   useEffect(() => {
     fetchTaxBrackets();
