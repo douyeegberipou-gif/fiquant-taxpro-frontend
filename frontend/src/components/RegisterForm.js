@@ -8,7 +8,7 @@ import { Button } from './ui/button';
 import { Alert, AlertDescription } from './ui/alert';
 import { Checkbox } from './ui/checkbox';
 
-export const RegisterForm = ({ onSwitchToLogin, onClose, onRegistrationSuccess }) => {
+export const RegisterForm = ({ onSwitchToLogin, onClose, onRegistrationSuccess, setShowTerms }) => {
   const { register } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
