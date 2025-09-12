@@ -713,7 +713,9 @@ async def update_user_profile(
         last_login=updated_user.last_login,
         email_verified=updated_user.email_verified,
         phone_verified=updated_user.phone_verified,
-        account_status=updated_user.account_status
+        account_status=updated_user.account_status,
+        admin_role=updated_user.admin_role,
+        admin_enabled=updated_user.admin_enabled
     )
 
 # ============================
