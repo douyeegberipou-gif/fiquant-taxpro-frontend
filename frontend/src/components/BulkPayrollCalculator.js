@@ -1,13 +1,21 @@
 import React, { useState, useRef } from 'react';
-import { Users, Plus, Trash2, Calculator, Download, Eye, EyeOff, Upload, FileSpreadsheet, Printer } from 'lucide-react';
+import { Users, Plus, Trash2, Calculator, Download, Eye, EyeOff, Upload, FileSpreadsheet, Printer, AlertTriangle } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Alert, AlertDescription } from './ui/alert';
 import { generateBulkPayeReport } from '../utils/pdfGenerator';
 
-const BulkPayrollCalculator = ({ formatCurrency, calculatePayeTax }) => {
+const BulkPayrollCalculator = ({ 
+  formatCurrency, 
+  calculatePayeTax, 
+  termsAccepted, 
+  setTermsAccepted, 
+  setShowTerms 
+}) => {
   const [employees, setEmployees] = useState([
     {
       id: 1,
