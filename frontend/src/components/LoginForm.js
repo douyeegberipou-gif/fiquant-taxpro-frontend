@@ -171,10 +171,33 @@ export const LoginForm = ({ onSwitchToRegister, onClose, setShowTerms }) => {
             </div>
           </div>
           
+          {/* Terms and Conditions Acceptance */}
+          <div className="space-y-3 pt-2">
+            <div className="flex items-start space-x-2">
+              <input
+                type="checkbox"
+                id="terms-login"
+                checked={termsAccepted}
+                onChange={(e) => setTermsAccepted(e.target.checked)}
+                className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              />
+              <Label htmlFor="terms-login" className="text-sm text-gray-700 cursor-pointer">
+                I accept Fiquant's{' '}
+                <button
+                  type="button"
+                  onClick={() => setShowTerms(true)}
+                  className="text-blue-600 hover:text-blue-800 underline"
+                >
+                  Terms and Conditions
+                </button>
+              </Label>
+            </div>
+          </div>
+          
           <Button
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700"
-            disabled={loading}
+            disabled={loading || !termsAccepted}
           >
             {loading ? 'Signing In...' : 'Sign In'}
           </Button>
