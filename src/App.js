@@ -230,10 +230,15 @@ function AppContent() {
   };
 
   const handleInputChange = (field, value) => {
-    setTaxInput(prev => ({
-      ...prev,
-      [field]: value
-    }));
+    console.log(`Input change: ${field} = ${value}`);
+    setTaxInput(prev => {
+      const newState = {
+        ...prev,
+        [field]: value
+      };
+      console.log('New taxInput state:', newState);
+      return newState;
+    });
   };
 
   const calculateTax = async () => {
