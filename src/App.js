@@ -1749,6 +1749,7 @@ function AppContent() {
       <AuthModal 
         isOpen={authModalOpen} 
         onClose={() => setAuthModalOpen(false)} 
+        setShowTerms={setShowTerms}
       />
 
       {/* Terms and Conditions Modal */}
