@@ -355,7 +355,11 @@ function AppContent() {
 
   const resetCitForm = () => {
     setCitInput({
+      // Company Information
       company_name: '',
+      year_of_assessment: '',
+      tax_year: '',
+      // Financial Information
       annual_turnover: '',
       total_fixed_assets: '',
       gross_income: '',
@@ -373,8 +377,6 @@ function AppContent() {
       personal_expenses: '',
       excessive_interest: '',
       other_non_deductible: '',
-      // Loss Relief
-      carry_forward_losses: '',
       // Capital Allowances
       buildings_cost: '',
       furniture_fittings_cost: '',
@@ -386,13 +388,15 @@ function AppContent() {
       plant_machinery_wdv: '',
       motor_vehicles_wdv: '',
       other_assets_wdv: '',
-      // WHT Credits
-      wht_on_contracts: '',
+      // Loss Relief & WHT
+      carry_forward_losses: '',
       wht_on_dividends: '',
-      wht_on_rent: '',
       wht_on_interest: '',
+      wht_on_rent: '',
+      wht_on_technical_fees: '',
       other_wht_credits: '',
-      total_debt: '',
+      // Company Classification
+      total_borrowed_funds: '',
       total_equity: '',
       ebitda: '',
       is_professional_service: false,
