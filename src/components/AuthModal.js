@@ -56,6 +56,7 @@ export const AuthModal = ({ isOpen, onClose, setShowTerms }) => {
             <LoginForm
               onSwitchToRegister={switchToRegister}
               onClose={onClose}
+              setShowTerms={setShowTerms}
             />
           )}
           
@@ -64,6 +65,7 @@ export const AuthModal = ({ isOpen, onClose, setShowTerms }) => {
               onSwitchToLogin={switchToLogin}
               onClose={onClose}
               onRegistrationSuccess={handleRegistrationSuccess}
+              setShowTerms={setShowTerms}
             />
           )}
           
