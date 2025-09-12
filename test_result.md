@@ -105,20 +105,20 @@
 user_problem_statement: "Fix critical bug where PAYE, CIT, and Bulk PAYE calculators display '₦NaN' instead of computed numerical results. The formatCurrency function in App.js has been updated to handle null/undefined/NaN values. Need comprehensive testing to verify the fix works across all three calculators."
 
 backend:
-  - task: "PAYE Tax Calculation API"
+  - task: "Fix ₦NaN Display Bug in PAYE Calculator"
     implemented: true
-    working: true
-    file: "server.py"
+    working: false
+    file: "App.js"
     stuck_count: 0
-    priority: "medium"
-    needs_retesting: false
+    priority: "high"
+    needs_retesting: true
     status_history:
-      - working: true
+      - working: false
+        agent: "user"
+        comment: "User reports: PAYE, CIT, and Bulk PAYE calculators showing '₦NaN' instead of calculated results"
+      - working: "NA"
         agent: "main"
-        comment: "Backend API is functioning properly for PAYE calculations"
-      - working: true
-        agent: "testing"
-        comment: "COMPREHENSIVE BACKEND TESTING COMPLETED: All PAYE APIs working perfectly. Tested 7 scenarios including: Root endpoint (✅), Tax brackets endpoint (✅), Low income calculation with auto-reliefs (✅), Medium income with allowances and rent relief (✅), High income with multiple tax brackets (✅), Calculation history endpoint (✅), Invalid input handling (✅). All tax calculations accurate per Nigerian 2026 tax laws. Response times excellent. Error handling robust."
+        comment: "Fixed formatCurrency function in App.js (lines 258-266) to handle null/undefined/NaN values by adding safety check: if (amount === null || amount === undefined || isNaN(amount)) { return '₦0'; }. This matches the error handling pattern used in pdfGenerator.js."
 
   - task: "CIT Tax Calculation API"
     implemented: true
