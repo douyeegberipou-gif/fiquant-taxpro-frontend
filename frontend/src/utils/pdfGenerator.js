@@ -297,6 +297,8 @@ export const generateCitReport = (citInput, citResult) => {
   
   const companyData = [
     ['Company Name', citInput.company_name || 'N/A'],
+    ['Year of Assessment', citInput.year_of_assessment || 'Not specified'],
+    ['Tax Year', citInput.tax_year || 'Not specified'],
     ['Annual Turnover', formatCurrency(citInput.annual_turnover)],
     ['Total Fixed Assets', formatCurrency(citInput.total_fixed_assets)],
     ['Company Classification', citResult.company_type || 'N/A'],
