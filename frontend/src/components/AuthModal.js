@@ -6,7 +6,7 @@ import { VerificationPage } from './VerificationPage';
 import { useAuth } from '../contexts/AuthContext';
 import { Alert, AlertDescription } from './ui/alert';
 
-export const AuthModal = ({ isOpen, onClose }) => {
+export const AuthModal = ({ isOpen, onClose, setShowTerms }) => {
   const [currentForm, setCurrentForm] = useState('login'); // 'login', 'register', or 'post-register'
   const [registeredEmail, setRegisteredEmail] = useState(null);
   const { user } = useAuth();
