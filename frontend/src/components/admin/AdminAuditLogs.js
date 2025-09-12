@@ -62,11 +62,24 @@ export const AdminAuditLogs = () => {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || 'Failed to load audit logs');
+        // Handle different response types
+        let errorMessage = 'Failed to load audit logs';
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.detail || errorMessage;
+        } catch (parseError) {
+          // If response is not JSON, use the status text
+          errorMessage = `Server error: ${response.status} ${response.statusText}`;
+        }
+        throw new Error(errorMessage);
       }
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch (parseError) {
+        throw new Error('Invalid response format from server');
+      }
       setLogs(data.logs);
       setTotalPages(data.total_pages);
       setTotalLogs(data.total_count);
