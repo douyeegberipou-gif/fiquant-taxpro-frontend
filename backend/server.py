@@ -970,6 +970,11 @@ async def delete_calculation_history(
 # PAYE Tax Models
 class TaxInput(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    # Staff Information
+    staff_name: Optional[str] = Field(default="", description="Name of staff/taxpayer")
+    month: Optional[str] = Field(default="", description="Month for which tax is calculated")
+    state_of_residence: Optional[str] = Field(default="", description="State of residence")
+    # Income Details
     basic_salary: float = Field(gt=0, description="Basic salary per month")
     transport_allowance: float = Field(default=0, description="Transport allowance per month")
     housing_allowance: float = Field(default=0, description="Housing allowance per month")
