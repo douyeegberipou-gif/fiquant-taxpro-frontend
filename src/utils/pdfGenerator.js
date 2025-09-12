@@ -154,7 +154,7 @@ export const generatePayeReport = (taxInput, result) => {
     ['Monthly Net Income', formatCurrency(result.monthly_net_income)]
   ];
   
-  doc.autoTable({
+  autoTable(doc, {
     head: [['Calculation Component', 'Amount']],
     body: taxData,
     startY: yPos,
