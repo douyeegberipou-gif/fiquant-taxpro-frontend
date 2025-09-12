@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Complete testing of the newly implemented User Accounts & Profiles system with email/phone verification. The registration/verification flow has been implemented but needs comprehensive testing to ensure the authentication system works correctly."
+user_problem_statement: "Fix critical bug where PAYE, CIT, and Bulk PAYE calculators display '₦NaN' instead of computed numerical results. The formatCurrency function in App.js has been updated to handle null/undefined/NaN values. Need comprehensive testing to verify the fix works across all three calculators."
 
 backend:
   - task: "PAYE Tax Calculation API"
