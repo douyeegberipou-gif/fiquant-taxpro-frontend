@@ -256,6 +256,10 @@ function AppContent() {
   };
 
   const formatCurrency = (amount) => {
+    // Handle null, undefined, or NaN values
+    if (amount === null || amount === undefined || isNaN(amount)) {
+      return '₦0';
+    }
     return '₦' + new Intl.NumberFormat('en-NG', {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
