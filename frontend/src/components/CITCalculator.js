@@ -602,10 +602,7 @@ const CITCalculator = ({
               <p className="text-xs text-amber-800 flex items-start">
                 <AlertTriangle className="h-4 w-4 mr-2 mt-0.5 flex-shrink-0" />
                 <span>
-                  <strong>Disclaimer:</strong> This computation is for guidance purposes only. 
-                  CIT calculations are estimates based on current Nigerian tax laws. 
-                  Please consult with a qualified tax professional or chartered accountant 
-                  to verify accuracy and ensure full compliance with corporate tax regulations.
+                  <strong>Note:</strong> Users are solely responsible for the validity, accuracy and completeness of the financial information they supply.
                 </span>
               </p>
             </div>
