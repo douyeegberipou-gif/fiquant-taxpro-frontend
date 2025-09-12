@@ -245,7 +245,8 @@ function AppContent() {
       });
 
       const response = await axios.post(`${API}/calculate-paye`, numericInput);
-      setResult(response.data);
+      // Backend returns an array, we need the first object
+      setResult(response.data[0]);
       fetchHistory(); // Refresh history
     } catch (error) {
       console.error('Error calculating tax:', error);
