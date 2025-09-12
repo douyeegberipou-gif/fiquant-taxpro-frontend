@@ -331,7 +331,7 @@ export const generateCitReport = (citInput, citResult) => {
     ['Total Deductible Expenses', formatCurrency(citResult.total_deductible_expenses)]
   ];
   
-  doc.autoTable({
+  autoTable(doc, {
     head: [['Expense Component', 'Amount']],
     body: expenseData,
     startY: yPos,
