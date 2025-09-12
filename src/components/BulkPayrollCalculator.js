@@ -312,7 +312,7 @@ const BulkPayrollCalculator = ({ formatCurrency, calculatePayeTax }) => {
         ['For technical support or questions about tax calculations,'],
         ['please contact Fiquant Consult at info@fiquantconsult.com'],
         [''],
-        ['© 2024 FIQUANT CONSULT - ALL RIGHTS RESERVED'],
+        ['© 2025 FIQUANT CONSULT - ALL RIGHTS RESERVED'],
         ['This template and tax calculator are proprietary to Fiquant Consult'],
       ];
       
