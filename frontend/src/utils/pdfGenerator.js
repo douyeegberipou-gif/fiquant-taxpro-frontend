@@ -178,7 +178,7 @@ export const generatePayeReport = (taxInput, result) => {
       formatCurrency(bracket.tax_amount)
     ]);
     
-    doc.autoTable({
+    autoTable(doc, {
       head: [['Income Range', 'Rate', 'Taxable Amount', 'Tax Amount']],
       body: bracketData,
       startY: yPos,
