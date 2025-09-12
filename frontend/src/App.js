@@ -16,6 +16,7 @@ import { AuthModal } from './components/AuthModal';
 import { UserProfile } from './components/UserProfile';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { AdminSetup } from './components/admin/AdminSetup';
+import TermsAndConditions from './components/TermsAndConditions';
 import { generatePayeReport, generateBulkPayeReport, generateCitReport } from './utils/pdfGenerator';
 import './App.css';
 
