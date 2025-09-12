@@ -731,6 +731,97 @@ function AppContent() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-6 space-y-6">
+                  {/* Staff Information Section */}
+                  <div className="space-y-4">
+                    <h3 className="font-semibold text-gray-900 flex items-center">
+                      <User className="h-4 w-4 mr-2 text-emerald-600" />
+                      Staff Information
+                    </h3>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="staff_name">Name of Staff/Taxpayer *</Label>
+                        <Input
+                          id="staff_name"
+                          type="text"
+                          placeholder="Full Name"
+                          value={taxInput.staff_name}
+                          onChange={(e) => handleInputChange('staff_name', e.target.value)}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="month">Month *</Label>
+                        <select
+                          id="month"
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                          value={taxInput.month}
+                          onChange={(e) => handleInputChange('month', e.target.value)}
+                        >
+                          <option value="">Select Month</option>
+                          <option value="January">January</option>
+                          <option value="February">February</option>
+                          <option value="March">March</option>
+                          <option value="April">April</option>
+                          <option value="May">May</option>
+                          <option value="June">June</option>
+                          <option value="July">July</option>
+                          <option value="August">August</option>
+                          <option value="September">September</option>
+                          <option value="October">October</option>
+                          <option value="November">November</option>
+                          <option value="December">December</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="state_of_residence">State of Residence *</Label>
+                      <select
+                        id="state_of_residence"
+                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        value={taxInput.state_of_residence}
+                        onChange={(e) => handleInputChange('state_of_residence', e.target.value)}
+                      >
+                        <option value="">Select State</option>
+                        <option value="Abia">Abia</option>
+                        <option value="Adamawa">Adamawa</option>
+                        <option value="Akwa Ibom">Akwa Ibom</option>
+                        <option value="Anambra">Anambra</option>
+                        <option value="Bauchi">Bauchi</option>
+                        <option value="Bayelsa">Bayelsa</option>
+                        <option value="Benue">Benue</option>
+                        <option value="Borno">Borno</option>
+                        <option value="Cross River">Cross River</option>
+                        <option value="Delta">Delta</option>
+                        <option value="Ebonyi">Ebonyi</option>
+                        <option value="Edo">Edo</option>
+                        <option value="Ekiti">Ekiti</option>
+                        <option value="Enugu">Enugu</option>
+                        <option value="FCT">Federal Capital Territory</option>
+                        <option value="Gombe">Gombe</option>
+                        <option value="Imo">Imo</option>
+                        <option value="Jigawa">Jigawa</option>
+                        <option value="Kaduna">Kaduna</option>
+                        <option value="Kano">Kano</option>
+                        <option value="Katsina">Katsina</option>
+                        <option value="Kebbi">Kebbi</option>
+                        <option value="Kogi">Kogi</option>
+                        <option value="Kwara">Kwara</option>
+                        <option value="Lagos">Lagos</option>
+                        <option value="Nasarawa">Nasarawa</option>
+                        <option value="Niger">Niger</option>
+                        <option value="Ogun">Ogun</option>
+                        <option value="Ondo">Ondo</option>
+                        <option value="Osun">Osun</option>
+                        <option value="Oyo">Oyo</option>
+                        <option value="Plateau">Plateau</option>
+                        <option value="Rivers">Rivers</option>
+                        <option value="Sokoto">Sokoto</option>
+                        <option value="Taraba">Taraba</option>
+                        <option value="Yobe">Yobe</option>
+                        <option value="Zamfara">Zamfara</option>
+                      </select>
+                    </div>
+                  </div>
+
                   {/* Basic Income Section */}
                   <div className="space-y-4">
                     <h3 className="font-semibold text-gray-900 flex items-center">
