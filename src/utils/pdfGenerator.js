@@ -382,7 +382,7 @@ export const generateCitReport = (citInput, citResult) => {
       formatCurrency(value)
     ]);
     
-    doc.autoTable({
+    autoTable(doc, {
       head: [['Asset Category', 'Allowance Amount']],
       body: allowanceData,
       startY: yPos,
