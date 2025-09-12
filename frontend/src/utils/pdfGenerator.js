@@ -86,10 +86,34 @@ export const generatePayeReport = (taxInput, result) => {
   
   let yPos = addHeader(doc, 'PAYE Tax Calculation Report');
   
-  // Employee Information Section
+  // Staff Information Section
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.text('Employee Information', 20, yPos);
+  doc.text('Staff Information', 20, yPos);
+  yPos += 10;
+  
+  // Staff Details Table
+  const staffData = [
+    ['Name of Staff/Taxpayer', taxInput.staff_name || 'Not specified'],
+    ['Month', taxInput.month || 'Not specified'],
+    ['State of Residence', taxInput.state_of_residence || 'Not specified']
+  ];
+  
+  autoTable(doc, {
+    head: [['Detail', 'Information']],
+    body: staffData,
+    startY: yPos,
+    theme: 'grid',
+    headStyles: { fillColor: [0, 100, 0], textColor: [255, 255, 255] },
+    margin: { left: 20, right: 20 }
+  });
+  
+  yPos = doc.lastAutoTable.finalY + 15;
+  
+  // Income Details Section
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Income Details', 20, yPos);
   yPos += 10;
   
   // Income Details Table
