@@ -1137,9 +1137,6 @@ function AppContent() {
               <BulkPayrollCalculator
                 formatCurrency={formatCurrency}
                 calculatePayeTax={calculatePayeTax}
-                termsAccepted={termsAccepted}
-                setTermsAccepted={setTermsAccepted}
-                setShowTerms={setShowTerms}
               />
             )}
           </TabsContent>
