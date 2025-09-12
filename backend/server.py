@@ -644,7 +644,9 @@ async def get_current_user_profile(current_user: UserProfile = Depends(get_curre
         last_login=current_user.last_login,
         email_verified=current_user.email_verified,
         phone_verified=current_user.phone_verified,
-        account_status=current_user.account_status
+        account_status=current_user.account_status,
+        admin_role=current_user.admin_role,
+        admin_enabled=current_user.admin_enabled
     )
 
 @api_router.put("/profile/update", response_model=UserResponse)
