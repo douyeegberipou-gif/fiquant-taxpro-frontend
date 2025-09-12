@@ -293,6 +293,11 @@ function AppContent() {
 
   const resetForm = () => {
     setTaxInput({
+      // Staff Information
+      staff_name: '',
+      month: '',
+      state_of_residence: '',
+      // Income Details
       basic_salary: '',
       transport_allowance: '',
       housing_allowance: '',
