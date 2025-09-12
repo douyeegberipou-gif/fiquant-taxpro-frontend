@@ -102,6 +102,9 @@ class UserResponse(BaseModel):
     email_verified: bool
     phone_verified: bool
     account_status: str
+    # Admin fields
+    admin_role: Optional[str] = None
+    admin_enabled: bool = False
 
 class EmailVerification(BaseModel):
     email: EmailStr
