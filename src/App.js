@@ -246,6 +246,8 @@ function AppContent() {
 
       const response = await axios.post(`${API}/calculate-paye`, numericInput);
       // Backend returns an array, we need the first object
+      console.log('Backend response:', response.data);
+      console.log('Setting result to:', response.data[0]);
       setResult(response.data[0]);
       fetchHistory(); // Refresh history
     } catch (error) {
