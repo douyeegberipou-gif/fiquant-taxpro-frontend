@@ -1743,6 +1743,28 @@ function AppContent() {
         isOpen={authModalOpen} 
         onClose={() => setAuthModalOpen(false)} 
       />
+
+      {/* Terms and Conditions Modal */}
+      {showTerms && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden">
+            <div className="flex justify-between items-center p-4 border-b">
+              <h2 className="text-lg font-semibold">Terms and Conditions</h2>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowTerms(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                ✕
+              </Button>
+            </div>
+            <div className="p-4 max-h-[calc(90vh-100px)] overflow-y-auto">
+              <TermsAndConditions />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
