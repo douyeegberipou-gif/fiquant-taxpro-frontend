@@ -560,6 +560,16 @@ If the problem persists, please contact Fiquant Consult support with this error 
         </div>
         
         <div className="p-8">
+          {/* Disclaimer Note */}
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4">
+            <p className="text-xs text-amber-800 flex items-start">
+              <AlertTriangle className="h-4 w-4 mr-2 mt-0.5 flex-shrink-0" />
+              <span>
+                <strong>Note:</strong> Users are solely responsible for the validity, accuracy and completeness of the financial information they supply.
+              </span>
+            </p>
+          </div>
+
           <div className="flex justify-between items-center">
             {/* Left side - Excel Upload Actions */}
             <div className="flex space-x-4">
