@@ -360,7 +360,7 @@ export const generateCitReport = (citInput, citResult) => {
     ['Development Levy (0.25%)', formatCurrency(citResult.development_levy)]
   ];
   
-  doc.autoTable({
+  autoTable(doc, {
     head: [['Tax Component', 'Amount/Rate']],
     body: citSummaryData,
     startY: yPos,
