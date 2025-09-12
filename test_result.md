@@ -462,7 +462,7 @@ test_plan:
 
 agent_communication:
   - agent: "main"
-    message: "Updated Excel download function to use XLSX.writeFile() method. Function executes without errors and logs success messages, but user reports no actual file download occurs. Need comprehensive testing to identify why download isn't triggering in user's browser environment."
+    message: "CRITICAL BUG FIX: Fixed formatCurrency function in App.js to handle null/undefined/NaN values by adding safety check that returns '₦0' for invalid amounts. This should resolve the '₦NaN' display issue across all three calculators (PAYE, CIT, Bulk PAYE). The root cause was that the formatCurrency function was directly passing invalid values to Intl.NumberFormat().format() without validation, resulting in 'NaN' being formatted as '₦NaN'. Need comprehensive testing to verify the fix works correctly for all calculator types and edge cases."
   - agent: "testing"
     message: "TESTING COMPLETE: Excel download functionality is working correctly. Successfully downloaded and verified Excel file in automated tests. The issue is browser-specific or user environment related. Core functionality confirmed working - XLSX library properly loaded, file creation successful, download mechanism functional. User may need to check browser settings, popup blockers, or download restrictions."
   - agent: "testing"
