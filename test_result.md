@@ -120,20 +120,20 @@ backend:
         agent: "main"
         comment: "Fixed formatCurrency function in App.js (lines 258-266) to handle null/undefined/NaN values by adding safety check: if (amount === null || amount === undefined || isNaN(amount)) { return '₦0'; }. This matches the error handling pattern used in pdfGenerator.js."
 
-  - task: "CIT Tax Calculation API"
+  - task: "Fix ₦NaN Display Bug in CIT Calculator"
     implemented: true
-    working: true
-    file: "server.py"
+    working: false
+    file: "components/CITCalculator.js"
     stuck_count: 0
-    priority: "medium"
-    needs_retesting: false
+    priority: "high"
+    needs_retesting: true
     status_history:
-      - working: true
+      - working: false
+        agent: "user"
+        comment: "User reports: CIT calculator showing '₦NaN' instead of calculated results"
+      - working: "NA"
         agent: "main"
-        comment: "Backend API is functioning properly for CIT calculations"
-      - working: true
-        agent: "testing"
-        comment: "COMPREHENSIVE BACKEND TESTING COMPLETED: All CIT APIs working perfectly. Tested 13 advanced scenarios including: CIT info endpoint (✅), Small company exemption (✅), Medium company taxation (✅), Large company thin capitalization (✅), Multinational minimum ETR (✅), Professional service exclusion (✅), Capital allowances for new/existing/mixed assets (✅), WHT credits normal/excess scenarios (✅), Comprehensive integration test (✅). All calculations accurate per Nigerian 2026 tax laws including thin cap rules, capital allowances, and WHT credits. Perfect 20/20 test pass rate."
+        comment: "CIT calculator uses formatCurrency function from App.js as a prop. The fix applied to App.js formatCurrency function should resolve the ₦NaN issue in CIT calculator as well."
 
   - task: "Health Check Endpoints"
     implemented: true
