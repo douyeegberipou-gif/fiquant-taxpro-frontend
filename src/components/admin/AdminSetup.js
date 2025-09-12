@@ -55,14 +55,18 @@ export const AdminSetup = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
       <Card className="max-w-md w-full">
         <CardHeader className="text-center">
-          <div className="w-16 h-16 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Shield className="h-8 w-8 text-white" />
+          <div className="w-16 h-16 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <img 
+              src="https://customer-assets.emergentagent.com/job_taxpro-ng/artifacts/i2zrdiwl_Fiquant%20Consult%20-%20Transparent%202.png" 
+              alt="Fiquant Consult Logo" 
+              className="w-16 h-16 object-contain"
+            />
           </div>
           <CardTitle className="text-2xl font-bold text-gray-900">
             Admin Setup
           </CardTitle>
           <CardDescription>
-            Initialize your first super admin account for Fiquant TaxPro
+            Initialize your first super admin account for Fiquant Consult
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
