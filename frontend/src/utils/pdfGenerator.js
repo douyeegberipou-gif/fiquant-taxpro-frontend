@@ -88,7 +88,7 @@ const addFooter = (doc) => {
     doc.setPage(i);
     doc.setFontSize(8);
     doc.setTextColor(100, 100, 100);
-    doc.text('© 2024 Fiquant Consult - Professional Tax Calculation Services', 20, 285);
+    doc.text('© 2025 Fiquant Consult - Professional Tax Calculation & Advisory Services', 20, 285);
     doc.text(`Page ${i} of ${pageCount}`, 180, 285);
   }
 };
