@@ -19,40 +19,26 @@ const formatDate = () => {
 };
 
 // Add header with logo and branding
-const addHeader = (doc, title) => {
+const addHeader = async (doc, title) => {
   // Company header background
   doc.setFillColor(0, 0, 0); // Black background
   doc.rect(0, 0, 220, 35, 'F');
   
-  // Add the new Fiquant Consult logo
+  // Add the Fiquant Consult logo - simplified approach
   try {
-    // Create a canvas to load and process the logo
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    const logoImg = new Image();
-    logoImg.crossOrigin = "anonymous";
+    // For now, we'll use a text-based logo since the image loading is problematic
+    // We can add a simple graphic representation
+    doc.setFillColor(255, 215, 0); // Gold color
+    doc.circle(25, 18, 8, 'F'); // Simple gold circle as logo placeholder
     
-    // Set up the image load handler
-    logoImg.onload = function() {
-      // Set canvas size
-      canvas.width = logoImg.width;
-      canvas.height = logoImg.height;
-      
-      // Draw the image to canvas
-      ctx.drawImage(logoImg, 0, 0);
-      
-      // Convert to base64 and add to PDF
-      const imgData = canvas.toDataURL('image/png');
-      doc.addImage(imgData, 'PNG', 15, 8, 20, 20); // x, y, width, height
-    };
+    // Add "F" in the circle
+    doc.setTextColor(0, 0, 0); // Black text
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('F', 22, 22);
     
-    // Load the logo
-    logoImg.src = 'https://customer-assets.emergentagent.com/job_taxpro-ng/artifacts/i2zrdiwl_Fiquant%20Consult%20-%20Transparent%202.png';
-    
-    // Fallback: Add logo directly (this might work with newer jsPDF versions)
-    doc.addImage('https://customer-assets.emergentagent.com/job_taxpro-ng/artifacts/i2zrdiwl_Fiquant%20Consult%20-%20Transparent%202.png', 'PNG', 15, 8, 20, 20);
   } catch (error) {
-    console.log('Logo loading failed, using text-only header');
+    console.log('Logo creation failed, using text-only header');
   }
   
   // Company name and branding
