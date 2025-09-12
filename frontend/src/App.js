@@ -1151,9 +1151,6 @@ function AppContent() {
               calculateCitTax={calculateCitTax}
               resetCitForm={resetCitForm}
               formatCurrency={formatCurrency}
-              citTermsAccepted={citTermsAccepted}
-              setCitTermsAccepted={setCitTermsAccepted}
-              setShowTerms={setShowTerms}
             />
           </TabsContent>
 
