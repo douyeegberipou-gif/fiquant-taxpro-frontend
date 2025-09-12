@@ -563,43 +563,12 @@ If the problem persists, please contact Fiquant Consult support with this error 
         </div>
         
         <div className="p-8">
-          {/* Terms and Conditions Acceptance */}
-          <div className="space-y-3 mb-6 pb-4 border-b border-gray-200">
-            <div className="flex items-start space-x-2">
-              <input
-                type="checkbox"
-                id="terms-bulk-paye"
-                checked={termsAccepted}
-                onChange={(e) => setTermsAccepted(e.target.checked)}
-                className="mt-1 h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded"
-              />
-              <Label htmlFor="terms-bulk-paye" className="text-sm text-gray-700 cursor-pointer">
-                I accept Fiquant's{' '}
-                <button
-                  type="button"
-                  onClick={() => setShowTerms(true)}
-                  className="text-emerald-600 hover:text-emerald-800 underline"
-                >
-                  Terms and Conditions
-                </button>
-              </Label>
-            </div>
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-              <p className="text-xs text-amber-800 flex items-start">
-                <AlertTriangle className="h-4 w-4 mr-2 mt-0.5 flex-shrink-0" />
-                <span>
-                  <strong>Note:</strong> Users are solely responsible for the validity, accuracy and completeness of the financial information they supply.
-                </span>
-              </p>
-            </div>
-          </div>
-
           <div className="flex justify-between items-center">
             {/* Left side - Excel Upload Actions */}
             <div className="flex space-x-4">
               <button 
                 onClick={calculateBulkPayroll} 
-                disabled={loading || employees.every(emp => !emp.name || !emp.basic_salary) || !termsAccepted}
+                disabled={loading || employees.every(emp => !emp.name || !emp.basic_salary)}
                 className="inline-flex items-center px-6 py-3 bg-gray-900 text-white text-sm font-medium rounded-xl hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-sm"
               >
                 <Calculator className="h-4 w-4 mr-2" />
