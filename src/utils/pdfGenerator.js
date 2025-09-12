@@ -128,7 +128,7 @@ export const generatePayeReport = (taxInput, result) => {
     ['Total Monthly Reliefs', formatCurrency(result.total_reliefs)]
   ];
   
-  doc.autoTable({
+  autoTable(doc, {
     head: [['Relief Component', 'Amount']],
     body: reliefData,
     startY: yPos,
