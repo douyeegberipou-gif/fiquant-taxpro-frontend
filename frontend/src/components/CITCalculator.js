@@ -51,6 +51,26 @@ const CITCalculator = ({
                 />
               </div>
               <div className="space-y-2">
+                <Label htmlFor="year_of_assessment">Year of Assessment *</Label>
+                <Input
+                  id="year_of_assessment"
+                  type="number"
+                  placeholder="2024"
+                  value={citInput.year_of_assessment}
+                  onChange={(e) => handleCitInputChange('year_of_assessment', e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="tax_year">Tax Year *</Label>
+                <Input
+                  id="tax_year"
+                  type="number"
+                  placeholder="2024"
+                  value={citInput.tax_year}
+                  onChange={(e) => handleCitInputChange('tax_year', e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="annual_turnover">Annual Turnover (₦) *</Label>
                 <Input
                   id="annual_turnover"
