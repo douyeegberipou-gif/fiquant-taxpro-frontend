@@ -970,41 +970,10 @@ function AppContent() {
                     </div>
                   </div>
 
-                  {/* Terms and Conditions Acceptance */}
-                  <div className="space-y-3 pt-4 border-t border-gray-200">
-                    <div className="flex items-start space-x-2">
-                      <input
-                        type="checkbox"
-                        id="terms-paye"
-                        checked={termsAccepted}
-                        onChange={(e) => setTermsAccepted(e.target.checked)}
-                        className="mt-1 h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded"
-                      />
-                      <Label htmlFor="terms-paye" className="text-sm text-gray-700 cursor-pointer">
-                        I accept Fiquant's{' '}
-                        <button
-                          type="button"
-                          onClick={() => setShowTerms(true)}
-                          className="text-emerald-600 hover:text-emerald-800 underline"
-                        >
-                          Terms and Conditions
-                        </button>
-                      </Label>
-                    </div>
-                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-                      <p className="text-xs text-amber-800 flex items-start">
-                        <AlertTriangle className="h-4 w-4 mr-2 mt-0.5 flex-shrink-0" />
-                        <span>
-                          <strong>Note:</strong> Users are solely responsible for the validity, accuracy and completeness of the financial information they supply.
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-
                   <div className="flex space-x-3 pt-4">
                     <Button 
                       onClick={calculateTax} 
-                      disabled={loading || !taxInput.basic_salary || !termsAccepted}
+                      disabled={loading || !taxInput.basic_salary}
                       className="flex-1 bg-emerald-600 hover:bg-emerald-700"
                     >
                       {loading ? 'Calculating...' : 'Calculate Tax'}
