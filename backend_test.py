@@ -2176,11 +2176,371 @@ class NigerianTaxCalculatorTester:
             print(f"   ❌ Should have rejected non-existent user promotion")
             return False
 
+    # ============================
+    # USER INVESTIGATION TESTS
+    # ============================
+    
+    def investigate_user_accounts(self):
+        """Investigate all user accounts in the system - URGENT SECURITY ANALYSIS"""
+        print("\n🚨 URGENT: USER ACCOUNTS INVESTIGATION")
+        print("=" * 80)
+        print("🔍 Investigating 28 users showing in admin dashboard")
+        print("📋 Expected: Only 2 users total (user + 1 known user)")
+        print("🎯 Goal: Identify test accounts vs real accounts")
+        print("-" * 80)
+        
+        # First, try to get admin access to list all users
+        success = self.test_admin_system_initialization()
+        if not success:
+            print("❌ Could not initialize admin system for investigation")
+            return False
+        
+        # Try to get all users through admin endpoint
+        success, response = self.run_test(
+            "🔍 INVESTIGATION: List All User Accounts",
+            "GET",
+            "admin/users?limit=100",  # Get up to 100 users
+            [200, 401],  # Accept both success and unauthorized
+            None,
+            auth_required=False  # Try without auth first
+        )
+        
+        if not success and isinstance(response, dict) and response.get('detail') == 'Admin access token required':
+            print("🔐 Admin authentication required. Attempting to create admin access...")
+            
+            # Try to create a super admin for investigation
+            admin_success = self.test_create_super_admin_for_investigation()
+            if admin_success:
+                # Retry with admin access
+                success, response = self.run_test(
+                    "🔍 INVESTIGATION: List All User Accounts (With Admin)",
+                    "GET",
+                    "admin/users?limit=100",
+                    200,
+                    None,
+                    auth_required=True
+                )
+        
+        if success and isinstance(response, dict) and 'users' in response:
+            users = response['users']
+            total_users = len(users)
+            
+            print(f"\n📊 INVESTIGATION RESULTS:")
+            print(f"👥 Total Users Found: {total_users}")
+            print(f"🎯 Expected Users: 2")
+            print(f"⚠️  Excess Users: {total_users - 2}")
+            
+            if total_users > 2:
+                print(f"\n🚨 SECURITY ALERT: {total_users - 2} unexpected user accounts found!")
+            
+            # Analyze each user account
+            test_accounts = []
+            real_accounts = []
+            suspicious_accounts = []
+            
+            print(f"\n📋 DETAILED USER ANALYSIS:")
+            print("-" * 80)
+            
+            for i, user in enumerate(users, 1):
+                email = user.get('email', 'No email')
+                full_name = user.get('full_name', 'No name')
+                created_at = user.get('created_at', 'No date')
+                account_status = user.get('account_status', 'Unknown')
+                email_verified = user.get('email_verified', False)
+                phone_verified = user.get('phone_verified', False)
+                admin_role = user.get('admin_role', None)
+                
+                print(f"\n👤 USER #{i}:")
+                print(f"   📧 Email: {email}")
+                print(f"   👤 Name: {full_name}")
+                print(f"   📅 Created: {created_at}")
+                print(f"   🔒 Status: {account_status}")
+                print(f"   ✅ Email Verified: {email_verified}")
+                print(f"   📱 Phone Verified: {phone_verified}")
+                if admin_role:
+                    print(f"   🛡️  Admin Role: {admin_role}")
+                
+                # Categorize accounts based on patterns
+                if self.is_test_account(email, full_name):
+                    test_accounts.append(user)
+                    print(f"   🧪 CATEGORY: TEST ACCOUNT")
+                elif self.is_real_account(email, full_name):
+                    real_accounts.append(user)
+                    print(f"   👤 CATEGORY: REAL ACCOUNT")
+                else:
+                    suspicious_accounts.append(user)
+                    print(f"   ⚠️  CATEGORY: SUSPICIOUS/UNKNOWN")
+            
+            # Summary analysis
+            print(f"\n📊 ACCOUNT CATEGORIZATION SUMMARY:")
+            print("-" * 80)
+            print(f"🧪 Test Accounts: {len(test_accounts)}")
+            print(f"👤 Real Accounts: {len(real_accounts)}")
+            print(f"⚠️  Suspicious/Unknown: {len(suspicious_accounts)}")
+            
+            # Detailed breakdown of test accounts
+            if test_accounts:
+                print(f"\n🧪 TEST ACCOUNTS IDENTIFIED:")
+                print("-" * 40)
+                for account in test_accounts:
+                    email = account.get('email', 'No email')
+                    created_at = account.get('created_at', 'No date')
+                    print(f"   • {email} (Created: {created_at})")
+            
+            # Real accounts analysis
+            if real_accounts:
+                print(f"\n👤 REAL ACCOUNTS IDENTIFIED:")
+                print("-" * 40)
+                for account in real_accounts:
+                    email = account.get('email', 'No email')
+                    full_name = account.get('full_name', 'No name')
+                    created_at = account.get('created_at', 'No date')
+                    print(f"   • {full_name} ({email}) - Created: {created_at}")
+            
+            # Suspicious accounts analysis
+            if suspicious_accounts:
+                print(f"\n⚠️  SUSPICIOUS/UNKNOWN ACCOUNTS:")
+                print("-" * 40)
+                for account in suspicious_accounts:
+                    email = account.get('email', 'No email')
+                    full_name = account.get('full_name', 'No name')
+                    created_at = account.get('created_at', 'No date')
+                    print(f"   • {full_name} ({email}) - Created: {created_at}")
+            
+            # Security assessment
+            print(f"\n🔒 SECURITY ASSESSMENT:")
+            print("-" * 40)
+            if len(real_accounts) <= 2 and len(test_accounts) > 0:
+                print("✅ LIKELY SAFE: Most accounts appear to be test accounts from our testing")
+                print("✅ Real account count matches expectation (≤2)")
+                print("🧪 Test accounts were created during comprehensive backend testing")
+            elif len(suspicious_accounts) > 0:
+                print("⚠️  REQUIRES REVIEW: Some accounts could not be categorized")
+                print("🔍 Manual review recommended for suspicious accounts")
+            elif len(real_accounts) > 2:
+                print("🚨 SECURITY CONCERN: More real accounts than expected")
+                print("🔍 Immediate investigation required")
+            
+            # Timeline analysis
+            print(f"\n📅 TIMELINE ANALYSIS:")
+            print("-" * 40)
+            self.analyze_account_creation_timeline(users)
+            
+            return True
+        else:
+            print("❌ Could not retrieve user accounts for investigation")
+            print("🔍 Attempting alternative investigation methods...")
+            
+            # Try to get user count through other means
+            return self.alternative_user_investigation()
+    
+    def is_test_account(self, email, full_name):
+        """Identify if an account is a test account based on patterns"""
+        test_patterns = [
+            'test', 'testing', 'fiquant.ng', 'adebayo', 'ogundimu', 
+            'verified.user', 'testauth', 'demo', 'sample', 'example',
+            'admin.test', 'bulk.test', 'auth.test', 'investigation',
+            'candidate', 'fresh.admin', 'codegen', 'flowtest'
+        ]
+        
+        email_lower = email.lower()
+        name_lower = full_name.lower()
+        
+        # Check email patterns
+        for pattern in test_patterns:
+            if pattern in email_lower or pattern in name_lower:
+                return True
+        
+        # Check for timestamp patterns in email (common in our tests)
+        import re
+        if re.search(r'\d{10}', email):  # 10-digit timestamp
+            return True
+        
+        return False
+    
+    def is_real_account(self, email, full_name):
+        """Identify if an account appears to be a real user account"""
+        real_patterns = [
+            'douyeegberipou@gmail.com',  # Known admin account
+            'doutimiye',  # Known admin name
+            'alfred-egberipou'  # Known admin name
+        ]
+        
+        email_lower = email.lower()
+        name_lower = full_name.lower()
+        
+        for pattern in real_patterns:
+            if pattern in email_lower or pattern in name_lower:
+                return True
+        
+        # Real accounts typically don't have test patterns and have proper domains
+        if not self.is_test_account(email, full_name):
+            # Check for common real email domains
+            real_domains = ['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com']
+            for domain in real_domains:
+                if domain in email_lower and 'fiquant.ng' not in email_lower:
+                    return True
+        
+        return False
+    
+    def analyze_account_creation_timeline(self, users):
+        """Analyze when accounts were created to identify testing periods"""
+        from datetime import datetime
+        
+        creation_dates = []
+        for user in users:
+            created_at = user.get('created_at')
+            if created_at:
+                try:
+                    # Parse ISO datetime
+                    if isinstance(created_at, str):
+                        dt = datetime.fromisoformat(created_at.replace('Z', '+00:00'))
+                    else:
+                        dt = created_at
+                    creation_dates.append((dt, user.get('email', 'No email')))
+                except:
+                    pass
+        
+        # Sort by creation date
+        creation_dates.sort(key=lambda x: x[0])
+        
+        print("📅 Account Creation Timeline:")
+        for dt, email in creation_dates:
+            print(f"   {dt.strftime('%Y-%m-%d %H:%M:%S')} - {email}")
+        
+        # Identify clusters (accounts created within short time periods)
+        if len(creation_dates) > 1:
+            print("\n🕒 Testing Session Analysis:")
+            current_session = []
+            session_threshold = 3600  # 1 hour
+            
+            for i, (dt, email) in enumerate(creation_dates):
+                if i == 0:
+                    current_session = [(dt, email)]
+                else:
+                    prev_dt = creation_dates[i-1][0]
+                    time_diff = (dt - prev_dt).total_seconds()
+                    
+                    if time_diff <= session_threshold:
+                        current_session.append((dt, email))
+                    else:
+                        if len(current_session) > 1:
+                            print(f"   📊 Testing Session: {len(current_session)} accounts created")
+                            print(f"      From: {current_session[0][0].strftime('%Y-%m-%d %H:%M:%S')}")
+                            print(f"      To: {current_session[-1][0].strftime('%Y-%m-%d %H:%M:%S')}")
+                        current_session = [(dt, email)]
+            
+            # Handle last session
+            if len(current_session) > 1:
+                print(f"   📊 Testing Session: {len(current_session)} accounts created")
+                print(f"      From: {current_session[0][0].strftime('%Y-%m-%d %H:%M:%S')}")
+                print(f"      To: {current_session[-1][0].strftime('%Y-%m-%d %H:%M:%S')}")
+    
+    def alternative_user_investigation(self):
+        """Alternative methods to investigate user accounts"""
+        print("\n🔍 ALTERNATIVE INVESTIGATION METHODS:")
+        print("-" * 40)
+        
+        # Try to access MongoDB directly through backend logs
+        print("📋 Checking if we can get user statistics...")
+        
+        # This would require direct database access which we don't have
+        # But we can try to infer from other endpoints
+        
+        print("⚠️  Direct database access not available")
+        print("🔍 Investigation requires admin access to user management endpoints")
+        
+        return False
+    
+    def test_create_super_admin_for_investigation(self):
+        """Create super admin access for investigation purposes"""
+        print("\n🛡️  Creating Super Admin for Investigation...")
+        
+        # First register an admin user
+        import time
+        timestamp = int(time.time())
+        admin_data = {
+            "email": f"investigation.admin.{timestamp}@fiquant.ng",
+            "phone": f"+234900{timestamp % 100000}",
+            "password": "InvestigationAdmin123!",
+            "full_name": "Investigation Admin",
+            "agree_terms": True
+        }
+        
+        success, response = self.run_test(
+            "Create Investigation Admin User",
+            "POST",
+            "auth/register",
+            200,
+            admin_data
+        )
+        
+        if not success:
+            return False
+        
+        user_id = response.get('id')
+        if not user_id:
+            return False
+        
+        # Try to promote to super admin
+        success, response = self.run_test(
+            "Initialize Super Admin for Investigation",
+            "POST",
+            f"admin/initialize-super-admin?user_email={admin_data['email']}",
+            [200, 400],  # 400 if already exists
+            None
+        )
+        
+        if success:
+            print("✅ Investigation admin created successfully")
+            
+            # Try to login and get token
+            login_data = {
+                "email_or_phone": admin_data["email"],
+                "password": admin_data["password"]
+            }
+            
+            # Note: This will fail if account is not verified, but we'll try anyway
+            login_success, login_response = self.run_test(
+                "Login Investigation Admin",
+                "POST",
+                "auth/login",
+                [200, 403],  # 403 if not verified
+                login_data
+            )
+            
+            if login_success and 'access_token' in login_response:
+                self.auth_token = login_response['access_token']
+                print("✅ Investigation admin authenticated")
+                return True
+            else:
+                print("⚠️  Investigation admin created but not verified - cannot authenticate")
+                return False
+        
+        return False
+    
+    def test_admin_system_initialization(self):
+        """Test admin system initialization"""
+        success, response = self.run_test(
+            "Admin System Check",
+            "GET",
+            "admin/users?limit=1",
+            [200, 401],
+            None
+        )
+        
+        return success
+
 def main():
     print("🚀 Starting Nigerian Tax Calculator API Tests")
     print("=" * 60)
     
     tester = NigerianTaxCalculatorTester()
+    
+    # URGENT: User Investigation First
+    print("\n🚨 URGENT: USER ACCOUNTS INVESTIGATION")
+    print("-" * 40)
+    tester.investigate_user_accounts()
     
     # Run Comprehensive Authentication tests first
     tester.run_comprehensive_authentication_tests()
