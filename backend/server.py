@@ -569,7 +569,9 @@ async def register_user(user_data: UserRegistration):
         last_login=user_profile.last_login,
         email_verified=user_profile.email_verified,
         phone_verified=user_profile.phone_verified,
-        account_status=user_profile.account_status
+        account_status=user_profile.account_status,
+        admin_role=user_profile.admin_role,
+        admin_enabled=user_profile.admin_enabled
     )
 
 @api_router.post("/auth/login", response_model=Token)
