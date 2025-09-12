@@ -470,9 +470,10 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Fix ₦NaN Display Bug in PAYE Calculator"
-    - "Fix ₦NaN Display Bug in CIT Calculator"
-    - "Fix ₦NaN Display Bug in Bulk PAYE Calculator"
+    - "PDF Generator Utility"
+    - "Single PAYE Print Report (PDF)"
+    - "Bulk PAYE Print Report (PDF)"
+    - "CIT Print Report (PDF)"
   stuck_tasks:
     - "PDF Generator Utility"
     - "Single PAYE Print Report (PDF)"
