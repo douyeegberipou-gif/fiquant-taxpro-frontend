@@ -428,7 +428,7 @@ function AppContent() {
               {/* Logo Section */}
               <div className="relative w-20 h-20 flex items-center justify-center">
                 <img 
-                  src="https://customer-assets.emergentagent.com/job_fiquant-taxpro/artifacts/6no1wler_Fiquant%20Consult%20Logo%20%28Adj%29%203%20-%20Black.jpeg" 
+                  src="https://customer-assets.emergentagent.com/job_taxpro-ng/artifacts/i2zrdiwl_Fiquant%20Consult%20-%20Transparent%202.png" 
                   alt="Fiquant Consult Logo" 
                   className="w-20 h-20 object-contain"
                 />
