@@ -7,7 +7,7 @@ import { Label } from './ui/label';
 import { Button } from './ui/button';
 import { Alert, AlertDescription } from './ui/alert';
 
-export const LoginForm = ({ onSwitchToRegister, onClose }) => {
+export const LoginForm = ({ onSwitchToRegister, onClose, setShowTerms }) => {
   const { login } = useAuth();
   const [formData, setFormData] = useState({
     email_or_phone: '',
@@ -16,6 +16,7 @@ export const LoginForm = ({ onSwitchToRegister, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
