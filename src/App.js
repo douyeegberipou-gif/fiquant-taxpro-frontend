@@ -242,6 +242,7 @@ function AppContent() {
   };
 
   const calculateTax = async () => {
+    alert('calculateTax function called!'); // Debug alert
     console.log('calculateTax function called');
     console.log('taxInput:', taxInput);
     console.log('loading:', loading);
