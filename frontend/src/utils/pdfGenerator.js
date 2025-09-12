@@ -24,9 +24,14 @@ const addHeader = (doc, title) => {
   doc.setFillColor(0, 0, 0); // Black background
   doc.rect(0, 0, 220, 35, 'F');
   
-  // Add the Fiquant Consult logo - simplified approach
+  // Add the Fiquant Consult logo
   try {
-    // Create a simple graphic representation as logo
+    // Use the downloaded logo file
+    const logoPath = '/logo.png'; // Relative to public folder
+    doc.addImage(logoPath, 'PNG', 15, 8, 20, 20); // x, y, width, height
+  } catch (error) {
+    console.log('Logo loading failed, using fallback');
+    // Fallback: Create a simple graphic representation as logo
     doc.setFillColor(255, 215, 0); // Gold color
     doc.circle(25, 18, 8, 'F'); // Simple gold circle as logo placeholder
     
@@ -35,9 +40,6 @@ const addHeader = (doc, title) => {
     doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
     doc.text('F', 22, 22);
-    
-  } catch (error) {
-    console.log('Logo creation failed, using text-only header');
   }
   
   // Company name and branding
