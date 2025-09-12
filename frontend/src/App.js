@@ -333,7 +333,7 @@ function AppContent() {
     try {
       const numericInput = {};
       Object.keys(citInput).forEach(key => {
-        if (key === 'company_name') {
+        if (key === 'company_name' || key === 'year_of_assessment' || key === 'tax_year') {
           numericInput[key] = citInput[key];
         } else if (key === 'is_professional_service' || key === 'is_multinational') {
           numericInput[key] = citInput[key];
