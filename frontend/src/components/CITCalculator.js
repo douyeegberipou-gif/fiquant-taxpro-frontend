@@ -577,41 +577,10 @@ const CITCalculator = ({
             </div>
           </div>
 
-          {/* Terms and Conditions Acceptance */}
-          <div className="space-y-3 pt-4 border-t border-gray-200">
-            <div className="flex items-start space-x-2">
-              <input
-                type="checkbox"
-                id="terms-cit"
-                checked={citTermsAccepted}
-                onChange={(e) => setCitTermsAccepted(e.target.checked)}
-                className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-              />
-              <Label htmlFor="terms-cit" className="text-sm text-gray-700 cursor-pointer">
-                I accept Fiquant's{' '}
-                <button
-                  type="button"
-                  onClick={() => setShowTerms(true)}
-                  className="text-blue-600 hover:text-blue-800 underline"
-                >
-                  Terms and Conditions
-                </button>
-              </Label>
-            </div>
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-              <p className="text-xs text-amber-800 flex items-start">
-                <AlertTriangle className="h-4 w-4 mr-2 mt-0.5 flex-shrink-0" />
-                <span>
-                  <strong>Note:</strong> Users are solely responsible for the validity, accuracy and completeness of the financial information they supply.
-                </span>
-              </p>
-            </div>
-          </div>
-
           <div className="flex space-x-3 pt-4">
             <Button 
               onClick={calculateCitTax} 
-              disabled={citLoading || !citInput.company_name || !citInput.annual_turnover || !citInput.gross_income || !citTermsAccepted}
+              disabled={citLoading || !citInput.company_name || !citInput.annual_turnover || !citInput.gross_income}
               className="flex-1 bg-blue-600 hover:bg-blue-700"
             >
               {citLoading ? 'Calculating...' : 'Calculate CIT'}
