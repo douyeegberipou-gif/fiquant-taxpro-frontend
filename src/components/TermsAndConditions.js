@@ -24,7 +24,7 @@ export const TermsAndConditions = () => {
               <div>
                 <h4 className="font-semibold text-amber-800">Important Notice</h4>
                 <p className="text-amber-700 mt-1">
-                  These calculations are for guidance purposes only. Please consult a qualified tax professional for official tax advice and compliance.
+                  Users are solely responsible for the validity, accuracy and completeness of the financial information they supply.
                 </p>
               </div>
             </div>
