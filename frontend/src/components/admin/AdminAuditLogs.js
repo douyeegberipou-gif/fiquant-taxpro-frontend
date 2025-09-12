@@ -80,9 +80,11 @@ export const AdminAuditLogs = () => {
       } catch (parseError) {
         throw new Error('Invalid response format from server');
       }
-      setLogs(data.logs);
-      setTotalPages(data.total_pages);
-      setTotalLogs(data.total_count);
+
+      // Handle case where no logs exist yet
+      setLogs(data.logs || []);
+      setTotalPages(data.total_pages || 1);
+      setTotalLogs(data.total_count || 0);
     } catch (error) {
       console.error('Error loading audit logs:', error);
       setError(error.message);
