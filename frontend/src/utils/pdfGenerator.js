@@ -214,7 +214,7 @@ export const generateBulkPayeReport = (employees, totals) => {
     ['Total Annual Tax', formatCurrency(totals.totalTax * 12)]
   ];
   
-  doc.autoTable({
+  autoTable(doc, {
     head: [['Summary Item', 'Amount/Count']],
     body: summaryData,
     startY: yPos,
