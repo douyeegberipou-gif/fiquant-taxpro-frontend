@@ -36,6 +36,11 @@ function AppContent() {
   
   // Existing state variables
   const [taxInput, setTaxInput] = useState({
+    // Staff Information
+    staff_name: '',
+    month: '',
+    state_of_residence: '',
+    // Income Details
     basic_salary: '',
     transport_allowance: '',
     housing_allowance: '',
