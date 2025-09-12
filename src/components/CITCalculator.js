@@ -17,10 +17,7 @@ const CITCalculator = ({
   handleCitInputChange, 
   calculateCitTax, 
   resetCitForm,
-  formatCurrency,
-  citTermsAccepted,
-  setCitTermsAccepted,
-  setShowTerms
+  formatCurrency
 }) => {
   return (
     <div className="grid lg:grid-cols-2 gap-8">
