@@ -302,7 +302,7 @@ export const generateCitReport = (citInput, citResult) => {
     ['Total Income', formatCurrency(citResult.total_income)]
   ];
   
-  doc.autoTable({
+  autoTable(doc, {
     head: [['Income Component', 'Amount']],
     body: revenueData,
     startY: yPos,
