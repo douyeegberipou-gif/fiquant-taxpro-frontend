@@ -11,10 +11,7 @@ import { generateBulkPayeReport } from '../utils/pdfGenerator';
 
 const BulkPayrollCalculator = ({ 
   formatCurrency, 
-  calculatePayeTax, 
-  termsAccepted, 
-  setTermsAccepted, 
-  setShowTerms 
+  calculatePayeTax
 }) => {
   const [employees, setEmployees] = useState([
     {
