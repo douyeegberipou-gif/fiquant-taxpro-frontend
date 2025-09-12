@@ -19,15 +19,14 @@ const formatDate = () => {
 };
 
 // Add header with logo and branding
-const addHeader = async (doc, title) => {
+const addHeader = (doc, title) => {
   // Company header background
   doc.setFillColor(0, 0, 0); // Black background
   doc.rect(0, 0, 220, 35, 'F');
   
   // Add the Fiquant Consult logo - simplified approach
   try {
-    // For now, we'll use a text-based logo since the image loading is problematic
-    // We can add a simple graphic representation
+    // Create a simple graphic representation as logo
     doc.setFillColor(255, 215, 0); // Gold color
     doc.circle(25, 18, 8, 'F'); // Simple gold circle as logo placeholder
     
