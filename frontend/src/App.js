@@ -237,12 +237,18 @@ function AppContent() {
   };
 
   const calculateTax = async () => {
+    console.log('calculateTax function called');
+    console.log('taxInput:', taxInput);
+    console.log('loading:', loading);
+    console.log('basic_salary check:', !taxInput.basic_salary);
+    
     setLoading(true);
     try {
       const numericInput = {};
       Object.keys(taxInput).forEach(key => {
         numericInput[key] = parseFloat(taxInput[key]) || 0;
       });
+      console.log('numericInput:', numericInput);
 
       const response = await axios.post(`${API}/calculate-paye`, numericInput);
       // Backend returns an array, we need the first object
