@@ -176,12 +176,18 @@ export const RegisterForm = ({ onSwitchToLogin, onClose, onRegistrationSuccess }
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader className="text-center">
+        <div className="flex items-center justify-center mb-4">
+          <img 
+            src="https://customer-assets.emergentagent.com/job_taxpro-ng/artifacts/i2zrdiwl_Fiquant%20Consult%20-%20Transparent%202.png" 
+            alt="Fiquant Consult Logo" 
+            className="w-16 h-16 object-contain"
+          />
+        </div>
         <CardTitle className="flex items-center justify-center space-x-2">
-          <UserPlus className="h-5 w-5 text-green-600" />
           <span>Create Account</span>
         </CardTitle>
         <CardDescription>
-          Join Fiquant TaxPro for professional tax calculations
+          Join Fiquant Consult for professional tax calculations
         </CardDescription>
       </CardHeader>
       
