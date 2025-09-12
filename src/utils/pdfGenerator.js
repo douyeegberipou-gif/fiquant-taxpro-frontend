@@ -279,7 +279,7 @@ export const generateCitReport = (citInput, citResult) => {
     ['Multinational Enterprise', citInput.is_multinational ? 'Yes' : 'No']
   ];
   
-  doc.autoTable({
+  autoTable(doc, {
     head: [['Company Detail', 'Value']],
     body: companyData,
     startY: yPos,
