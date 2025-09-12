@@ -101,7 +101,7 @@ export const generatePayeReport = (taxInput, result) => {
     ['Monthly Gross Income', formatCurrency(result.monthly_gross_income)]
   ];
   
-  doc.autoTable({
+  autoTable(doc, {
     head: [['Income Component', 'Amount']],
     body: incomeData,
     startY: yPos,
