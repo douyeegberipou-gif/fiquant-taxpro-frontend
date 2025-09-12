@@ -242,7 +242,7 @@ export const generateBulkPayeReport = (employees, totals) => {
     formatCurrency(emp.result.monthly_net_income)
   ]);
   
-  doc.autoTable({
+  autoTable(doc, {
     head: [['#', 'Employee Name', 'TIN', 'Monthly Gross', 'Monthly Tax', 'Monthly Net']],
     body: employeeData,
     startY: yPos,
