@@ -2021,6 +2021,47 @@ async def setup_owner_admin():
         print(f"Error setting up owner admin: {e}")
         raise HTTPException(status_code=500, detail="Failed to setup owner admin")
 
+# Owner password reset (one-time use)
+@admin_router.post("/reset-owner-password")
+async def reset_owner_password():
+    """Reset password for the platform owner"""
+    try:
+        owner_email = "douyeegberipou@gmail.com"
+        new_password = "AdminPass123!"
+        
+        # Check if user exists
+        user_data = await db.users.find_one({"email": owner_email})
+        if not user_data:
+            raise HTTPException(status_code=404, detail="Owner account not found")
+        
+        # Hash the new password
+        password_hash = hash_password(new_password)
+        
+        # Update password
+        result = await db.users.update_one(
+            {"email": owner_email},
+            {"$set": {
+                "password_hash": password_hash,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+        
+        if result.matched_count > 0:
+            print(f"Password reset completed for {owner_email}")
+            return {
+                "message": f"Password reset completed for {owner_email}",
+                "new_password": new_password,
+                "note": "Please change this password after first login"
+            }
+        else:
+            raise HTTPException(status_code=404, detail="Failed to reset password")
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error resetting owner password: {e}")
+        raise HTTPException(status_code=500, detail="Failed to reset owner password")
+
 # Include admin router
 app.include_router(admin_router)
 
