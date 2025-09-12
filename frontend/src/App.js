@@ -301,7 +301,8 @@ function AppContent() {
   const calculatePayeTax = async (taxInput) => {
     try {
       const response = await axios.post(`${API}/calculate-paye`, taxInput);
-      return response.data;
+      // Backend returns an array, we need the first object
+      return response.data[0];
     } catch (error) {
       console.error('Error calculating PAYE tax:', error);
       throw error;
