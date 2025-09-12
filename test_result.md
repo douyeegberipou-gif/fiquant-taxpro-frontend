@@ -449,14 +449,9 @@ metadata:
 
 test_plan:
   current_focus:
-    - "User Registration API"
-    - "User Verification API"
-    - "User Login API"
-    - "Authentication Middleware"
-    - "User Registration Form"
-    - "User Verification Page"
-    - "User Login Form"
-    - "Authentication Context"
+    - "Fix ₦NaN Display Bug in PAYE Calculator"
+    - "Fix ₦NaN Display Bug in CIT Calculator"
+    - "Fix ₦NaN Display Bug in Bulk PAYE Calculator"
   stuck_tasks:
     - "PDF Generator Utility"
     - "Single PAYE Print Report (PDF)"
