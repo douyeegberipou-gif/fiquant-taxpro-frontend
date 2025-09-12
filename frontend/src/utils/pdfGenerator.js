@@ -22,36 +22,63 @@ const formatDate = () => {
 const addHeader = (doc, title) => {
   // Company header background
   doc.setFillColor(0, 0, 0); // Black background
-  doc.rect(0, 0, 220, 30, 'F');
+  doc.rect(0, 0, 220, 35, 'F');
   
-  // Company name - Fix spacing between Fiquant and TaxPro
+  // Add the new Fiquant Consult logo
+  try {
+    // Create a canvas to load and process the logo
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const logoImg = new Image();
+    logoImg.crossOrigin = "anonymous";
+    
+    // Set up the image load handler
+    logoImg.onload = function() {
+      // Set canvas size
+      canvas.width = logoImg.width;
+      canvas.height = logoImg.height;
+      
+      // Draw the image to canvas
+      ctx.drawImage(logoImg, 0, 0);
+      
+      // Convert to base64 and add to PDF
+      const imgData = canvas.toDataURL('image/png');
+      doc.addImage(imgData, 'PNG', 15, 8, 20, 20); // x, y, width, height
+    };
+    
+    // Load the logo
+    logoImg.src = 'https://customer-assets.emergentagent.com/job_taxpro-ng/artifacts/i2zrdiwl_Fiquant%20Consult%20-%20Transparent%202.png';
+    
+    // Fallback: Add logo directly (this might work with newer jsPDF versions)
+    doc.addImage('https://customer-assets.emergentagent.com/job_taxpro-ng/artifacts/i2zrdiwl_Fiquant%20Consult%20-%20Transparent%202.png', 'PNG', 15, 8, 20, 20);
+  } catch (error) {
+    console.log('Logo loading failed, using text-only header');
+  }
+  
+  // Company name and branding
   doc.setTextColor(255, 255, 255); // White text
   doc.setFontSize(22);
   doc.setFont('helvetica', 'bold');
-  doc.text('Fiquant', 20, 18);
-  
-  // TaxPro in gold color (approximation) - proper spacing
-  doc.setTextColor(255, 215, 0); // Gold color
-  doc.text('TaxPro', 70, 18);
+  doc.text('Fiquant Consult', 45, 18);
   
   // Subtitle
   doc.setFontSize(10);
-  doc.setTextColor(200, 200, 200);
-  doc.text('Nigerian Tax Calculator 2026 - Professional Edition', 20, 25);
+  doc.setTextColor(255, 215, 0); // Gold color for subtitle
+  doc.text('Nigerian Tax Calculator 2026 - Professional Edition', 45, 25);
   
   // Report title
   doc.setTextColor(0, 0, 0); // Black text
   doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
-  doc.text(title, 20, 45);
+  doc.text(title, 20, 50);
   
   // Generated date
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
-  doc.text(`Generated on: ${formatDate()}`, 20, 52);
+  doc.text(`Generated on: ${formatDate()}`, 20, 57);
   
   // Return the Y position where content should start
-  return 60;
+  return 65;
 };
 
 // Add footer
