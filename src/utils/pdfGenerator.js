@@ -1,10 +1,10 @@
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-// Utility function to format currency
+// Utility function to format currency for PDF (with proper encoding)
 const formatCurrency = (amount) => {
-  if (amount === null || amount === undefined || isNaN(amount)) return '₦0.00';
-  return `₦${parseFloat(amount).toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  if (amount === null || amount === undefined || isNaN(amount)) return '\u20A6 0.00'; // Unicode for Naira symbol
+  return `\u20A6 ${parseFloat(amount).toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 };
 
 // Utility function to format date
