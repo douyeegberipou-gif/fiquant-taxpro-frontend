@@ -262,7 +262,12 @@ function AppContent() {
     try {
       const numericInput = {};
       Object.keys(taxInput).forEach(key => {
-        numericInput[key] = parseFloat(taxInput[key]) || 0;
+        // Keep string fields as strings
+        if (key === 'staff_name' || key === 'month' || key === 'state_of_residence') {
+          numericInput[key] = taxInput[key];
+        } else {
+          numericInput[key] = parseFloat(taxInput[key]) || 0;
+        }
       });
       console.log('numericInput:', numericInput);
 
