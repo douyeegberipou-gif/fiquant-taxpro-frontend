@@ -1153,6 +1153,13 @@ function AppContent() {
                         <span>Print Report (PDF)</span>
                       </Button>
                     </div>
+                    
+                    {/* Results Disclaimer */}
+                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 mt-4">
+                      <p className="text-xs text-gray-600 text-center">
+                        * This computation is for guidance purposes only. Please consult a qualified tax professional to verify accuracy and ensure compliance.
+                      </p>
+                    </div>
                   </CardContent>
                 </Card>
               )}
