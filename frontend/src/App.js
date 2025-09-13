@@ -18,6 +18,7 @@ import { AdminDashboard } from './components/admin/AdminDashboard';
 import { AdminSetup } from './components/admin/AdminSetup';
 import TermsAndConditions from './components/TermsAndConditions';
 import TaxInformation from './components/TaxInformation';
+import EnhancedHistory from './components/EnhancedHistory';
 import { generatePayeReport, generateBulkPayeReport, generateCitReport } from './utils/pdfGenerator';
 import './App.css';
 
