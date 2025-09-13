@@ -608,7 +608,7 @@ function AppContent() {
         
         <Tabs defaultValue="calculator" className="space-y-6">
           <div className="relative">
-            <TabsList className="grid w-full grid-cols-9 bg-transparent border-0 p-0 h-auto">
+            <TabsList className="grid w-full grid-cols-8 bg-transparent border-0 p-0 h-auto">
               <TabsTrigger 
                 value="calculator" 
                 className="relative bg-gradient-to-r from-gray-200 to-gray-300 border-0 px-6 py-3 mx-0 text-gray-700 font-medium transform skew-x-12 hover:from-gray-300 hover:to-gray-400 data-[state=active]:from-white data-[state=active]:to-gray-100 data-[state=active]:text-black data-[state=active]:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
@@ -621,6 +621,7 @@ function AppContent() {
                 <Users className="h-4 w-4 transform -skew-x-12" />
                 <span className="transform -skew-x-12">PAYE</span>
               </TabsTrigger>
+              
               <TabsTrigger 
                 value="cit" 
                 className="relative bg-gradient-to-r from-gray-200 to-gray-300 border-0 px-6 py-3 mx-0 text-gray-700 font-medium transform skew-x-12 hover:from-gray-300 hover:to-gray-400 data-[state=active]:from-white data-[state=active]:to-gray-100 data-[state=active]:text-black data-[state=active]:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
@@ -633,55 +634,6 @@ function AppContent() {
                 <Building2 className="h-4 w-4 transform -skew-x-12" />
                 <span className="transform -skew-x-12">CIT</span>
               </TabsTrigger>
-              <TabsTrigger 
-                value="brackets" 
-                className="relative bg-gradient-to-r from-gray-200 to-gray-300 border-0 px-6 py-3 mx-0 text-gray-700 font-medium transform skew-x-12 hover:from-gray-300 hover:to-gray-400 data-[state=active]:from-white data-[state=active]:to-gray-100 data-[state=active]:text-black data-[state=active]:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
-                style={{
-                  clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
-                  marginRight: '-10px',
-                  zIndex: 3
-                }}
-              >
-                <TrendingUp className="h-4 w-4 transform -skew-x-12" />
-                <span className="transform -skew-x-12">Tax Info</span>
-              </TabsTrigger>
-              <TabsTrigger 
-                value="history" 
-                className="relative bg-gradient-to-r from-gray-200 to-gray-300 border-0 px-6 py-3 mx-0 text-gray-700 font-medium transform skew-x-12 hover:from-gray-300 hover:to-gray-400 data-[state=active]:from-white data-[state=active]:to-gray-100 data-[state=active]:text-black data-[state=active]:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
-                style={{
-                  clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
-                  marginRight: '-10px',
-                  zIndex: 4
-                }}
-              >
-                <FileText className="h-4 w-4 transform -skew-x-12" />
-                <span className="transform -skew-x-12">History</span>
-              </TabsTrigger>
-              {isAuthenticated() && (
-                <TabsTrigger 
-                  value="profile" 
-                  className="relative bg-gradient-to-r from-gray-200 to-gray-300 border-0 px-6 py-3 mx-0 text-gray-700 font-medium transform skew-x-12 hover:from-gray-300 hover:to-gray-400 data-[state=active]:from-white data-[state=active]:to-gray-100 data-[state=active]:text-black data-[state=active]:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
-                  style={{
-                    clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
-                    marginRight: '-10px',
-                    zIndex: 5
-                  }}
-                >
-                  <User className="h-4 w-4 transform -skew-x-12" />
-                  <span className="transform -skew-x-12">Profile</span>
-                </TabsTrigger>
-              )}
-              <TabsTrigger 
-                value="compliance" 
-                className="relative bg-gradient-to-r from-gray-200 to-gray-300 border-0 px-6 py-3 mx-0 text-gray-700 font-medium transform skew-x-12 hover:from-gray-300 hover:to-gray-400 data-[state=active]:from-white data-[state=active]:to-gray-100 data-[state=active]:text-black data-[state=active]:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
-                style={{
-                  clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
-                  zIndex: 6
-                }}
-              >
-                <Briefcase className="h-4 w-4 transform -skew-x-12" />
-                <span className="transform -skew-x-12">Compliance</span>
-              </TabsTrigger>
               
               <TabsTrigger 
                 value="vat" 
@@ -689,11 +641,24 @@ function AppContent() {
                 style={{
                   clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
                   marginRight: '-10px',
-                  zIndex: 7
+                  zIndex: 3
                 }}
               >
                 <Receipt className="h-4 w-4 transform -skew-x-12" />
                 <span className="transform -skew-x-12">VAT</span>
+              </TabsTrigger>
+              
+              <TabsTrigger 
+                value="cgt" 
+                className="relative bg-gradient-to-r from-gray-200 to-gray-300 border-0 px-6 py-3 mx-0 text-gray-700 font-medium transform skew-x-12 hover:from-gray-300 hover:to-gray-400 data-[state=active]:from-white data-[state=active]:to-gray-100 data-[state=active]:text-black data-[state=active]:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
+                style={{
+                  clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
+                  marginRight: '-10px',
+                  zIndex: 4
+                }}
+              >
+                <TrendingUp className="h-4 w-4 transform -skew-x-12" />
+                <span className="transform -skew-x-12">CGT</span>
               </TabsTrigger>
               
               <TabsTrigger 
@@ -702,7 +667,7 @@ function AppContent() {
                 style={{
                   clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
                   marginRight: '-10px',
-                  zIndex: 8
+                  zIndex: 5
                 }}
               >
                 <CreditCard className="h-4 w-4 transform -skew-x-12" />
@@ -710,16 +675,56 @@ function AppContent() {
               </TabsTrigger>
               
               <TabsTrigger 
-                value="cgt" 
+                value="brackets" 
                 className="relative bg-gradient-to-r from-gray-200 to-gray-300 border-0 px-6 py-3 mx-0 text-gray-700 font-medium transform skew-x-12 hover:from-gray-300 hover:to-gray-400 data-[state=active]:from-white data-[state=active]:to-gray-100 data-[state=active]:text-black data-[state=active]:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
                 style={{
                   clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
-                  zIndex: 9
+                  marginRight: '-10px',
+                  zIndex: 6
                 }}
               >
-                <TrendingUp className="h-4 w-4 transform -skew-x-12" />
-                <span className="transform -skew-x-12">CGT</span>
+                <Info className="h-4 w-4 transform -skew-x-12" />
+                <span className="transform -skew-x-12">Tax Info</span>
               </TabsTrigger>
+              
+              <TabsTrigger 
+                value="history" 
+                className="relative bg-gradient-to-r from-gray-200 to-gray-300 border-0 px-6 py-3 mx-0 text-gray-700 font-medium transform skew-x-12 hover:from-gray-300 hover:to-gray-400 data-[state=active]:from-white data-[state=active]:to-gray-100 data-[state=active]:text-black data-[state=active]:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
+                style={{
+                  clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
+                  marginRight: '-10px',
+                  zIndex: 7
+                }}
+              >
+                <FileText className="h-4 w-4 transform -skew-x-12" />
+                <span className="transform -skew-x-12">History</span>
+              </TabsTrigger>
+              
+              <TabsTrigger 
+                value="compliance" 
+                className="relative bg-gradient-to-r from-gray-200 to-gray-300 border-0 px-6 py-3 mx-0 text-gray-700 font-medium transform skew-x-12 hover:from-gray-300 hover:to-gray-400 data-[state=active]:from-white data-[state=active]:to-gray-100 data-[state=active]:text-black data-[state=active]:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
+                style={{
+                  clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
+                  zIndex: 8
+                }}
+              >
+                <Briefcase className="h-4 w-4 transform -skew-x-12" />
+                <span className="transform -skew-x-12">Compliance</span>
+              </TabsTrigger>
+              {isAuthenticated() && (
+                <TabsTrigger 
+                  value="profile" 
+                  className="relative bg-gradient-to-r from-gray-200 to-gray-300 border-0 px-6 py-3 mx-0 text-gray-700 font-medium transform skew-x-12 hover:from-gray-300 hover:to-gray-400 data-[state=active]:from-white data-[state=active]:to-gray-100 data-[state=active]:text-black data-[state=active]:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
+                  style={{
+                    clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
+                    marginRight: '-10px',
+                    zIndex: 9
+                  }}
+                >
+                  <User className="h-4 w-4 transform -skew-x-12" />
+                  <span className="transform -skew-x-12">Profile</span>
+                </TabsTrigger>
+              )}
             </TabsList>
           </div>
 
