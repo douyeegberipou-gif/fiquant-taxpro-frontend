@@ -509,7 +509,8 @@ metadata:
 
 test_plan:
   current_focus:
-    - "PAYE Calculator Button Functionality"
+    - "History Tab Enhancement - Remove WHT Information"
+    - "Interactive History Component Implementation"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
