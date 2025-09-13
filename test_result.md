@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "I need comprehensive debugging and testing of the PAYE calculator functionality in Fiquant TaxPro. There's a critical issue where the calculateTax function is not executing despite button clicks being registered. User reports all tax calculations showing ₦0 instead of computed results. I fixed the ₦NaN display bug by updating formatCurrency function. I fixed the API response handling (backend returns array, frontend needs response.data[0]). However, the calculateTax function is NOT being called at all despite button clicks."
+user_problem_statement: "Complete the History tab enhancement by replacing the existing static history display and removing all WHT (Withholding Tax) information. The tab should only display calculation history with interactive expand/collapse functionality and print options for better user experience."
 
 backend:
   - task: "Fix ₦NaN Display Bug in PAYE Calculator"
