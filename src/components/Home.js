@@ -133,8 +133,8 @@ const Home = ({ onNavigateToTab }) => {
               <div className="flex flex-col lg:flex-row items-center">
                 <div className="lg:w-1/3 h-64 lg:h-auto">
                   <img 
-                    src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/mk9a877s_Gemini_Generated_Image_k1jwlnk1jwlnk1jw%20%281%29.png" 
-                    alt="Corporate boardroom meeting"
+                    src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/za762luj_Gemini_Generated_Image_ge8ufyge8ufyge8u.png" 
+                    alt="Professional business presentation meeting"
                     className="w-full h-full object-cover"
                   />
                 </div>
