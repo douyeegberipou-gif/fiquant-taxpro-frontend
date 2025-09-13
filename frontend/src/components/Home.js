@@ -7,7 +7,7 @@ const Home = ({ onNavigateToTab }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-black via-gray-900 to-black text-white py-20 px-6 overflow-hidden"
+      <section className="relative bg-gradient-to-r from-black via-gray-900 to-black text-white py-12 sm:py-16 md:py-20 px-4 sm:px-6 overflow-hidden"
         style={{
           backgroundImage: `linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1752074177162-0560205be28a')`,
           backgroundSize: 'cover',
@@ -16,39 +16,39 @@ const Home = ({ onNavigateToTab }) => {
         <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/10 to-yellow-600/10"></div>
         <div className="relative max-w-7xl mx-auto text-center">
           {/* Logo and Brand */}
-          <div className="flex items-center justify-center mb-8">
+          <div className="flex flex-col sm:flex-row items-center justify-center mb-6 sm:mb-8">
             <img 
               src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/q9xbgjwy_Fiquant%20Consult%20-%20Transparent%20%28Logo%20Only%29.png" 
               alt="Fiquant Consult Logo" 
-              className="h-16 w-16 mr-4"
+              className="h-12 w-12 sm:h-16 sm:w-16 mb-3 sm:mb-0 sm:mr-4"
             />
-            <div className="text-left">
+            <div className="text-center sm:text-left">
               <img 
                 src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/aa6pe5bc_Fiquant%20Consult%20-%20Transparent%20%28Name%20only%29.png" 
                 alt="Fiquant Consult" 
-                className="h-12 mb-2"
+                className="h-8 sm:h-12 mb-2 mx-auto sm:mx-0"
               />
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
+              <h2 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
                 TaxPro 2026
               </h2>
             </div>
           </div>
 
-          <div className="flex items-center justify-center mb-6">
-            <AlertTriangle className="h-8 w-8 text-yellow-500 mr-3" />
-            <h1 className="text-4xl md:text-5xl font-bold leading-tight">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-center mb-4 sm:mb-6">
+            <AlertTriangle className="h-6 w-6 sm:h-8 sm:w-8 text-yellow-500 mb-2 sm:mb-0 sm:mr-3 mx-auto sm:mx-0" />
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-center sm:text-left">
               Did you know? Filing the wrong tax under Nigeria's 2026 laws can 
               <span className="text-yellow-400"> shut down your business</span> or land you in penalty debt.
             </h1>
           </div>
           
-          <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-6 sm:mb-8 max-w-4xl mx-auto leading-relaxed px-4 sm:px-0">
             Don't gamble with compliance. Be 100% sure of what you owe. Our all-in-one app calculates every tax correctly — instantly, free, and NTA-compliant.
           </p>
           
           <Button 
             onClick={() => onNavigateToTab('calculator')}
-            className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-black font-bold py-4 px-8 rounded-full text-lg transform hover:scale-105 transition-all duration-200 shadow-2xl"
+            className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-black font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-full text-base sm:text-lg transform hover:scale-105 transition-all duration-200 shadow-2xl mobile-button"
           >
             🚀 Check Your Taxes Now — Free & Accurate
           </Button>
@@ -56,8 +56,8 @@ const Home = ({ onNavigateToTab }) => {
       </section>
 
       {/* Tax Calculator Banners */}
-      <section className="py-16 px-6">
-        <div className="max-w-7xl mx-auto space-y-12">
+      <section className="py-12 sm:py-16 px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto space-y-8 sm:space-y-12">
           
           {/* PAYE Banner */}
           <Card className="bg-gradient-to-r from-emerald-50 to-green-50 border-emerald-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
