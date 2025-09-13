@@ -60,29 +60,29 @@ const Home = ({ onNavigateToTab }) => {
         <div className="max-w-7xl mx-auto space-y-8 sm:space-y-12">
           
           {/* PAYE Banner */}
-          <Card className="bg-gradient-to-r from-emerald-50 to-green-50 border-emerald-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
+          <Card className="bg-gradient-to-r from-emerald-50 to-green-50 border-emerald-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden mobile-card">
             <CardContent className="p-0">
               <div className="flex flex-col lg:flex-row items-center">
-                <div className="lg:w-1/3 h-64 lg:h-auto">
+                <div className="w-full lg:w-1/3 h-48 sm:h-56 lg:h-auto mobile-image">
                   <img 
                     src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/2s52tc3b_Gemini_Generated_Image_k1jwlnk1jwlnk1jw.png" 
                     alt="Professional team with arms folded"
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="flex-1 p-8">
+                <div className="flex-1 p-4 sm:p-6 lg:p-8 mobile-spacing">
                   <div className="flex items-start mb-4">
-                    <Users className="h-8 w-8 text-emerald-600 mr-3 mt-1" />
+                    <Users className="h-6 w-6 sm:h-8 sm:w-8 text-emerald-600 mr-2 sm:mr-3 mt-1 flex-shrink-0" />
                     <div>
-                      <h2 className="text-3xl font-bold text-gray-900 mb-3">
+                      <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-3">
                         👩🏽‍💼 Stop Overpaying or Underpaying PAYE
                       </h2>
-                      <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                      <p className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed mb-4 sm:mb-6">
                         <strong>Did you know?</strong> Wrong PAYE deductions can block your access to loans, mortgages, and government services. Our tool gives you the exact figure — including pension, NHF, life insurance, and reliefs — so you never lose out.
                       </p>
                       <Button 
                         onClick={() => onNavigateToTab('calculator')}
-                        className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                        className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-lg text-sm sm:text-base lg:text-lg shadow-lg hover:shadow-xl transition-all duration-200 mobile-button w-full sm:w-auto"
                       >
                         ✨ Calculate Your NTA-Compliant PAYE Free Now!
                       </Button>
