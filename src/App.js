@@ -1346,6 +1346,21 @@ function AppContent() {
               <UserProfile />
             </TabsContent>
           )}
+
+          {/* VAT Calculator Tab */}
+          <TabsContent value="vat">
+            <VATCalculator formatCurrency={formatCurrency} />
+          </TabsContent>
+
+          {/* Payment Processing Calculator Tab */}
+          <TabsContent value="payment">
+            <PaymentProcessingCalculator formatCurrency={formatCurrency} />
+          </TabsContent>
+
+          {/* CGT Calculator Tab */}
+          <TabsContent value="cgt">
+            <CGTCalculator formatCurrency={formatCurrency} />
+          </TabsContent>
         </Tabs>
       </div>
       
