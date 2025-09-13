@@ -608,7 +608,7 @@ function AppContent() {
           </Alert>
         )}
         
-        <Tabs defaultValue="home" className="space-y-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <div className="relative">
             <TabsList className="grid w-full grid-cols-9 bg-transparent border-0 p-0 h-auto">
               <TabsTrigger 
