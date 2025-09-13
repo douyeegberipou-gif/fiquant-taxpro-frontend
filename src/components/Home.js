@@ -115,7 +115,7 @@ const Home = ({ onNavigateToTab }) => {
                         <strong>Did you know?</strong> Failure to remit correct PAYE for staff can attract penalties of up to ₦500,000 per month and destroy staff trust. Upload your payroll and let our Bulk PAYE engine compute everything instantly — safe, clean, compliant.
                       </p>
                       <Button 
-                        onClick={() => onNavigateToTab('bulk')}
+                        onClick={() => onNavigateToTab('calculator')}
                         className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-lg hover:shadow-xl transition-all duration-200"
                       >
                         💼 Run Bulk PAYE for Your Team — Free & Compliant!
