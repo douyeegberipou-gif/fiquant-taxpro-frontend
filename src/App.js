@@ -608,7 +608,7 @@ function AppContent() {
         
         <Tabs defaultValue="calculator" className="space-y-6">
           <div className="relative">
-            <TabsList className="grid w-full grid-cols-6 bg-transparent border-0 p-0 h-auto">
+            <TabsList className="grid w-full grid-cols-9 bg-transparent border-0 p-0 h-auto">
               <TabsTrigger 
                 value="calculator" 
                 className="relative bg-gradient-to-r from-gray-200 to-gray-300 border-0 px-6 py-3 mx-0 text-gray-700 font-medium transform skew-x-12 hover:from-gray-300 hover:to-gray-400 data-[state=active]:from-white data-[state=active]:to-gray-100 data-[state=active]:text-black data-[state=active]:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
