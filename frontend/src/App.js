@@ -642,7 +642,7 @@ function AppContent() {
                 style={{
                   clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
                   marginRight: '-10px',
-                  zIndex: 2
+                  zIndex: 3
                 }}
               >
                 <Building2 className="h-4 w-4 transform -skew-x-12" />
@@ -655,7 +655,7 @@ function AppContent() {
                 style={{
                   clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
                   marginRight: '-10px',
-                  zIndex: 3
+                  zIndex: 4
                 }}
               >
                 <Receipt className="h-4 w-4 transform -skew-x-12" />
@@ -668,7 +668,7 @@ function AppContent() {
                 style={{
                   clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
                   marginRight: '-10px',
-                  zIndex: 4
+                  zIndex: 5
                 }}
               >
                 <TrendingUp className="h-4 w-4 transform -skew-x-12" />
@@ -681,7 +681,7 @@ function AppContent() {
                 style={{
                   clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
                   marginRight: '-10px',
-                  zIndex: 5
+                  zIndex: 6
                 }}
               >
                 <CreditCard className="h-4 w-4 transform -skew-x-12" />
@@ -694,7 +694,7 @@ function AppContent() {
                 style={{
                   clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
                   marginRight: '-10px',
-                  zIndex: 6
+                  zIndex: 7
                 }}
               >
                 <Info className="h-4 w-4 transform -skew-x-12" />
@@ -707,7 +707,7 @@ function AppContent() {
                 style={{
                   clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
                   marginRight: '-10px',
-                  zIndex: 7
+                  zIndex: 8
                 }}
               >
                 <FileText className="h-4 w-4 transform -skew-x-12" />
@@ -719,7 +719,7 @@ function AppContent() {
                 className="relative bg-gradient-to-r from-gray-200 to-gray-300 border-0 px-6 py-3 mx-0 text-gray-700 font-medium transform skew-x-12 hover:from-gray-300 hover:to-gray-400 data-[state=active]:from-white data-[state=active]:to-gray-100 data-[state=active]:text-black data-[state=active]:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
                 style={{
                   clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
-                  zIndex: 8
+                  zIndex: 9
                 }}
               >
                 <Briefcase className="h-4 w-4 transform -skew-x-12" />
