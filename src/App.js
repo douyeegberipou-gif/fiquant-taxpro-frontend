@@ -680,7 +680,45 @@ function AppContent() {
                 }}
               >
                 <Briefcase className="h-4 w-4 transform -skew-x-12" />
-                <span className="transform -skew-x-12">Compliance</span>
+                <span className="transform -skew-x-12">Tax Info</span>
+              </TabsTrigger>
+              
+              <TabsTrigger 
+                value="vat" 
+                className="relative bg-gradient-to-r from-gray-200 to-gray-300 border-0 px-6 py-3 mx-0 text-gray-700 font-medium transform skew-x-12 hover:from-gray-300 hover:to-gray-400 data-[state=active]:from-white data-[state=active]:to-gray-100 data-[state=active]:text-black data-[state=active]:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
+                style={{
+                  clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
+                  marginRight: '-10px',
+                  zIndex: 7
+                }}
+              >
+                <Receipt className="h-4 w-4 transform -skew-x-12" />
+                <span className="transform -skew-x-12">VAT</span>
+              </TabsTrigger>
+              
+              <TabsTrigger 
+                value="payment" 
+                className="relative bg-gradient-to-r from-gray-200 to-gray-300 border-0 px-6 py-3 mx-0 text-gray-700 font-medium transform skew-x-12 hover:from-gray-300 hover:to-gray-400 data-[state=active]:from-white data-[state=active]:to-gray-100 data-[state=active]:text-black data-[state=active]:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
+                style={{
+                  clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
+                  marginRight: '-10px',
+                  zIndex: 8
+                }}
+              >
+                <CreditCard className="h-4 w-4 transform -skew-x-12" />
+                <span className="transform -skew-x-12">Payments</span>
+              </TabsTrigger>
+              
+              <TabsTrigger 
+                value="cgt" 
+                className="relative bg-gradient-to-r from-gray-200 to-gray-300 border-0 px-6 py-3 mx-0 text-gray-700 font-medium transform skew-x-12 hover:from-gray-300 hover:to-gray-400 data-[state=active]:from-white data-[state=active]:to-gray-100 data-[state=active]:text-black data-[state=active]:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
+                style={{
+                  clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
+                  zIndex: 9
+                }}
+              >
+                <TrendingUp className="h-4 w-4 transform -skew-x-12" />
+                <span className="transform -skew-x-12">CGT</span>
               </TabsTrigger>
             </TabsList>
           </div>
