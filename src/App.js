@@ -732,7 +732,7 @@ function AppContent() {
                   style={{
                     clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
                     marginRight: '-10px',
-                    zIndex: 9
+                    zIndex: 10
                   }}
                 >
                   <User className="h-4 w-4 transform -skew-x-12" />
@@ -741,6 +741,17 @@ function AppContent() {
               )}
             </TabsList>
           </div>
+
+          {/* Home Tab */}
+          <TabsContent value="home">
+            <Home onNavigateToTab={(tabValue) => {
+              // Find the tab trigger and click it
+              const tabTrigger = document.querySelector(`[value="${tabValue}"]`);
+              if (tabTrigger) {
+                tabTrigger.click();
+              }
+            }} />
+          </TabsContent>
 
           {/* PAYE Calculator Tab */}
           <TabsContent value="calculator" className="space-y-6">
