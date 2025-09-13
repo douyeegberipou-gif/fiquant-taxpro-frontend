@@ -94,29 +94,29 @@ const Home = ({ onNavigateToTab }) => {
           </Card>
 
           {/* Bulk PAYE Banner */}
-          <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
+          <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden mobile-card">
             <CardContent className="p-0">
               <div className="flex flex-col lg:flex-row-reverse items-center">
-                <div className="lg:w-1/3 h-64 lg:h-auto">
+                <div className="w-full lg:w-1/3 h-48 sm:h-56 lg:h-auto mobile-image">
                   <img 
                     src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/d1v076l9_Gemini_Generated_Image_k1jwlnk1jwlnk1jw%20%282%29.png" 
                     alt="Colleagues working over laptop"
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="flex-1 p-8">
+                <div className="flex-1 p-4 sm:p-6 lg:p-8 mobile-spacing">
                   <div className="flex items-start mb-4">
-                    <Building2 className="h-8 w-8 text-blue-600 mr-3 mt-1" />
+                    <Building2 className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600 mr-2 sm:mr-3 mt-1 flex-shrink-0" />
                     <div>
-                      <h2 className="text-3xl font-bold text-gray-900 mb-3">
+                      <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-3">
                         🏢 Payroll Mistakes = Heavy Fines
                       </h2>
-                      <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                      <p className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed mb-4 sm:mb-6">
                         <strong>Did you know?</strong> Failure to remit correct PAYE for staff can attract penalties of up to ₦500,000 per month and destroy staff trust. Upload your payroll and let our Bulk PAYE engine compute everything instantly — safe, clean, compliant.
                       </p>
                       <Button 
                         onClick={() => onNavigateToTab('calculator', { mode: 'bulk' })}
-                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-lg text-sm sm:text-base lg:text-lg shadow-lg hover:shadow-xl transition-all duration-200 mobile-button w-full sm:w-auto"
                       >
                         💼 Run Bulk PAYE for Your Team — Free & Compliant!
                       </Button>
@@ -128,29 +128,29 @@ const Home = ({ onNavigateToTab }) => {
           </Card>
 
           {/* CIT Banner */}
-          <Card className="bg-gradient-to-r from-purple-50 to-violet-50 border-purple-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
+          <Card className="bg-gradient-to-r from-purple-50 to-violet-50 border-purple-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden mobile-card">
             <CardContent className="p-0">
               <div className="flex flex-col lg:flex-row items-center">
-                <div className="lg:w-1/3 h-64 lg:h-auto">
+                <div className="w-full lg:w-1/3 h-48 sm:h-56 lg:h-auto mobile-image">
                   <img 
                     src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/za762luj_Gemini_Generated_Image_ge8ufyge8ufyge8u.png" 
                     alt="Professional business presentation meeting"
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="flex-1 p-8">
+                <div className="flex-1 p-4 sm:p-6 lg:p-8 mobile-spacing">
                   <div className="flex items-start mb-4">
-                    <Calculator className="h-8 w-8 text-purple-600 mr-3 mt-1" />
+                    <Calculator className="h-6 w-6 sm:h-8 sm:w-8 text-purple-600 mr-2 sm:mr-3 mt-1 flex-shrink-0" />
                     <div>
-                      <h2 className="text-3xl font-bold text-gray-900 mb-3">
+                      <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-3">
                         📑 Don't Let Wrong CIT Shut Down Your Company
                       </h2>
-                      <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                      <p className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed mb-4 sm:mb-6">
                         <strong>Did you know?</strong> Underpaying CIT attracts 25% fines, compounded interest, and even business closure orders. Don't be a victim. Get it right every time with our instant calculator.
                       </p>
                       <Button 
                         onClick={() => onNavigateToTab('cit')}
-                        className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                        className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-lg text-sm sm:text-base lg:text-lg shadow-lg hover:shadow-xl transition-all duration-200 mobile-button w-full sm:w-auto"
                       >
                         📊 Calculate Your NTA-Compliant CIT Free Now!
                       </Button>
@@ -162,29 +162,29 @@ const Home = ({ onNavigateToTab }) => {
           </Card>
 
           {/* VAT Banner */}
-          <Card className="bg-gradient-to-r from-orange-50 to-red-50 border-orange-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
+          <Card className="bg-gradient-to-r from-orange-50 to-red-50 border-orange-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden mobile-card">
             <CardContent className="p-0">
               <div className="flex flex-col lg:flex-row-reverse items-center">
-                <div className="lg:w-1/3 h-64 lg:h-auto">
+                <div className="w-full lg:w-1/3 h-48 sm:h-56 lg:h-auto mobile-image">
                   <img 
                     src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/iakm5flx_Gemini_Generated_Image_k1jwlnk1jwlnk1jw%20%283%29.png" 
                     alt="Business handshake"
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="flex-1 p-8">
+                <div className="flex-1 p-4 sm:p-6 lg:p-8 mobile-spacing">
                   <div className="flex items-start mb-4">
-                    <Receipt className="h-8 w-8 text-orange-600 mr-3 mt-1" />
+                    <Receipt className="h-6 w-6 sm:h-8 sm:w-8 text-orange-600 mr-2 sm:mr-3 mt-1 flex-shrink-0" />
                     <div>
-                      <h2 className="text-3xl font-bold text-gray-900 mb-3">
+                      <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-3">
                         💸 VAT Errors Can Cripple Your Cash Flow
                       </h2>
-                      <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                      <p className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed mb-4 sm:mb-6">
                         <strong>Did you know?</strong> Incorrect VAT filing can trigger back-duty audits, double tax payments, and fines of up to ₦50,000 per return. Our VAT tool makes sure your invoices, input, and output VAT are perfect.
                       </p>
                       <Button 
                         onClick={() => onNavigateToTab('vat')}
-                        className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                        className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-lg text-sm sm:text-base lg:text-lg shadow-lg hover:shadow-xl transition-all duration-200 mobile-button w-full sm:w-auto"
                       >
                         🧾 Check Your VAT Now — Stay 100% Compliant!
                       </Button>
@@ -196,29 +196,29 @@ const Home = ({ onNavigateToTab }) => {
           </Card>
 
           {/* CGT Banner */}
-          <Card className="bg-gradient-to-r from-green-50 to-teal-50 border-green-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
+          <Card className="bg-gradient-to-r from-green-50 to-teal-50 border-green-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden mobile-card">
             <CardContent className="p-0">
               <div className="flex flex-col lg:flex-row items-center">
-                <div className="lg:w-1/3 h-64 lg:h-auto">
+                <div className="w-full lg:w-1/3 h-48 sm:h-56 lg:h-auto mobile-image">
                   <img 
                     src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/3l8sul24_Gemini_Generated_Image_bhxj3sbhxj3sbhxj.png" 
                     alt="Property sale consultation"
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="flex-1 p-8">
+                <div className="flex-1 p-4 sm:p-6 lg:p-8 mobile-spacing">
                   <div className="flex items-start mb-4">
-                    <TrendingUp className="h-8 w-8 text-green-600 mr-3 mt-1" />
+                    <TrendingUp className="h-6 w-6 sm:h-8 sm:w-8 text-green-600 mr-2 sm:mr-3 mt-1 flex-shrink-0" />
                     <div>
-                      <h2 className="text-3xl font-bold text-gray-900 mb-3">
+                      <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-3">
                         🏠 Selling Assets? Don't Lose Profits to CGT
                       </h2>
-                      <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                      <p className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed mb-4 sm:mb-6">
                         <strong>Did you know?</strong> Not reporting disposals correctly can lead to 10% CGT plus penalties and forfeiture risks. Our CGT calculator shows exactly what you owe so you only pay what's fair — nothing more, nothing less.
                       </p>
                       <Button 
                         onClick={() => onNavigateToTab('cgt')}
-                        className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                        className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-lg text-sm sm:text-base lg:text-lg shadow-lg hover:shadow-xl transition-all duration-200 mobile-button w-full sm:w-auto"
                       >
                         💰 Calculate Your NTA-Compliant CGT Free Now!
                       </Button>
@@ -230,29 +230,29 @@ const Home = ({ onNavigateToTab }) => {
           </Card>
 
           {/* Payment Calculator Banner */}
-          <Card className="bg-gradient-to-r from-pink-50 to-rose-50 border-pink-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
+          <Card className="bg-gradient-to-r from-pink-50 to-rose-50 border-pink-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden mobile-card">
             <CardContent className="p-0">
               <div className="flex flex-col lg:flex-row-reverse items-center">
-                <div className="lg:w-1/3 h-64 lg:h-auto">
+                <div className="w-full lg:w-1/3 h-48 sm:h-56 lg:h-auto mobile-image">
                   <img 
                     src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/s7a291fy_Gemini_Generated_Image_rgk3prgk3prgk3pr.png" 
                     alt="Female colleague assisting with computer work"
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="flex-1 p-8">
+                <div className="flex-1 p-4 sm:p-6 lg:p-8 mobile-spacing">
                   <div className="flex items-start mb-4">
-                    <CreditCard className="h-8 w-8 text-pink-600 mr-3 mt-1" />
+                    <CreditCard className="h-6 w-6 sm:h-8 sm:w-8 text-pink-600 mr-2 sm:mr-3 mt-1 flex-shrink-0" />
                     <div>
-                      <h2 className="text-3xl font-bold text-gray-900 mb-3">
+                      <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-3">
                         🤝 Stop Overpaying Vendors. Stop Losing to Errors.
                       </h2>
-                      <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                      <p className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed mb-4 sm:mb-6">
                         <strong>Did you know?</strong> Forgetting to deduct WHT or VAT before paying vendors can cost you twice — once to FIRS, once to your supplier. Our payment calculator ensures you deduct right and pay net correctly every time.
                       </p>
                       <Button 
                         onClick={() => onNavigateToTab('payment')}
-                        className="bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                        className="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-lg text-sm sm:text-base lg:text-lg shadow-lg hover:shadow-xl transition-all duration-200 mobile-button w-full sm:w-auto"
                       >
                         ✔️ Calculate Correct Net-to-Pay — Free & Instant!
                       </Button>
