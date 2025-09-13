@@ -65,8 +65,8 @@ const Home = ({ onNavigateToTab }) => {
               <div className="flex flex-col lg:flex-row items-center">
                 <div className="lg:w-1/3 h-64 lg:h-auto">
                   <img 
-                    src="https://images.unsplash.com/photo-1739298061757-7a3339cee982" 
-                    alt="Professional team"
+                    src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/2s52tc3b_Gemini_Generated_Image_k1jwlnk1jwlnk1jw.png" 
+                    alt="Professional team with arms folded"
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -99,8 +99,8 @@ const Home = ({ onNavigateToTab }) => {
               <div className="flex flex-col lg:flex-row-reverse items-center">
                 <div className="lg:w-1/3 h-64 lg:h-auto">
                   <img 
-                    src="https://images.unsplash.com/photo-1606836591695-4d58a73eba1e" 
-                    alt="Business meeting"
+                    src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/d1v076l9_Gemini_Generated_Image_k1jwlnk1jwlnk1jw%20%282%29.png" 
+                    alt="Colleagues working over laptop"
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -133,8 +133,8 @@ const Home = ({ onNavigateToTab }) => {
               <div className="flex flex-col lg:flex-row items-center">
                 <div className="lg:w-1/3 h-64 lg:h-auto">
                   <img 
-                    src="https://images.unsplash.com/photo-1739287088635-444554e7ac0e" 
-                    alt="Business professionals"
+                    src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/3l8sul24_Gemini_Generated_Image_bhxj3sbhxj3sbhxj.png" 
+                    alt="Business meeting with sale sign"
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -167,8 +167,8 @@ const Home = ({ onNavigateToTab }) => {
               <div className="flex flex-col lg:flex-row-reverse items-center">
                 <div className="lg:w-1/3 h-64 lg:h-auto">
                   <img 
-                    src="https://images.unsplash.com/photo-1709715357520-5e1047a2b691" 
-                    alt="Team collaboration"
+                    src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/iakm5flx_Gemini_Generated_Image_k1jwlnk1jwlnk1jw%20%283%29.png" 
+                    alt="Business handshake"
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -201,8 +201,8 @@ const Home = ({ onNavigateToTab }) => {
               <div className="flex flex-col lg:flex-row items-center">
                 <div className="lg:w-1/3 h-64 lg:h-auto">
                   <img 
-                    src="https://images.unsplash.com/photo-1603202662706-62ead3176b8f" 
-                    alt="Professional consultation"
+                    src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/3l8sul24_Gemini_Generated_Image_bhxj3sbhxj3sbhxj.png" 
+                    alt="Property sale consultation"
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -235,8 +235,8 @@ const Home = ({ onNavigateToTab }) => {
               <div className="flex flex-col lg:flex-row-reverse items-center">
                 <div className="lg:w-1/3 h-64 lg:h-auto">
                   <img 
-                    src="https://images.unsplash.com/photo-1616587656977-ac36a5a430bc" 
-                    alt="Business meeting"
+                    src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/s7a291fy_Gemini_Generated_Image_rgk3prgk3prgk3pr.png" 
+                    alt="Female colleague assisting with computer work"
                     className="w-full h-full object-cover"
                   />
                 </div>
