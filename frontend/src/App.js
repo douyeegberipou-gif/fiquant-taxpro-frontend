@@ -35,6 +35,7 @@ function AppContent() {
   const [verificationStatus, setVerificationStatus] = useState(null); // 'verifying', 'success', 'error'
   const [verificationMessage, setVerificationMessage] = useState('');
   const [showAdminDashboard, setShowAdminDashboard] = useState(false);
+  const [activeTab, setActiveTab] = useState('home');
   
   // Check for admin setup route
   if (window.location.pathname === '/admin-setup') {
