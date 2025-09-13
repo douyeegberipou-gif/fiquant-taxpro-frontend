@@ -424,3 +424,378 @@ export const generateCitReport = (citInput, citResult) => {
   // Save the PDF
   doc.save(`CIT_Tax_Report_${citInput.company_name || 'Company'}_${new Date().toISOString().split('T')[0]}.pdf`);
 };
+
+// VAT Report Generator
+export const generateVatReport = (vatInput, vatResult) => {
+  const doc = new jsPDF();
+  
+  addHeader(doc, 'VAT Calculation Report');
+  
+  let yPos = 55;
+  
+  // Report Title
+  doc.setFontSize(18);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(0, 0, 0);
+  doc.text('Value Added Tax (VAT) Report', 20, yPos);
+  yPos += 10;
+  
+  // Generated date
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(100, 100, 100);
+  doc.text(`Generated on: ${formatDate()}`, 20, yPos);
+  yPos += 20;
+  
+  // Company Information
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(0, 0, 0);
+  doc.text('Company Information', 20, yPos);
+  yPos += 10;
+  
+  const companyData = [
+    ['Company Name', vatInput.company_name],
+    ['Reporting Month', vatInput.month],
+    ['VAT Registration Status', vatInput.is_registered_business ? 'Registered' : 'Not Registered'],
+    ['Report Date', formatDate()]
+  ];
+  
+  autoTable(doc, {
+    head: [['Company Detail', 'Value']],
+    body: companyData,
+    startY: yPos,
+    theme: 'grid',
+    headStyles: { fillColor: [0, 0, 0], textColor: [255, 255, 255] },
+    margin: { left: 20, right: 20 }
+  });
+  
+  yPos = doc.lastAutoTable.finalY + 15;
+  
+  // Sales Breakdown
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Sales Breakdown', 20, yPos);
+  yPos += 10;
+  
+  const salesData = [
+    ['Total Sales', formatCurrency(vatResult.total_sales)],
+    ['VAT Exempt Sales', formatCurrency(vatResult.vat_exempt_sales)],
+    ['Zero-Rated Sales (Exports)', formatCurrency(vatResult.zero_rated_sales)],
+    ['Taxable Sales', formatCurrency(vatResult.taxable_sales)],
+    ['VAT Rate Applied', `${vatResult.vat_rate}%`]
+  ];
+  
+  autoTable(doc, {
+    head: [['Sales Component', 'Amount']],
+    body: salesData,
+    startY: yPos,
+    theme: 'grid',
+    headStyles: { fillColor: [34, 197, 94], textColor: [255, 255, 255] },
+    margin: { left: 20, right: 20 }
+  });
+  
+  yPos = doc.lastAutoTable.finalY + 15;
+  
+  // VAT Calculation Summary
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('VAT Calculation Summary', 20, yPos);
+  yPos += 10;
+  
+  const vatSummaryData = [
+    ['Output VAT (VAT Collected)', formatCurrency(vatResult.output_vat)],
+    ['Input VAT (VAT Recoverable)', formatCurrency(vatResult.input_vat_recoverable)],
+    [vatResult.is_refund ? 'VAT Refund Due' : 'Net VAT Payable', formatCurrency(Math.abs(vatResult.net_vat_payable))],
+    ['Position', vatResult.is_refund ? 'Refund Position' : 'Payable Position']
+  ];
+  
+  autoTable(doc, {
+    head: [['VAT Component', 'Amount']],
+    body: vatSummaryData,
+    startY: yPos,
+    theme: 'grid',
+    headStyles: { fillColor: [59, 130, 246], textColor: [255, 255, 255] },
+    margin: { left: 20, right: 20 }
+  });
+  
+  addFooter(doc);
+  
+  // Save the PDF
+  doc.save(`VAT_Report_${vatInput.company_name || 'Company'}_${vatInput.month || 'Report'}_${new Date().toISOString().split('T')[0]}.pdf`);
+};
+
+// Payment Processing Report Generator
+export const generatePaymentProcessingReport = (paymentInput, paymentResult) => {
+  const doc = new jsPDF();
+  
+  addHeader(doc, 'Payment Processing Report');
+  
+  let yPos = 55;
+  
+  // Report Title
+  doc.setFontSize(18);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(0, 0, 0);
+  doc.text('Payment Processing & Tax Deduction Report', 20, yPos);
+  yPos += 10;
+  
+  // Generated date
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(100, 100, 100);
+  doc.text(`Generated on: ${formatDate()}`, 20, yPos);
+  yPos += 20;
+  
+  // Payment Information
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(0, 0, 0);
+  doc.text('Payment Information', 20, yPos);
+  yPos += 10;
+  
+  const paymentData = [
+    ['Payee Name/Company', paymentResult.payee_name],
+    ['Contract Amount', formatCurrency(paymentResult.contract_amount)],
+    ['Transaction Type', paymentResult.transaction_type],
+    ['Payee Status', paymentResult.is_resident ? 'Resident' : 'Non-Resident'],
+    ['Processing Month', paymentResult.month]
+  ];
+  
+  autoTable(doc, {
+    head: [['Payment Detail', 'Value']],
+    body: paymentData,
+    startY: yPos,
+    theme: 'grid',
+    headStyles: { fillColor: [0, 0, 0], textColor: [255, 255, 255] },
+    margin: { left: 20, right: 20 }
+  });
+  
+  yPos = doc.lastAutoTable.finalY + 15;
+  
+  // Tax Calculations
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Tax Calculations', 20, yPos);
+  yPos += 10;
+  
+  const taxData = [
+    ['Amount Before VAT', formatCurrency(paymentResult.amount_before_vat)],
+    ['VAT Applicable', paymentResult.vat_applicable ? 'Yes' : 'No'],
+    ['VAT Rate', `${paymentResult.vat_rate}%`],
+    ['VAT Amount', formatCurrency(paymentResult.vat_amount)],
+    ['WHT Rate', `${paymentResult.wht_rate}%`],
+    ['WHT Amount', formatCurrency(paymentResult.wht_amount)]
+  ];
+  
+  autoTable(doc, {
+    head: [['Tax Component', 'Amount/Rate']],
+    body: taxData,
+    startY: yPos,
+    theme: 'grid',
+    headStyles: { fillColor: [168, 85, 247], textColor: [255, 255, 255] },
+    margin: { left: 20, right: 20 }
+  });
+  
+  yPos = doc.lastAutoTable.finalY + 15;
+  
+  // Payment Summary
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Payment Summary', 20, yPos);
+  yPos += 10;
+  
+  const summaryData = [
+    ['Gross Contract Amount', formatCurrency(paymentResult.contract_amount)],
+    ['Less: VAT', `-${formatCurrency(paymentResult.vat_amount)}`],
+    ['Less: WHT', `-${formatCurrency(paymentResult.wht_amount)}`],
+    ['Net Payment to Payee', formatCurrency(paymentResult.net_payment)],
+    ['Total Government Remittance', formatCurrency(paymentResult.total_government_remittance)]
+  ];
+  
+  autoTable(doc, {
+    head: [['Summary Item', 'Amount']],
+    body: summaryData,
+    startY: yPos,
+    theme: 'grid',
+    headStyles: { fillColor: [59, 130, 246], textColor: [255, 255, 255] },
+    margin: { left: 20, right: 20 }
+  });
+  
+  yPos = doc.lastAutoTable.finalY + 15;
+  
+  // Remittance Deadlines
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Government Remittance Deadlines', 20, yPos);
+  yPos += 10;
+  
+  const deadlineData = [
+    ['VAT Remittance', paymentResult.vat_due_date],
+    ['WHT Remittance (FIRS)', paymentResult.wht_due_date],
+    ['WHT Remittance (SIRS)', paymentResult.sirs_due_date]
+  ];
+  
+  autoTable(doc, {
+    head: [['Tax Type', 'Due Date']],
+    body: deadlineData,
+    startY: yPos,
+    theme: 'grid',
+    headStyles: { fillColor: [239, 68, 68], textColor: [255, 255, 255] },
+    margin: { left: 20, right: 20 }
+  });
+  
+  addFooter(doc);
+  
+  // Save the PDF
+  doc.save(`Payment_Processing_Report_${paymentResult.payee_name || 'Payee'}_${paymentResult.month || 'Report'}_${new Date().toISOString().split('T')[0]}.pdf`);
+};
+
+// CGT Report Generator
+export const generateCgtReport = (cgtInput, cgtResult) => {
+  const doc = new jsPDF();
+  
+  addHeader(doc, 'Capital Gains Tax Report');
+  
+  let yPos = 55;
+  
+  // Report Title
+  doc.setFontSize(18);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(0, 0, 0);
+  doc.text('Capital Gains Tax (CGT) Report', 20, yPos);
+  yPos += 10;
+  
+  // Generated date
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(100, 100, 100);
+  doc.text(`Generated on: ${formatDate()}`, 20, yPos);
+  yPos += 20;
+  
+  // Taxpayer Information
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(0, 0, 0);
+  doc.text('Taxpayer Information', 20, yPos);
+  yPos += 10;
+  
+  const taxpayerData = [
+    ['Taxpayer Name', cgtResult.taxpayer_name],
+    ['Tax Year', cgtResult.year],
+    ['Taxpayer Type', cgtResult.taxpayer_type.charAt(0).toUpperCase() + cgtResult.taxpayer_type.slice(1)],
+    ['Asset Type', cgtResult.asset_type],
+    ['Holding Period', cgtInput.holding_period || 'Not specified']
+  ];
+  
+  autoTable(doc, {
+    head: [['Taxpayer Detail', 'Value']],
+    body: taxpayerData,
+    startY: yPos,
+    theme: 'grid',
+    headStyles: { fillColor: [0, 0, 0], textColor: [255, 255, 255] },
+    margin: { left: 20, right: 20 }
+  });
+  
+  yPos = doc.lastAutoTable.finalY + 15;
+  
+  // Asset Transaction Details
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Asset Transaction Details', 20, yPos);
+  yPos += 10;
+  
+  const transactionData = [
+    ['Disposal Proceeds', formatCurrency(cgtResult.disposal_proceeds)],
+    ['Acquisition Cost', formatCurrency(cgtResult.acquisition_cost)],
+    ['Allowable Expenses', formatCurrency(cgtResult.allowable_expenses)],
+    ['Total Cost', formatCurrency(cgtResult.total_cost)],
+    [cgtResult.is_loss ? 'Capital Loss' : 'Capital Gain', formatCurrency(Math.abs(cgtResult.capital_gain))]
+  ];
+  
+  autoTable(doc, {
+    head: [['Transaction Component', 'Amount']],
+    body: transactionData,
+    startY: yPos,
+    theme: 'grid',
+    headStyles: { fillColor: [34, 197, 94], textColor: [255, 255, 255] },
+    margin: { left: 20, right: 20 }
+  });
+  
+  yPos = doc.lastAutoTable.finalY + 15;
+  
+  // CGT Calculation
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('CGT Calculation', 20, yPos);
+  yPos += 10;
+  
+  let cgtData = [];
+  
+  if (cgtResult.is_exempt) {
+    cgtData = [
+      ['CGT Status', 'EXEMPT'],
+      ['Exemption Reason', cgtResult.exemption_reason],
+      ['CGT Liability', formatCurrency(0)]
+    ];
+  } else if (cgtResult.is_loss) {
+    cgtData = [
+      ['CGT Status', 'CAPITAL LOSS'],
+      ['Loss Amount', formatCurrency(cgtResult.loss_amount)],
+      ['CGT Liability', formatCurrency(0)],
+      ['Loss Carry Forward', 'Available for future gains']
+    ];
+  } else {
+    cgtData = [
+      ['Taxable Capital Gain', formatCurrency(cgtResult.capital_gain)],
+      ['CGT Rate Applied', cgtResult.rate_description],
+      ['CGT Liability', formatCurrency(cgtResult.cgt_liability)]
+    ];
+  }
+  
+  autoTable(doc, {
+    head: [['CGT Component', 'Amount/Status']],
+    body: cgtData,
+    startY: yPos,
+    theme: 'grid',
+    headStyles: { fillColor: [59, 130, 246], textColor: [255, 255, 255] },
+    margin: { left: 20, right: 20 }
+  });
+  
+  // Add exemption note if applicable
+  if (cgtResult.is_exempt) {
+    yPos = doc.lastAutoTable.finalY + 15;
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Exemption Information', 20, yPos);
+    yPos += 8;
+    
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.text('CGT exemption applies when disposal proceeds < N150M AND capital gains < N10M', 20, yPos);
+    yPos += 5;
+    doc.text('within any 12-month period (Nigerian Tax Act 2026).', 20, yPos);
+  }
+  
+  // Add tax rate information
+  if (!cgtResult.is_exempt && !cgtResult.is_loss) {
+    yPos = doc.lastAutoTable.finalY + 15;
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Tax Rate Information (NTA 2026)', 20, yPos);
+    yPos += 8;
+    
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    if (cgtResult.taxpayer_type === 'company') {
+      doc.text('Companies: 30% CGT rate (aligned with Corporate Income Tax rate)', 20, yPos);
+    } else {
+      doc.text('Individuals: Progressive rates (0-25%) based on total income level', 20, yPos);
+    }
+  }
+  
+  addFooter(doc);
+  
+  // Save the PDF
+  doc.save(`CGT_Report_${cgtResult.taxpayer_name || 'Taxpayer'}_${cgtResult.year || 'Report'}_${new Date().toISOString().split('T')[0]}.pdf`);
+};
