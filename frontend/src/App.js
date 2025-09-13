@@ -741,6 +741,7 @@ function AppContent() {
                   <span className="transform -skew-x-12">Profile</span>
                 </TabsTrigger>
               )}
+              </div>
             </TabsList>
           </div>
 
