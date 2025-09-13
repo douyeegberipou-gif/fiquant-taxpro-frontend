@@ -266,61 +266,61 @@ const Home = ({ onNavigateToTab }) => {
       </section>
 
       {/* Closing CTA Section */}
-      <section className="relative bg-gradient-to-r from-black via-gray-900 to-black text-white py-20 px-6"
+      <section className="relative bg-gradient-to-r from-black via-gray-900 to-black text-white py-12 sm:py-16 md:py-20 px-4 sm:px-6"
         style={{
           backgroundImage: `linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1734184451176-d3ca5bb6b64a')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}>
         <div className="max-w-4xl mx-auto text-center">
-          <div className="flex items-center justify-center mb-6">
-            <Target className="h-12 w-12 text-yellow-500 mr-4" />
-            <h2 className="text-4xl md:text-5xl font-bold">
+          <div className="flex flex-col sm:flex-row items-center justify-center mb-4 sm:mb-6">
+            <Target className="h-8 w-8 sm:h-12 sm:w-12 text-yellow-500 mb-2 sm:mb-0 sm:mr-4" />
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center sm:text-left">
               🎯 Don't Wait for FIRS Penalties. Take Control Today.
             </h2>
           </div>
           
-          <p className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed">
+          <p className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-6 sm:mb-8 leading-relaxed px-4 sm:px-0">
             Every mistake costs you money. With Fiquant TaxPro 2026, you'll never underpay, overpay, or miss deadlines again. Stay compliant. Protect your business. Keep your peace of mind.
           </p>
           
           <Button 
             onClick={() => onNavigateToTab('calculator')}
-            className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-black font-bold py-6 px-12 rounded-full text-xl transform hover:scale-105 transition-all duration-200 shadow-2xl"
+            className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-black font-bold py-4 sm:py-6 px-8 sm:px-12 rounded-full text-lg sm:text-xl transform hover:scale-105 transition-all duration-200 shadow-2xl mobile-button mb-8 sm:mb-12"
           >
             🚀 Start Managing Your Taxes Now — 100% Free & NTA-Compliant
           </Button>
 
           {/* Trust Indicators */}
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8">
             <div className="flex items-center justify-center">
-              <CheckCircle className="h-6 w-6 text-green-400 mr-2" />
-              <span className="text-lg">100% NTA 2026 Compliant</span>
+              <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-green-400 mr-2" />
+              <span className="text-sm sm:text-lg">100% NTA 2026 Compliant</span>
             </div>
             <div className="flex items-center justify-center">
-              <CheckCircle className="h-6 w-6 text-green-400 mr-2" />
-              <span className="text-lg">Free & Instant Results</span>
+              <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-green-400 mr-2" />
+              <span className="text-sm sm:text-lg">Free & Instant Results</span>
             </div>
             <div className="flex items-center justify-center">
-              <CheckCircle className="h-6 w-6 text-green-400 mr-2" />
-              <span className="text-lg">Professional PDF Reports</span>
+              <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-green-400 mr-2" />
+              <span className="text-sm sm:text-lg">Professional PDF Reports</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-8 px-6">
+      <footer className="bg-gray-900 text-gray-400 py-6 sm:py-8 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto text-center">
-          <div className="flex items-center justify-center mb-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center mb-3 sm:mb-4">
             <img 
               src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/q9xbgjwy_Fiquant%20Consult%20-%20Transparent%20%28Logo%20Only%29.png" 
               alt="Fiquant Consult Logo" 
-              className="h-8 w-8 mr-2"
+              className="h-6 w-6 sm:h-8 sm:w-8 mb-2 sm:mb-0 sm:mr-2"
             />
-            <span className="text-lg font-semibold">Fiquant Consult - TaxPro 2026</span>
+            <span className="text-base sm:text-lg font-semibold">Fiquant Consult - TaxPro 2026</span>
           </div>
-          <p className="text-sm">
+          <p className="text-xs sm:text-sm mb-2">
             Powered by FIRS Guidelines | Nigerian Tax Calculator 2026 Professional Edition
           </p>
           <p className="text-xs mt-2">
