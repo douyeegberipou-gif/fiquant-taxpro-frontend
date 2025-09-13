@@ -747,6 +747,16 @@ function AppContent() {
           <TabsContent value="home">
             <Home onNavigateToTab={(tabValue) => {
               setActiveTab(tabValue);
+              // Scroll to top when navigating
+              setTimeout(() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }, 100);
+              
+              // Set bulk mode if navigating to bulk PAYE
+              if (tabValue === 'calculator') {
+                // For bulk PAYE, we can set the mode - but let's check the current context
+                // We'll let the user choose mode in the calculator interface
+              }
             }} />
           </TabsContent>
 
