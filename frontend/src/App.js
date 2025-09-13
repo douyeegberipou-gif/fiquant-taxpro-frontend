@@ -22,6 +22,7 @@ import EnhancedHistory from './components/EnhancedHistory';
 import VATCalculator from './components/VATCalculator';
 import PaymentProcessingCalculator from './components/PaymentProcessingCalculator';
 import CGTCalculator from './components/CGTCalculator';
+import Home from './components/Home';
 import { generatePayeReport, generateBulkPayeReport, generateCitReport } from './utils/pdfGenerator';
 import './App.css';
 
