@@ -9,6 +9,79 @@ body {
         "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Mobile optimization */
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 768px) {
+    body {
+        font-size: 16px; /* Prevent zoom on iOS */
+    }
+    
+    /* Ensure touch targets are at least 44px */
+    button, input, select, textarea {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    /* Improve text readability on small screens */
+    h1 { font-size: 1.8rem !important; }
+    h2 { font-size: 1.5rem !important; }
+    h3 { font-size: 1.25rem !important; }
+    
+    /* Optimize cards for mobile */
+    .mobile-card {
+        margin: 0.5rem !important;
+        padding: 1rem !important;
+    }
+    
+    /* Better spacing for mobile */
+    .mobile-spacing {
+        padding: 1rem !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    /* Optimize tabs for mobile */
+    .mobile-tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    
+    .mobile-tabs::-webkit-scrollbar {
+        display: none;
+    }
+    
+    /* Touch-friendly buttons */
+    .mobile-button {
+        padding: 0.75rem 1.5rem !important;
+        font-size: 1rem !important;
+        border-radius: 0.5rem !important;
+    }
+    
+    /* Form optimizations */
+    .mobile-form input,
+    .mobile-form select,
+    .mobile-form textarea {
+        font-size: 16px !important; /* Prevent zoom on iOS */
+        padding: 0.75rem !important;
+        border-radius: 0.5rem !important;
+    }
+    
+    /* Grid responsive adjustments */
+    .mobile-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+    
+    /* Image optimizations */
+    .mobile-image {
+        height: 200px !important;
+        object-fit: cover;
+    }
 }
 
 code {
