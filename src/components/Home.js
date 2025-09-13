@@ -7,7 +7,12 @@ const Home = ({ onNavigateToTab }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-black via-gray-900 to-black text-white py-20 px-6 overflow-hidden">
+      <section className="relative bg-gradient-to-r from-black via-gray-900 to-black text-white py-20 px-6 overflow-hidden"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1752074177162-0560205be28a')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}>
         <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/10 to-yellow-600/10"></div>
         <div className="relative max-w-7xl mx-auto text-center">
           {/* Logo and Brand */}
@@ -55,174 +60,204 @@ const Home = ({ onNavigateToTab }) => {
         <div className="max-w-7xl mx-auto space-y-12">
           
           {/* PAYE Banner */}
-          <Card className="bg-gradient-to-r from-emerald-50 to-green-50 border-emerald-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-            <CardContent className="p-8">
-              <div className="flex flex-col lg:flex-row items-center justify-between">
-                <div className="flex-1 lg:pr-8">
+          <Card className="bg-gradient-to-r from-emerald-50 to-green-50 border-emerald-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
+            <CardContent className="p-0">
+              <div className="flex flex-col lg:flex-row items-center">
+                <div className="lg:w-1/3 h-64 lg:h-auto">
+                  <img 
+                    src="https://images.unsplash.com/photo-1739298061757-7a3339cee982" 
+                    alt="Professional team"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex-1 p-8">
                   <div className="flex items-start mb-4">
                     <Users className="h-8 w-8 text-emerald-600 mr-3 mt-1" />
                     <div>
                       <h2 className="text-3xl font-bold text-gray-900 mb-3">
                         👩🏽‍💼 Stop Overpaying or Underpaying PAYE
                       </h2>
-                      <p className="text-lg text-gray-700 leading-relaxed">
+                      <p className="text-lg text-gray-700 leading-relaxed mb-6">
                         <strong>Did you know?</strong> Wrong PAYE deductions can block your access to loans, mortgages, and government services. Our tool gives you the exact figure — including pension, NHF, life insurance, and reliefs — so you never lose out.
                       </p>
+                      <Button 
+                        onClick={() => onNavigateToTab('calculator')}
+                        className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                      >
+                        ✨ Calculate Your NTA-Compliant PAYE Free Now!
+                      </Button>
                     </div>
                   </div>
-                </div>
-                <div className="mt-6 lg:mt-0">
-                  <Button 
-                    onClick={() => onNavigateToTab('calculator')}
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-lg hover:shadow-xl transition-all duration-200"
-                  >
-                    ✨ Calculate Your NTA-Compliant PAYE Free Now!
-                  </Button>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           {/* Bulk PAYE Banner */}
-          <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-            <CardContent className="p-8">
-              <div className="flex flex-col lg:flex-row items-center justify-between">
-                <div className="flex-1 lg:pr-8">
+          <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
+            <CardContent className="p-0">
+              <div className="flex flex-col lg:flex-row-reverse items-center">
+                <div className="lg:w-1/3 h-64 lg:h-auto">
+                  <img 
+                    src="https://images.unsplash.com/photo-1606836591695-4d58a73eba1e" 
+                    alt="Business meeting"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex-1 p-8">
                   <div className="flex items-start mb-4">
                     <Building2 className="h-8 w-8 text-blue-600 mr-3 mt-1" />
                     <div>
                       <h2 className="text-3xl font-bold text-gray-900 mb-3">
                         🏢 Payroll Mistakes = Heavy Fines
                       </h2>
-                      <p className="text-lg text-gray-700 leading-relaxed">
+                      <p className="text-lg text-gray-700 leading-relaxed mb-6">
                         <strong>Did you know?</strong> Failure to remit correct PAYE for staff can attract penalties of up to ₦500,000 per month and destroy staff trust. Upload your payroll and let our Bulk PAYE engine compute everything instantly — safe, clean, compliant.
                       </p>
+                      <Button 
+                        onClick={() => onNavigateToTab('bulk')}
+                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                      >
+                        💼 Run Bulk PAYE for Your Team — Free & Compliant!
+                      </Button>
                     </div>
                   </div>
-                </div>
-                <div className="mt-6 lg:mt-0">
-                  <Button 
-                    onClick={() => onNavigateToTab('bulk')}
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-lg hover:shadow-xl transition-all duration-200"
-                  >
-                    💼 Run Bulk PAYE for Your Team — Free & Compliant!
-                  </Button>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           {/* CIT Banner */}
-          <Card className="bg-gradient-to-r from-purple-50 to-violet-50 border-purple-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-            <CardContent className="p-8">
-              <div className="flex flex-col lg:flex-row items-center justify-between">
-                <div className="flex-1 lg:pr-8">
+          <Card className="bg-gradient-to-r from-purple-50 to-violet-50 border-purple-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
+            <CardContent className="p-0">
+              <div className="flex flex-col lg:flex-row items-center">
+                <div className="lg:w-1/3 h-64 lg:h-auto">
+                  <img 
+                    src="https://images.unsplash.com/photo-1739287088635-444554e7ac0e" 
+                    alt="Business professionals"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex-1 p-8">
                   <div className="flex items-start mb-4">
                     <Calculator className="h-8 w-8 text-purple-600 mr-3 mt-1" />
                     <div>
                       <h2 className="text-3xl font-bold text-gray-900 mb-3">
                         📑 Don't Let Wrong CIT Shut Down Your Company
                       </h2>
-                      <p className="text-lg text-gray-700 leading-relaxed">
+                      <p className="text-lg text-gray-700 leading-relaxed mb-6">
                         <strong>Did you know?</strong> Underpaying CIT attracts 25% fines, compounded interest, and even business closure orders. Don't be a victim. Get it right every time with our instant calculator.
                       </p>
+                      <Button 
+                        onClick={() => onNavigateToTab('cit')}
+                        className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                      >
+                        📊 Calculate Your NTA-Compliant CIT Free Now!
+                      </Button>
                     </div>
                   </div>
-                </div>
-                <div className="mt-6 lg:mt-0">
-                  <Button 
-                    onClick={() => onNavigateToTab('cit')}
-                    className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-lg hover:shadow-xl transition-all duration-200"
-                  >
-                    📊 Calculate Your NTA-Compliant CIT Free Now!
-                  </Button>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           {/* VAT Banner */}
-          <Card className="bg-gradient-to-r from-orange-50 to-red-50 border-orange-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-            <CardContent className="p-8">
-              <div className="flex flex-col lg:flex-row items-center justify-between">
-                <div className="flex-1 lg:pr-8">
+          <Card className="bg-gradient-to-r from-orange-50 to-red-50 border-orange-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
+            <CardContent className="p-0">
+              <div className="flex flex-col lg:flex-row-reverse items-center">
+                <div className="lg:w-1/3 h-64 lg:h-auto">
+                  <img 
+                    src="https://images.unsplash.com/photo-1709715357520-5e1047a2b691" 
+                    alt="Team collaboration"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex-1 p-8">
                   <div className="flex items-start mb-4">
                     <Receipt className="h-8 w-8 text-orange-600 mr-3 mt-1" />
                     <div>
                       <h2 className="text-3xl font-bold text-gray-900 mb-3">
                         💸 VAT Errors Can Cripple Your Cash Flow
                       </h2>
-                      <p className="text-lg text-gray-700 leading-relaxed">
+                      <p className="text-lg text-gray-700 leading-relaxed mb-6">
                         <strong>Did you know?</strong> Incorrect VAT filing can trigger back-duty audits, double tax payments, and fines of up to ₦50,000 per return. Our VAT tool makes sure your invoices, input, and output VAT are perfect.
                       </p>
+                      <Button 
+                        onClick={() => onNavigateToTab('vat')}
+                        className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                      >
+                        🧾 Check Your VAT Now — Stay 100% Compliant!
+                      </Button>
                     </div>
                   </div>
-                </div>
-                <div className="mt-6 lg:mt-0">
-                  <Button 
-                    onClick={() => onNavigateToTab('vat')}
-                    className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-lg hover:shadow-xl transition-all duration-200"
-                  >
-                    🧾 Check Your VAT Now — Stay 100% Compliant!
-                  </Button>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           {/* CGT Banner */}
-          <Card className="bg-gradient-to-r from-green-50 to-teal-50 border-green-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-            <CardContent className="p-8">
-              <div className="flex flex-col lg:flex-row items-center justify-between">
-                <div className="flex-1 lg:pr-8">
+          <Card className="bg-gradient-to-r from-green-50 to-teal-50 border-green-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
+            <CardContent className="p-0">
+              <div className="flex flex-col lg:flex-row items-center">
+                <div className="lg:w-1/3 h-64 lg:h-auto">
+                  <img 
+                    src="https://images.unsplash.com/photo-1603202662706-62ead3176b8f" 
+                    alt="Professional consultation"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex-1 p-8">
                   <div className="flex items-start mb-4">
                     <TrendingUp className="h-8 w-8 text-green-600 mr-3 mt-1" />
                     <div>
                       <h2 className="text-3xl font-bold text-gray-900 mb-3">
                         🏠 Selling Assets? Don't Lose Profits to CGT
                       </h2>
-                      <p className="text-lg text-gray-700 leading-relaxed">
+                      <p className="text-lg text-gray-700 leading-relaxed mb-6">
                         <strong>Did you know?</strong> Not reporting disposals correctly can lead to 10% CGT plus penalties and forfeiture risks. Our CGT calculator shows exactly what you owe so you only pay what's fair — nothing more, nothing less.
                       </p>
+                      <Button 
+                        onClick={() => onNavigateToTab('cgt')}
+                        className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                      >
+                        💰 Calculate Your NTA-Compliant CGT Free Now!
+                      </Button>
                     </div>
                   </div>
-                </div>
-                <div className="mt-6 lg:mt-0">
-                  <Button 
-                    onClick={() => onNavigateToTab('cgt')}
-                    className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-lg hover:shadow-xl transition-all duration-200"
-                  >
-                    💰 Calculate Your NTA-Compliant CGT Free Now!
-                  </Button>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           {/* Payment Calculator Banner */}
-          <Card className="bg-gradient-to-r from-pink-50 to-rose-50 border-pink-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-            <CardContent className="p-8">
-              <div className="flex flex-col lg:flex-row items-center justify-between">
-                <div className="flex-1 lg:pr-8">
+          <Card className="bg-gradient-to-r from-pink-50 to-rose-50 border-pink-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
+            <CardContent className="p-0">
+              <div className="flex flex-col lg:flex-row-reverse items-center">
+                <div className="lg:w-1/3 h-64 lg:h-auto">
+                  <img 
+                    src="https://images.unsplash.com/photo-1616587656977-ac36a5a430bc" 
+                    alt="Business meeting"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex-1 p-8">
                   <div className="flex items-start mb-4">
                     <CreditCard className="h-8 w-8 text-pink-600 mr-3 mt-1" />
                     <div>
                       <h2 className="text-3xl font-bold text-gray-900 mb-3">
                         🤝 Stop Overpaying Vendors. Stop Losing to Errors.
                       </h2>
-                      <p className="text-lg text-gray-700 leading-relaxed">
+                      <p className="text-lg text-gray-700 leading-relaxed mb-6">
                         <strong>Did you know?</strong> Forgetting to deduct WHT or VAT before paying vendors can cost you twice — once to FIRS, once to your supplier. Our payment calculator ensures you deduct right and pay net correctly every time.
                       </p>
+                      <Button 
+                        onClick={() => onNavigateToTab('payment')}
+                        className="bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                      >
+                        ✔️ Calculate Correct Net-to-Pay — Free & Instant!
+                      </Button>
                     </div>
                   </div>
-                </div>
-                <div className="mt-6 lg:mt-0">
-                  <Button 
-                    onClick={() => onNavigateToTab('payment')}
-                    className="bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-lg hover:shadow-xl transition-all duration-200"
-                  >
-                    ✔️ Calculate Correct Net-to-Pay — Free & Instant!
-                  </Button>
                 </div>
               </div>
             </CardContent>
@@ -231,7 +266,12 @@ const Home = ({ onNavigateToTab }) => {
       </section>
 
       {/* Closing CTA Section */}
-      <section className="bg-gradient-to-r from-black via-gray-900 to-black text-white py-20 px-6">
+      <section className="relative bg-gradient-to-r from-black via-gray-900 to-black text-white py-20 px-6"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1734184451176-d3ca5bb6b64a')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}>
         <div className="max-w-4xl mx-auto text-center">
           <div className="flex items-center justify-center mb-6">
             <Target className="h-12 w-12 text-yellow-500 mr-4" />
