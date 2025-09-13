@@ -746,11 +746,7 @@ function AppContent() {
           {/* Home Tab */}
           <TabsContent value="home">
             <Home onNavigateToTab={(tabValue) => {
-              // Find the tab trigger and click it
-              const tabTrigger = document.querySelector(`[value="${tabValue}"]`);
-              if (tabTrigger) {
-                tabTrigger.click();
-              }
+              setActiveTab(tabValue);
             }} />
           </TabsContent>
 
