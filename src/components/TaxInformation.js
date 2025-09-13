@@ -1224,6 +1224,118 @@ const TaxInformation = () => {
                 </div>
               </div>
             </div>
+
+            {/* WHT Information Section */}
+            <div className="space-y-6">
+              <Card className="bg-white border-orange-100 shadow-lg">
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <CreditCard className="h-5 w-5 text-orange-600" />
+                    <span>Withholding Tax (WHT) 2026</span>
+                  </CardTitle>
+                  <CardDescription>
+                    Current WHT rates for various transactions
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid gap-3">
+                    <div className="p-4 bg-orange-50 rounded-lg">
+                      <div className="flex justify-between items-start mb-2">
+                        <h4 className="font-medium text-orange-900">Dividends & Interest</h4>
+                        <Badge variant="outline" className="text-sm text-orange-700 border-orange-300">
+                          10%
+                        </Badge>
+                      </div>
+                      <p className="text-sm text-orange-700">Both resident and non-resident recipients</p>
+                    </div>
+                    
+                    <div className="p-4 bg-orange-50 rounded-lg">
+                      <div className="flex justify-between items-start mb-2">
+                        <h4 className="font-medium text-orange-900">Rent & Lease Payments</h4>
+                        <Badge variant="outline" className="text-sm text-orange-700 border-orange-300">
+                          10%
+                        </Badge>
+                      </div>
+                      <p className="text-sm text-orange-700">All rent, hire, or lease transactions</p>
+                    </div>
+
+                    <div className="p-4 bg-orange-50 rounded-lg">
+                      <div className="flex justify-between items-start mb-2">
+                        <h4 className="font-medium text-orange-900">Professional Services</h4>
+                        <div className="text-right">
+                          <Badge variant="outline" className="text-sm text-orange-700 border-orange-300 mb-1">
+                            5% Resident
+                          </Badge>
+                          <br />
+                          <Badge variant="outline" className="text-sm text-orange-700 border-orange-300">
+                            10% Non-Resident
+                          </Badge>
+                        </div>
+                      </div>
+                      <p className="text-sm text-orange-700">Consultancy, technical, management fees</p>
+                    </div>
+
+                    <div className="p-4 bg-orange-50 rounded-lg">
+                      <div className="flex justify-between items-start mb-2">
+                        <h4 className="font-medium text-orange-900">Goods & Construction</h4>
+                        <Badge variant="outline" className="text-sm text-orange-700 border-orange-300">
+                          2-5%
+                        </Badge>
+                      </div>
+                      <p className="text-sm text-orange-700">Supply of goods, construction contracts</p>
+                    </div>
+
+                    <div className="p-4 bg-orange-50 rounded-lg">
+                      <div className="flex justify-between items-start mb-2">
+                        <h4 className="font-medium text-orange-900">Royalties</h4>
+                        <div className="text-right">
+                          <Badge variant="outline" className="text-sm text-orange-700 border-orange-300 mb-1">
+                            10% Corporate
+                          </Badge>
+                          <br />
+                          <Badge variant="outline" className="text-sm text-orange-700 border-orange-300">
+                            5% Non-Corporate
+                          </Badge>
+                        </div>
+                      </div>
+                      <p className="text-sm text-orange-700">Intellectual property, licensing</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-white border-orange-100 shadow-lg">
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <AlertTriangle className="h-5 w-5 text-orange-600" />
+                    <span>WHT Key Requirements</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-700">Deduction Timing</span>
+                    <span className="font-medium text-orange-600">At payment or when due</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-700">FIRS Remittance</span>
+                    <span className="font-medium text-orange-600">By 21st of following month</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-700">SIRS Remittance</span>
+                    <span className="font-medium text-orange-600">By 30th of following month</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-700">Late Payment Penalty</span>
+                    <span className="font-medium text-red-600">10% per annum + interest</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-700">Non-Deduction Fine</span>
+                    <span className="font-medium text-red-600">10% of undeducted amount</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
           </div>
         );
 
