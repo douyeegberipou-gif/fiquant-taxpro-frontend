@@ -680,7 +680,7 @@ function AppContent() {
                 }}
               >
                 <Briefcase className="h-4 w-4 transform -skew-x-12" />
-                <span className="transform -skew-x-12">Tax Info</span>
+                <span className="transform -skew-x-12">Compliance</span>
               </TabsTrigger>
               
               <TabsTrigger 
