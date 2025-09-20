@@ -209,6 +209,210 @@ const Home = ({ onNavigateToTab }) => {
         </div>
       </section>
 
+      {/* Feature Panels */}
+      <section className="py-24" 
+        style={{
+          background: 'linear-gradient(180deg, #000000 0%, #0f0f0f 50%, #000000 100%)'
+        }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          
+          {/* PAYE Panel */}
+          <div className="rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+            style={{
+              backdropFilter: 'blur(20px)',
+              background: 'rgba(255, 255, 255, 0.1)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+            }}>
+            <div className="flex flex-col lg:flex-row items-center">
+              <div className="w-full lg:w-1/3 h-48 lg:h-64">
+                <img 
+                  src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/2s52tc3b_Gemini_Generated_Image_k1jwlnk1jwlnk1jw.png" 
+                  alt="Professional team"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="flex-1 p-8">
+                <div className="flex items-start mb-4">
+                  <Users className="h-8 w-8 text-yellow-400 mr-3 mt-1 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-2xl font-bold text-white mb-4">
+                      Know EXACTLY what your employer is allowed to charge you as tax
+                    </h3>
+                    <ul className="text-gray-300 space-y-2 mb-6">
+                      <li>• Exact PAYE with pension, NHF, life insurance & rent relief.</li>
+                      <li>• Annualised PAYE with document upload.</li>
+                    </ul>
+                    <Button 
+                      onClick={() => onNavigateToTab('calculator')}
+                      className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-lg"
+                    >
+                      Calculate NTA-Compliant PAYE — Free
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* CIT Panel */}
+          <div className="rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+            style={{
+              backdropFilter: 'blur(20px)',
+              background: 'rgba(255, 255, 255, 0.1)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+            }}>
+            <div className="flex flex-col lg:flex-row-reverse items-center">
+              <div className="w-full lg:w-1/3 h-48 lg:h-64">
+                <img 
+                  src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/za762luj_Gemini_Generated_Image_ge8ufyge8ufyge8u.png" 
+                  alt="Business meeting"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="flex-1 p-8">
+                <div className="flex items-start mb-4">
+                  <Calculator className="h-8 w-8 text-yellow-400 mr-3 mt-1 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-2xl font-bold text-white mb-4">
+                      Accurate CIT with 2025 Rules
+                    </h3>
+                    <ul className="text-gray-300 space-y-2 mb-6">
+                      <li>• Capital allowances, thin cap rules & development levy.</li>
+                      <li>• Small company exemptions & multinational compliance.</li>
+                    </ul>
+                    <Button 
+                      onClick={() => onNavigateToTab('cit')}
+                      className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg"
+                    >
+                      Calculate NTA-Compliant CIT — Free
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* VAT Panel */}
+          <div className="rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+            style={{
+              backdropFilter: 'blur(20px)',
+              background: 'rgba(255, 255, 255, 0.1)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+            }}>
+            <div className="flex flex-col lg:flex-row items-center">
+              <div className="w-full lg:w-1/3 h-48 lg:h-64">
+                <img 
+                  src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/iakm5flx_Gemini_Generated_Image_k1jwlnk1jwlnk1jw%20%283%29.png" 
+                  alt="Business handshake"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="flex-1 p-8">
+                <div className="flex items-start mb-4">
+                  <Receipt className="h-8 w-8 text-yellow-400 mr-3 mt-1 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-2xl font-bold text-white mb-4">
+                      VAT Made Simple
+                    </h3>
+                    <ul className="text-gray-300 space-y-2 mb-6">
+                      <li>• Automatic transaction classification by NTA rules.</li>
+                      <li>• Input/output VAT tracking & compliance.</li>
+                    </ul>
+                    <Button 
+                      onClick={() => onNavigateToTab('vat')}
+                      className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-6 rounded-lg"
+                    >
+                      Calculate VAT — Free & Compliant
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* CGT Panel */}
+          <div className="rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+            style={{
+              backdropFilter: 'blur(20px)',
+              background: 'rgba(255, 255, 255, 0.1)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+            }}>
+            <div className="flex flex-col lg:flex-row-reverse items-center">
+              <div className="w-full lg:w-1/3 h-48 lg:h-64">
+                <img 
+                  src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/3l8sul24_Gemini_Generated_Image_bhxj3sbhxj3sbhxj.png" 
+                  alt="Property consultation"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="flex-1 p-8">
+                <div className="flex items-start mb-4">
+                  <TrendingUp className="h-8 w-8 text-yellow-400 mr-3 mt-1 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-2xl font-bold text-white mb-4">
+                      Capital Gains Tax Calculator
+                    </h3>
+                    <ul className="text-gray-300 space-y-2 mb-6">
+                      <li>• Asset disposal calculations with 2025 rates.</li>
+                      <li>• Exemptions & allowances automatically applied.</li>
+                    </ul>
+                    <Button 
+                      onClick={() => onNavigateToTab('cgt')}
+                      className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg"
+                    >
+                      Calculate CGT — Free & Accurate
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Payment Panel */}
+          <div className="rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+            style={{
+              backdropFilter: 'blur(20px)',
+              background: 'rgba(255, 255, 255, 0.1)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+            }}>
+            <div className="flex flex-col lg:flex-row items-center">
+              <div className="w-full lg:w-1/3 h-48 lg:h-64">
+                <img 
+                  src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/s7a291fy_Gemini_Generated_Image_rgk3prgk3prgk3pr.png" 
+                  alt="Payment processing"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="flex-1 p-8">
+                <div className="flex items-start mb-4">
+                  <CreditCard className="h-8 w-8 text-yellow-400 mr-3 mt-1 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-2xl font-bold text-white mb-4">
+                      Payment Processing Calculator
+                    </h3>
+                    <ul className="text-gray-300 space-y-2 mb-6">
+                      <li>• Net payment calculations with WHT & VAT deductions.</li>
+                      <li>• Vendor payment compliance made easy.</li>
+                    </ul>
+                    <Button 
+                      onClick={() => onNavigateToTab('payment')}
+                      className="bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-6 rounded-lg"
+                    >
+                      Calculate Net Payments — Free
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Pricing Windows */}
       <section className="relative py-24" 
         style={{
