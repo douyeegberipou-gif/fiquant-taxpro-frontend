@@ -1,97 +1,81 @@
 <analysis>
-The development trajectory for Fiquant TaxPro, a Nigerian tax management application, has been extensive and iterative. Starting from core calculator functionality (PAYE, CIT, Bulk PAYE) and a premium UI with PDF reporting and basic authentication, the AI engineer diligently addressed critical bugs. These included implementing robust email/phone verification, fixing login flows, resolving ₦NaN display errors across calculators (due to frontend data handling and a user interaction oversight), and rectifying PDF report issues (logo loading, Naira symbols, and  compatibility).
+The development of Fiquant TaxPro has been an iterative process, transitioning from an initial MVP to a more feature-rich application. The AI engineer successfully implemented a refined History tab, removing WHT information and improving interactivity. Subsequently, a critical bug involving the accidental removal of WHT information from the Tax Information tab was addressed, with the information correctly re-integrated after several attempts at precise placement.
 
-Subsequent enhancements added a comprehensive administrative dashboard (user management, analytics, audit logs), new input fields for tax calculators and reports, and a legal framework with expanded Terms & Conditions and disclaimers. The T&Cs acceptance mechanism was strategically relocated to login/registration, with calculator disclaimers maintained. Most recently, detailed Nigerian tax information (NTA 2026, TIN) was integrated into a new tab. The current focus is on revamping the user's calculation History tab for enhanced interactivity and detail.
+Significant new features include the addition of three new tax calculators: VAT, Payments Processing (for WHT and VAT), and Capital Gains Tax (CGT), each with dedicated tabs, PDF generation, and specific NTA 2026 compliance logic (e.g., automated VAT classification). A central Home landing page was designed and integrated, featuring a hero section, multiple tax-specific banners with CTAs, and branding. Initial navigation issues from the landing page to calculators and incorrect scroll-to-top behavior were identified and fixed, along with integrating user-provided images into the banners. The most recent focus has been on comprehensive mobile optimization for the entire site.
 </analysis>
 
 <product_requirements>
-Fiquant TaxPro is a Nigerian tax management solution for 2026 tax laws, aimed at individuals and businesses. It features Personal Income Tax (PAYE) and Corporate Income Tax (CIT) calculators, with PAYE supporting reliefs and progressive tax bands, and CIT handling various financial components like turnover, expenses, and loss relief. A bulk PAYE calculator allows  Excel template download (watermarked) and upload. The application's UI/UX emphasizes a professional, black and gold Fiquant Consult brand aesthetic, utilizing modern Shadcn UI components, responsive design, and consistent Naira symbol (₦) for currency.
+Fiquant TaxPro is a Nigerian tax management solution for 2026 tax laws, targeting individuals and businesses. It offers PAYE and CIT calculators, with PAYE supporting reliefs and progressive tax bands, and CIT handling financial components like turnover and loss relief. A bulk PAYE calculator allows Excel template download and upload. The UI/UX features a professional black and gold Fiquant Consult brand, using Shadcn UI, responsive design, and consistent Naira symbol (₦).
 
-A secure User Accounts & Profiles system, featuring email/phone verification, enables personalized history and future monetization. An Administrative Dashboard is required, accessible via a separate  portal (initially for super admins only). This dashboard manages user accounts (view, edit, suspend, roles, audit trail), provides real-time user analytics (active users, calculator usage, churn, exportable reports), tracks all admin actions in audit logs (with IP/user agent), and monitors system health. Admin accounts require 2FA, and the dashboard must align with the existing black/gold theme.
+User accounts include email/phone verification. An Administrative Dashboard (super admin only) manages users, provides analytics, and tracks audit logs. New fields Name of Staff/Taxpayer, Month, State of Residence for PAYE, and Year of Assessment, Tax Year for CIT were required. Comprehensive Terms and Conditions, a calculator disclaimer footnote, and T&Cs acceptance (moved to login/registration) were implemented. An email service for notifications and admin broadcasts was planned. Detailed Nigerian tax information (NTA 2026, TIN) was added.
 
-Further requirements included adding Name of Staff/Taxpayer, Month, and State of Residence fields to the PAYE calculator and reports, and Year of Assessment and Tax Year fields to the CIT calculator and reports. Comprehensive Terms and Conditions, absolving Fiquant Consult of liability for tax accuracy, were needed, along with a disclaimer footnote on calculator screens and a checkbox for T&Cs acceptance (later moved to login/registration screens). An email service integration was specified for automated notifications (verification, password reset, tax reminders) and admin broadcasts, with template management, user preferences, and analytics. Lastly, thorough tax information based on the New Nigeria Tax Act (NTA) 2026 and associated laws was requested, and the calculation history tab needs reformatting for explorability and printing.
+Recently, the History tab required enhancement for interactivity and print options, and extraneous WHT information needed removal from it (but re-addition to Tax Info). New tax calculators for Value Added Tax (VAT), Payments Processing (for WHT and VAT), and Capital Gains Tax (CGT) were requested with specific logic (e.g., VAT transaction-based classification, updated CGT rates), print functions, disclaimers, and new input fields. A Home landing page with a hero section, branded banners for each tax type (with CTA navigation), and custom images was also required. Finally, the application needs to be optimized for mobile devices.
 </product_requirements>
 
 <key_technical_concepts>
 -   **Full-stack**: React (Frontend), FastAPI (Backend), MongoDB (Database).
--   **UI/UX**: Tailwind CSS, Shadcn UI, Lucide React.
--   **Backend**: Pydantic, Motor, JWT, bcrypt.
--   **Frontend**: React Context API, , , .
+-   **UI/UX**: Tailwind CSS, Shadcn UI, Lucide React (icons), Responsive Design.
+-   **Frontend**: React Context API, , , , .
 -   **Document Generation**:  (Excel), , .
--   **Authentication**: Email/Phone verification, Role-Based Access Control (RBAC).
--   **Email Integration**: SendGrid (SDK installed).
+-   **Authentication**: JWT, bcrypt, Email/Phone verification, RBAC.
+-   **Email Integration**: SendGrid (SDK installed, pending full implementation).
 </key_technical_concepts>
 
 <code_architecture>
 
 
 -   ****:
-    -   **Summary**: The core FastAPI backend handling all tax calculations, user authentication, and database operations.
-    -   **Changes Made**: Refined PAYE/CIT calculations; implemented JWT authentication with email/phone verification and resend; added user calculation history. Integrated a comprehensive admin system, including new  models,  roles, and  middleware. Added API endpoints for user, audit, and analytics management, as well as owner-admin-setup and password reset. Fixed  to correctly include admin roles. Email/SMS functions now log links for development. Critically, the  and  Pydantic models were updated to include new fields like staff name, month, state, assessment year, and tax year.
+    -   **Summary**: The main React component orchestrating the application's layout, routing, and state management.
+    -   **Changes Made**: Significant updates to manage the tab structure and navigation. Integrated , admin routing, and . Replaced old History content with . Added new tab navigations for , , , and , dynamically handling  state. Fixed  component import conflict. Implemented  for smooth navigation. Contains mobile optimization adjustments for main containers and tab lists.
 -   ****:
-    -   **Summary**: A newly created file intended to encapsulate all email service integration logic using SendGrid.
-    -   **Changes Made**: The file has been created, and the  library installed, but the core email sending logic and API key integration are pending.
+    -   **Summary**: A new React component designed to replace the old static history content, offering interactive and detailed views of user calculations.
+    -   **Changes Made**: Initial creation. Imports were fixed to correctly reference  UI components (e.g.,  instead of ). It is now integrated into .
 -   ****:
-    -   **Summary**: The main React component responsible for the application's overall structure, navigation, and the primary PAYE calculator interface.
-    -   **Changes Made**: UI and Naira symbol updates. Integrated  and conditionally renders authentication components. Added admin routing and logic for the Admin button. Fixed the initial  bug by correcting the  function to handle invalid inputs and  to correctly process array API responses (e.g., ). New state fields for PAYE () and CIT () were added to accommodate staff/tax year details. Integrated  component, its acceptance state, and disclaimer footnotes. Managed the relocation of the T&Cs checkbox from the calculators to the login/registration forms, ensuring disclaimers remained. The Tax Brackets tab was replaced with the new  component.
+    -   **Summary**: Displays comprehensive legal and tax information relevant to Nigerian tax laws.
+    -   **Changes Made**: Detailed WHT information, including rates and requirements, was re-added to the 'Tax Rates & Structure' section after being accidentally removed.
 -   ****:
-    -   **Summary**: React component for the Corporate Income Tax calculator.
-    -   **Changes Made**: Added Print Report and Carry Forward Losses fields. Ensured Naira symbols. Updated the UI to include new Year of Assessment and Tax Year fields. The T&Cs acceptance checkbox was initially added then removed, but the disclaimer footnote was retained.
+    -   **Summary**: Utility functions for generating PDF reports.
+    -   **Changes Made**: New PDF generation functions for VAT, Payment Processing, and CGT calculators were added.
 -   ****:
-    -   **Summary**: React component for the bulk PAYE calculator.
-    -   **Changes Made**:  Excel template download with watermark and upload support. Print Report functionality. Ensured Naira symbols and updated branding to Fiquant Consult. Fixed a  bug by modifying  to correctly extract data from array API responses (). The T&Cs acceptance checkbox was initially added then removed, but the disclaimer footnote was retained.
+    -   **Summary**: New React component for Value Added Tax calculation.
+    -   **Changes Made**: Initial creation. Implemented a transaction-by-transaction approach with dynamic addition of transactions. Includes dropdowns for transaction types, automated VAT classification (standard-rated, exempt, zero-rated) based on NTA 2026, and VAT registration status handling.
 -   ****:
-    -   **Summary**: Utility functions for generating PDF reports for tax calculations.
-    -   **Changes Made**:  now uses the new transparent logo. Updated footer branding. Fixed logo loading by implementing synchronous base64 encoding from the local  asset. Crucially,  compatibility issues were resolved by updating its import and usage syntax. Ensured proper rendering of the Naira symbol within PDFs. Both PAYE and CIT report generation functions were updated to include the newly added staff/year information.
+    -   **Summary**: New React component for calculating net payments after applying WHT and VAT.
+    -   **Changes Made**: Initial creation.
 -   ****:
-    -   **Summary**: User login form component.
-    -   **Changes Made**: Improved unverified account error messages and added resend options. Updated to the new transparent logo. **Modified to include the Terms & Conditions acceptance checkbox and a link to open the T&Cs modal.**
+    -   **Summary**: New React component for Capital Gains Tax calculation.
+    -   **Changes Made**: Initial creation.
 -   ****:
-    -   **Summary**: User registration form component.
-    -   **Changes Made**: Integrated with the email verification flow. Updated for  flow and the new transparent logo. **Modified to integrate the Terms & Conditions acceptance checkbox and modal.**
+    -   **Summary**: A new landing page component designed as the default view, showcasing Fiquant TaxPro's value proposition and guiding users to specific calculators.
+    -   **Changes Made**: Initial creation and population with hero section, six tax-specific banners (PAYE, Bulk PAYE, CIT, VAT, CGT, Payments) with headlines, sublines, and CTA buttons. Custom images (provided by the user) were integrated into each banner. Navigation via CTA buttons now uses  from  and can pass  context. Includes mobile-responsive classes for its structure and banners.
 -   ****:
-    -   **Summary**: A reusable modal component for housing authentication forms (login, register).
-    -   **Changes Made**: Updated for the verification flow and new logo. **Modified to accept and pass a  prop to both  and  for T&Cs modal control.**
--   ****:
-    -   **Summary**: Displays audit logs of administrative actions.
-    -   **Changes Made**: Initial creation. **Enhanced to include robust error handling for unexpected non-JSON responses from the backend API and to gracefully display messages when no audit logs are found.**
--   ** (New)**:
-    -   **Summary**: A Shadcn UI component for creating scrollable regions.
-    -   **Changes Made**: Created to properly render the expanded  content within a modal.
--   ** (New)**:
-    -   **Summary**: Component displaying the application's terms and conditions.
-    -   **Changes Made**: Initially created with basic content. Subsequently, the content was significantly expanded (sevenfold) with additional standard legal clauses, ensuring the original core content was placed at the bottom as requested.
--   ** (New)**:
-    -   **Summary**: A new component dedicated to providing comprehensive information about Nigerian tax laws and regulations.
-    -   **Changes Made**: Created following extensive research into the New Nigeria Tax Act (NTA) 2026 and related requirements (e.g., TIN). This component was then integrated into , replacing the previous Tax Brackets tab.
--   ** (New)**:
-    -   **Summary**: A new component under development, intended to replace the existing history tab content. It will provide a more interactive and detailed view of user calculation history, including options to expand details and print.
-    -   **Changes Made**: The file has been created, marking the beginning of this feature's implementation.
+    -   **Summary**: Global CSS file for styling, including Tailwind CSS directives.
+    -   **Changes Made**: Added mobile-specific CSS optimizations to enhance responsiveness across the application.
 </code_architecture>
 
 <pending_tasks>
--   **Email Service Integration**:
-    -   Obtain SendGrid API key, sender email, and sender name from the user.
-    -   Implement full email sending functionality for various triggers (verification, password reset, tax reminders, admin broadcasts).
-    -   Develop template management for dynamic fields.
-    -   Implement user email preferences in the user profile.
-    -   Set up analytics and logging for email delivery status in the database and admin dashboard.
--   User Analytics & Usage Statistics: Full implementation for real-time charts and export reports.
--   Audit & Security Logs: Full implementation for recording admin actions, failed logins, and comprehensive audit reports.
--   System Health & Monitoring: Full implementation for uptime, response times, and error logs.
--   Monetization model and account permission tiers (beyond super admin).
--   Ensure user accounts do not pre-populate tax calculator forms (future update/testing).
--   Cleanup of test accounts (user was offered choices but no final decision was made).
+-   **Email Service Integration**: Obtain SendGrid API key, implement full email sending functionality (verification, password reset, reminders, admin broadcasts), develop template management, user preferences, and analytics/logging for delivery status.
+-   **User Analytics & Usage Statistics**: Full implementation for real-time charts and export reports.
+-   **Audit & Security Logs**: Full implementation for recording admin actions, failed logins, and comprehensive audit reports (beyond current  display).
+-   **System Health & Monitoring**: Full implementation for uptime, response times, and error logs.
+-   **Monetization model and account permission tiers** (beyond super admin).
+-   **Prevent pre-population of tax calculator forms** by user accounts.
+-   **Cleanup of test accounts**.
 </pending_tasks>
 
 <current_work>
-Immediately before this summary request, the AI engineer was working on enhancing the user's calculation History tab. The user requested two main improvements for this section:
-1.  **Removal of extraneous information**: Specifically, all WHT (Withholding Tax) rates and related key information needed to be removed, ensuring the tab strictly displays calculation history.
-2.  **Improved interactivity and detail**: The history entries should be easily explorable, allowing users to click on a specific calculation to view expanded details and access a print option. This aims to make the history more functional and valuable for users revisiting past transactions.
+Immediately before this summary request, the AI engineer was actively working on **mobile optimization** for the Fiquant TaxPro application. This task was initiated to ensure the application's interface displays and functions properly on mobile devices.
 
-In response to this, the AI engineer first identified the existing WHT information within the History tab content in . As the first step towards the re-design, a new React component file, , has been created. This new component is intended to fully replace the current static and cluttered History tab content, laying the groundwork for the interactive features.
+The work has progressed through several stages:
+1.  **Viewport Configuration Check**: Confirmed that  already contained the correct viewport meta tag.
+2.  **Global Mobile CSS**: Added mobile-specific CSS optimizations to  to implement responsive styling globally.
+3.  **App.js Header & Tabs Optimization**: Started applying mobile-responsive classes to the main  component, specifically focusing on the  to enable horizontal scrolling on mobile. A lint error related to a missing closing  tag was identified and fixed during this process.
+4.  **Home Component Optimization**: The  component was optimized for mobile devices, likely adjusting layout and element sizing.
+5.  **Banner Card Optimization**: The individual tax calculator banner cards within the  component were modified to stack vertically on small screens, improving their presentation on mobile.
+
+The current, ongoing specific task is to **optimize the closing CTA (Call-to-Action) section of the Home landing page and to add mobile-specific classes to the various calculator forms** to ensure they are fully responsive and user-friendly on mobile devices.
 </current_work>
 
 <optional_next_step>
-Replace the existing History tab content in  with the newly created  component and begin implementing its interactive features.
+Continue optimizing the closing CTA section and adding mobile-specific classes to the calculator forms.
 </optional_next_step>
