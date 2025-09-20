@@ -185,20 +185,20 @@ const Home = ({ onNavigateToTab }) => {
                 onClick={item.action}
                 className="group cursor-pointer p-6 rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
                 style={{
-                  backdropFilter: 'blur(10px)',
-                  background: 'rgba(220, 220, 219, 0.8)',
-                  border: '1px solid rgba(255, 255, 255, 0.3)',
-                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.05)'
+                  backdropFilter: 'blur(20px)',
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
                 }}
               >
                 <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 rounded-lg bg-white/60 group-hover:bg-white/80 flex items-center justify-center transition-colors backdrop-blur-sm">
-                    <item.icon className="h-6 w-6 text-gray-600 group-hover:text-gray-900" />
+                  <div className="w-12 h-12 rounded-lg bg-white/20 group-hover:bg-white/30 flex items-center justify-center transition-colors backdrop-blur-sm">
+                    <item.icon className="h-6 w-6 text-white group-hover:text-white" />
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-semibold text-gray-900 group-hover:text-gray-900">{item.label}</h4>
+                    <h4 className="font-semibold text-white group-hover:text-white">{item.label}</h4>
                   </div>
-                  <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-all" />
+                  <ArrowRight className="h-5 w-5 text-gray-300 group-hover:text-white opacity-0 group-hover:opacity-100 transition-all" />
                 </div>
               </div>
             ))}
