@@ -356,28 +356,52 @@ const Home = ({ onNavigateToTab }) => {
               
               {/* Trust Badges */}
               <div className="grid grid-cols-2 gap-6 mb-12">
-                <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center space-x-3 p-4 rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                  style={{
+                    backdropFilter: 'blur(10px)',
+                    background: 'rgba(248, 249, 250, 0.8)',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.04)'
+                  }}>
                   <Shield className="h-8 w-8 text-green-500" />
                   <div>
                     <div className="font-semibold text-gray-900">NRS-Aligned</div>
                     <div className="text-sm text-gray-600">Fully compliant calculations</div>
                   </div>
                 </div>
-                <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center space-x-3 p-4 rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                  style={{
+                    backdropFilter: 'blur(10px)',
+                    background: 'rgba(248, 249, 250, 0.8)',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.04)'
+                  }}>
                   <Lock className="h-8 w-8 text-blue-500" />
                   <div>
                     <div className="font-semibold text-gray-900">Encrypted</div>
                     <div className="text-sm text-gray-600">Bank-grade security</div>
                   </div>
                 </div>
-                <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center space-x-3 p-4 rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                  style={{
+                    backdropFilter: 'blur(10px)',
+                    background: 'rgba(248, 249, 250, 0.8)',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.04)'
+                  }}>
                   <Award className="h-8 w-8 text-purple-500" />
                   <div>
                     <div className="font-semibold text-gray-900">Audit-Ready</div>
                     <div className="text-sm text-gray-600">Professional reports</div>
                   </div>
                 </div>
-                <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center space-x-3 p-4 rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                  style={{
+                    backdropFilter: 'blur(10px)',
+                    background: 'rgba(248, 249, 250, 0.8)',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.04)'
+                  }}>
                   <Users className="h-8 w-8 text-orange-500" />
                   <div>
                     <div className="font-semibold text-gray-900">500+ SMEs</div>
@@ -387,9 +411,15 @@ const Home = ({ onNavigateToTab }) => {
               </div>
 
               {/* Founder Credibility */}
-              <div className="bg-gradient-to-r from-gray-50 to-white p-6 rounded-xl border border-gray-200">
+              <div className="p-6 rounded-xl border border-gray-200 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                style={{
+                  backdropFilter: 'blur(12px)',
+                  background: 'rgba(248, 249, 250, 0.85)',
+                  border: '1px solid rgba(255, 255, 255, 0.4)',
+                  boxShadow: '0 6px 24px rgba(0, 0, 0, 0.05)'
+                }}>
                 <div className="flex items-center space-x-4 mb-4">
-                  <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
+                  <div className="w-12 h-12 bg-white/60 rounded-full flex items-center justify-center backdrop-blur-sm">
                     <Briefcase className="h-6 w-6 text-gray-600" />
                   </div>
                   <div>
