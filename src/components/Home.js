@@ -4,15 +4,18 @@ import { Button } from './ui/button.jsx';
 import { 
   AlertTriangle, Users, Building2, Calculator, Receipt, TrendingUp, CreditCard, Target, CheckCircle, 
   Shield, Clock, FileCheck, Star, ArrowRight, ChevronDown, ChevronUp, Award, Lock, Phone, Mail,
-  Heart, Zap, MousePointer, Download, History, DollarSign, BarChart3, Globe
+  Heart, Zap, MousePointer, Download, History, DollarSign, BarChart3, Globe, Play, Eye, Briefcase
 } from 'lucide-react';
 
 const Home = ({ onNavigateToTab }) => {
-  const [activeTab, setActiveTab] = useState('free');
+  const [activeTab, setActiveTab] = useState('pro');
   const [expandedFaq, setExpandedFaq] = useState(null);
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-white"
+      style={{
+        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+      }}>
       {/* Trust Strip */}
       <div className="bg-gradient-to-r from-yellow-600/20 to-yellow-500/20 text-center py-2 px-4">
         <p className="text-yellow-100 text-xs sm:text-sm font-medium">
