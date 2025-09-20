@@ -539,27 +539,27 @@ const Home = ({ onNavigateToTab }) => {
                 answer: "Absolutely. We use bank-grade encryption for all data in transit and at rest. We're SOC 2 compliant and never share your financial information with third parties."
               }
             ].map((faq, index) => (
-              <div key={index} className="rounded-xl border overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+              <div key={index} className="rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
                 style={{
-                  backdropFilter: 'blur(12px)',
-                  background: 'rgba(220, 220, 219, 0.85)',
-                  border: '1px solid rgba(255, 255, 255, 0.4)',
-                  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.04)'
+                  backdropFilter: 'blur(20px)',
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
                 }}>
                 <button
                   onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
-                  className="w-full p-6 text-left flex justify-between items-center hover:bg-white/30 transition-colors backdrop-blur-sm"
+                  className="w-full p-6 text-left flex justify-between items-center hover:bg-white/10 transition-colors backdrop-blur-sm"
                 >
-                  <span className="font-semibold text-gray-900">{faq.question}</span>
+                  <span className="font-semibold text-white">{faq.question}</span>
                   {expandedFaq === index ? (
-                    <ChevronUp className="h-5 w-5 text-gray-500" />
+                    <ChevronUp className="h-5 w-5 text-gray-300" />
                   ) : (
-                    <ChevronDown className="h-5 w-5 text-gray-500" />
+                    <ChevronDown className="h-5 w-5 text-gray-300" />
                   )}
                 </button>
                 {expandedFaq === index && (
                   <div className="px-6 pb-6">
-                    <p className="text-gray-600">{faq.answer}</p>
+                    <p className="text-gray-300">{faq.answer}</p>
                   </div>
                 )}
               </div>
