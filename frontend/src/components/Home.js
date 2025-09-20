@@ -509,11 +509,11 @@ const Home = ({ onNavigateToTab }) => {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-24" style={{ backgroundColor: '#313131' }}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h3>
-            <p className="text-xl text-gray-600">Everything you need to know about Fiquant TaxPro</p>
+            <h3 className="text-3xl font-bold text-white mb-4">Frequently Asked Questions</h3>
+            <p className="text-xl text-gray-300">Everything you need to know about Fiquant TaxPro</p>
           </div>
           
           <div className="space-y-4">
