@@ -116,7 +116,112 @@ const Home = ({ onNavigateToTab }) => {
         </div>
       </section>
 
-      {/* Tax Calculator Banners */}
+      {/* Floating: "What do you want to do?" */}
+      <section className="py-16 px-4 sm:px-6 bg-gray-900">
+        <div className="max-w-6xl mx-auto">
+          <h3 className="text-2xl sm:text-3xl font-bold text-white text-center mb-12">
+            What do you want to do?
+          </h3>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div 
+              onClick={() => onNavigateToTab('calculator')}
+              className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-200 cursor-pointer group"
+            >
+              <div className="flex items-center space-x-3">
+                <Users className="h-6 w-6 text-yellow-400 group-hover:text-yellow-300" />
+                <span className="text-white font-medium group-hover:text-yellow-100">I want to Calculate my PAYE</span>
+              </div>
+            </div>
+            <div 
+              onClick={() => onNavigateToTab('calculator', { mode: 'bulk' })}
+              className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-200 cursor-pointer group"
+            >
+              <div className="flex items-center space-x-3">
+                <Building2 className="h-6 w-6 text-yellow-400 group-hover:text-yellow-300" />
+                <span className="text-white font-medium group-hover:text-yellow-100">I want to Run Bulk PAYE for my team</span>
+              </div>
+            </div>
+            <div 
+              onClick={() => onNavigateToTab('cit')}
+              className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-200 cursor-pointer group"
+            >
+              <div className="flex items-center space-x-3">
+                <Calculator className="h-6 w-6 text-yellow-400 group-hover:text-yellow-300" />
+                <span className="text-white font-medium group-hover:text-yellow-100">I want to Estimate my Company Tax (CIT)</span>
+              </div>
+            </div>
+            <div 
+              onClick={() => onNavigateToTab('vat')}
+              className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-200 cursor-pointer group"
+            >
+              <div className="flex items-center space-x-3">
+                <Receipt className="h-6 w-6 text-yellow-400 group-hover:text-yellow-300" />
+                <span className="text-white font-medium group-hover:text-yellow-100">I want to Check VAT due on an invoice</span>
+              </div>
+            </div>
+            <div 
+              onClick={() => onNavigateToTab('cgt')}
+              className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-200 cursor-pointer group"
+            >
+              <div className="flex items-center space-x-3">
+                <TrendingUp className="h-6 w-6 text-yellow-400 group-hover:text-yellow-300" />
+                <span className="text-white font-medium group-hover:text-yellow-100">I want to Work out CGT on a sale</span>
+              </div>
+            </div>
+            <div 
+              onClick={() => onNavigateToTab('payment')}
+              className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-200 cursor-pointer group"
+            >
+              <div className="flex items-center space-x-3">
+                <CreditCard className="h-6 w-6 text-yellow-400 group-hover:text-yellow-300" />
+                <span className="text-white font-medium group-hover:text-yellow-100">I want to Calculate Net-to-Pay for a vendor</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Benefits Section */}
+      <section className="py-16 px-4 sm:px-6 bg-gradient-to-b from-gray-900 to-black">
+        <div className="max-w-6xl mx-auto">
+          <h3 className="text-3xl sm:text-4xl font-bold text-white text-center mb-12">
+            Why Fiquant TaxPro
+          </h3>
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Shield className="h-10 w-10 text-black" />
+              </div>
+              <h4 className="text-xl font-bold text-white mb-4">NTA-accurate</h4>
+              <p className="text-gray-300">Calculations follow the Nigeria Tax Act 2025 and NRS guidance.</p>
+            </div>
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Zap className="h-10 w-10 text-black" />
+              </div>
+              <h4 className="text-xl font-bold text-white mb-4">Instant & Actionable</h4>
+              <p className="text-gray-300">Results you can download and present in PDF.</p>
+            </div>
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Lock className="h-10 w-10 text-black" />
+              </div>
+              <h4 className="text-xl font-bold text-white mb-4">Trusted & Secure</h4>
+              <p className="text-gray-300">Encrypted data storage, audit-ready reports, enterprise plans.</p>
+            </div>
+          </div>
+          <div className="text-center">
+            <Button 
+              onClick={() => onNavigateToTab('calculator')}
+              className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-black font-bold py-3 px-8 rounded-full text-lg"
+            >
+              See How It Works — 60 second demo
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Feature Panels */}
       <section className="py-12 sm:py-16 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto space-y-8 sm:space-y-12">
           
