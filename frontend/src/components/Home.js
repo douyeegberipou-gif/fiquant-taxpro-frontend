@@ -37,7 +37,13 @@ const Home = ({ onNavigateToTab }) => {
       </div>
 
       {/* Hero Section */}
-      <section className="relative bg-white pt-16 pb-24 overflow-hidden">
+      <section className="relative pt-16 pb-24 overflow-hidden"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:grid lg:grid-cols-12 lg:gap-8 items-center">
             {/* Left Column - Content */}
@@ -55,20 +61,21 @@ const Home = ({ onNavigateToTab }) => {
                     alt="Fiquant Consult" 
                     className="h-8 mb-1"
                   />
-                  <p className="text-sm font-semibold text-gray-600">TaxPro 2026</p>
+                  <p className="text-sm font-semibold text-white">TaxPro 2026</p>
                 </div>
               </div>
 
-              <h1 className="text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-8"
+              <h1 className="text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-8"
                 style={{
                   fontFamily: "'GT America', 'Satoshi', 'Proxima Nova', sans-serif",
-                  letterSpacing: '-0.025em'
+                  letterSpacing: '-0.025em',
+                  textShadow: '0 2px 4px rgba(0,0,0,0.3)'
                 }}>
                 Did you know calculating & filing the wrong taxes can land you in 
-                <span className="text-red-600"> trouble</span>?
+                <span className="text-red-400"> trouble</span>?
               </h1>
               
-              <p className="text-xl text-gray-600 mb-12 leading-relaxed max-w-2xl">
+              <p className="text-xl text-gray-200 mb-12 leading-relaxed max-w-2xl">
                 Fiquant TaxPro — NTA 2025-compliant tax calculators and compliance tools.<br/>
                 Get instant, accurate PAYE, CIT, VAT, CGT & payment calculations — free. Protect revenue. Avoid fines.
               </p>
@@ -89,10 +96,10 @@ const Home = ({ onNavigateToTab }) => {
                 <Button 
                   onClick={() => onNavigateToTab('calculator', { mode: 'bulk' })}
                   variant="outline"
-                  className="px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-200 border-2"
+                  className="px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-200 border-2 bg-white/10 backdrop-blur-sm"
                   style={{
                     borderColor: '#D4AF37',
-                    color: '#D4AF37'
+                    color: 'white'
                   }}
                 >
                   Bulk PAYE for Teams
@@ -100,11 +107,11 @@ const Home = ({ onNavigateToTab }) => {
               </div>
 
               {/* Try Demo */}
-              <div className="flex items-center space-x-3 text-gray-600 mb-8">
-                <Play className="h-5 w-5 text-green-500" />
+              <div className="flex items-center space-x-3 text-gray-200 mb-8">
+                <Play className="h-5 w-5 text-green-400" />
                 <span 
                   onClick={() => onNavigateToTab('calculator')}
-                  className="cursor-pointer font-medium hover:text-gray-900 transition-colors underline"
+                  className="cursor-pointer font-medium hover:text-white transition-colors underline"
                 >
                   Try Demo — No account required, see results in 30 seconds
                 </span>
@@ -115,27 +122,32 @@ const Home = ({ onNavigateToTab }) => {
             <div className="lg:col-span-5 mt-12 lg:mt-0">
               <div className="relative">
                 {/* Mockup placeholder - can be replaced with actual calculator preview */}
-                <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8 shadow-2xl border border-gray-200">
+                <div className="rounded-2xl p-8 shadow-2xl border border-white/20 transition-all duration-300 hover:shadow-3xl"
+                  style={{
+                    backdropFilter: 'blur(16px)',
+                    background: 'rgba(255, 255, 255, 0.15)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)'
+                  }}>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-gray-500">PAYE Calculator</span>
+                      <span className="text-sm font-medium text-gray-200">PAYE Calculator</span>
                       <div className="w-3 h-3 bg-green-400 rounded-full"></div>
                     </div>
                     <div className="space-y-3">
-                      <div className="bg-white rounded-lg p-4 border">
-                        <div className="text-sm text-gray-500 mb-1">Monthly Gross Income</div>
-                        <div className="text-2xl font-bold text-gray-900">₦1,500,000</div>
+                      <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+                        <div className="text-sm text-gray-300 mb-1">Monthly Gross Income</div>
+                        <div className="text-2xl font-bold text-white">₦1,500,000</div>
                       </div>
-                      <div className="bg-white rounded-lg p-4 border">
-                        <div className="text-sm text-gray-500 mb-1">Monthly Tax</div>
-                        <div className="text-2xl font-bold text-red-600">₦248,325</div>
+                      <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+                        <div className="text-sm text-gray-300 mb-1">Monthly Tax</div>
+                        <div className="text-2xl font-bold text-red-300">₦248,325</div>
                       </div>
-                      <div className="bg-white rounded-lg p-4 border">
-                        <div className="text-sm text-gray-500 mb-1">Net Income</div>
-                        <div className="text-2xl font-bold text-green-600">₦1,251,675</div>
+                      <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+                        <div className="text-sm text-gray-300 mb-1">Net Income</div>
+                        <div className="text-2xl font-bold text-green-300">₦1,251,675</div>
                       </div>
                     </div>
-                    <Button className="w-full bg-green-600 text-white rounded-lg py-3">
+                    <Button className="w-full bg-green-600 text-white rounded-lg py-3 hover:bg-green-700 transition-colors">
                       <Eye className="h-4 w-4 mr-2" />
                       View Full Report
                     </Button>
@@ -143,8 +155,8 @@ const Home = ({ onNavigateToTab }) => {
                 </div>
                 
                 {/* Decorative elements */}
-                <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-full opacity-60"></div>
-                <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full opacity-40"></div>
+                <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-yellow-200/20 to-yellow-300/20 rounded-full opacity-60"></div>
+                <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-br from-blue-200/20 to-blue-300/20 rounded-full opacity-40"></div>
               </div>
             </div>
           </div>
