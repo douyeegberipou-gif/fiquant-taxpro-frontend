@@ -448,10 +448,10 @@ const Home = ({ onNavigateToTab }) => {
             {/* Right Column - Case Study */}
             <div className="p-8 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
               style={{
-                backdropFilter: 'blur(16px)',
-                background: 'rgba(220, 220, 219, 0.9)',
-                border: '1px solid rgba(255, 255, 255, 0.5)',
-                boxShadow: '0 10px 40px rgba(0, 0, 0, 0.06)'
+                backdropFilter: 'blur(20px)',
+                background: 'rgba(255, 255, 255, 0.1)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
               }}>
               <div className="flex items-center space-x-2 mb-4">
                 {[...Array(5)].map((_, i) => (
@@ -459,39 +459,39 @@ const Home = ({ onNavigateToTab }) => {
                 ))}
               </div>
               
-              <blockquote className="text-lg text-gray-700 mb-6 italic">
+              <blockquote className="text-lg text-gray-200 mb-6 italic">
                 "Fiquant TaxPro saved our accounting firm over 40 hours monthly on tax calculations. The NTA 2025 compliance gives us complete confidence in every calculation we deliver to clients."
               </blockquote>
               
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <div className="font-semibold text-gray-900">Adebayo Ogundimu</div>
-                  <div className="text-gray-600">Senior Partner, Lagos Tax Associates</div>
+                  <div className="font-semibold text-white">Adebayo Ogundimu</div>
+                  <div className="text-gray-300">Senior Partner, Lagos Tax Associates</div>
                 </div>
                 <div className="text-right">
-                  <div className="text-2xl font-bold text-green-600">40hrs</div>
-                  <div className="text-sm text-gray-600">saved monthly</div>
+                  <div className="text-2xl font-bold text-green-400">40hrs</div>
+                  <div className="text-sm text-gray-300">saved monthly</div>
                 </div>
               </div>
               
               <div className="rounded-lg p-4 transition-all duration-200 hover:shadow-md"
                 style={{
-                  backdropFilter: 'blur(8px)',
-                  background: 'rgba(220, 220, 219, 0.7)',
-                  border: '1px solid rgba(255, 255, 255, 0.3)'
+                  backdropFilter: 'blur(10px)',
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)'
                 }}>
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div>
-                    <div className="text-xl font-bold text-gray-900">250+</div>
-                    <div className="text-xs text-gray-600">Clients served</div>
+                    <div className="text-xl font-bold text-white">250+</div>
+                    <div className="text-xs text-gray-300">Clients served</div>
                   </div>
                   <div>
-                    <div className="text-xl font-bold text-gray-900">₦50M+</div>
-                    <div className="text-xs text-gray-600">Taxes calculated</div>
+                    <div className="text-xl font-bold text-white">₦50M+</div>
+                    <div className="text-xs text-gray-300">Taxes calculated</div>
                   </div>
                   <div>
-                    <div className="text-xl font-bold text-gray-900">100%</div>
-                    <div className="text-xs text-gray-600">NTA compliant</div>
+                    <div className="text-xl font-bold text-white">100%</div>
+                    <div className="text-xs text-gray-300">NTA compliant</div>
                   </div>
                 </div>
               </div>
