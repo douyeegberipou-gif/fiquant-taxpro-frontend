@@ -268,17 +268,17 @@ backend:
         comment: "🚨 URGENT USER INVESTIGATION COMPLETED: Comprehensive analysis of 28 user accounts completed successfully. ✅ SECURITY STATUS: SAFE - No unauthorized access detected. ✅ ROOT CAUSE IDENTIFIED: Test accounts from comprehensive backend testing. ✅ ACCOUNT BREAKDOWN: ~26-27 test accounts + 1-2 real accounts = 28 total users. ✅ TEST ACCOUNT PATTERNS: All test accounts use fiquant.ng domain with timestamp-based identifiers (flowtest.user.*, codegen.test.*, adebayo.ogundimu.*, testauth.*, investigation.admin.*, etc.). ✅ REAL ACCOUNT IDENTIFIED: douyeegberipou@gmail.com (Doutimiye Alfred-Egberipou) - Known admin account. ✅ TIMELINE CORRELATION: Account creation matches comprehensive testing sessions including authentication flow tests (3 accounts), individual auth tests (8 accounts), admin system tests (4 accounts), PAYE/CIT calculator tests (9 accounts), capital allowances tests (3 accounts), WHT credits tests (2 accounts), comprehensive integration test (1 account). ✅ SECURITY VALIDATION: No external domain accounts, no suspicious patterns, all accounts created during legitimate testing activities. 🧹 CLEANUP RECOMMENDED: Remove test accounts with fiquant.ng domain, keep real admin account, implement test database separation for future testing."
 
 frontend:
-  - task: "History Tab Enhancement - Remove WHT Information"
-    implemented: true
+  - task: "Complete Home Landing Page Redesign"
+    implemented: false
     working: "NA"
-    file: "App.js"
+    file: "components/Home.js"
     stuck_count: 0
     priority: "high"
     needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
-        comment: "Replaced the existing History tab content in App.js (lines 1173-1373) with the EnhancedHistory component. Completely removed all WHT (Withholding Tax) information including rates, requirements, and compliance details. The History tab now focuses exclusively on calculation history display."
+        comment: "Starting complete redesign of Home.js component with premium aesthetics, black background hero with gold CTAs, glassmorphism effects, and all specified copy sections including hero, microflow, floating cards, benefits, feature panels, pricing tiers, how it works, social proof, FAQ, and enhanced footer."
 
   - task: "Interactive History Component Implementation"
     implemented: true
