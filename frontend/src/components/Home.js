@@ -17,63 +17,136 @@ const Home = ({ onNavigateToTab }) => {
         fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
       }}>
       {/* Trust Strip */}
-      <div className="bg-gradient-to-r from-yellow-600/20 to-yellow-500/20 text-center py-2 px-4">
-        <p className="text-yellow-100 text-xs sm:text-sm font-medium">
-          NRS-aligned • Used by SMEs & Accountants • Encrypted & Secure
-        </p>
+      <div className="bg-gradient-to-r from-gray-50 to-white border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+          <div className="flex items-center justify-center space-x-6 text-sm font-medium text-gray-600">
+            <div className="flex items-center space-x-2">
+              <CheckCircle className="h-4 w-4 text-green-500" />
+              <span>NRS-aligned</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Users className="h-4 w-4 text-blue-500" />
+              <span>Used by 500+ SMEs</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Shield className="h-4 w-4 text-purple-500" />
+              <span>Encrypted & Audit-Ready</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Hero Section */}
-      <section className="relative bg-black text-white py-16 sm:py-20 md:py-24 px-4 sm:px-6 overflow-hidden">
-        {/* Background Effects */}
-        <div className="absolute inset-0">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-yellow-500/10 to-yellow-600/10 rounded-full blur-3xl transform translate-x-32 -translate-y-32"></div>
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-yellow-400/10 to-yellow-500/10 rounded-full blur-3xl transform -translate-x-16 translate-y-16"></div>
-        </div>
-        
-        <div className="relative max-w-6xl mx-auto text-center">
-          {/* Logo and Brand */}
-          <div className="flex flex-col sm:flex-row items-center justify-center mb-8 sm:mb-10">
-            <img 
-              src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/q9xbgjwy_Fiquant%20Consult%20-%20Transparent%20%28Logo%20Only%29.png" 
-              alt="Fiquant Consult Logo" 
-              className="h-16 w-16 sm:h-20 sm:w-20 mb-4 sm:mb-0 sm:mr-4"
-            />
-            <div className="text-center sm:text-left">
-              <img 
-                src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/aa6pe5bc_Fiquant%20Consult%20-%20Transparent%20%28Name%20only%29.png" 
-                alt="Fiquant Consult" 
-                className="h-10 sm:h-14 mb-3 mx-auto sm:mx-0"
-              />
-              <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
-                TaxPro 2026
-              </h2>
-            </div>
-          </div>
+      <section className="relative bg-white pt-16 pb-24 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="lg:grid lg:grid-cols-12 lg:gap-8 items-center">
+            {/* Left Column - Content */}
+            <div className="lg:col-span-7">
+              {/* Brand Logo */}
+              <div className="flex items-center mb-12">
+                <img 
+                  src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/q9xbgjwy_Fiquant%20Consult%20-%20Transparent%20%28Logo%20Only%29.png" 
+                  alt="Fiquant Consult Logo" 
+                  className="h-12 w-12 mr-4"
+                />
+                <div>
+                  <img 
+                    src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/aa6pe5bc_Fiquant%20Consult%20-%20Transparent%20%28Name%20only%29.png" 
+                    alt="Fiquant Consult" 
+                    className="h-8 mb-1"
+                  />
+                  <p className="text-sm font-semibold text-gray-600">TaxPro 2026</p>
+                </div>
+              </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 sm:mb-8">
-            Did you know? Filing the wrong tax under the Nigeria Tax Act 2025 can land you in trouble?
-          </h1>
-          
-          <h2 className="text-xl sm:text-2xl md:text-3xl text-gray-300 mb-8 sm:mb-10 max-w-5xl mx-auto leading-relaxed">
-            Fiquant TaxPro — NTA 2025-compliant tax calculators and compliance tools.<br/>
-            Get instant, accurate PAYE, CIT, VAT, CGT & payment calculations — free. Protect revenue. Avoid fines. Don't rely on luck, be prepared.
-          </h2>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-            <Button 
-              onClick={() => onNavigateToTab('calculator')}
-              className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-black font-bold py-4 px-8 rounded-full text-lg transform hover:scale-105 transition-all duration-200 shadow-2xl w-full sm:w-auto"
-            >
-              See how much taxes you owe in 60 seconds — Free & NTA-Compliant
-            </Button>
-            <Button 
-              onClick={() => onNavigateToTab('calculator', { mode: 'bulk' })}
-              variant="outline"
-              className="border-white text-white hover:bg-white hover:text-black py-4 px-8 rounded-full text-lg font-bold w-full sm:w-auto"
-            >
-              For Businesses: Run Bulk PAYE
-            </Button>
+              <h1 className="text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-8"
+                style={{
+                  fontFamily: "'GT America', 'Satoshi', 'Proxima Nova', sans-serif",
+                  letterSpacing: '-0.025em'
+                }}>
+                Did you know calculating & filing the wrong taxes can land you in 
+                <span className="text-red-600"> trouble</span>?
+              </h1>
+              
+              <p className="text-xl text-gray-600 mb-12 leading-relaxed max-w-2xl">
+                Fiquant TaxPro — NTA 2025-compliant tax calculators and compliance tools.<br/>
+                Get instant, accurate PAYE, CIT, VAT, CGT & payment calculations — free. Protect revenue. Avoid fines.
+              </p>
+              
+              {/* CTA Row */}
+              <div className="flex flex-col sm:flex-row gap-4 mb-16">
+                <Button 
+                  onClick={() => onNavigateToTab('calculator')}
+                  className="px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                  style={{
+                    backgroundColor: '#D4AF37',
+                    color: 'white',
+                    border: 'none'
+                  }}
+                >
+                  Calculate My Taxes — Free & NTA-Compliant
+                </Button>
+                <Button 
+                  onClick={() => onNavigateToTab('calculator', { mode: 'bulk' })}
+                  variant="outline"
+                  className="px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-200 border-2"
+                  style={{
+                    borderColor: '#D4AF37',
+                    color: '#D4AF37'
+                  }}
+                >
+                  Bulk PAYE for Teams
+                </Button>
+              </div>
+
+              {/* Try Demo */}
+              <div className="flex items-center space-x-3 text-gray-600 mb-8">
+                <Play className="h-5 w-5 text-green-500" />
+                <span 
+                  onClick={() => onNavigateToTab('calculator')}
+                  className="cursor-pointer font-medium hover:text-gray-900 transition-colors underline"
+                >
+                  Try Demo — No account required, see results in 30 seconds
+                </span>
+              </div>
+            </div>
+
+            {/* Right Column - Visual */}
+            <div className="lg:col-span-5 mt-12 lg:mt-0">
+              <div className="relative">
+                {/* Mockup placeholder - can be replaced with actual calculator preview */}
+                <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8 shadow-2xl border border-gray-200">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-500">PAYE Calculator</span>
+                      <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="bg-white rounded-lg p-4 border">
+                        <div className="text-sm text-gray-500 mb-1">Monthly Gross Income</div>
+                        <div className="text-2xl font-bold text-gray-900">₦1,500,000</div>
+                      </div>
+                      <div className="bg-white rounded-lg p-4 border">
+                        <div className="text-sm text-gray-500 mb-1">Monthly Tax</div>
+                        <div className="text-2xl font-bold text-red-600">₦248,325</div>
+                      </div>
+                      <div className="bg-white rounded-lg p-4 border">
+                        <div className="text-sm text-gray-500 mb-1">Net Income</div>
+                        <div className="text-2xl font-bold text-green-600">₦1,251,675</div>
+                      </div>
+                    </div>
+                    <Button className="w-full bg-green-600 text-white rounded-lg py-3">
+                      <Eye className="h-4 w-4 mr-2" />
+                      View Full Report
+                    </Button>
+                  </div>
+                </div>
+                
+                {/* Decorative elements */}
+                <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-full opacity-60"></div>
+                <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full opacity-40"></div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
