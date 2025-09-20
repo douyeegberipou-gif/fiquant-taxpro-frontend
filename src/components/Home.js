@@ -151,42 +151,175 @@ const Home = ({ onNavigateToTab }) => {
         </div>
       </section>
 
-      {/* Microflow Section */}
-      <section className="py-16 px-4 sm:px-6 bg-gradient-to-b from-black to-gray-900">
-        <div className="max-w-6xl mx-auto">
-          <h3 className="text-3xl sm:text-4xl font-bold text-white text-center mb-12">
-            Get answers in 60 seconds
-          </h3>
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 text-center border border-white/20">
-              <div className="w-16 h-16 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MousePointer className="h-8 w-8 text-black" />
+      </section>
+
+      {/* Floating Quick-Actions: "What do you want to do?" */}
+      <section className="relative -mt-12 pb-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">What do you want to do?</h3>
+            <p className="text-gray-600">Choose your calculator and get instant, NTA-compliant results</p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+            {[
+              { icon: Users, label: "Calculate my PAYE", action: () => onNavigateToTab('calculator') },
+              { icon: Building2, label: "Run Bulk PAYE for my team", action: () => onNavigateToTab('calculator', { mode: 'bulk' }) },
+              { icon: Calculator, label: "Estimate my Company Tax (CIT)", action: () => onNavigateToTab('cit') },
+              { icon: Receipt, label: "Check VAT due on an invoice", action: () => onNavigateToTab('vat') },
+              { icon: TrendingUp, label: "Work out CGT on a sale", action: () => onNavigateToTab('cgt') },
+              { icon: CreditCard, label: "Calculate Net-to-Pay for a vendor", action: () => onNavigateToTab('payment') }
+            ].map((item, index) => (
+              <div 
+                key={index}
+                onClick={item.action}
+                className="group cursor-pointer p-6 rounded-xl border border-gray-200 bg-white/60 backdrop-blur-sm hover:bg-white/80 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+                style={{
+                  backdropFilter: 'blur(8px)',
+                  background: 'rgba(255,255,255,0.72)'
+                }}
+              >
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 rounded-lg bg-gray-50 group-hover:bg-gray-100 flex items-center justify-center transition-colors">
+                    <item.icon className="h-6 w-6 text-gray-600 group-hover:text-gray-900" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-gray-900 group-hover:text-gray-900">{item.label}</h4>
+                  </div>
+                  <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-all" />
+                </div>
               </div>
-              <h4 className="text-xl font-bold text-white mb-2">Choose</h4>
-              <p className="text-gray-300">PAYE / CIT / VAT / CGT / Payment</p>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Windows */}
+      <section className="relative py-24 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h3 className="text-3xl font-bold text-gray-900 mb-4">Choose Your Plan</h3>
+            <p className="text-xl text-gray-600">Start free, upgrade when you need more features</p>
+          </div>
+          
+          <div className="grid lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {/* Free Plan */}
+            <div className="relative bg-white rounded-2xl shadow-lg border border-gray-200 p-8 hover:shadow-xl transition-shadow">
+              <div className="text-center mb-8">
+                <h4 className="text-2xl font-bold text-gray-900 mb-2">Free</h4>
+                <p className="text-4xl font-bold text-gray-900">₦0<span className="text-lg font-normal text-gray-500">/month</span></p>
+                <p className="text-gray-600 mt-2">Always free to calculate</p>
+              </div>
+              
+              <ul className="space-y-4 mb-8">
+                {[
+                  "All calculators (PAYE, CIT, VAT, CGT, Payments)",
+                  "NTA Tax Info & Guides", 
+                  "Basic calculations",
+                  "Email support"
+                ].map((feature, i) => (
+                  <li key={i} className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                    <span className="text-gray-700">{feature}</span>
+                  </li>
+                ))}
+                {[
+                  "Download PDF disabled",
+                  "Save History disabled"
+                ].map((feature, i) => (
+                  <li key={i} className="flex items-center">
+                    <AlertTriangle className="h-5 w-5 text-red-400 mr-3 flex-shrink-0" />
+                    <span className="text-gray-500 line-through">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              
+              <Button 
+                onClick={() => onNavigateToTab('calculator')}
+                variant="outline"
+                className="w-full py-3 border-gray-300 text-gray-700 hover:bg-gray-50"
+              >
+                Use Free Calculators
+              </Button>
             </div>
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 text-center border border-white/20">
-              <div className="w-16 h-16 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <FileCheck className="h-8 w-8 text-black" />
+
+            {/* Pro Plan - Most Popular */}
+            <div className="relative bg-white rounded-2xl shadow-xl border-2 p-8 transform scale-105"
+              style={{ borderColor: '#D4AF37' }}>
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                <div className="px-4 py-1 rounded-full text-sm font-semibold text-white"
+                  style={{ backgroundColor: '#D4AF37' }}>
+                  Most Popular
+                </div>
               </div>
-              <h4 className="text-xl font-bold text-white mb-2">Enter</h4>
-              <p className="text-gray-300">salary, turnover, invoice or upload payslip</p>
+              
+              <div className="text-center mb-8">
+                <h4 className="text-2xl font-bold text-gray-900 mb-2">Pro</h4>
+                <p className="text-4xl font-bold text-gray-900">₦10,000<span className="text-lg font-normal text-gray-500">/month</span></p>
+                <p className="text-gray-600 mt-2">Everything in Free, plus:</p>
+              </div>
+              
+              <ul className="space-y-4 mb-8">
+                {[
+                  "Print & export PDFs",
+                  "View & export calculation history",
+                  "Bulk PAYE up to 250 employees",
+                  "One admin seat",
+                  "Priority email support (48hr)",
+                  "Advanced reporting"
+                ].map((feature, i) => (
+                  <li key={i} className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                    <span className="text-gray-700">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              
+              <Button 
+                className="w-full py-3 text-white font-semibold rounded-lg hover:scale-105 transition-transform"
+                style={{ backgroundColor: '#D4AF37' }}
+              >
+                Start 7-day Trial
+              </Button>
             </div>
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 text-center border border-white/20">
-              <div className="w-16 h-16 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Download className="h-8 w-8 text-black" />
+
+            {/* Premium Plan */}
+            <div className="relative bg-white rounded-2xl shadow-lg border border-gray-200 p-8 hover:shadow-xl transition-shadow">
+              <div className="text-center mb-8">
+                <h4 className="text-2xl font-bold text-gray-900 mb-2">Premium</h4>
+                <p className="text-4xl font-bold text-gray-900">₦14,999<span className="text-lg font-normal text-gray-500">/month</span></p>
+                <p className="text-gray-600 mt-2">Everything in Pro, plus:</p>
               </div>
-              <h4 className="text-xl font-bold text-white mb-2">Get</h4>
-              <p className="text-gray-300">instant NTA-compliant result + downloadable PDF</p>
+              
+              <ul className="space-y-4 mb-8">
+                {[
+                  "Secure tax-file storage & retrieval",
+                  "Compliance assistance & review",
+                  "Email invoice / filing integration", 
+                  "Priority phone & email support (24hr)",
+                  "Custom integrations",
+                  "Dedicated account manager"
+                ].map((feature, i) => (
+                  <li key={i} className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                    <span className="text-gray-700">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              
+              <Button 
+                variant="outline"
+                className="w-full py-3 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white"
+              >
+                Start 7-day Trial
+              </Button>
             </div>
           </div>
-          <div className="text-center">
-            <Button 
-              onClick={() => onNavigateToTab('calculator')}
-              variant="link"
-              className="text-yellow-400 hover:text-yellow-300 text-lg underline"
-            >
-              Try Demo Calculation (No signup)
+          
+          <div className="text-center mt-12">
+            <p className="text-gray-600 mb-4">Need custom features or API access?</p>
+            <Button variant="link" className="text-gray-900 font-semibold underline">
+              Contact Sales for Enterprise Solutions
             </Button>
           </div>
         </div>
