@@ -222,7 +222,323 @@ const Home = ({ onNavigateToTab }) => {
       </section>
 
       {/* Feature Panels */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6">
+      {/* Feature Panels */}
+      <section className="py-16 px-4 sm:px-6 bg-black">
+        <div className="max-w-7xl mx-auto space-y-8">
+          
+          {/* PAYE Panel */}
+          <div className="bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10 overflow-hidden">
+            <div className="flex flex-col lg:flex-row items-center">
+              <div className="w-full lg:w-1/3 h-48 lg:h-64">
+                <img 
+                  src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/2s52tc3b_Gemini_Generated_Image_k1jwlnk1jwlnk1jw.png" 
+                  alt="Professional team"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="flex-1 p-8">
+                <div className="flex items-start mb-4">
+                  <Users className="h-8 w-8 text-yellow-400 mr-3 mt-1 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-2xl font-bold text-white mb-4">
+                      Stop Overpaying or Underpaying PAYE
+                    </h3>
+                    <ul className="text-gray-300 space-y-2 mb-6">
+                      <li>• Exact PAYE with pension, NHF, life insurance & rent relief.</li>
+                      <li>• Annualised PAYE with document upload.</li>
+                    </ul>
+                    <Button 
+                      onClick={() => onNavigateToTab('calculator')}
+                      className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-lg"
+                    >
+                      Calculate NTA-Compliant PAYE — Free
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* CIT Panel */}
+          <div className="bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10 overflow-hidden">
+            <div className="flex flex-col lg:flex-row-reverse items-center">
+              <div className="w-full lg:w-1/3 h-48 lg:h-64">
+                <img 
+                  src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/za762luj_Gemini_Generated_Image_ge8ufyge8ufyge8u.png" 
+                  alt="Business meeting"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="flex-1 p-8">
+                <div className="flex items-start mb-4">
+                  <Calculator className="h-8 w-8 text-yellow-400 mr-3 mt-1 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-2xl font-bold text-white mb-4">
+                      Accurate CIT with 2025 Rules
+                    </h3>
+                    <ul className="text-gray-300 space-y-2 mb-6">
+                      <li>• Capital allowances, thin cap rules & development levy.</li>
+                      <li>• Small company exemptions & multinational compliance.</li>
+                    </ul>
+                    <Button 
+                      onClick={() => onNavigateToTab('cit')}
+                      className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg"
+                    >
+                      Calculate NTA-Compliant CIT — Free
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* VAT Panel */}
+          <div className="bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10 overflow-hidden">
+            <div className="flex flex-col lg:flex-row items-center">
+              <div className="w-full lg:w-1/3 h-48 lg:h-64">
+                <img 
+                  src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/iakm5flx_Gemini_Generated_Image_k1jwlnk1jwlnk1jw%20%283%29.png" 
+                  alt="Business handshake"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="flex-1 p-8">
+                <div className="flex items-start mb-4">
+                  <Receipt className="h-8 w-8 text-yellow-400 mr-3 mt-1 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-2xl font-bold text-white mb-4">
+                      VAT Made Simple
+                    </h3>
+                    <ul className="text-gray-300 space-y-2 mb-6">
+                      <li>• Automatic transaction classification by NTA rules.</li>
+                      <li>• Input/output VAT tracking & compliance.</li>
+                    </ul>
+                    <Button 
+                      onClick={() => onNavigateToTab('vat')}
+                      className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-6 rounded-lg"
+                    >
+                      Calculate VAT — Free & Compliant
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* CGT Panel */}
+          <div className="bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10 overflow-hidden">
+            <div className="flex flex-col lg:flex-row-reverse items-center">
+              <div className="w-full lg:w-1/3 h-48 lg:h-64">
+                <img 
+                  src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/3l8sul24_Gemini_Generated_Image_bhxj3sbhxj3sbhxj.png" 
+                  alt="Property consultation"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="flex-1 p-8">
+                <div className="flex items-start mb-4">
+                  <TrendingUp className="h-8 w-8 text-yellow-400 mr-3 mt-1 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-2xl font-bold text-white mb-4">
+                      Capital Gains Tax Calculator
+                    </h3>
+                    <ul className="text-gray-300 space-y-2 mb-6">
+                      <li>• Asset disposal calculations with 2025 rates.</li>
+                      <li>• Exemptions & allowances automatically applied.</li>
+                    </ul>
+                    <Button 
+                      onClick={() => onNavigateToTab('cgt')}
+                      className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg"
+                    >
+                      Calculate CGT — Free & Accurate
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Payment Panel */}
+          <div className="bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10 overflow-hidden">
+            <div className="flex flex-col lg:flex-row items-center">
+              <div className="w-full lg:w-1/3 h-48 lg:h-64">
+                <img 
+                  src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/s7a291fy_Gemini_Generated_Image_rgk3prgk3prgk3pr.png" 
+                  alt="Payment processing"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="flex-1 p-8">
+                <div className="flex items-start mb-4">
+                  <CreditCard className="h-8 w-8 text-yellow-400 mr-3 mt-1 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-2xl font-bold text-white mb-4">
+                      Payment Processing Calculator
+                    </h3>
+                    <ul className="text-gray-300 space-y-2 mb-6">
+                      <li>• Net payment calculations with WHT & VAT deductions.</li>
+                      <li>• Vendor payment compliance made easy.</li>
+                    </ul>
+                    <Button 
+                      onClick={() => onNavigateToTab('payment')}
+                      className="bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-6 rounded-lg"
+                    >
+                      Calculate Net Payments — Free
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section className="py-16 px-4 sm:px-6 bg-gray-900">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h3 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+              Free to use — pay when you print or store
+            </h3>
+          </div>
+          
+          {/* Pricing Tabs */}
+          <div className="flex justify-center mb-8">
+            <div className="bg-white/10 backdrop-blur-lg rounded-full p-1 border border-white/20">
+              {['free', 'pro', 'premium'].map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`px-6 py-2 rounded-full font-medium transition-all duration-200 ${
+                    activeTab === tab
+                      ? 'bg-yellow-500 text-black'
+                      : 'text-white hover:text-yellow-300'
+                  }`}
+                >
+                  {tab === 'free' ? 'Free' : tab === 'pro' ? 'Pro — ₦10,000/mo' : 'Premium — ₦14,999/mo'}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Pricing Content */}
+          <div className="bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10 p-8">
+            {activeTab === 'free' && (
+              <div className="text-center">
+                <h4 className="text-2xl font-bold text-white mb-6">Free (Default) — Always free to calculate</h4>
+                <div className="grid md:grid-cols-2 gap-6 mb-8">
+                  <div className="space-y-3">
+                    <div className="flex items-center text-green-400">
+                      <CheckCircle className="h-5 w-5 mr-2" />
+                      <span>All calculators (PAYE, CIT, VAT, CGT, Payments)</span>
+                    </div>
+                    <div className="flex items-center text-green-400">
+                      <CheckCircle className="h-5 w-5 mr-2" />
+                      <span>NTA Tax Info & Guides</span>
+                    </div>
+                    <div className="flex items-center text-green-400">
+                      <CheckCircle className="h-5 w-5 mr-2" />
+                      <span>Ads-supported</span>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex items-center text-red-400">
+                      <AlertTriangle className="h-5 w-5 mr-2" />
+                      <span>Download PDF disabled</span>
+                    </div>
+                    <div className="flex items-center text-red-400">
+                      <AlertTriangle className="h-5 w-5 mr-2" />
+                      <span>Save History disabled</span>
+                    </div>
+                  </div>
+                </div>
+                <Button 
+                  onClick={() => onNavigateToTab('calculator')}
+                  className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-black font-bold py-3 px-8 rounded-full text-lg"
+                >
+                  Use Free Calculators
+                </Button>
+              </div>
+            )}
+
+            {activeTab === 'pro' && (
+              <div className="text-center">
+                <h4 className="text-2xl font-bold text-white mb-6">Pro — ₦10,000 / month</h4>
+                <div className="grid md:grid-cols-2 gap-6 mb-8">
+                  <div className="space-y-3">
+                    <div className="flex items-center text-green-400">
+                      <CheckCircle className="h-5 w-5 mr-2" />
+                      <span>Everything in Free, plus:</span>
+                    </div>
+                    <div className="flex items-center text-green-400">
+                      <CheckCircle className="h-5 w-5 mr-2" />
+                      <span>Print & export PDFs</span>
+                    </div>
+                    <div className="flex items-center text-green-400">
+                      <CheckCircle className="h-5 w-5 mr-2" />
+                      <span>View & export calculation history</span>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex items-center text-green-400">
+                      <CheckCircle className="h-5 w-5 mr-2" />
+                      <span>One admin seat & bulk PAYE up to 250 employees</span>
+                    </div>
+                    <div className="flex items-center text-green-400">
+                      <CheckCircle className="h-5 w-5 mr-2" />
+                      <span>Priority email support (48hr)</span>
+                    </div>
+                  </div>
+                </div>
+                <Button className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg">
+                  Start 7-day Trial
+                </Button>
+              </div>
+            )}
+
+            {activeTab === 'premium' && (
+              <div className="text-center">
+                <h4 className="text-2xl font-bold text-white mb-6">Premium — ₦14,999 / month</h4>
+                <div className="grid md:grid-cols-2 gap-6 mb-8">
+                  <div className="space-y-3">
+                    <div className="flex items-center text-green-400">
+                      <CheckCircle className="h-5 w-5 mr-2" />
+                      <span>Everything in Pro, plus:</span>
+                    </div>
+                    <div className="flex items-center text-green-400">
+                      <CheckCircle className="h-5 w-5 mr-2" />
+                      <span>Secure tax-file storage & retrieval</span>
+                    </div>
+                    <div className="flex items-center text-green-400">
+                      <CheckCircle className="h-5 w-5 mr-2" />
+                      <span>Compliance assistance & review (1 review / quarter)</span>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex items-center text-green-400">
+                      <CheckCircle className="h-5 w-5 mr-2" />
+                      <span>Email invoice / filing integration</span>
+                    </div>
+                    <div className="flex items-center text-green-400">
+                      <CheckCircle className="h-5 w-5 mr-2" />
+                      <span>Priority phone & email support (24hr)</span>
+                    </div>
+                  </div>
+                </div>
+                <Button className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold py-3 px-8 rounded-full text-lg">
+                  Start 7-day Trial
+                </Button>
+              </div>
+            )}
+          </div>
+
+          <div className="text-center mt-8">
+            <Button variant="outline" className="border-white text-white hover:bg-white hover:text-black">
+              Custom & API access — contact sales
+            </Button>
+          </div>
+        </div>
+      </section>
         <div className="max-w-7xl mx-auto space-y-8 sm:space-y-12">
           
           {/* PAYE Banner */}
