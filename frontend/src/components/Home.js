@@ -186,7 +186,7 @@ const Home = ({ onNavigateToTab }) => {
                 className="group cursor-pointer p-6 rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
                 style={{
                   backdropFilter: 'blur(10px)',
-                  background: 'rgba(248, 249, 250, 0.8)',
+                  background: 'rgba(189, 189, 187, 0.8)',
                   border: '1px solid rgba(255, 255, 255, 0.3)',
                   boxShadow: '0 4px 16px rgba(0, 0, 0, 0.05)'
                 }}
