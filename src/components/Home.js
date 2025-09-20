@@ -218,15 +218,15 @@ const Home = ({ onNavigateToTab }) => {
             {/* Free Plan */}
             <div className="relative rounded-2xl p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
               style={{
-                backdropFilter: 'blur(12px)',
-                background: 'rgba(220, 220, 219, 0.85)',
-                border: '1px solid rgba(255, 255, 255, 0.4)',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.06)'
+                backdropFilter: 'blur(20px)',
+                background: 'rgba(255, 255, 255, 0.1)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
               }}>
               <div className="text-center mb-8">
-                <h4 className="text-2xl font-bold text-gray-900 mb-2">Free</h4>
-                <p className="text-4xl font-bold text-gray-900">₦0<span className="text-lg font-normal text-gray-500">/month</span></p>
-                <p className="text-gray-600 mt-2">Always free to calculate</p>
+                <h4 className="text-2xl font-bold text-white mb-2">Free</h4>
+                <p className="text-4xl font-bold text-white">₦0<span className="text-lg font-normal text-gray-300">/month</span></p>
+                <p className="text-gray-300 mt-2">Always free to calculate</p>
               </div>
               
               <ul className="space-y-4 mb-8">
@@ -237,8 +237,8 @@ const Home = ({ onNavigateToTab }) => {
                   "Email support"
                 ].map((feature, i) => (
                   <li key={i} className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                    <span className="text-gray-700">{feature}</span>
+                    <CheckCircle className="h-5 w-5 text-green-400 mr-3 flex-shrink-0" />
+                    <span className="text-gray-200">{feature}</span>
                   </li>
                 ))}
                 {[
@@ -247,7 +247,7 @@ const Home = ({ onNavigateToTab }) => {
                 ].map((feature, i) => (
                   <li key={i} className="flex items-center">
                     <AlertTriangle className="h-5 w-5 text-red-400 mr-3 flex-shrink-0" />
-                    <span className="text-gray-500 line-through">{feature}</span>
+                    <span className="text-gray-400 line-through">{feature}</span>
                   </li>
                 ))}
               </ul>
@@ -255,7 +255,7 @@ const Home = ({ onNavigateToTab }) => {
               <Button 
                 onClick={() => onNavigateToTab('calculator')}
                 variant="outline"
-                className="w-full py-3 border-gray-300 text-gray-700 hover:bg-gray-50"
+                className="w-full py-3 border-white/30 text-white hover:bg-white/20"
               >
                 Use Free Calculators
               </Button>
@@ -264,10 +264,10 @@ const Home = ({ onNavigateToTab }) => {
             {/* Pro Plan - Most Popular */}
             <div className="relative rounded-2xl p-8 transform scale-105 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
               style={{
-                backdropFilter: 'blur(16px)',
-                background: 'rgba(220, 220, 219, 0.9)',
+                backdropFilter: 'blur(20px)',
+                background: 'rgba(255, 255, 255, 0.15)',
                 border: '2px solid #D4AF37',
-                boxShadow: '0 12px 40px rgba(212, 175, 55, 0.15)'
+                boxShadow: '0 12px 40px rgba(212, 175, 55, 0.4)'
               }}>
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                 <div className="px-4 py-1 rounded-full text-sm font-semibold text-white"
@@ -281,9 +281,9 @@ const Home = ({ onNavigateToTab }) => {
               </div>
               
               <div className="text-center mb-8">
-                <h4 className="text-2xl font-bold text-gray-900 mb-2">Pro</h4>
-                <p className="text-4xl font-bold text-gray-900">₦10,000<span className="text-lg font-normal text-gray-500">/month</span></p>
-                <p className="text-gray-600 mt-2">Everything in Free, plus:</p>
+                <h4 className="text-2xl font-bold text-white mb-2">Pro</h4>
+                <p className="text-4xl font-bold text-white">₦10,000<span className="text-lg font-normal text-gray-300">/month</span></p>
+                <p className="text-gray-300 mt-2">Everything in Free, plus:</p>
               </div>
               
               <ul className="space-y-4 mb-8">
@@ -296,8 +296,8 @@ const Home = ({ onNavigateToTab }) => {
                   "Advanced reporting"
                 ].map((feature, i) => (
                   <li key={i} className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                    <span className="text-gray-700">{feature}</span>
+                    <CheckCircle className="h-5 w-5 text-green-400 mr-3 flex-shrink-0" />
+                    <span className="text-gray-200">{feature}</span>
                   </li>
                 ))}
               </ul>
@@ -313,15 +313,15 @@ const Home = ({ onNavigateToTab }) => {
             {/* Premium Plan */}
             <div className="relative rounded-2xl p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
               style={{
-                backdropFilter: 'blur(12px)',
-                background: 'rgba(220, 220, 219, 0.85)',
-                border: '1px solid rgba(255, 255, 255, 0.4)',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.06)'
+                backdropFilter: 'blur(20px)',
+                background: 'rgba(255, 255, 255, 0.1)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
               }}>
               <div className="text-center mb-8">
-                <h4 className="text-2xl font-bold text-gray-900 mb-2">Premium</h4>
-                <p className="text-4xl font-bold text-gray-900">₦14,999<span className="text-lg font-normal text-gray-500">/month</span></p>
-                <p className="text-gray-600 mt-2">Everything in Pro, plus:</p>
+                <h4 className="text-2xl font-bold text-white mb-2">Premium</h4>
+                <p className="text-4xl font-bold text-white">₦14,999<span className="text-lg font-normal text-gray-300">/month</span></p>
+                <p className="text-gray-300 mt-2">Everything in Pro, plus:</p>
               </div>
               
               <ul className="space-y-4 mb-8">
@@ -334,15 +334,15 @@ const Home = ({ onNavigateToTab }) => {
                   "Dedicated account manager"
                 ].map((feature, i) => (
                   <li key={i} className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                    <span className="text-gray-700">{feature}</span>
+                    <CheckCircle className="h-5 w-5 text-green-400 mr-3 flex-shrink-0" />
+                    <span className="text-gray-200">{feature}</span>
                   </li>
                 ))}
               </ul>
               
               <Button 
                 variant="outline"
-                className="w-full py-3 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white"
+                className="w-full py-3 border-white/30 text-white hover:bg-white/20"
               >
                 Start 7-day Trial
               </Button>
