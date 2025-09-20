@@ -527,10 +527,16 @@ const Home = ({ onNavigateToTab }) => {
                 answer: "Absolutely. We use bank-grade encryption for all data in transit and at rest. We're SOC 2 compliant and never share your financial information with third parties."
               }
             ].map((faq, index) => (
-              <div key={index} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div key={index} className="rounded-xl border overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                style={{
+                  backdropFilter: 'blur(12px)',
+                  background: 'rgba(248, 249, 250, 0.85)',
+                  border: '1px solid rgba(255, 255, 255, 0.4)',
+                  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.04)'
+                }}>
                 <button
                   onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
-                  className="w-full p-6 text-left flex justify-between items-center hover:bg-gray-50 transition-colors"
+                  className="w-full p-6 text-left flex justify-between items-center hover:bg-white/30 transition-colors backdrop-blur-sm"
                 >
                   <span className="font-semibold text-gray-900">{faq.question}</span>
                   {expandedFaq === index ? (
