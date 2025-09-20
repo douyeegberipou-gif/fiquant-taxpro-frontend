@@ -157,3 +157,191 @@ code {
     @apply bg-background text-foreground;
     }
 }
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  /* Main container adjustments */
+  .main-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  /* Tab list horizontal scrolling */
+  .tabs-list {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    white-space: nowrap;
+  }
+  
+  .tabs-list::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Mobile button adjustments */
+  .mobile-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    min-height: 2.75rem;
+  }
+  
+  /* Mobile card adjustments */
+  .mobile-card {
+    margin-bottom: 1rem;
+  }
+  
+  /* Mobile image containers */
+  .mobile-image {
+    height: 12rem;
+  }
+  
+  /* Mobile spacing adjustments */
+  .mobile-spacing {
+    padding: 1rem;
+  }
+
+  /* Glassmorphism mobile optimizations */
+  .glass-panel-mobile {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Floating cards mobile */
+  .floating-card-mobile {
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  /* Feature panels mobile */
+  .feature-panel-mobile {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .feature-panel-mobile .feature-image {
+    width: 100%;
+    height: 200px;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Pricing tabs mobile */
+  .pricing-tabs-mobile {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .pricing-tabs-mobile button {
+    width: 100%;
+    padding: 0.75rem;
+    text-align: center;
+  }
+
+  /* FAQ mobile */
+  .faq-mobile {
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Hero section mobile */
+  .hero-mobile {
+    padding: 2rem 1rem;
+    text-align: center;
+  }
+
+  .hero-mobile h1 {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-mobile h2 {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    margin-bottom: 2rem;
+  }
+
+  /* Microflow mobile */
+  .microflow-mobile {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  /* Benefits section mobile */
+  .benefits-mobile {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    text-align: center;
+  }
+
+  /* Footer mobile */
+  .footer-mobile {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    text-align: center;
+  }
+}
+
+/* Desktop glassmorphism effects */
+@media (min-width: 641px) {
+  .glass-panel {
+    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .floating-card {
+    backdrop-filter: blur(15px);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+  }
+
+  .floating-card:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+  }
+}
+
+/* Global glassmorphism utility classes */
+.glass-morphism {
+  backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+}
+
+.glass-morphism-dark {
+  backdrop-filter: blur(16px);
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar for glassmorphism elements */
+.glass-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.glass-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.glass-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.glass-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
