@@ -141,6 +141,37 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
 }
 
+/* Custom Grey Glassmorphism Tiles (#BDBDBB) */
+.glass-tile-custom-grey {
+  backdrop-filter: blur(12px);
+  background: rgba(189, 189, 187, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  transition: all 300ms ease-out;
+}
+
+.glass-tile-custom-grey:hover {
+  background: rgba(189, 189, 187, 0.95);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.glass-tile-custom-grey-medium {
+  backdrop-filter: blur(16px);
+  background: rgba(189, 189, 187, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 16px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
+  transition: all 300ms ease-out;
+}
+
+.glass-tile-custom-grey-medium:hover {
+  background: rgba(189, 189, 187, 0.95);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+}
+
 .glass-tile-medium {
   backdrop-filter: blur(16px);
   background: rgba(248, 249, 250, 0.9);
