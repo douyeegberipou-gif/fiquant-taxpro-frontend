@@ -539,7 +539,6 @@ const Home = ({ onNavigateToTab }) => {
           </div>
         </div>
       </section>
-      </section>
 
       {/* How It Works */}
       <section className="py-16 px-4 sm:px-6 bg-gradient-to-b from-gray-900 to-black">
