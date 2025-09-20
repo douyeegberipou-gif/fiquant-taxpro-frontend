@@ -204,7 +204,13 @@ const Home = ({ onNavigateToTab }) => {
           
           <div className="grid lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {/* Free Plan */}
-            <div className="relative bg-white rounded-2xl shadow-lg border border-gray-200 p-8 hover:shadow-xl transition-shadow">
+            <div className="relative rounded-2xl p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+              style={{
+                backdropFilter: 'blur(12px)',
+                background: 'rgba(248, 249, 250, 0.85)',
+                border: '1px solid rgba(255, 255, 255, 0.4)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.06)'
+              }}>
               <div className="text-center mb-8">
                 <h4 className="text-2xl font-bold text-gray-900 mb-2">Free</h4>
                 <p className="text-4xl font-bold text-gray-900">₦0<span className="text-lg font-normal text-gray-500">/month</span></p>
@@ -244,11 +250,20 @@ const Home = ({ onNavigateToTab }) => {
             </div>
 
             {/* Pro Plan - Most Popular */}
-            <div className="relative bg-white rounded-2xl shadow-xl border-2 p-8 transform scale-105"
-              style={{ borderColor: '#D4AF37' }}>
+            <div className="relative rounded-2xl p-8 transform scale-105 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+              style={{
+                backdropFilter: 'blur(16px)',
+                background: 'rgba(248, 249, 250, 0.9)',
+                border: '2px solid #D4AF37',
+                boxShadow: '0 12px 40px rgba(212, 175, 55, 0.15)'
+              }}>
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                 <div className="px-4 py-1 rounded-full text-sm font-semibold text-white"
-                  style={{ backgroundColor: '#D4AF37' }}>
+                  style={{ 
+                    backgroundColor: '#D4AF37',
+                    backdropFilter: 'blur(8px)',
+                    boxShadow: '0 4px 12px rgba(212, 175, 55, 0.3)'
+                  }}>
                   Most Popular
                 </div>
               </div>
@@ -284,7 +299,13 @@ const Home = ({ onNavigateToTab }) => {
             </div>
 
             {/* Premium Plan */}
-            <div className="relative bg-white rounded-2xl shadow-lg border border-gray-200 p-8 hover:shadow-xl transition-shadow">
+            <div className="relative rounded-2xl p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+              style={{
+                backdropFilter: 'blur(12px)',
+                background: 'rgba(248, 249, 250, 0.85)',
+                border: '1px solid rgba(255, 255, 255, 0.4)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.06)'
+              }}>
               <div className="text-center mb-8">
                 <h4 className="text-2xl font-bold text-gray-900 mb-2">Premium</h4>
                 <p className="text-4xl font-bold text-gray-900">₦14,999<span className="text-lg font-normal text-gray-500">/month</span></p>
