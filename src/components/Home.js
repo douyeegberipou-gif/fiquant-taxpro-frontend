@@ -449,7 +449,7 @@ const Home = ({ onNavigateToTab }) => {
             <div className="p-8 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
               style={{
                 backdropFilter: 'blur(16px)',
-                background: 'rgba(248, 249, 250, 0.9)',
+                background: 'rgba(189, 189, 187, 0.9)',
                 border: '1px solid rgba(255, 255, 255, 0.5)',
                 boxShadow: '0 10px 40px rgba(0, 0, 0, 0.06)'
               }}>
@@ -477,7 +477,7 @@ const Home = ({ onNavigateToTab }) => {
               <div className="rounded-lg p-4 transition-all duration-200 hover:shadow-md"
                 style={{
                   backdropFilter: 'blur(8px)',
-                  background: 'rgba(243, 244, 246, 0.7)',
+                  background: 'rgba(189, 189, 187, 0.7)',
                   border: '1px solid rgba(255, 255, 255, 0.3)'
                 }}>
                 <div className="grid grid-cols-3 gap-4 text-center">
