@@ -210,7 +210,10 @@ const Home = ({ onNavigateToTab }) => {
       </section>
 
       {/* Pricing Windows */}
-      <section className="relative py-24" style={{ backgroundColor: '#313131' }}>
+      <section className="relative py-24" 
+        style={{
+          background: 'linear-gradient(45deg, #000000 0%, #1f1f1f 25%, #0a0a0a 50%, #1a1a1a 75%, #000000 100%)'
+        }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h3 className="text-3xl font-bold text-white mb-4">Choose Your Plan</h3>
