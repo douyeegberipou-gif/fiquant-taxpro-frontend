@@ -371,7 +371,7 @@ const Home = ({ onNavigateToTab }) => {
                 <div className="flex items-center space-x-3 p-4 rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
                   style={{
                     backdropFilter: 'blur(10px)',
-                    background: 'rgba(189, 189, 187, 0.8)',
+                    background: 'rgba(220, 220, 219, 0.8)',
                     border: '1px solid rgba(255, 255, 255, 0.3)',
                     boxShadow: '0 4px 16px rgba(0, 0, 0, 0.04)'
                   }}>
@@ -384,7 +384,7 @@ const Home = ({ onNavigateToTab }) => {
                 <div className="flex items-center space-x-3 p-4 rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
                   style={{
                     backdropFilter: 'blur(10px)',
-                    background: 'rgba(189, 189, 187, 0.8)',
+                    background: 'rgba(220, 220, 219, 0.8)',
                     border: '1px solid rgba(255, 255, 255, 0.3)',
                     boxShadow: '0 4px 16px rgba(0, 0, 0, 0.04)'
                   }}>
@@ -397,7 +397,7 @@ const Home = ({ onNavigateToTab }) => {
                 <div className="flex items-center space-x-3 p-4 rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
                   style={{
                     backdropFilter: 'blur(10px)',
-                    background: 'rgba(189, 189, 187, 0.8)',
+                    background: 'rgba(220, 220, 219, 0.8)',
                     border: '1px solid rgba(255, 255, 255, 0.3)',
                     boxShadow: '0 4px 16px rgba(0, 0, 0, 0.04)'
                   }}>
@@ -410,7 +410,7 @@ const Home = ({ onNavigateToTab }) => {
                 <div className="flex items-center space-x-3 p-4 rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
                   style={{
                     backdropFilter: 'blur(10px)',
-                    background: 'rgba(189, 189, 187, 0.8)',
+                    background: 'rgba(220, 220, 219, 0.8)',
                     border: '1px solid rgba(255, 255, 255, 0.3)',
                     boxShadow: '0 4px 16px rgba(0, 0, 0, 0.04)'
                   }}>
@@ -426,7 +426,7 @@ const Home = ({ onNavigateToTab }) => {
               <div className="p-6 rounded-xl border border-gray-200 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
                 style={{
                   backdropFilter: 'blur(12px)',
-                  background: 'rgba(189, 189, 187, 0.85)',
+                  background: 'rgba(220, 220, 219, 0.85)',
                   border: '1px solid rgba(255, 255, 255, 0.4)',
                   boxShadow: '0 6px 24px rgba(0, 0, 0, 0.05)'
                 }}>
