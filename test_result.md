@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Complete redesign of the Fiquant TaxPro landing page with premium aesthetics using black background hero with gold CTAs and glassmorphism panels. Implement all specified copy sections including hero, microflow, floating cards, benefits, feature panels, pricing tiers, how it works, social proof, FAQ, and footer. Focus on UI design only, preserve existing calculator navigation functionality."
+user_problem_statement: "Complete premium redesign of the Fiquant TaxPro landing page following exact brand specifications with refined visual system, authority & clarity focused hero, immediate microflow, glassmorphism pricing windows, trust & proof elements, and comprehensive UI polish with exact fonts, colors, spacing, and accessibility requirements."
 
 backend:
   - task: "Fix ₦NaN Display Bug in PAYE Calculator"
