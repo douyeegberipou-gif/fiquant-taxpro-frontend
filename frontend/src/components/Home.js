@@ -171,14 +171,16 @@ const Home = ({ onNavigateToTab }) => {
               <div 
                 key={index}
                 onClick={item.action}
-                className="group cursor-pointer p-6 rounded-xl border border-gray-200 bg-white/60 backdrop-blur-sm hover:bg-white/80 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+                className="group cursor-pointer p-6 rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
                 style={{
-                  backdropFilter: 'blur(8px)',
-                  background: 'rgba(255,255,255,0.72)'
+                  backdropFilter: 'blur(10px)',
+                  background: 'rgba(248, 249, 250, 0.8)',
+                  border: '1px solid rgba(255, 255, 255, 0.3)',
+                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.05)'
                 }}
               >
                 <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 rounded-lg bg-gray-50 group-hover:bg-gray-100 flex items-center justify-center transition-colors">
+                  <div className="w-12 h-12 rounded-lg bg-white/60 group-hover:bg-white/80 flex items-center justify-center transition-colors backdrop-blur-sm">
                     <item.icon className="h-6 w-6 text-gray-600 group-hover:text-gray-900" />
                   </div>
                   <div className="flex-1">
