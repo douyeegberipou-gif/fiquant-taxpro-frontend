@@ -542,7 +542,7 @@ const Home = ({ onNavigateToTab }) => {
               <div key={index} className="rounded-xl border overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
                 style={{
                   backdropFilter: 'blur(12px)',
-                  background: 'rgba(248, 249, 250, 0.85)',
+                  background: 'rgba(189, 189, 187, 0.85)',
                   border: '1px solid rgba(255, 255, 255, 0.4)',
                   boxShadow: '0 4px 20px rgba(0, 0, 0, 0.04)'
                 }}>
