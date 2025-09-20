@@ -151,8 +151,6 @@ const Home = ({ onNavigateToTab }) => {
         </div>
       </section>
 
-      </section>
-
       {/* Floating Quick-Actions: "What do you want to do?" */}
       <section className="relative -mt-12 pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
