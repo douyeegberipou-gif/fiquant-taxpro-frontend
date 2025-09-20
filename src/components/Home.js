@@ -1,57 +1,118 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent } from './ui/card.jsx';
 import { Button } from './ui/button.jsx';
-import { AlertTriangle, Users, Building2, Calculator, Receipt, TrendingUp, CreditCard, Target, CheckCircle } from 'lucide-react';
+import { 
+  AlertTriangle, Users, Building2, Calculator, Receipt, TrendingUp, CreditCard, Target, CheckCircle, 
+  Shield, Clock, FileCheck, Star, ArrowRight, ChevronDown, ChevronUp, Award, Lock, Phone, Mail,
+  Heart, Zap, MousePointer, Download, History, DollarSign, BarChart3, Globe
+} from 'lucide-react';
 
 const Home = ({ onNavigateToTab }) => {
+  const [activeTab, setActiveTab] = useState('free');
+  const [expandedFaq, setExpandedFaq] = useState(null);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+    <div className="min-h-screen bg-black">
+      {/* Trust Strip */}
+      <div className="bg-gradient-to-r from-yellow-600/20 to-yellow-500/20 text-center py-2 px-4">
+        <p className="text-yellow-100 text-xs sm:text-sm font-medium">
+          NRS-aligned • Used by SMEs & Accountants • Encrypted & Secure
+        </p>
+      </div>
+
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-black via-gray-900 to-black text-white py-12 sm:py-16 md:py-20 px-4 sm:px-6 overflow-hidden"
-        style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1752074177162-0560205be28a')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
-        }}>
-        <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/10 to-yellow-600/10"></div>
-        <div className="relative max-w-7xl mx-auto text-center">
+      <section className="relative bg-black text-white py-16 sm:py-20 md:py-24 px-4 sm:px-6 overflow-hidden">
+        {/* Background Effects */}
+        <div className="absolute inset-0">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-yellow-500/10 to-yellow-600/10 rounded-full blur-3xl transform translate-x-32 -translate-y-32"></div>
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-yellow-400/10 to-yellow-500/10 rounded-full blur-3xl transform -translate-x-16 translate-y-16"></div>
+        </div>
+        
+        <div className="relative max-w-6xl mx-auto text-center">
           {/* Logo and Brand */}
-          <div className="flex flex-col sm:flex-row items-center justify-center mb-6 sm:mb-8">
+          <div className="flex flex-col sm:flex-row items-center justify-center mb-8 sm:mb-10">
             <img 
               src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/q9xbgjwy_Fiquant%20Consult%20-%20Transparent%20%28Logo%20Only%29.png" 
               alt="Fiquant Consult Logo" 
-              className="h-12 w-12 sm:h-16 sm:w-16 mb-3 sm:mb-0 sm:mr-4"
+              className="h-16 w-16 sm:h-20 sm:w-20 mb-4 sm:mb-0 sm:mr-4"
             />
             <div className="text-center sm:text-left">
               <img 
                 src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/aa6pe5bc_Fiquant%20Consult%20-%20Transparent%20%28Name%20only%29.png" 
                 alt="Fiquant Consult" 
-                className="h-8 sm:h-12 mb-2 mx-auto sm:mx-0"
+                className="h-10 sm:h-14 mb-3 mx-auto sm:mx-0"
               />
-              <h2 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
+              <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
                 TaxPro 2026
               </h2>
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-center mb-4 sm:mb-6">
-            <AlertTriangle className="h-6 w-6 sm:h-8 sm:w-8 text-yellow-500 mb-2 sm:mb-0 sm:mr-3 mx-auto sm:mx-0" />
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-center sm:text-left">
-              Did you know? Filing the wrong tax under Nigeria's 2026 laws can 
-              <span className="text-yellow-400"> shut down your business</span> or land you in penalty debt.
-            </h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 sm:mb-8">
+            Did you know? Filing the wrong tax under the Nigeria Tax Act 2025 can land you in trouble?
+          </h1>
+          
+          <h2 className="text-xl sm:text-2xl md:text-3xl text-gray-300 mb-8 sm:mb-10 max-w-5xl mx-auto leading-relaxed">
+            Fiquant TaxPro — NTA 2025-compliant tax calculators and compliance tools.<br/>
+            Get instant, accurate PAYE, CIT, VAT, CGT & payment calculations — free. Protect revenue. Avoid fines. Don't rely on luck, be prepared.
+          </h2>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+            <Button 
+              onClick={() => onNavigateToTab('calculator')}
+              className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-black font-bold py-4 px-8 rounded-full text-lg transform hover:scale-105 transition-all duration-200 shadow-2xl w-full sm:w-auto"
+            >
+              See how much taxes you owe in 60 seconds — Free & NTA-Compliant
+            </Button>
+            <Button 
+              onClick={() => onNavigateToTab('calculator', { mode: 'bulk' })}
+              variant="outline"
+              className="border-white text-white hover:bg-white hover:text-black py-4 px-8 rounded-full text-lg font-bold w-full sm:w-auto"
+            >
+              For Businesses: Run Bulk PAYE
+            </Button>
           </div>
-          
-          <p className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-6 sm:mb-8 max-w-4xl mx-auto leading-relaxed px-4 sm:px-0">
-            Don't gamble with compliance. Be 100% sure of what you owe. Our all-in-one app calculates every tax correctly — instantly, free, and NTA-compliant.
-          </p>
-          
-          <Button 
-            onClick={() => onNavigateToTab('calculator')}
-            className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-black font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-full text-base sm:text-lg transform hover:scale-105 transition-all duration-200 shadow-2xl mobile-button"
-          >
-            🚀 Check Your Taxes Now — Free & Accurate
-          </Button>
+        </div>
+      </section>
+
+      {/* Microflow Section */}
+      <section className="py-16 px-4 sm:px-6 bg-gradient-to-b from-black to-gray-900">
+        <div className="max-w-6xl mx-auto">
+          <h3 className="text-3xl sm:text-4xl font-bold text-white text-center mb-12">
+            Get answers in 60 seconds
+          </h3>
+          <div className="grid md:grid-cols-3 gap-8 mb-8">
+            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 text-center border border-white/20">
+              <div className="w-16 h-16 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <MousePointer className="h-8 w-8 text-black" />
+              </div>
+              <h4 className="text-xl font-bold text-white mb-2">Choose</h4>
+              <p className="text-gray-300">PAYE / CIT / VAT / CGT / Payment</p>
+            </div>
+            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 text-center border border-white/20">
+              <div className="w-16 h-16 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <FileCheck className="h-8 w-8 text-black" />
+              </div>
+              <h4 className="text-xl font-bold text-white mb-2">Enter</h4>
+              <p className="text-gray-300">salary, turnover, invoice or upload payslip</p>
+            </div>
+            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 text-center border border-white/20">
+              <div className="w-16 h-16 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Download className="h-8 w-8 text-black" />
+              </div>
+              <h4 className="text-xl font-bold text-white mb-2">Get</h4>
+              <p className="text-gray-300">instant NTA-compliant result + downloadable PDF</p>
+            </div>
+          </div>
+          <div className="text-center">
+            <Button 
+              onClick={() => onNavigateToTab('calculator')}
+              variant="link"
+              className="text-yellow-400 hover:text-yellow-300 text-lg underline"
+            >
+              Try Demo Calculation (No signup)
+            </Button>
+          </div>
         </div>
       </section>
 
