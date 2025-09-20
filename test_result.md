@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Complete the History tab enhancement by replacing the existing static history display and removing all WHT (Withholding Tax) information. The tab should only display calculation history with interactive expand/collapse functionality and print options for better user experience."
+user_problem_statement: "Complete redesign of the Fiquant TaxPro landing page with premium aesthetics using black background hero with gold CTAs and glassmorphism panels. Implement all specified copy sections including hero, microflow, floating cards, benefits, feature panels, pricing tiers, how it works, social proof, FAQ, and footer. Focus on UI design only, preserve existing calculator navigation functionality."
 
 backend:
   - task: "Fix ₦NaN Display Bug in PAYE Calculator"
