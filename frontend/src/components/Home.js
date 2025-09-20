@@ -365,7 +365,10 @@ const Home = ({ onNavigateToTab }) => {
       </section>
 
       {/* Trust & Proof */}
-      <section className="py-24" style={{ backgroundColor: '#313131' }}>
+      <section className="py-24" 
+        style={{
+          background: 'linear-gradient(180deg, #000000 0%, #151515 30%, #0f0f0f 60%, #000000 100%)'
+        }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left Column - Badges and Credentials */}
