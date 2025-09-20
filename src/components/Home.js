@@ -164,7 +164,10 @@ const Home = ({ onNavigateToTab }) => {
       </section>
 
       {/* Floating Quick-Actions: "What do you want to do?" */}
-      <section className="relative -mt-12 pb-24" style={{ backgroundColor: '#313131' }}>
+      <section className="relative -mt-12 pb-24" 
+        style={{
+          background: 'linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%)'
+        }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h3 className="text-2xl font-bold text-white mb-4">What do you want to do?</h3>
