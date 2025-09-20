@@ -195,7 +195,7 @@ const Home = ({ onNavigateToTab }) => {
                 }}
               >
                 <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 rounded-lg bg-white/20 group-hover:bg-white/30 flex items-center justify-center transition-colors backdrop-blur-sm">
+                  <div className="w-12 h-12 flex items-center justify-center transition-colors">
                     <item.icon className="h-6 w-6 text-white group-hover:text-white" />
                   </div>
                   <div className="flex-1">
