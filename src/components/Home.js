@@ -518,7 +518,10 @@ const Home = ({ onNavigateToTab }) => {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-24" style={{ backgroundColor: '#313131' }}>
+      <section className="py-24" 
+        style={{
+          background: 'linear-gradient(225deg, #000000 0%, #1a1a1a 40%, #050505 70%, #000000 100%)'
+        }}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h3 className="text-3xl font-bold text-white mb-4">Frequently Asked Questions</h3>
