@@ -370,76 +370,76 @@ const Home = ({ onNavigateToTab }) => {
               <div className="grid grid-cols-2 gap-6 mb-12">
                 <div className="flex items-center space-x-3 p-4 rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
                   style={{
-                    backdropFilter: 'blur(10px)',
-                    background: 'rgba(220, 220, 219, 0.8)',
-                    border: '1px solid rgba(255, 255, 255, 0.3)',
-                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.04)'
+                    backdropFilter: 'blur(20px)',
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
                   }}>
-                  <Shield className="h-8 w-8 text-green-500" />
+                  <Shield className="h-8 w-8 text-green-400" />
                   <div>
-                    <div className="font-semibold text-gray-900">NRS-Aligned</div>
-                    <div className="text-sm text-gray-600">Fully compliant calculations</div>
+                    <div className="font-semibold text-white">NRS-Aligned</div>
+                    <div className="text-sm text-gray-300">Fully compliant calculations</div>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3 p-4 rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
                   style={{
-                    backdropFilter: 'blur(10px)',
-                    background: 'rgba(220, 220, 219, 0.8)',
-                    border: '1px solid rgba(255, 255, 255, 0.3)',
-                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.04)'
+                    backdropFilter: 'blur(20px)',
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
                   }}>
-                  <Lock className="h-8 w-8 text-blue-500" />
+                  <Lock className="h-8 w-8 text-blue-400" />
                   <div>
-                    <div className="font-semibold text-gray-900">Encrypted</div>
-                    <div className="text-sm text-gray-600">Bank-grade security</div>
+                    <div className="font-semibold text-white">Encrypted</div>
+                    <div className="text-sm text-gray-300">Bank-grade security</div>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3 p-4 rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
                   style={{
-                    backdropFilter: 'blur(10px)',
-                    background: 'rgba(220, 220, 219, 0.8)',
-                    border: '1px solid rgba(255, 255, 255, 0.3)',
-                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.04)'
+                    backdropFilter: 'blur(20px)',
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
                   }}>
-                  <Award className="h-8 w-8 text-purple-500" />
+                  <Award className="h-8 w-8 text-purple-400" />
                   <div>
-                    <div className="font-semibold text-gray-900">Audit-Ready</div>
-                    <div className="text-sm text-gray-600">Professional reports</div>
+                    <div className="font-semibold text-white">Audit-Ready</div>
+                    <div className="text-sm text-gray-300">Professional reports</div>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3 p-4 rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
                   style={{
-                    backdropFilter: 'blur(10px)',
-                    background: 'rgba(220, 220, 219, 0.8)',
-                    border: '1px solid rgba(255, 255, 255, 0.3)',
-                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.04)'
+                    backdropFilter: 'blur(20px)',
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
                   }}>
-                  <Users className="h-8 w-8 text-orange-500" />
+                  <Users className="h-8 w-8 text-orange-400" />
                   <div>
-                    <div className="font-semibold text-gray-900">500+ SMEs</div>
-                    <div className="text-sm text-gray-600">Trusted nationwide</div>
+                    <div className="font-semibold text-white">500+ SMEs</div>
+                    <div className="text-sm text-gray-300">Trusted nationwide</div>
                   </div>
                 </div>
               </div>
 
               {/* Founder Credibility */}
-              <div className="p-6 rounded-xl border border-gray-200 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+              <div className="p-6 rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
                 style={{
-                  backdropFilter: 'blur(12px)',
-                  background: 'rgba(220, 220, 219, 0.85)',
-                  border: '1px solid rgba(255, 255, 255, 0.4)',
-                  boxShadow: '0 6px 24px rgba(0, 0, 0, 0.05)'
+                  backdropFilter: 'blur(20px)',
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
                 }}>
                 <div className="flex items-center space-x-4 mb-4">
-                  <div className="w-12 h-12 bg-white/60 rounded-full flex items-center justify-center backdrop-blur-sm">
-                    <Briefcase className="h-6 w-6 text-gray-600" />
+                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                    <Briefcase className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <div className="font-semibold text-gray-900">Expert Team</div>
-                    <div className="text-sm text-gray-600">Ex-NRS advisors & tax partners</div>
+                    <div className="font-semibold text-white">Expert Team</div>
+                    <div className="text-sm text-gray-300">Ex-NRS advisors & tax partners</div>
                   </div>
                 </div>
-                <p className="text-gray-700 text-sm">
+                <p className="text-gray-300 text-sm">
                   Built by former Nigerian Revenue Service advisors and certified tax practitioners with 20+ years of combined experience.
                 </p>
               </div>
