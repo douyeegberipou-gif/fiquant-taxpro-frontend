@@ -459,11 +459,12 @@ const Home = ({ onNavigateToTab }) => {
             <div className="relative rounded-2xl p-8 transform scale-105 transition-all duration-300 hover:shadow-xl hover:-translate-y-2"
               style={{
                 backgroundColor: 'white',
-                border: '2px solid #3b82f6',
-                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)'
+                border: '2px solid #D4AF37',
+                boxShadow: '0 4px 8px rgba(212, 175, 55, 0.2)'
               }}>
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <div className="px-4 py-1 rounded-full text-sm font-semibold text-white bg-blue-600">
+                <div className="px-4 py-1 rounded-full text-sm font-semibold text-white"
+                  style={{ backgroundColor: '#D4AF37' }}>
                   Most Popular
                 </div>
               </div>
