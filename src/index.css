@@ -39,6 +39,25 @@
   font-family: 'Roboto Mono', 'IBM Plex Mono', monospace;
 }
 
+/* Pulsing Glow Animation */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(255, 255, 255, 0.1);
+    opacity: 1;
+  }
+  50% {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                0 0 30px rgba(255, 255, 255, 0.2),
+                0 0 40px rgba(255, 255, 255, 0.1);
+    opacity: 0.9;
+  }
+}
+
+.pulse-glow {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
 /* Component Library - Premium Design System */
 .btn-primary {
   background-color: var(--gold-accent);  /* #D4AF37 */
