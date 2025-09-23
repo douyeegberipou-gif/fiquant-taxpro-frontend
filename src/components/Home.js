@@ -582,7 +582,7 @@ const Home = ({ onNavigateToTab }) => {
                   style={{
                     backgroundColor: 'white',
                     border: '1px solid #e5e7eb',
-                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
                   }}>
                   <Award className="h-8 w-8 text-purple-600" />
                   <div>
