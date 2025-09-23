@@ -687,14 +687,11 @@ const Home = ({ onNavigateToTab }) => {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-24" 
-        style={{
-          background: 'linear-gradient(225deg, #000000 0%, #1a1a1a 40%, #050505 70%, #000000 100%)'
-        }}>
+      <section className="py-24 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h3 className="text-3xl font-bold text-white mb-4">Frequently Asked Questions</h3>
-            <p className="text-xl text-gray-300">Everything you need to know about Fiquant TaxPro</p>
+            <h3 className="text-3xl font-bold text-gray-800 mb-4">Frequently Asked Questions</h3>
+            <p className="text-xl text-gray-600">Everything you need to know about Fiquant TaxPro</p>
           </div>
           
           <div className="space-y-4">
@@ -720,27 +717,26 @@ const Home = ({ onNavigateToTab }) => {
                 answer: "Absolutely. We use bank-grade encryption for all data in transit and at rest. We're SOC 2 compliant and never share your financial information with third parties."
               }
             ].map((faq, index) => (
-              <div key={index} className="rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+              <div key={index} className="rounded-xl overflow-hidden transition-all duration-300 hover:shadow-md hover:-translate-y-1"
                 style={{
-                  backdropFilter: 'blur(20px)',
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+                  backgroundColor: 'white',
+                  border: '1px solid #e5e7eb',
+                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
                 }}>
                 <button
                   onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
-                  className="w-full p-6 text-left flex justify-between items-center hover:bg-white/10 transition-colors backdrop-blur-sm"
+                  className="w-full p-6 text-left flex justify-between items-center hover:bg-gray-50 transition-colors"
                 >
-                  <span className="font-semibold text-white">{faq.question}</span>
+                  <span className="font-semibold text-gray-800">{faq.question}</span>
                   {expandedFaq === index ? (
-                    <ChevronUp className="h-5 w-5 text-gray-300" />
+                    <ChevronUp className="h-5 w-5 text-gray-600" />
                   ) : (
-                    <ChevronDown className="h-5 w-5 text-gray-300" />
+                    <ChevronDown className="h-5 w-5 text-gray-600" />
                   )}
                 </button>
                 {expandedFaq === index && (
                   <div className="px-6 pb-6">
-                    <p className="text-gray-300">{faq.answer}</p>
+                    <p className="text-gray-600">{faq.answer}</p>
                   </div>
                 )}
               </div>
