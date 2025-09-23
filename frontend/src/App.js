@@ -610,86 +610,116 @@ function AppContent() {
         
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <div className="relative">
-            <TabsList className="grid w-full grid-cols-9 md:grid-cols-9 h-auto mobile-tabs overflow-x-auto bg-gray-100 rounded-lg p-1 shadow-sm">
-              <div className="flex md:contents min-w-full md:min-w-0 gap-1">
+            <TabsList className="grid w-full grid-cols-9 md:grid-cols-9 h-auto mobile-tabs overflow-x-auto bg-transparent rounded-none p-0">
+              <div className="flex md:contents min-w-full md:min-w-0 gap-2">
               <TabsTrigger 
                 value="home" 
-                className="flex-1 md:flex-none bg-white border border-gray-200 px-4 py-3 text-gray-600 font-medium rounded-md hover:bg-green-50 hover:text-green-600 hover:border-green-200 data-[state=active]:bg-green-500 data-[state=active]:text-white data-[state=active]:border-green-500 data-[state=active]:shadow-md transition-all duration-200 flex flex-col items-center justify-center space-y-1"
+                className="flex-1 md:flex-none bg-gray-50 px-6 py-4 text-gray-700 font-medium rounded-lg hover:bg-gray-100 data-[state=active]:bg-teal-500 data-[state=active]:text-white transition-all duration-200 flex flex-col items-center justify-center space-y-2 shadow-sm hover:shadow-md data-[state=active]:shadow-md"
+                style={{
+                  boxShadow: activeTab === 'home' ? '0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)' : '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
+                }}
               >
                 <HomeIcon className="h-5 w-5" />
-                <span className="text-xs uppercase tracking-wide">HOME</span>
+                <span className="text-xs font-semibold tracking-wide">HOME</span>
               </TabsTrigger>
               
               <TabsTrigger 
                 value="calculator" 
-                className="flex-1 md:flex-none bg-white border border-gray-200 px-4 py-3 text-gray-600 font-medium rounded-md hover:bg-green-50 hover:text-green-600 hover:border-green-200 data-[state=active]:bg-green-500 data-[state=active]:text-white data-[state=active]:border-green-500 data-[state=active]:shadow-md transition-all duration-200 flex flex-col items-center justify-center space-y-1"
+                className="flex-1 md:flex-none bg-gray-50 px-6 py-4 text-gray-700 font-medium rounded-lg hover:bg-gray-100 data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-all duration-200 flex flex-col items-center justify-center space-y-2 shadow-sm hover:shadow-md data-[state=active]:shadow-md"
+                style={{
+                  boxShadow: activeTab === 'calculator' ? '0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)' : '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
+                }}
               >
                 <Users className="h-5 w-5" />
-                <span className="text-xs uppercase tracking-wide">PAYE</span>
+                <span className="text-xs font-semibold tracking-wide">PAYE</span>
               </TabsTrigger>
               
               <TabsTrigger 
                 value="cit" 
-                className="flex-1 md:flex-none bg-white border border-gray-200 px-4 py-3 text-gray-600 font-medium rounded-md hover:bg-green-50 hover:text-green-600 hover:border-green-200 data-[state=active]:bg-green-500 data-[state=active]:text-white data-[state=active]:border-green-500 data-[state=active]:shadow-md transition-all duration-200 flex flex-col items-center justify-center space-y-1"
+                className="flex-1 md:flex-none bg-gray-50 px-6 py-4 text-gray-700 font-medium rounded-lg hover:bg-gray-100 data-[state=active]:bg-teal-600 data-[state=active]:text-white transition-all duration-200 flex flex-col items-center justify-center space-y-2 shadow-sm hover:shadow-md data-[state=active]:shadow-md"
+                style={{
+                  boxShadow: activeTab === 'cit' ? '0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)' : '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
+                }}
               >
                 <Building2 className="h-5 w-5" />
-                <span className="text-xs uppercase tracking-wide">CIT</span>
+                <span className="text-xs font-semibold tracking-wide">CIT</span>
               </TabsTrigger>
               
               <TabsTrigger 
                 value="vat" 
-                className="flex-1 md:flex-none bg-white border border-gray-200 px-4 py-3 text-gray-600 font-medium rounded-md hover:bg-green-50 hover:text-green-600 hover:border-green-200 data-[state=active]:bg-green-500 data-[state=active]:text-white data-[state=active]:border-green-500 data-[state=active]:shadow-md transition-all duration-200 flex flex-col items-center justify-center space-y-1"
+                className="flex-1 md:flex-none bg-gray-50 px-6 py-4 text-gray-700 font-medium rounded-lg hover:bg-gray-100 data-[state=active]:bg-gray-400 data-[state=active]:text-white transition-all duration-200 flex flex-col items-center justify-center space-y-2 shadow-sm hover:shadow-md data-[state=active]:shadow-md"
+                style={{
+                  boxShadow: activeTab === 'vat' ? '0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)' : '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
+                }}
               >
                 <Receipt className="h-5 w-5" />
-                <span className="text-xs uppercase tracking-wide">VAT</span>
+                <span className="text-xs font-semibold tracking-wide">VAT</span>
               </TabsTrigger>
               
               <TabsTrigger 
                 value="cgt" 
-                className="flex-1 md:flex-none bg-white border border-gray-200 px-4 py-3 text-gray-600 font-medium rounded-md hover:bg-green-50 hover:text-green-600 hover:border-green-200 data-[state=active]:bg-green-500 data-[state=active]:text-white data-[state=active]:border-green-500 data-[state=active]:shadow-md transition-all duration-200 flex flex-col items-center justify-center space-y-1"
+                className="flex-1 md:flex-none bg-gray-50 px-6 py-4 text-gray-700 font-medium rounded-lg hover:bg-gray-100 data-[state=active]:bg-gray-400 data-[state=active]:text-white transition-all duration-200 flex flex-col items-center justify-center space-y-2 shadow-sm hover:shadow-md data-[state=active]:shadow-md"
+                style={{
+                  boxShadow: activeTab === 'cgt' ? '0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)' : '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
+                }}
               >
                 <TrendingUp className="h-5 w-5" />
-                <span className="text-xs uppercase tracking-wide">CGT</span>
+                <span className="text-xs font-semibold tracking-wide">CGT</span>
               </TabsTrigger>
               
               <TabsTrigger 
                 value="payment" 
-                className="flex-1 md:flex-none bg-white border border-gray-200 px-4 py-3 text-gray-600 font-medium rounded-md hover:bg-green-50 hover:text-green-600 hover:border-green-200 data-[state=active]:bg-green-500 data-[state=active]:text-white data-[state=active]:border-green-500 data-[state=active]:shadow-md transition-all duration-200 flex flex-col items-center justify-center space-y-1"
+                className="flex-1 md:flex-none bg-gray-50 px-6 py-4 text-gray-700 font-medium rounded-lg hover:bg-gray-100 data-[state=active]:bg-gray-400 data-[state=active]:text-white transition-all duration-200 flex flex-col items-center justify-center space-y-2 shadow-sm hover:shadow-md data-[state=active]:shadow-md"
+                style={{
+                  boxShadow: activeTab === 'payment' ? '0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)' : '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
+                }}
               >
                 <CreditCard className="h-5 w-5" />
-                <span className="text-xs uppercase tracking-wide">PAYMENTS</span>
+                <span className="text-xs font-semibold tracking-wide">PAYMENTS</span>
               </TabsTrigger>
               
               <TabsTrigger 
                 value="brackets" 
-                className="flex-1 md:flex-none bg-white border border-gray-200 px-4 py-3 text-gray-600 font-medium rounded-md hover:bg-green-50 hover:text-green-600 hover:border-green-200 data-[state=active]:bg-green-500 data-[state=active]:text-white data-[state=active]:border-green-500 data-[state=active]:shadow-md transition-all duration-200 flex flex-col items-center justify-center space-y-1"
+                className="flex-1 md:flex-none bg-gray-50 px-6 py-4 text-gray-700 font-medium rounded-lg hover:bg-gray-100 data-[state=active]:bg-gray-400 data-[state=active]:text-white transition-all duration-200 flex flex-col items-center justify-center space-y-2 shadow-sm hover:shadow-md data-[state=active]:shadow-md"
+                style={{
+                  boxShadow: activeTab === 'brackets' ? '0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)' : '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
+                }}
               >
                 <Info className="h-5 w-5" />
-                <span className="text-xs uppercase tracking-wide">TAX INFO</span>
+                <span className="text-xs font-semibold tracking-wide">TAX INFO</span>
               </TabsTrigger>
               
               <TabsTrigger 
                 value="history" 
-                className="flex-1 md:flex-none bg-white border border-gray-200 px-4 py-3 text-gray-600 font-medium rounded-md hover:bg-green-50 hover:text-green-600 hover:border-green-200 data-[state=active]:bg-green-500 data-[state=active]:text-white data-[state=active]:border-green-500 data-[state=active]:shadow-md transition-all duration-200 flex flex-col items-center justify-center space-y-1"
+                className="flex-1 md:flex-none bg-gray-50 px-6 py-4 text-gray-700 font-medium rounded-lg hover:bg-gray-100 data-[state=active]:bg-gray-400 data-[state=active]:text-white transition-all duration-200 flex flex-col items-center justify-center space-y-2 shadow-sm hover:shadow-md data-[state=active]:shadow-md"
+                style={{
+                  boxShadow: activeTab === 'history' ? '0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)' : '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
+                }}
               >
                 <FileText className="h-5 w-5" />
-                <span className="text-xs uppercase tracking-wide">HISTORY</span>
+                <span className="text-xs font-semibold tracking-wide">HISTORY</span>
               </TabsTrigger>
               
               <TabsTrigger 
                 value="compliance" 
-                className="flex-1 md:flex-none bg-white border border-gray-200 px-4 py-3 text-gray-600 font-medium rounded-md hover:bg-green-50 hover:text-green-600 hover:border-green-200 data-[state=active]:bg-green-500 data-[state=active]:text-white data-[state=active]:border-green-500 data-[state=active]:shadow-md transition-all duration-200 flex flex-col items-center justify-center space-y-1"
+                className="flex-1 md:flex-none bg-gray-50 px-6 py-4 text-gray-700 font-medium rounded-lg hover:bg-gray-100 data-[state=active]:bg-gray-400 data-[state=active]:text-white transition-all duration-200 flex flex-col items-center justify-center space-y-2 shadow-sm hover:shadow-md data-[state=active]:shadow-md"
+                style={{
+                  boxShadow: activeTab === 'compliance' ? '0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)' : '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
+                }}
               >
                 <Briefcase className="h-5 w-5" />
-                <span className="text-xs uppercase tracking-wide">COMPLIANCE</span>
+                <span className="text-xs font-semibold tracking-wide">COMPLIANCE</span>
               </TabsTrigger>
               {isAuthenticated() && (
                 <TabsTrigger 
                   value="profile" 
-                  className="flex-1 md:flex-none bg-white border border-gray-200 px-4 py-3 text-gray-600 font-medium rounded-md hover:bg-green-50 hover:text-green-600 hover:border-green-200 data-[state=active]:bg-green-500 data-[state=active]:text-white data-[state=active]:border-green-500 data-[state=active]:shadow-md transition-all duration-200 flex flex-col items-center justify-center space-y-1"
+                  className="flex-1 md:flex-none bg-gray-50 px-6 py-4 text-gray-700 font-medium rounded-lg hover:bg-gray-100 data-[state=active]:bg-gray-400 data-[state=active]:text-white transition-all duration-200 flex flex-col items-center justify-center space-y-2 shadow-sm hover:shadow-md data-[state=active]:shadow-md"
+                  style={{
+                    boxShadow: activeTab === 'profile' ? '0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)' : '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
+                  }}
                 >
                   <User className="h-5 w-5" />
-                  <span className="text-xs uppercase tracking-wide">PROFILE</span>
+                  <span className="text-xs font-semibold tracking-wide">PROFILE</span>
                 </TabsTrigger>
               )}
               </div>
