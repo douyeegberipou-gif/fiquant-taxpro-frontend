@@ -314,25 +314,23 @@ const Home = ({ onNavigateToTab }) => {
                 boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
               }}
             >
-              <div className="absolute bottom-0 left-0 right-0 h-1/3 p-4 flex flex-col justify-center"
+              <div className="absolute bottom-0 left-0 right-0 h-1/3 p-4 flex flex-col justify-center items-center text-center"
                 style={{
                   backdropFilter: 'blur(16px)',
                   background: 'rgba(255, 255, 255, 0.15)',
                   border: '1px solid rgba(255, 255, 255, 0.2)'
                 }}>
-                <div className="flex items-start mb-2">
-                  <TrendingUp className="h-5 w-5 text-blue-600 mr-2 mt-1 flex-shrink-0" />
-                  <div>
-                    <h3 className="text-base font-bold text-gray-800 mb-2">
-                      Work out CGT due on a sale
-                    </h3>
-                    <Button 
-                      className="bg-green-600 hover:bg-green-700 text-white text-xs font-bold py-1.5 px-3 rounded-md"
-                    >
-                      Calculate CGT — Free
-                    </Button>
-                  </div>
+                <div className="flex items-center mb-2">
+                  <TrendingUp className="h-5 w-5 text-blue-600 mr-2 flex-shrink-0" />
+                  <h3 className="text-base font-bold text-white">
+                    Work out CGT due on a sale
+                  </h3>
                 </div>
+                <Button 
+                  className="bg-green-600 hover:bg-green-700 text-white text-xs font-bold py-1.5 px-3 rounded-lg"
+                >
+                  Calculate CGT — Free
+                </Button>
               </div>
             </div>
 
