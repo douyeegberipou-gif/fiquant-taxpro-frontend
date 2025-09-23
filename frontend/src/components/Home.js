@@ -492,7 +492,8 @@ const Home = ({ onNavigateToTab }) => {
               </ul>
               
               <Button 
-                className="w-full py-3 text-white font-semibold rounded-lg hover:scale-105 transition-transform bg-blue-600 hover:bg-blue-700"
+                className="w-full py-3 text-white font-semibold rounded-lg hover:scale-105 transition-transform"
+                style={{ backgroundColor: '#D4AF37' }}
               >
                 Start 7-day Trial
               </Button>
