@@ -545,90 +545,82 @@ const Home = ({ onNavigateToTab }) => {
       </section>
 
       {/* Trust & Proof */}
-      <section className="py-24" 
-        style={{
-          background: 'linear-gradient(180deg, #000000 0%, #151515 30%, #0f0f0f 60%, #000000 100%)'
-        }}>
+      <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left Column - Badges and Credentials */}
             <div>
-              <h3 className="text-3xl font-bold text-white mb-8">Trusted by SMEs & Tax Professionals</h3>
+              <h3 className="text-3xl font-bold text-gray-800 mb-8">Trusted by SMEs & Tax Professionals</h3>
               
               {/* Trust Badges */}
               <div className="grid grid-cols-2 gap-6 mb-12">
-                <div className="flex items-center space-x-3 p-4 rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                <div className="flex items-center space-x-3 p-4 rounded-lg transition-all duration-300 hover:shadow-md hover:-translate-y-1"
                   style={{
-                    backdropFilter: 'blur(20px)',
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+                    backgroundColor: 'white',
+                    border: '1px solid #e5e7eb',
+                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
                   }}>
-                  <Shield className="h-8 w-8 text-green-400" />
+                  <Shield className="h-8 w-8 text-green-600" />
                   <div>
-                    <div className="font-semibold text-white">NRS-Aligned</div>
-                    <div className="text-sm text-gray-300">Fully compliant calculations</div>
+                    <div className="font-semibold text-gray-800">NRS-Aligned</div>
+                    <div className="text-sm text-gray-600">Fully compliant calculations</div>
                   </div>
                 </div>
-                <div className="flex items-center space-x-3 p-4 rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                <div className="flex items-center space-x-3 p-4 rounded-lg transition-all duration-300 hover:shadow-md hover:-translate-y-1"
                   style={{
-                    backdropFilter: 'blur(20px)',
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+                    backgroundColor: 'white',
+                    border: '1px solid #e5e7eb',
+                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
                   }}>
-                  <Lock className="h-8 w-8 text-blue-400" />
+                  <Lock className="h-8 w-8 text-blue-600" />
                   <div>
-                    <div className="font-semibold text-white">Encrypted</div>
-                    <div className="text-sm text-gray-300">Bank-grade security</div>
+                    <div className="font-semibold text-gray-800">Encrypted</div>
+                    <div className="text-sm text-gray-600">Bank-grade security</div>
                   </div>
                 </div>
-                <div className="flex items-center space-x-3 p-4 rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                <div className="flex items-center space-x-3 p-4 rounded-lg transition-all duration-300 hover:shadow-md hover:-translate-y-1"
                   style={{
-                    backdropFilter: 'blur(20px)',
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+                    backgroundColor: 'white',
+                    border: '1px solid #e5e7eb',
+                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
                   }}>
-                  <Award className="h-8 w-8 text-purple-400" />
+                  <Award className="h-8 w-8 text-purple-600" />
                   <div>
-                    <div className="font-semibold text-white">Audit-Ready</div>
-                    <div className="text-sm text-gray-300">Professional reports</div>
+                    <div className="font-semibold text-gray-800">Audit-Ready</div>
+                    <div className="text-sm text-gray-600">Professional reports</div>
                   </div>
                 </div>
-                <div className="flex items-center space-x-3 p-4 rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                <div className="flex items-center space-x-3 p-4 rounded-lg transition-all duration-300 hover:shadow-md hover:-translate-y-1"
                   style={{
-                    backdropFilter: 'blur(20px)',
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+                    backgroundColor: 'white',
+                    border: '1px solid #e5e7eb',
+                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
                   }}>
-                  <Users className="h-8 w-8 text-orange-400" />
+                  <Users className="h-8 w-8 text-orange-600" />
                   <div>
-                    <div className="font-semibold text-white">500+ SMEs</div>
-                    <div className="text-sm text-gray-300">Trusted nationwide</div>
+                    <div className="font-semibold text-gray-800">500+ SMEs</div>
+                    <div className="text-sm text-gray-600">Trusted nationwide</div>
                   </div>
                 </div>
               </div>
 
               {/* Founder Credibility */}
-              <div className="p-6 rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+              <div className="p-6 rounded-xl transition-all duration-300 hover:shadow-md hover:-translate-y-1"
                 style={{
-                  backdropFilter: 'blur(20px)',
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+                  backgroundColor: 'white',
+                  border: '1px solid #e5e7eb',
+                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
                 }}>
                 <div className="flex items-center space-x-4 mb-4">
-                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-                    <Briefcase className="h-6 w-6 text-white" />
+                  <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
+                    <Briefcase className="h-6 w-6 text-gray-600" />
                   </div>
                   <div>
-                    <div className="font-semibold text-white">Expert Team</div>
-                    <div className="text-sm text-gray-300">Ex-NRS advisors & tax partners</div>
+                    <div className="font-semibold text-gray-800">Expert Team</div>
+                    <div className="text-sm text-gray-600">Ex-NRS advisors & tax partners</div>
                   </div>
                 </div>
-                <p className="text-gray-300 text-sm">
+                <p className="text-gray-600 text-sm">
                   Built by former Nigerian Revenue Service advisors and certified tax practitioners with 20+ years of combined experience.
                 </p>
               </div>
@@ -637,58 +629,55 @@ const Home = ({ onNavigateToTab }) => {
             {/* Right Column - Case Study */}
             <div className="p-8 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
               style={{
-                backdropFilter: 'blur(20px)',
-                background: 'rgba(255, 255, 255, 0.1)',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+                backgroundColor: 'white',
+                border: '1px solid #e5e7eb',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)'
               }}>
               <div className="flex items-center space-x-2 mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                  <Star key={i} className="h-5 w-5 text-yellow-500 fill-current" />
                 ))}
               </div>
               
-              <blockquote className="text-lg text-gray-200 mb-6 italic">
+              <blockquote className="text-lg text-gray-700 mb-6 italic">
                 "Fiquant TaxPro saved our accounting firm over 40 hours monthly on tax calculations. The NTA 2025 compliance gives us complete confidence in every calculation we deliver to clients."
               </blockquote>
               
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <div className="font-semibold text-white">Adebayo Ogundimu</div>
-                  <div className="text-gray-300">Senior Partner, Lagos Tax Associates</div>
+                  <div className="font-semibold text-gray-800">Adebayo Ogundimu</div>
+                  <div className="text-gray-600">Senior Partner, Lagos Tax Associates</div>
                 </div>
                 <div className="text-right">
-                  <div className="text-2xl font-bold text-green-400">40hrs</div>
-                  <div className="text-sm text-gray-300">saved monthly</div>
+                  <div className="text-2xl font-bold text-green-600">40hrs</div>
+                  <div className="text-sm text-gray-600">saved monthly</div>
                 </div>
               </div>
               
               <div className="rounded-lg p-4 transition-all duration-200 hover:shadow-md"
                 style={{
-                  backdropFilter: 'blur(10px)',
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)'
+                  backgroundColor: '#f8fafc',
+                  border: '1px solid #e2e8f0'
                 }}>
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div>
-                    <div className="text-xl font-bold text-white">250+</div>
-                    <div className="text-xs text-gray-300">Clients served</div>
+                    <div className="text-xl font-bold text-gray-800">250+</div>
+                    <div className="text-xs text-gray-600">Clients served</div>
                   </div>
                   <div>
-                    <div className="text-xl font-bold text-white">₦50M+</div>
-                    <div className="text-xs text-gray-300">Taxes calculated</div>
+                    <div className="text-xl font-bold text-gray-800">₦50M+</div>
+                    <div className="text-xs text-gray-600">Taxes calculated</div>
                   </div>
                   <div>
-                    <div className="text-xl font-bold text-white">100%</div>
-                    <div className="text-xs text-gray-300">NTA compliant</div>
+                    <div className="text-xl font-bold text-gray-800">100%</div>
+                    <div className="text-xs text-gray-600">NTA compliant</div>
                   </div>
                 </div>
               </div>
               
               <Button 
                 variant="link" 
-                className="mt-4 text-sm font-semibold p-0"
-                style={{ color: '#D4AF37' }}
+                className="mt-4 text-sm font-semibold p-0 text-blue-600"
               >
                 See full case study →
               </Button>
