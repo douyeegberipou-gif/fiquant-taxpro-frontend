@@ -746,7 +746,7 @@ const Home = ({ onNavigateToTab }) => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-16">
+      <footer className="bg-gray-800 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             {/* Company Info */}
@@ -759,15 +759,15 @@ const Home = ({ onNavigateToTab }) => {
                 />
                 <span className="text-xl font-bold">Fiquant TaxPro 2026</span>
               </div>
-              <p className="text-gray-400 mb-6 max-w-md">
+              <p className="text-gray-300 mb-6 max-w-md">
                 NTA 2025-compliant tax calculators and compliance tools for Nigerian businesses and individuals. Built by tax experts, trusted by professionals.
               </p>
               <div className="flex space-x-4">
-                <div className="flex items-center space-x-2 text-sm text-gray-400">
+                <div className="flex items-center space-x-2 text-sm text-gray-300">
                   <Mail className="h-4 w-4" />
                   <span>support@fiquant.ng</span>
                 </div>
-                <div className="flex items-center space-x-2 text-sm text-gray-400">
+                <div className="flex items-center space-x-2 text-sm text-gray-300">
                   <Phone className="h-4 w-4" />
                   <span>+234 (0) 700 FIQUANT</span>
                 </div>
@@ -777,7 +777,7 @@ const Home = ({ onNavigateToTab }) => {
             {/* Product Links */}
             <div>
               <h5 className="font-semibold mb-4">Product</h5>
-              <ul className="space-y-2 text-sm text-gray-400">
+              <ul className="space-y-2 text-sm text-gray-300">
                 <li><a href="#" className="hover:text-white transition-colors">Pricing</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Calculators</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">API Documentation</a></li>
@@ -788,7 +788,7 @@ const Home = ({ onNavigateToTab }) => {
             {/* Support Links */}
             <div>
               <h5 className="font-semibold mb-4">Support</h5>
-              <ul className="space-y-2 text-sm text-gray-400">
+              <ul className="space-y-2 text-sm text-gray-300">
                 <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Contact Us</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
@@ -798,12 +798,12 @@ const Home = ({ onNavigateToTab }) => {
           </div>
           
           {/* Bottom Bar */}
-          <div className="border-t border-gray-800 pt-8">
+          <div className="border-t border-gray-700 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center">
-              <p className="text-sm text-gray-400 mb-4 md:mb-0">
+              <p className="text-sm text-gray-300 mb-4 md:mb-0">
                 © 2026 Fiquant Consult. All rights reserved. Built for Nigerian Tax Compliance.
               </p>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-gray-400">
                 Fiquant TaxPro provides calculation tools and guidance. This is not legal advice. 
                 For complex tax matters consult qualified tax counsel.
               </p>
