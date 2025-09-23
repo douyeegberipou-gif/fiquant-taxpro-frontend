@@ -186,7 +186,7 @@ const Home = ({ onNavigateToTab }) => {
               <div 
                 key={index}
                 onClick={item.action}
-                className="group cursor-pointer p-6 rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                className="group cursor-pointer p-6 rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1 pulse-glow"
                 style={{
                   backdropFilter: 'blur(20px)',
                   background: 'rgba(255, 255, 255, 0.1)',
