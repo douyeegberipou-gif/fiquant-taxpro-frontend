@@ -164,14 +164,11 @@ const Home = ({ onNavigateToTab }) => {
       </section>
 
       {/* Floating Quick-Actions: "What do you want to do?" */}
-      <section className="relative -mt-12 pb-24" 
-        style={{
-          background: 'linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%)'
-        }}>
+      <section className="relative -mt-12 pb-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h3 className="text-2xl font-bold text-white mb-4">What do you want to do?</h3>
-            <p className="text-gray-300">Choose your calculator and get instant, NTA-compliant results</p>
+            <h3 className="text-2xl font-bold text-gray-800 mb-4">What do you want to do?</h3>
+            <p className="text-gray-600">Choose your calculator and get instant, NTA-compliant results</p>
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
@@ -188,10 +185,9 @@ const Home = ({ onNavigateToTab }) => {
                 onClick={item.action}
                 className="group cursor-pointer p-6 rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
                 style={{
-                  backdropFilter: 'blur(20px)',
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+                  backgroundColor: 'white',
+                  border: '1px solid #e5e7eb',
+                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
                 }}
               >
                 <div className="flex items-center space-x-4">
