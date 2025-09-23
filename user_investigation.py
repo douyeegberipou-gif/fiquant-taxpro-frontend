@@ -11,7 +11,7 @@ from datetime import datetime
 import re
 
 class UserInvestigator:
-    def __init__(self, base_url="https://fiquant-taxpro-1.preview.emergentagent.com/api"):
+    def __init__(self, base_url="https://tax-calc-nigeria.preview.emergentagent.com/api"):
         self.base_url = base_url
         self.findings = []
         
