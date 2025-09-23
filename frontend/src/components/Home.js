@@ -192,12 +192,12 @@ const Home = ({ onNavigateToTab }) => {
               >
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 flex items-center justify-center transition-colors">
-                    <item.icon className="h-6 w-6 text-white group-hover:text-white" />
+                    <item.icon className="h-6 w-6 text-gray-700 group-hover:text-blue-600" />
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-semibold text-white group-hover:text-white">{item.label}</h4>
+                    <h4 className="font-semibold text-gray-800 group-hover:text-blue-600">{item.label}</h4>
                   </div>
-                  <ArrowRight className="h-5 w-5 text-gray-300 group-hover:text-white opacity-0 group-hover:opacity-100 transition-all" />
+                  <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-blue-600 opacity-0 group-hover:opacity-100 transition-all" />
                 </div>
               </div>
             ))}
