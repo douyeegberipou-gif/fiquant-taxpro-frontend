@@ -402,29 +402,25 @@ const Home = ({ onNavigateToTab }) => {
       </section>
 
       {/* Pricing Windows */}
-      <section className="relative py-24" 
-        style={{
-          background: 'linear-gradient(45deg, #000000 0%, #1f1f1f 25%, #0a0a0a 50%, #1a1a1a 75%, #000000 100%)'
-        }}>
+      <section className="relative py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h3 className="text-3xl font-bold text-white mb-4">Choose Your Plan</h3>
-            <p className="text-xl text-gray-300">Start free, upgrade when you need more features</p>
+            <h3 className="text-3xl font-bold text-gray-800 mb-4">Choose Your Plan</h3>
+            <p className="text-xl text-gray-600">Start free, upgrade when you need more features</p>
           </div>
           
           <div className="grid lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {/* Free Plan */}
-            <div className="relative rounded-2xl p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+            <div className="relative rounded-2xl p-8 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
               style={{
-                backdropFilter: 'blur(20px)',
-                background: 'rgba(255, 255, 255, 0.1)',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+                backgroundColor: 'white',
+                border: '1px solid #e5e7eb',
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
               }}>
               <div className="text-center mb-8">
-                <h4 className="text-2xl font-bold text-white mb-2">Free</h4>
-                <p className="text-4xl font-bold text-white">₦0<span className="text-lg font-normal text-gray-300">/month</span></p>
-                <p className="text-gray-300 mt-2">Always free to calculate</p>
+                <h4 className="text-2xl font-bold text-gray-800 mb-2">Free</h4>
+                <p className="text-4xl font-bold text-gray-800">₦0<span className="text-lg font-normal text-gray-600">/month</span></p>
+                <p className="text-gray-600 mt-2">Always free to calculate</p>
               </div>
               
               <ul className="space-y-4 mb-8">
@@ -435,8 +431,8 @@ const Home = ({ onNavigateToTab }) => {
                   "Email support"
                 ].map((feature, i) => (
                   <li key={i} className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-3 flex-shrink-0" />
-                    <span className="text-gray-200">{feature}</span>
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                    <span className="text-gray-700">{feature}</span>
                   </li>
                 ))}
                 {[
@@ -444,8 +440,8 @@ const Home = ({ onNavigateToTab }) => {
                   "Save History disabled"
                 ].map((feature, i) => (
                   <li key={i} className="flex items-center">
-                    <AlertTriangle className="h-5 w-5 text-red-400 mr-3 flex-shrink-0" />
-                    <span className="text-gray-400 line-through">{feature}</span>
+                    <AlertTriangle className="h-5 w-5 text-red-500 mr-3 flex-shrink-0" />
+                    <span className="text-gray-500 line-through">{feature}</span>
                   </li>
                 ))}
               </ul>
@@ -453,35 +449,29 @@ const Home = ({ onNavigateToTab }) => {
               <Button 
                 onClick={() => onNavigateToTab('calculator')}
                 variant="outline"
-                className="w-full py-3 border-white/30 text-white hover:bg-white/20"
+                className="w-full py-3 border-gray-300 text-gray-700 hover:bg-gray-50"
               >
                 Use Free Calculators
               </Button>
             </div>
 
             {/* Pro Plan - Most Popular */}
-            <div className="relative rounded-2xl p-8 transform scale-105 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+            <div className="relative rounded-2xl p-8 transform scale-105 transition-all duration-300 hover:shadow-xl hover:-translate-y-2"
               style={{
-                backdropFilter: 'blur(20px)',
-                background: 'rgba(255, 255, 255, 0.15)',
-                border: '2px solid #D4AF37',
-                boxShadow: '0 12px 40px rgba(212, 175, 55, 0.4)'
+                backgroundColor: 'white',
+                border: '2px solid #3b82f6',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)'
               }}>
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <div className="px-4 py-1 rounded-full text-sm font-semibold text-white"
-                  style={{ 
-                    backgroundColor: '#D4AF37',
-                    backdropFilter: 'blur(8px)',
-                    boxShadow: '0 4px 12px rgba(212, 175, 55, 0.3)'
-                  }}>
+                <div className="px-4 py-1 rounded-full text-sm font-semibold text-white bg-blue-600">
                   Most Popular
                 </div>
               </div>
               
               <div className="text-center mb-8">
-                <h4 className="text-2xl font-bold text-white mb-2">Pro</h4>
-                <p className="text-4xl font-bold text-white">₦10,000<span className="text-lg font-normal text-gray-300">/month</span></p>
-                <p className="text-gray-300 mt-2">Everything in Free, plus:</p>
+                <h4 className="text-2xl font-bold text-gray-800 mb-2">Pro</h4>
+                <p className="text-4xl font-bold text-gray-800">₦10,000<span className="text-lg font-normal text-gray-600">/month</span></p>
+                <p className="text-gray-600 mt-2">Everything in Free, plus:</p>
               </div>
               
               <ul className="space-y-4 mb-8">
@@ -494,32 +484,30 @@ const Home = ({ onNavigateToTab }) => {
                   "Advanced reporting"
                 ].map((feature, i) => (
                   <li key={i} className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-3 flex-shrink-0" />
-                    <span className="text-gray-200">{feature}</span>
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                    <span className="text-gray-700">{feature}</span>
                   </li>
                 ))}
               </ul>
               
               <Button 
-                className="w-full py-3 text-white font-semibold rounded-lg hover:scale-105 transition-transform"
-                style={{ backgroundColor: '#D4AF37' }}
+                className="w-full py-3 text-white font-semibold rounded-lg hover:scale-105 transition-transform bg-blue-600 hover:bg-blue-700"
               >
                 Start 7-day Trial
               </Button>
             </div>
 
             {/* Premium Plan */}
-            <div className="relative rounded-2xl p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+            <div className="relative rounded-2xl p-8 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
               style={{
-                backdropFilter: 'blur(20px)',
-                background: 'rgba(255, 255, 255, 0.1)',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+                backgroundColor: 'white',
+                border: '1px solid #e5e7eb',
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
               }}>
               <div className="text-center mb-8">
-                <h4 className="text-2xl font-bold text-white mb-2">Premium</h4>
-                <p className="text-4xl font-bold text-white">₦14,999<span className="text-lg font-normal text-gray-300">/month</span></p>
-                <p className="text-gray-300 mt-2">Everything in Pro, plus:</p>
+                <h4 className="text-2xl font-bold text-gray-800 mb-2">Premium</h4>
+                <p className="text-4xl font-bold text-gray-800">₦14,999<span className="text-lg font-normal text-gray-600">/month</span></p>
+                <p className="text-gray-600 mt-2">Everything in Pro, plus:</p>
               </div>
               
               <ul className="space-y-4 mb-8">
@@ -532,15 +520,15 @@ const Home = ({ onNavigateToTab }) => {
                   "Dedicated account manager"
                 ].map((feature, i) => (
                   <li key={i} className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-3 flex-shrink-0" />
-                    <span className="text-gray-200">{feature}</span>
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                    <span className="text-gray-700">{feature}</span>
                   </li>
                 ))}
               </ul>
               
               <Button 
                 variant="outline"
-                className="w-full py-3 border-white/30 text-white hover:bg-white/20"
+                className="w-full py-3 border-gray-300 text-gray-700 hover:bg-gray-50"
               >
                 Start 7-day Trial
               </Button>
@@ -549,7 +537,7 @@ const Home = ({ onNavigateToTab }) => {
           
           <div className="text-center mt-12">
             <p className="text-gray-600 mb-4">Need custom features or API access?</p>
-            <Button variant="link" className="text-gray-900 font-semibold underline">
+            <Button variant="link" className="text-blue-600 font-semibold underline">
               Contact Sales for Enterprise Solutions
             </Button>
           </div>
