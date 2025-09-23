@@ -215,24 +215,26 @@ const Home = ({ onNavigateToTab }) => {
               className="relative rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 h-80 cursor-pointer"
               onClick={() => onNavigateToTab('calculator')}
               style={{
-                backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/2s52tc3b_Gemini_Generated_Image_k1jwlnk1jwlnk1jw.png')`,
+                backgroundImage: `linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.3)), url('https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/2s52tc3b_Gemini_Generated_Image_k1jwlnk1jwlnk1jw.png')`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
               }}
             >
-              <div className="absolute bottom-0 left-0 right-0 p-6 bg-white bg-opacity-95 backdrop-blur-sm">
-                <div className="flex items-start mb-3">
-                  <Users className="h-6 w-6 text-blue-600 mr-3 mt-1 flex-shrink-0" />
+              <div className="absolute bottom-0 left-0 right-0 h-1/3 p-4 flex flex-col justify-center"
+                style={{
+                  backdropFilter: 'blur(16px)',
+                  background: 'rgba(255, 255, 255, 0.15)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)'
+                }}>
+                <div className="flex items-start mb-2">
+                  <Users className="h-5 w-5 text-blue-600 mr-2 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="text-lg font-bold text-gray-800 mb-2">
-                      Know EXACTLY what your employer is allowed to charge you as tax
+                    <h3 className="text-base font-bold text-gray-800 mb-2">
+                      Calculate my PAYE
                     </h3>
-                    <p className="text-sm text-gray-600 mb-3">
-                      Exact PAYE with pension, NHF, life insurance & rent relief.
-                    </p>
                     <Button 
-                      className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold py-2 px-4 rounded-lg"
+                      className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-1.5 px-3 rounded-md"
                     >
                       Calculate PAYE — Free
                     </Button>
@@ -244,28 +246,30 @@ const Home = ({ onNavigateToTab }) => {
             {/* CIT Panel */}
             <div 
               className="relative rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 h-80 cursor-pointer"
-              onClick={() => onNavigateToTab('cit')}
+              onClick={() => onNavigateToTab('calculator', { mode: 'bulk' })}
               style={{
-                backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/za762luj_Gemini_Generated_Image_ge8ufyge8ufyge8u.png')`,
+                backgroundImage: `linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.3)), url('https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/za762luj_Gemini_Generated_Image_ge8ufyge8ufyge8u.png')`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
               }}
             >
-              <div className="absolute bottom-0 left-0 right-0 p-6 bg-white bg-opacity-95 backdrop-blur-sm">
-                <div className="flex items-start mb-3">
-                  <Calculator className="h-6 w-6 text-blue-600 mr-3 mt-1 flex-shrink-0" />
+              <div className="absolute bottom-0 left-0 right-0 h-1/3 p-4 flex flex-col justify-center"
+                style={{
+                  backdropFilter: 'blur(16px)',
+                  background: 'rgba(255, 255, 255, 0.15)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)'
+                }}>
+                <div className="flex items-start mb-2">
+                  <Calculator className="h-5 w-5 text-blue-600 mr-2 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="text-lg font-bold text-gray-800 mb-2">
-                      Accurate CIT with 2025 Rules
+                    <h3 className="text-base font-bold text-gray-800 mb-2">
+                      Run bulk PAYE for my team
                     </h3>
-                    <p className="text-sm text-gray-600 mb-3">
-                      Capital allowances, thin cap rules & development levy.
-                    </p>
                     <Button 
-                      className="bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold py-2 px-4 rounded-lg"
+                      className="bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold py-1.5 px-3 rounded-md"
                     >
-                      Calculate CIT — Free
+                      Bulk PAYE — Free
                     </Button>
                   </div>
                 </div>
@@ -277,24 +281,26 @@ const Home = ({ onNavigateToTab }) => {
               className="relative rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 h-80 cursor-pointer"
               onClick={() => onNavigateToTab('vat')}
               style={{
-                backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/iakm5flx_Gemini_Generated_Image_k1jwlnk1jwlnk1jw%20%283%29.png')`,
+                backgroundImage: `linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.3)), url('https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/iakm5flx_Gemini_Generated_Image_k1jwlnk1jwlnk1jw%20%283%29.png')`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
               }}
             >
-              <div className="absolute bottom-0 left-0 right-0 p-6 bg-white bg-opacity-95 backdrop-blur-sm">
-                <div className="flex items-start mb-3">
-                  <Receipt className="h-6 w-6 text-blue-600 mr-3 mt-1 flex-shrink-0" />
+              <div className="absolute bottom-0 left-0 right-0 h-1/3 p-4 flex flex-col justify-center"
+                style={{
+                  backdropFilter: 'blur(16px)',
+                  background: 'rgba(255, 255, 255, 0.15)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)'
+                }}>
+                <div className="flex items-start mb-2">
+                  <Receipt className="h-5 w-5 text-blue-600 mr-2 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="text-lg font-bold text-gray-800 mb-2">
-                      VAT Made Simple
+                    <h3 className="text-base font-bold text-gray-800 mb-2">
+                      Compute VAT due on an Invoice
                     </h3>
-                    <p className="text-sm text-gray-600 mb-3">
-                      Automatic transaction classification by NTA rules.
-                    </p>
                     <Button 
-                      className="bg-orange-600 hover:bg-orange-700 text-white text-sm font-bold py-2 px-4 rounded-lg"
+                      className="bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold py-1.5 px-3 rounded-md"
                     >
                       Calculate VAT — Free
                     </Button>
@@ -308,24 +314,26 @@ const Home = ({ onNavigateToTab }) => {
               className="relative rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 h-80 cursor-pointer"
               onClick={() => onNavigateToTab('cgt')}
               style={{
-                backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/3l8sul24_Gemini_Generated_Image_bhxj3sbhxj3sbhxj.png')`,
+                backgroundImage: `linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.3)), url('https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/3l8sul24_Gemini_Generated_Image_bhxj3sbhxj3sbhxj.png')`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
               }}
             >
-              <div className="absolute bottom-0 left-0 right-0 p-6 bg-white bg-opacity-95 backdrop-blur-sm">
-                <div className="flex items-start mb-3">
-                  <TrendingUp className="h-6 w-6 text-blue-600 mr-3 mt-1 flex-shrink-0" />
+              <div className="absolute bottom-0 left-0 right-0 h-1/3 p-4 flex flex-col justify-center"
+                style={{
+                  backdropFilter: 'blur(16px)',
+                  background: 'rgba(255, 255, 255, 0.15)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)'
+                }}>
+                <div className="flex items-start mb-2">
+                  <TrendingUp className="h-5 w-5 text-blue-600 mr-2 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="text-lg font-bold text-gray-800 mb-2">
-                      Capital Gains Tax Calculator
+                    <h3 className="text-base font-bold text-gray-800 mb-2">
+                      Work out CGT due on a sale
                     </h3>
-                    <p className="text-sm text-gray-600 mb-3">
-                      Asset disposal calculations with 2025 rates.
-                    </p>
                     <Button 
-                      className="bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-2 px-4 rounded-lg"
+                      className="bg-green-600 hover:bg-green-700 text-white text-xs font-bold py-1.5 px-3 rounded-md"
                     >
                       Calculate CGT — Free
                     </Button>
@@ -339,26 +347,28 @@ const Home = ({ onNavigateToTab }) => {
               className="relative rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 h-80 cursor-pointer"
               onClick={() => onNavigateToTab('payment')}
               style={{
-                backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/s7a291fy_Gemini_Generated_Image_rgk3prgk3prgk3pr.png')`,
+                backgroundImage: `linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.3)), url('https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/s7a291fy_Gemini_Generated_Image_rgk3prgk3prgk3pr.png')`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
               }}
             >
-              <div className="absolute bottom-0 left-0 right-0 p-6 bg-white bg-opacity-95 backdrop-blur-sm">
-                <div className="flex items-start mb-3">
-                  <CreditCard className="h-6 w-6 text-blue-600 mr-3 mt-1 flex-shrink-0" />
+              <div className="absolute bottom-0 left-0 right-0 h-1/3 p-4 flex flex-col justify-center"
+                style={{
+                  backdropFilter: 'blur(16px)',
+                  background: 'rgba(255, 255, 255, 0.15)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)'
+                }}>
+                <div className="flex items-start mb-2">
+                  <CreditCard className="h-5 w-5 text-blue-600 mr-2 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="text-lg font-bold text-gray-800 mb-2">
-                      Payment Processing Calculator
+                    <h3 className="text-base font-bold text-gray-800 mb-2">
+                      Calculate net payment to vendor
                     </h3>
-                    <p className="text-sm text-gray-600 mb-3">
-                      Net payment calculations with WHT & VAT deductions.
-                    </p>
                     <Button 
-                      className="bg-pink-600 hover:bg-pink-700 text-white text-sm font-bold py-2 px-4 rounded-lg"
+                      className="bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold py-1.5 px-3 rounded-md"
                     >
-                      Calculate Net Payments — Free
+                      Calculate Payment — Free
                     </Button>
                   </div>
                 </div>
