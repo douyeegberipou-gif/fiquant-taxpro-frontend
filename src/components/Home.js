@@ -163,48 +163,6 @@ const Home = ({ onNavigateToTab }) => {
         </div>
       </section>
 
-      {/* Floating Quick-Actions: "What do you want to do?" */}
-      <section className="relative -mt-12 pb-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h3 className="text-2xl font-bold text-gray-800 mb-4">What do you want to do?</h3>
-            <p className="text-gray-600">Choose your calculator and get instant, NTA-compliant results</p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-            {[
-              { icon: Users, label: "Calculate my PAYE", action: () => onNavigateToTab('calculator') },
-              { icon: Building2, label: "Run Bulk PAYE for my team", action: () => onNavigateToTab('calculator', { mode: 'bulk' }) },
-              { icon: Calculator, label: "Estimate my Company Tax (CIT)", action: () => onNavigateToTab('cit') },
-              { icon: Receipt, label: "Check VAT due on an invoice", action: () => onNavigateToTab('vat') },
-              { icon: TrendingUp, label: "Work out CGT on a sale", action: () => onNavigateToTab('cgt') },
-              { icon: CreditCard, label: "Calculate Net-to-Pay for a vendor", action: () => onNavigateToTab('payment') }
-            ].map((item, index) => (
-              <div 
-                key={index}
-                onClick={item.action}
-                className="group cursor-pointer p-6 rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
-                style={{
-                  backgroundColor: 'white',
-                  border: '1px solid #e5e7eb',
-                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
-                }}
-              >
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 flex items-center justify-center transition-colors">
-                    <item.icon className="h-6 w-6 text-gray-700 group-hover:text-blue-600" />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-semibold text-gray-800 group-hover:text-blue-600">{item.label}</h4>
-                  </div>
-                  <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-blue-600 opacity-0 group-hover:opacity-100 transition-all" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Feature Panels */}
       <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
