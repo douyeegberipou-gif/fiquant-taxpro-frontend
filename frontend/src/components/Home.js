@@ -206,19 +206,15 @@ const Home = ({ onNavigateToTab }) => {
       </section>
 
       {/* Feature Panels */}
-      <section className="py-24" 
-        style={{
-          background: 'linear-gradient(180deg, #000000 0%, #0f0f0f 50%, #000000 100%)'
-        }}>
+      <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           
           {/* PAYE Panel */}
-          <div className="rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+          <div className="rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
             style={{
-              backdropFilter: 'blur(20px)',
-              background: 'rgba(255, 255, 255, 0.1)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+              backgroundColor: 'white',
+              border: '1px solid #e5e7eb',
+              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
             }}>
             <div className="flex flex-col lg:flex-row items-center">
               <div className="w-full lg:w-1/3 h-48 lg:h-64">
@@ -230,12 +226,12 @@ const Home = ({ onNavigateToTab }) => {
               </div>
               <div className="flex-1 p-8">
                 <div className="flex items-start mb-4">
-                  <Users className="h-8 w-8 text-yellow-400 mr-3 mt-1 flex-shrink-0" />
+                  <Users className="h-8 w-8 text-blue-600 mr-3 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="text-2xl font-bold text-white mb-4">
+                    <h3 className="text-2xl font-bold text-gray-800 mb-4">
                       Know EXACTLY what your employer is allowed to charge you as tax
                     </h3>
-                    <ul className="text-gray-300 space-y-2 mb-6">
+                    <ul className="text-gray-600 space-y-2 mb-6">
                       <li>• Exact PAYE with pension, NHF, life insurance & rent relief.</li>
                       <li>• Annualised PAYE with document upload.</li>
                     </ul>
@@ -252,12 +248,11 @@ const Home = ({ onNavigateToTab }) => {
           </div>
 
           {/* CIT Panel */}
-          <div className="rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+          <div className="rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
             style={{
-              backdropFilter: 'blur(20px)',
-              background: 'rgba(255, 255, 255, 0.1)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+              backgroundColor: 'white',
+              border: '1px solid #e5e7eb',
+              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
             }}>
             <div className="flex flex-col lg:flex-row-reverse items-center">
               <div className="w-full lg:w-1/3 h-48 lg:h-64">
@@ -269,12 +264,12 @@ const Home = ({ onNavigateToTab }) => {
               </div>
               <div className="flex-1 p-8">
                 <div className="flex items-start mb-4">
-                  <Calculator className="h-8 w-8 text-yellow-400 mr-3 mt-1 flex-shrink-0" />
+                  <Calculator className="h-8 w-8 text-blue-600 mr-3 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="text-2xl font-bold text-white mb-4">
+                    <h3 className="text-2xl font-bold text-gray-800 mb-4">
                       Accurate CIT with 2025 Rules
                     </h3>
-                    <ul className="text-gray-300 space-y-2 mb-6">
+                    <ul className="text-gray-600 space-y-2 mb-6">
                       <li>• Capital allowances, thin cap rules & development levy.</li>
                       <li>• Small company exemptions & multinational compliance.</li>
                     </ul>
@@ -291,12 +286,11 @@ const Home = ({ onNavigateToTab }) => {
           </div>
 
           {/* VAT Panel */}
-          <div className="rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+          <div className="rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
             style={{
-              backdropFilter: 'blur(20px)',
-              background: 'rgba(255, 255, 255, 0.1)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+              backgroundColor: 'white',
+              border: '1px solid #e5e7eb',
+              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
             }}>
             <div className="flex flex-col lg:flex-row items-center">
               <div className="w-full lg:w-1/3 h-48 lg:h-64">
@@ -308,12 +302,12 @@ const Home = ({ onNavigateToTab }) => {
               </div>
               <div className="flex-1 p-8">
                 <div className="flex items-start mb-4">
-                  <Receipt className="h-8 w-8 text-yellow-400 mr-3 mt-1 flex-shrink-0" />
+                  <Receipt className="h-8 w-8 text-blue-600 mr-3 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="text-2xl font-bold text-white mb-4">
+                    <h3 className="text-2xl font-bold text-gray-800 mb-4">
                       VAT Made Simple
                     </h3>
-                    <ul className="text-gray-300 space-y-2 mb-6">
+                    <ul className="text-gray-600 space-y-2 mb-6">
                       <li>• Automatic transaction classification by NTA rules.</li>
                       <li>• Input/output VAT tracking & compliance.</li>
                     </ul>
@@ -330,12 +324,11 @@ const Home = ({ onNavigateToTab }) => {
           </div>
 
           {/* CGT Panel */}
-          <div className="rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+          <div className="rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
             style={{
-              backdropFilter: 'blur(20px)',
-              background: 'rgba(255, 255, 255, 0.1)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+              backgroundColor: 'white',
+              border: '1px solid #e5e7eb',
+              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
             }}>
             <div className="flex flex-col lg:flex-row-reverse items-center">
               <div className="w-full lg:w-1/3 h-48 lg:h-64">
@@ -347,12 +340,12 @@ const Home = ({ onNavigateToTab }) => {
               </div>
               <div className="flex-1 p-8">
                 <div className="flex items-start mb-4">
-                  <TrendingUp className="h-8 w-8 text-yellow-400 mr-3 mt-1 flex-shrink-0" />
+                  <TrendingUp className="h-8 w-8 text-blue-600 mr-3 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="text-2xl font-bold text-white mb-4">
+                    <h3 className="text-2xl font-bold text-gray-800 mb-4">
                       Capital Gains Tax Calculator
                     </h3>
-                    <ul className="text-gray-300 space-y-2 mb-6">
+                    <ul className="text-gray-600 space-y-2 mb-6">
                       <li>• Asset disposal calculations with 2025 rates.</li>
                       <li>• Exemptions & allowances automatically applied.</li>
                     </ul>
@@ -369,12 +362,11 @@ const Home = ({ onNavigateToTab }) => {
           </div>
 
           {/* Payment Panel */}
-          <div className="rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+          <div className="rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
             style={{
-              backdropFilter: 'blur(20px)',
-              background: 'rgba(255, 255, 255, 0.1)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+              backgroundColor: 'white',
+              border: '1px solid #e5e7eb',
+              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
             }}>
             <div className="flex flex-col lg:flex-row items-center">
               <div className="w-full lg:w-1/3 h-48 lg:h-64">
@@ -386,12 +378,12 @@ const Home = ({ onNavigateToTab }) => {
               </div>
               <div className="flex-1 p-8">
                 <div className="flex items-start mb-4">
-                  <CreditCard className="h-8 w-8 text-yellow-400 mr-3 mt-1 flex-shrink-0" />
+                  <CreditCard className="h-8 w-8 text-blue-600 mr-3 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="text-2xl font-bold text-white mb-4">
+                    <h3 className="text-2xl font-bold text-gray-800 mb-4">
                       Payment Processing Calculator
                     </h3>
-                    <ul className="text-gray-300 space-y-2 mb-6">
+                    <ul className="text-gray-600 space-y-2 mb-6">
                       <li>• Net payment calculations with WHT & VAT deductions.</li>
                       <li>• Vendor payment compliance made easy.</li>
                     </ul>
