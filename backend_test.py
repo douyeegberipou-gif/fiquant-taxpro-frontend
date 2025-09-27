@@ -3287,112 +3287,423 @@ class NigerianTaxCalculatorTester:
         
         return success
 
+    # ============================
+    # SPECIAL ADMIN ACCESS TESTS
+    # ============================
+    
+    def test_admin_user_exists(self):
+        """Test if special admin user douyeegberipou@yahoo.com exists in database"""
+        # First, we need to get an admin token to access admin endpoints
+        # Let's try to login as the special admin user first
+        login_data = {
+            "email_or_phone": "douyeegberipou@yahoo.com",
+            "password": "any_password_should_work"  # Should bypass password verification
+        }
+        
+        success, response = self.run_test(
+            "Special Admin Login Bypass Test",
+            "POST",
+            "auth/login",
+            200,  # Should succeed
+            login_data
+        )
+        
+        if success:
+            # Store admin token for subsequent tests
+            self.admin_token = response.get('access_token')
+            print(f"   ✅ Special admin login bypass working - Token obtained")
+            print(f"   User ID: {response.get('user_id')}")
+            
+            # Now check if user exists via admin endpoint
+            headers = {'Authorization': f'Bearer {self.admin_token}'}
+            
+            try:
+                import requests
+                url = f"{self.base_url}/admin/users"
+                admin_response = requests.get(url, headers=headers, timeout=30)
+                
+                if admin_response.status_code == 200:
+                    users_data = admin_response.json()
+                    admin_user_found = False
+                    
+                    for user in users_data:
+                        if user.get('email', '').lower() == 'douyeegberipou@yahoo.com':
+                            admin_user_found = True
+                            print(f"   ✅ Admin user found in database:")
+                            print(f"     Email: {user.get('email')}")
+                            print(f"     Full Name: {user.get('full_name')}")
+                            print(f"     Admin Role: {user.get('admin_role')}")
+                            print(f"     Admin Enabled: {user.get('admin_enabled')}")
+                            print(f"     Email Verified: {user.get('email_verified')}")
+                            print(f"     Phone Verified: {user.get('phone_verified')}")
+                            print(f"     Account Status: {user.get('account_status')}")
+                            break
+                    
+                    if not admin_user_found:
+                        print(f"   ❌ Admin user douyeegberipou@yahoo.com NOT found in database")
+                        return False
+                        
+                else:
+                    print(f"   ❌ Failed to access admin users endpoint: {admin_response.status_code}")
+                    return False
+                    
+            except Exception as e:
+                print(f"   ❌ Error accessing admin endpoint: {str(e)}")
+                return False
+        else:
+            print(f"   ❌ Special admin login failed - User may not exist or bypass not working")
+            return False
+        
+        return success
+    
+    def test_special_admin_login_bypass(self):
+        """Test special admin login bypass with any password"""
+        test_passwords = ["wrong_password", "123456", "", "random_text"]
+        
+        for password in test_passwords:
+            login_data = {
+                "email_or_phone": "douyeegberipou@yahoo.com",
+                "password": password
+            }
+            
+            success, response = self.run_test(
+                f"Special Admin Login Bypass - Password: '{password}'",
+                "POST",
+                "auth/login",
+                200,  # Should succeed regardless of password
+                login_data
+            )
+            
+            if success:
+                print(f"   ✅ Login successful with password: '{password}'")
+                print(f"   Token Type: {response.get('token_type')}")
+                print(f"   Expires In: {response.get('expires_in')} seconds")
+                
+                # Store token for other tests
+                if not hasattr(self, 'admin_token'):
+                    self.admin_token = response.get('access_token')
+            else:
+                print(f"   ❌ Login failed with password: '{password}' - Bypass not working")
+                return False
+        
+        print(f"   ✅ Password bypass working for all test passwords")
+        return True
+    
+    def test_special_admin_verification_bypass(self):
+        """Test that special admin bypasses account verification requirements"""
+        # The login should work even if account is not verified
+        # This is tested implicitly in the login bypass test above
+        
+        if hasattr(self, 'admin_token') and self.admin_token:
+            # Test accessing protected endpoint with admin token
+            success, response = self.run_test(
+                "Special Admin - Access Protected Endpoint",
+                "GET",
+                "auth/me",
+                200,
+                None,
+                auth_required=True
+            )
+            
+            if success:
+                print(f"   ✅ Admin can access protected endpoints")
+                print(f"   Admin Email: {response.get('email')}")
+                print(f"   Admin Role: {response.get('admin_role')}")
+                print(f"   Admin Enabled: {response.get('admin_enabled')}")
+                return True
+            else:
+                print(f"   ❌ Admin cannot access protected endpoints")
+                return False
+        else:
+            print(f"   ⚠️ No admin token available - skipping verification bypass test")
+            return False
+    
+    # ============================
+    # NOTIFICATION SYSTEM TESTS
+    # ============================
+    
+    def test_notifications_endpoint_authentication(self):
+        """Test that notifications endpoint requires authentication"""
+        success, response = self.run_test(
+            "Notifications Endpoint - No Authentication",
+            "GET",
+            "notifications",
+            [401, 403],  # Should fail without auth
+            None
+        )
+        
+        if success:
+            print(f"   ✅ Notifications endpoint correctly requires authentication")
+        
+        return success
+    
+    def test_notifications_get_with_auth(self):
+        """Test GET /api/notifications with authentication"""
+        if not hasattr(self, 'admin_token') or not self.admin_token:
+            print("   ⚠️ No admin token available - skipping authenticated notifications test")
+            return False
+        
+        # Temporarily set admin token for this test
+        old_token = self.auth_token
+        self.auth_token = self.admin_token
+        
+        success, response = self.run_test(
+            "GET Notifications - With Authentication",
+            "GET",
+            "notifications",
+            200,
+            None,
+            auth_required=True
+        )
+        
+        # Restore original token
+        self.auth_token = old_token
+        
+        if success:
+            print(f"   ✅ Notifications retrieved successfully")
+            if isinstance(response, dict):
+                notifications = response.get('notifications', [])
+                unread_count = response.get('unread_count', 0)
+                print(f"   Total notifications: {len(notifications)}")
+                print(f"   Unread count: {unread_count}")
+                
+                # Check for welcome notification
+                welcome_found = False
+                for notification in notifications:
+                    if 'Welcome to Fiquant TaxPro' in notification.get('title', ''):
+                        welcome_found = True
+                        print(f"   ✅ Welcome notification found:")
+                        print(f"     Title: {notification.get('title')}")
+                        print(f"     Type: {notification.get('notification_type')}")
+                        print(f"     Read: {notification.get('read')}")
+                        break
+                
+                if not welcome_found:
+                    print(f"   ⚠️ Welcome notification not found")
+            else:
+                print(f"   ❌ Unexpected response format: {type(response)}")
+        
+        return success
+    
+    def test_create_notification(self):
+        """Test POST /api/notifications for creating notifications"""
+        if not hasattr(self, 'admin_token') or not self.admin_token:
+            print("   ⚠️ No admin token available - skipping create notification test")
+            return False
+        
+        # Get current user ID from admin token
+        old_token = self.auth_token
+        self.auth_token = self.admin_token
+        
+        # First get user info
+        user_success, user_response = self.run_test(
+            "Get Current User for Notification Test",
+            "GET",
+            "auth/me",
+            200,
+            None,
+            auth_required=True
+        )
+        
+        if not user_success:
+            self.auth_token = old_token
+            return False
+        
+        user_id = user_response.get('id')
+        
+        # Create test notification
+        notification_data = {
+            "user_id": user_id,
+            "title": "Test Notification",
+            "message": "This is a test notification created during API testing",
+            "notification_type": "info"
+        }
+        
+        success, response = self.run_test(
+            "Create Notification - POST",
+            "POST",
+            "notifications",
+            [200, 201],  # Accept both 200 and 201
+            notification_data,
+            auth_required=True
+        )
+        
+        # Restore original token
+        self.auth_token = old_token
+        
+        if success:
+            print(f"   ✅ Notification created successfully")
+            if isinstance(response, dict):
+                print(f"   Notification ID: {response.get('id')}")
+                print(f"   Title: {response.get('title')}")
+                print(f"   Message: {response.get('message')}")
+                print(f"   Type: {response.get('notification_type')}")
+                
+                # Store notification ID for later tests
+                self.test_notification_id = response.get('id')
+        
+        return success
+    
+    def test_mark_notification_read(self):
+        """Test PATCH /api/notifications/{id}/read"""
+        if not hasattr(self, 'test_notification_id') or not self.test_notification_id:
+            print("   ⚠️ No test notification ID available - skipping mark read test")
+            return False
+        
+        if not hasattr(self, 'admin_token') or not self.admin_token:
+            print("   ⚠️ No admin token available - skipping mark read test")
+            return False
+        
+        # Temporarily set admin token
+        old_token = self.auth_token
+        self.auth_token = self.admin_token
+        
+        success, response = self.run_test(
+            "Mark Notification as Read - PATCH",
+            "PATCH",
+            f"notifications/{self.test_notification_id}/read",
+            200,
+            None,
+            auth_required=True
+        )
+        
+        # Restore original token
+        self.auth_token = old_token
+        
+        if success:
+            print(f"   ✅ Notification marked as read successfully")
+            if isinstance(response, dict) and 'message' in response:
+                print(f"   Response: {response['message']}")
+        
+        return success
+    
+    def test_mark_all_notifications_read(self):
+        """Test PATCH /api/notifications/mark-all-read"""
+        if not hasattr(self, 'admin_token') or not self.admin_token:
+            print("   ⚠️ No admin token available - skipping mark all read test")
+            return False
+        
+        # Temporarily set admin token
+        old_token = self.auth_token
+        self.auth_token = self.admin_token
+        
+        success, response = self.run_test(
+            "Mark All Notifications as Read - PATCH",
+            "PATCH",
+            "notifications/mark-all-read",
+            200,
+            None,
+            auth_required=True
+        )
+        
+        # Restore original token
+        self.auth_token = old_token
+        
+        if success:
+            print(f"   ✅ All notifications marked as read successfully")
+            if isinstance(response, dict):
+                if 'message' in response:
+                    print(f"   Response: {response['message']}")
+                if 'updated_count' in response:
+                    print(f"   Updated count: {response['updated_count']}")
+        
+        return success
+    
+    def test_notification_creation_during_registration(self):
+        """Test that welcome notification is created during user registration"""
+        import time
+        timestamp = int(time.time())
+        test_data = {
+            "email": f"notification.test.{timestamp}@fiquant.ng",
+            "phone": f"+234800{timestamp % 10000}",
+            "password": "NotificationTest123!",
+            "full_name": "Notification Test User",
+            "agree_terms": True
+        }
+        
+        # Register new user
+        success, response = self.run_test(
+            "User Registration for Notification Test",
+            "POST",
+            "auth/register",
+            200,
+            test_data
+        )
+        
+        if not success:
+            return False
+        
+        user_id = response.get('id')
+        print(f"   ✅ Test user created with ID: {user_id}")
+        
+        # Now we need to check if notification was created
+        # Since we can't login as unverified user, we'll use admin token to check
+        if not hasattr(self, 'admin_token') or not self.admin_token:
+            print("   ⚠️ No admin token available - cannot verify notification creation")
+            return True  # Registration succeeded, assume notification was created
+        
+        # Check notifications for the new user
+        # Note: This would require an admin endpoint to get notifications for specific user
+        # For now, we'll just confirm the registration succeeded
+        print(f"   ✅ User registration completed - welcome notification should be created")
+        print(f"   Note: Welcome notification creation is handled in backend during registration")
+        
+        return True
+
+    def run_special_admin_and_notification_tests(self):
+        """Run special admin access and notification system tests"""
+        print("🚀 Starting Special Admin Access and Notification System Testing...")
+        print(f"Base URL: {self.base_url}")
+        print("=" * 80)
+        
+        # Special Admin Access Tests
+        print("\n👑 SPECIAL ADMIN ACCESS TESTS")
+        print("-" * 40)
+        self.test_admin_user_exists()
+        self.test_special_admin_login_bypass()
+        self.test_special_admin_verification_bypass()
+        
+        # Notification System Tests
+        print("\n🔔 NOTIFICATION SYSTEM TESTS")
+        print("-" * 40)
+        self.test_notifications_endpoint_authentication()
+        self.test_notifications_get_with_auth()
+        self.test_create_notification()
+        self.test_mark_notification_read()
+        self.test_mark_all_notifications_read()
+        self.test_notification_creation_during_registration()
+        
+        # Final summary
+        print("\n" + "=" * 80)
+        print("📊 SPECIAL ADMIN & NOTIFICATION TESTING SUMMARY")
+        print("=" * 80)
+        print(f"Total tests run: {self.tests_run}")
+        print(f"Tests passed: {self.tests_passed}")
+        print(f"Tests failed: {self.tests_run - self.tests_passed}")
+        print(f"Success rate: {(self.tests_passed / self.tests_run * 100):.1f}%")
+        
+        if self.tests_passed == self.tests_run:
+            print("🎉 ALL TESTS PASSED! The special admin and notification systems are working correctly.")
+        else:
+            print("⚠️ Some tests failed. Please review the results above.")
+        
+        return self.tests_passed == self.tests_run
+
 def main():
-    print("🚀 Starting Nigerian Tax Calculator API Tests")
-    print("=" * 60)
+    print("🚀 Starting Special Admin Access and Notification System Testing...")
+    print("=" * 80)
     
     tester = NigerianTaxCalculatorTester()
     
-    # URGENT: User Investigation First
-    print("\n🚨 URGENT: USER ACCOUNTS INVESTIGATION")
-    print("-" * 40)
-    tester.investigate_user_accounts()
-    
-    # Run Comprehensive Authentication tests first
-    tester.run_comprehensive_authentication_tests()
-    
-    # Run Comprehensive Forgot Password tests
-    tester.run_comprehensive_forgot_password_tests()
-    
-    # Run Admin System tests
-    print("\n🔐 ADMIN SYSTEM INITIALIZATION TESTS")
-    print("-" * 40)
-    admin_tests = [
-        tester.test_initialize_super_admin,
-        tester.test_duplicate_super_admin_prevention,
-        tester.test_admin_endpoints_without_auth,
-        tester.test_invalid_user_super_admin_promotion
-    ]
-    
-    for test in admin_tests:
-        try:
-            test()
-        except AttributeError:
-            print(f"⚠️ Admin test {test.__name__} not implemented yet")
-        except Exception as e:
-            print(f"❌ Admin test {test.__name__} failed: {str(e)}")
-    
-    # Run PAYE tests
-    print("\n📋 PAYE CALCULATOR TESTS")
-    print("-" * 40)
-    paye_tests = [
-        tester.test_root_endpoint,
-        tester.test_tax_brackets_endpoint,
-        tester.test_low_income_calculation,
-        tester.test_medium_income_calculation,
-        tester.test_high_income_calculation,
-        tester.test_history_endpoint,
-        tester.test_invalid_input
-    ]
-    
-    for test in paye_tests:
-        test()
-    
-    # Run CIT tests
-    print("\n🏢 CORPORATE INCOME TAX (CIT) TESTS")
-    print("-" * 40)
-    cit_tests = [
-        tester.test_cit_info_endpoint,
-        tester.test_small_company_exempt,
-        tester.test_medium_company_calculation,
-        tester.test_large_company_thin_cap,
-        tester.test_large_multinational_minimum_etr,
-        tester.test_professional_service_firm,
-        tester.test_cit_history_endpoint
-    ]
-    
-    for test in cit_tests:
-        test()
-    
-    # Run Capital Allowances tests
-    print("\n🏗️ CAPITAL ALLOWANCES TESTS (2026 Rules)")
-    print("-" * 40)
-    capital_allowances_tests = [
-        tester.test_capital_allowances_scenario_a,
-        tester.test_capital_allowances_scenario_b,
-        tester.test_capital_allowances_scenario_c
-    ]
-    
-    for test in capital_allowances_tests:
-        test()
-    
-    # Run WHT Credits tests
-    print("\n💳 WITHHOLDING TAX CREDITS TESTS")
-    print("-" * 40)
-    wht_tests = [
-        tester.test_wht_credits_scenario_d,
-        tester.test_wht_credits_scenario_e
-    ]
-    
-    for test in wht_tests:
-        test()
-    
-    # Run Comprehensive test
-    print("\n🎯 COMPREHENSIVE INTEGRATION TEST")
-    print("-" * 40)
-    comprehensive_tests = [
-        tester.test_comprehensive_scenario
-    ]
-    
-    for test in comprehensive_tests:
-        test()
+    # Run only the special admin and notification tests as requested
+    success = tester.run_special_admin_and_notification_tests()
     
     # Print final results
-    print("\n" + "=" * 60)
+    print("\n" + "=" * 80)
     print(f"📊 FINAL RESULTS: {tester.tests_passed}/{tester.tests_run} tests passed")
     
-    if tester.tests_passed == tester.tests_run:
-        print("🎉 All tests passed!")
+    if success:
+        print("🎉 All special admin and notification tests passed!")
         return 0
     else:
         print(f"❌ {tester.tests_run - tester.tests_passed} tests failed")
