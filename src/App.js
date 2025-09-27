@@ -1443,6 +1443,17 @@ function AppContent() {
         setShowTerms={setShowTerms}
       />
 
+      {/* Password Reset Modal */}
+      {showPasswordReset && (
+        <PasswordResetForm 
+          onClose={() => {
+            setShowPasswordReset(false);
+            // Clear URL parameters
+            window.history.replaceState({}, document.title, window.location.pathname);
+          }} 
+        />
+      )}
+
       {/* Terms and Conditions Modal */}
       {showTerms && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
