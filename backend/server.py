@@ -2040,6 +2040,71 @@ async def get_all_carousel_slides_admin(
         total_slides=len(slides)
     )
 
+# ============================
+# CAROUSEL SETTINGS API ENDPOINTS
+# ============================
+
+@api_router.get("/carousel/settings", response_model=CarouselSettingsResponse)
+async def get_carousel_settings():
+    """Get carousel settings (public endpoint)"""
+    settings_data = await db.carousel_settings.find_one({"id": "carousel_settings"})
+    
+    if not settings_data:
+        # Create default settings if they don't exist
+        default_settings = CarouselSettings()
+        settings_dict = default_settings.dict()
+        settings_dict["created_at"] = settings_dict["created_at"].isoformat()
+        settings_dict["updated_at"] = settings_dict["updated_at"].isoformat()
+        
+        await db.carousel_settings.insert_one(settings_dict)
+        settings = default_settings
+    else:
+        settings = CarouselSettings(**settings_data)
+    
+    return CarouselSettingsResponse(settings=settings)
+
+@api_router.put("/carousel/settings", response_model=CarouselSettingsResponse)
+async def update_carousel_settings(
+    settings_data: CarouselSettingsUpdate,
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Update carousel settings (admin only)"""
+    # Check if user is admin
+    if not current_user.admin_enabled or not current_user.admin_role:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required"
+        )
+    
+    # Get existing settings or create default
+    existing_settings = await db.carousel_settings.find_one({"id": "carousel_settings"})
+    
+    if not existing_settings:
+        # Create default settings
+        default_settings = CarouselSettings()
+        settings_dict = default_settings.dict()
+        settings_dict["created_at"] = settings_dict["created_at"].isoformat()
+        settings_dict["updated_at"] = settings_dict["updated_at"].isoformat()
+        
+        await db.carousel_settings.insert_one(settings_dict)
+        existing_settings = settings_dict
+    
+    # Prepare update data
+    update_data = {k: v for k, v in settings_data.dict().items() if v is not None}
+    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    
+    # Update settings
+    await db.carousel_settings.update_one(
+        {"id": "carousel_settings"},
+        {"$set": update_data}
+    )
+    
+    # Get updated settings
+    updated_settings_data = await db.carousel_settings.find_one({"id": "carousel_settings"})
+    updated_settings = CarouselSettings(**updated_settings_data)
+    
+    return CarouselSettingsResponse(settings=updated_settings)
+
 # Include the router in the main app
 app.include_router(api_router)
 
