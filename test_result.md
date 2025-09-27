@@ -524,7 +524,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "NTA 2025 Minimum Tax Implementation Testing"
+    - "Placeholder Text Styling Verification Testing"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
