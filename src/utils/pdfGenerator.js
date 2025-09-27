@@ -653,7 +653,7 @@ export const generatePaymentProcessingReport = (paymentInput, paymentResult) => 
     margin: { left: 20, right: 20 }
   });
   
-  addFooter(doc);
+  addFiquantFooter(doc);
   
   // Save the PDF
   doc.save(`Payment_Processing_Report_${paymentResult.payee_name || 'Payee'}_${paymentResult.month || 'Report'}_${new Date().toISOString().split('T')[0]}.pdf`);
