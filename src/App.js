@@ -72,6 +72,7 @@ function AppContent() {
   const [citInput, setCitInput] = useState({
     // Company Information
     company_name: '',
+    tin: '',
     year_of_assessment: '',
     tax_year: '',
     // Financial Information
