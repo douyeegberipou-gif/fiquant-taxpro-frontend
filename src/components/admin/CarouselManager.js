@@ -58,6 +58,36 @@ export const CarouselManager = () => {
     }
   };
 
+  const loadSettings = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/api/carousel/settings`);
+      
+      if (response.data && response.data.settings) {
+        setSettings(response.data.settings);
+        setTempSettings(response.data.settings);
+      }
+    } catch (error) {
+      setError('Failed to load carousel settings');
+      console.error('Error loading settings:', error);
+    }
+  };
+
+  const handleSaveSettings = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.put(`${API_URL}/api/carousel/settings`, tempSettings, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      setSettings(tempSettings);
+      setEditingSettings(false);
+      setError(null);
+    } catch (error) {
+      setError('Failed to update carousel settings');
+      console.error('Error updating settings:', error);
+    }
+  };
+
   const handleCreate = async () => {
     try {
       const token = localStorage.getItem('token');
