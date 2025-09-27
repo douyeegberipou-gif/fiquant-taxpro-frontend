@@ -606,42 +606,6 @@ export const generateCgtReport = (cgtInput, cgtResult) => {
   
   let yPos = addTaxpayerHeader(doc, 'Capital Gains Tax Report', taxpayerInfo);
   
-  // Remove redundant title since it's now in header
-  yPos += 10;
-  
-  // Generated date
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'normal');
-  doc.setTextColor(100, 100, 100);
-  doc.text(`Generated on: ${formatDate()}`, 20, yPos);
-  yPos += 20;
-  
-  // Taxpayer Information
-  doc.setFontSize(14);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(0, 0, 0);
-  doc.text('Taxpayer Information', 20, yPos);
-  yPos += 10;
-  
-  const taxpayerData = [
-    ['Taxpayer Name', cgtResult.taxpayer_name],
-    ['Tax Year', cgtResult.year],
-    ['Taxpayer Type', cgtResult.taxpayer_type.charAt(0).toUpperCase() + cgtResult.taxpayer_type.slice(1)],
-    ['Asset Type', cgtResult.asset_type],
-    ['Holding Period', cgtInput.holding_period || 'Not specified']
-  ];
-  
-  autoTable(doc, {
-    head: [['Taxpayer Detail', 'Value']],
-    body: taxpayerData,
-    startY: yPos,
-    theme: 'grid',
-    headStyles: { fillColor: [0, 0, 0], textColor: [255, 255, 255] },
-    margin: { left: 20, right: 20 }
-  });
-  
-  yPos = doc.lastAutoTable.finalY + 15;
-  
   // Asset Transaction Details
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
