@@ -1060,6 +1060,7 @@ class TaxInput(BaseModel):
     staff_name: Optional[str] = Field(default="", description="Name of staff/taxpayer")
     tin: Optional[str] = Field(default="", description="Tax Identification Number (TIN) - Optional")
     month: Optional[str] = Field(default="", description="Month for which tax is calculated")
+    year: Optional[str] = Field(default="", description="Year for which tax is calculated")
     state_of_residence: Optional[str] = Field(default="", description="State of residence")
     # Income Details
     basic_salary: float = Field(gt=0, description="Basic salary per month")
