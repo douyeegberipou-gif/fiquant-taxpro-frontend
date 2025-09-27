@@ -17,6 +17,60 @@ const Home = ({ onNavigateToTab }) => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
+  // Fetch carousel slides
+  const fetchCarouselSlides = async () => {
+    try {
+      const response = await axios.get(`${BACKEND_URL}/api/carousel/slides`);
+      if (response.data && response.data.slides) {
+        setCarouselSlides(response.data.slides);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error('Error fetching carousel slides:', error);
+      // Use fallback content if API fails
+      setCarouselSlides([{
+        id: 'fallback',
+        title: 'Did you know calculating & filing the wrong taxes can land you in trouble?',
+        subtitle: 'Fiquant TaxPro — NTA 2025-compliant tax calculators and compliance tools. Get instant, accurate PAYE, CIT, VAT, CGT & payment calculations — free. Protect revenue. Avoid fines.',
+        order_index: 0,
+        active: true
+      }]);
+      setIsLoading(false);
+    }
+  };
+
+  // Auto-rotate carousel every 3 seconds
+  useEffect(() => {
+    fetchCarouselSlides();
+  }, []);
+
+  useEffect(() => {
+    if (carouselSlides.length > 1) {
+      const interval = setInterval(() => {
+        setCurrentSlideIndex((prevIndex) => 
+          (prevIndex + 1) % carouselSlides.length
+        );
+      }, 3000); // 3 seconds
+
+      return () => clearInterval(interval);
+    }
+  }, [carouselSlides.length]);
+
+  // Get current slide
+  const getCurrentSlide = () => {
+    if (carouselSlides.length === 0) {
+      return {
+        title: 'Did you know calculating & filing the wrong taxes can land you in trouble?',
+        subtitle: 'Fiquant TaxPro — NTA 2025-compliant tax calculators and compliance tools. Get instant, accurate PAYE, CIT, VAT, CGT & payment calculations — free. Protect revenue. Avoid fines.'
+      };
+    }
+    return carouselSlides[currentSlideIndex] || carouselSlides[0];
+  };
+
+  const currentSlide = getCurrentSlide();
+
   return (
     <div className="min-h-screen bg-white"
       style={{
