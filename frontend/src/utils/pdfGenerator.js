@@ -541,15 +541,15 @@ export const generateVatReport = (vatInput, vatResult) => {
 export const generatePaymentProcessingReport = (paymentInput, paymentResult) => {
   const doc = new jsPDF();
   
-  addHeader(doc, 'Payment Processing Report');
+  // Prepare payee info for header
+  const payeeInfo = {
+    name: paymentResult.payee_name || 'Not specified',
+    month: paymentResult.month || 'Not specified'
+  };
   
-  let yPos = 55;
+  let yPos = addTaxpayerHeader(doc, 'Payment Processing Report', payeeInfo);
   
-  // Report Title
-  doc.setFontSize(18);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(0, 0, 0);
-  doc.text('Payment Processing & Tax Deduction Report', 20, yPos);
+  // Remove redundant title since it's now in header
   yPos += 10;
   
   // Generated date
