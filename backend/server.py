@@ -1589,7 +1589,7 @@ async def get_cit_info():
         "currency": "NGN",
         "company_classifications": {
             "small": {
-                "criteria": "Turnover ≤ ₦100M AND Fixed Assets ≤ ₦250M",
+                "criteria": "Turnover ≤ ₦50M AND Fixed Assets ≤ ₦250M",
                 "cit_rate": "0%",
                 "development_levy": "0%",
                 "exemptions": "Excludes professional service firms"
