@@ -14,6 +14,7 @@ import BulkPayrollCalculator from './components/BulkPayrollCalculator';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { AuthModal } from './components/AuthModal';
 import { UserProfile } from './components/UserProfile';
+import { PasswordResetForm } from './components/PasswordResetForm';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { AdminSetup } from './components/admin/AdminSetup';
 import TermsAndConditions from './components/TermsAndConditions';
