@@ -154,10 +154,10 @@ export const LoginForm = ({ onSwitchToRegister, onClose, setShowTerms }) => {
             className="w-16 h-16 object-contain"
           />
         </div>
-        <CardTitle className="flex items-center justify-center space-x-2">
+        <CardTitle className="flex items-center justify-center space-x-2 text-white">
           <span>Welcome Back</span>
         </CardTitle>
-        <CardDescription>
+        <CardDescription className="text-gray-200">
           Sign in to your Fiquant Consult account
         </CardDescription>
       </CardHeader>
