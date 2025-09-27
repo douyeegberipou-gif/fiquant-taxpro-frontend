@@ -1,64 +1,68 @@
 <analysis>
-The AI engineer successfully guided Fiquant TaxPro through significant enhancements, transitioning from initial calculator implementations to a fully redesigned landing page. Key achievements include the creation of new tax calculators (VAT, Payments Processing, CGT), an interactive History tab, and initial mobile optimization. The bulk of the recent work focused on an iterative, comprehensive redesign of the  landing page, responding to detailed user specifications for premium aesthetics, copy, and specific visual elements like glassmorphism and background gradients. The engineer adeptly handled design changes, CSS styling, JSX error corrections, and verified progress through screenshots and automated frontend testing, ensuring functionality remained intact despite extensive UI overhauls.
+The AI engineer successfully guided Fiquant TaxPro through a multi-faceted development trajectory, encompassing significant UI/UX overhauls and critical functional enhancements. Initially, the focus was on iterative landing page redesigns, introducing and refining elements like pulsing animations, subtle shadows, and extensive glassmorphism effects across various sections and components. Simultaneously, the engineer addressed several core application functionalities: correcting the CIT small company classification and minimum tax logic, updating the VAT rate, integrating Taxpayer Identification Number (TIN) fields across all tax calculators, and thoroughly redesigning PDF printouts to be taxpayer-centric. A major milestone was the complete implementation of the Forgot Password feature, covering both backend endpoints and the entire frontend UI. The latest efforts concentrated on applying glassmorphism to the login window and refining its text and input field aesthetics for optimal user experience. The process involved continuous iteration, detailed file modifications, and frequent visual and automated testing.
 </analysis>
 
 <product_requirements>
-Fiquant TaxPro is a Nigerian tax management solution for NTA 2025/2026 tax laws, targeting individuals and businesses. It offers PAYE and CIT calculators, with PAYE supporting reliefs and progressive tax bands, and CIT handling financial components. A bulk PAYE calculator allows Excel template download/upload. User accounts include email/phone verification and an Administrative Dashboard for management, analytics, and audit logs. Recently, the History tab was enhanced for interactivity, and WHT information re-added to Tax Information. New calculators (VAT, Payments Processing, CGT) were added with NTA 2026 logic and PDF generation.
+Fiquant TaxPro is a Nigerian tax management solution (NTA 2025/2026) for individuals and businesses, featuring PAYE and CIT calculators (including bulk PAYE), user authentication (email/phone verification), and an administrative dashboard. Recent additions include an interactive History tab, WHT information, and new VAT, Payments Processing, and CGT calculators with PDF generation.
 
-The primary recent focus has been a complete redesign of the Home landing page. This includes:
-1.  **Premium Design**: Black background hero with gold CTAs and glass panels; refined visual system using a palette of #0A0A0A (Primary Black), #FFFFFF (Pure White), #D4AF37 (Gold), #1B1B1B (Charcoal), #F7F8FA (Light Neutral), with glass tints.
-2.  **Specific Copy**: Detailed headlines, subheads, trust strips, microflow cards, floating quick-actions, benefits, feature panels (PAYE headline: Know EXACTLY what your employer is allowed to charge you as tax), pricing plans (Free, Pro N9,999/month, Premium N14,999/month), How It Works, social proof, FAQ, and footer.
-3.  **UI Elements**: Floating glass cards for quick actions, three side-by-side glassmorphism pricing cards (Pro highlighted as Most popular with gold badge).
-4.  **Aesthetics**: Use GT America/Satoshi for headlines, Inter/Source Sans Pro for body. Generous whitespace, grid layout, subtle animations, and specific component stylings (buttons, inputs, cards, modals).
-5.  **Imagery**: Greyscale city skyline background for hero, editorial-grade desaturated photographs behind dark overlays.
-6.  **Accessibility**: Alt text, keyboard usability, high contrast, ARIA labels.
-7.  **Iterative Refinements**: Navigation icons redesign, floating sections color changes to #BDBDBB, then #DCDCDB, then backgrounds below hero to #313131 with clear glassmorphism, then black gradients, and removal of borders around What do you want to do? icons. The re-inclusion of feature panels between What do you want to do? and Choose your plan sections, maintaining glassmorphism, was also requested.
+The core recent work focused on:
+1.  **Landing Page Redesign**: Iterative updates to  for a premium, clean aesthetic using white/light backgrounds, subtle shadows, and specific typography. This included redesigning feature panels into a responsive grid with image overlays and glassmorphism.
+2.  **Tax Calculation Logic**: Correcting CIT small company classification (turnover ≤₦50M AND fixed assets ≤₦250M), implementing NTA minimum tax rules, and updating VAT rate to 7.5%.
+3.  **Data Capture**: Integrating optional Taxpayer ID (TIN) fields into all calculators (PAYE, CIT, VAT, CGT, Payments) and adding a Year field to the PAYE calculator.
+4.  **PDF Printout Overhaul**: Removing Fiquant branding from headers, placing it in footnotes, and introducing taxpayer-focused headers (name, period, YOA, TIN) for all reports, along with fixing alignment, NaN errors, and currency symbols.
+5.  **User Authentication**: Implementing a full Forgot Password feature (backend endpoints and frontend UI).
+6.  **UI Consistency**: Applying glassmorphism to the login window and ensuring text/input fields are white for readability.
 </product_requirements>
 
 <key_technical_concepts>
 -   **Full-stack**: React (Frontend), FastAPI (Backend), MongoDB (Database).
--   **UI/UX**: Tailwind CSS, Shadcn UI, Lucide React, Responsive Design, Glassmorphism.
--   **Frontend**: React Context API, , , , .
--   **Document Generation**: , , .
--   **Authentication**: JWT, bcrypt, Email/Phone verification, RBAC.
+-   **UI/UX**: Tailwind CSS, Shadcn UI, Lucide React, Responsive Design, Glassmorphism, CSS Animations.
+-   **Frontend**: React Context API, , , .
+-   **Document Generation**: , .
+-   **Authentication**: JWT, bcrypt, Password Reset (token-based).
+-   **Backend**: Pydantic for data models.
 </key_technical_concepts>
 
 <code_architecture>
 
 -   ****:
-    -   **Summary**: The main React component, managing global layout, routing, and navigation state.
-    -   **Changes Made**: Significant updates to navigation tab styling, implementing a clean rectangular tab design with vertical icon/text layout and green active/hover states, adhering to a recent design reference.
+    -   **Summary**: Main React component managing global routing, navigation, and calculator/modal states.
+    -   **Changes Made**: Navigation tab styling updated. Added  integration, state, and URL token detection. PAYE calculator layout () reorganized, and a 'Year' field integrated into its state and validation.
 -   ****:
-    -   **Summary**: The core landing page component, comprising multiple sections (Hero, Microflow, Floating Quick-Actions, Benefits, Feature Panels, Pricing, How It Works, Social Proof, FAQ, Footer) guiding users through the application.
-    -   **Changes Made**: Underwent a complete visual redesign multiple times. The Hero section background was updated to a greyscale city skyline image. All floating elements (quick-action cards, pricing cards, trust badges, case study card, FAQ tiles) had their background colors iteratively changed from a light grey to #BDBDBB, then #DCDCDB, and finally to transparent glassmorphism with black gradient backgrounds applied to their parent sections. Glassmorphism effects were extensively applied and refined for transparency and appearance. Borders around icons in the What do you want to do? section were removed. Feature panels were initially present, removed during an early redesign phase, and most recently re-included between the What do you want to do? and Choose your plan sections, with updated content (e.g., PAYE headline changed to Know EXACTLY what your employer is allowed to charge you as tax) and consistent glassmorphism and gradient backgrounds.
+    -   **Summary**: The application's core landing page.
+    -   **Changes Made**: Redesigned to a clean, light aesthetic. Feature panels converted to a responsive grid of image-backed cards with glassmorphism text overlays. What do you want to do? section removed; its caption relocated. Pricing section received a greyscale background and glassmorphism cards.
 -   ****:
-    -   **Summary**: Global CSS file for application-wide styling, including Tailwind CSS directives and custom styles.
-    -   **Changes Made**: Heavily modified to support the various redesign iterations. This includes adding mobile-specific optimizations, defining custom color variables (e.g., , , ), and implementing complex glassmorphism effects (, , ). Black gradient backgrounds were added for all sections below the hero, such as  for Quick-Actions and similar for Pricing, Trust & Proof, and FAQ sections.
+    -   **Summary**: Global CSS for application-wide styling.
+    -   **Changes Made**: Added/removed  animation. Defined custom styles for glassmorphism and integrated a global placeholder styling rule .
+-   ****:
+    -   **Summary**: FastAPI backend handling API routes and business logic.
+    -   **Changes Made**: Corrected CIT small company logic (turnover ₦50M threshold, AND condition). Implemented NTA minimum tax rules. Added  to PAYE result model and ,  to / models. Implemented Forgot Password endpoints.
+-   ****:
+    -   **Summary**: Utility for generating PDF reports.
+    -   **Changes Made**: Overhauled printout headers/footers to be taxpayer-focused (name, TIN, period, YOA) and relegated Fiquant branding to a footnote. Added PAYE effective tax rate, fixed alignment, NaN errors, and currency formatting (reverted to 'N'). Removed redundant data sections.
+-   ****:
+    -   **Summary**: Handles user login.
+    -   **Changes Made**: Integrated Forgot Password link and modal. Styled with transparent background for glassmorphism, with all text and input field backgrounds changed to white.
+-   ****:
+    -   **Summary**: Handles user registration.
+    -   **Changes Made**: Styled with transparent background for glassmorphism, with all text and input field backgrounds changed to white.
+-   ****:
+    -   **Summary**: Wrapper for login/registration forms.
+    -   **Changes Made**: Removed secondary border, applied glassmorphism (). Adjusted text colors for contrast.
+-   ** (New File)**:
+    -   **Summary**: Component for handling password reset using a token.
+    -   **Changes Made**: Implemented password input, validation, API integration. All text and input field backgrounds changed to white.
 </code_architecture>
 
 <pending_tasks>
--   **Email Service Integration**: Full implementation including SendGrid API key acquisition, template management, and analytics.
--   **User Analytics & Usage Statistics**: Full implementation for real-time charts and export reports.
--   **Audit & Security Logs**: Full implementation for comprehensive audit reports.
--   **System Health & Monitoring**: Full implementation for uptime, response times, and error logs.
--   **Monetization model and account permission tiers**.
--   **Prevent pre-population of tax calculator forms**.
--   **Cleanup of test accounts**.
+-   **Notification Bell Icon**: Implement notification bell in header and push notification system.
+-   **User Account Recovery**: Retrieve/reset password for , grant superuser access, and bypass verification.
 </pending_tasks>
 
 <current_work>
-Immediately before this summary, the AI engineer was addressing a user request to **re-include specific feature panels** (PAYE, CIT, VAT, CGT, Payments) within the  component. These panels were to be positioned strategically between the What do you want to do? quick-actions section and the Choose your plan (Pricing) section on the landing page.
-
-The task involved:
-1.  **Re-insertion of Feature Panels**: The code in  was modified to re-add five distinct feature panels.
-2.  **Headline Update**: The headline for the PAYE panel was specifically updated to Know EXACTLY what your employer is allowed to charge you as tax.
-3.  **Glassmorphism and Design Consistency**: The re-included panels were styled to maintain the existing glassmorphism effect, using , , and . Their parent container sections now utilize black gradient backgrounds, consistent with other sections below the hero.
-4.  **Button Styling**: The CTA buttons within these panels retained their distinct colors (green, purple, orange, green, pink).
-5.  **Functionality Preservation**: All navigational and interactive functionalities associated with these panels were preserved.
-
-This work ensures that the feature panels are again part of the landing page, aligning with the latest design language and specified content.
+Immediately before this summary, the AI engineer was finalizing the aesthetic adjustments to the login window following the implementation of its glassmorphism effect. The user explicitly requested that all text within the login window (encompassing , , , and ) be adjusted to  and that the fill color (background) of all text entry fields also be made . This work aimed to improve the contrast and readability of the form elements against the newly applied translucent glassmorphism background, ensuring a consistent and refined visual experience. The engineer was in the process of applying these specific color changes across the , , and  components, targeting labels, input fields, and other textual elements, before verifying the changes with a screenshot.
 </current_work>
 
 <optional_next_step>
-Visually verify the re-included feature panels on the landing page, ensuring correct placement, PAYE headline, and glassmorphism.
+Take a screenshot to verify the updated text and input field colors on the login window.
 </optional_next_step>

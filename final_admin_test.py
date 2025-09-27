@@ -3,7 +3,7 @@ import json
 import sys
 
 class ComprehensiveAdminAccountTester:
-    def __init__(self, base_url="https://tax-calc-nigeria.preview.emergentagent.com/api"):
+    def __init__(self, base_url="https://taxpro-nigeria.preview.emergentagent.com/api"):
         self.base_url = base_url
         self.target_email = "douyeegberipou@gmail.com"
         self.target_name = "Doutimiye Alfred-Egberipou"
