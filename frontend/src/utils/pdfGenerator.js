@@ -331,30 +331,6 @@ export const generateCitReport = (citInput, citResult) => {
   
   let yPos = addTaxpayerHeader(doc, 'Corporate Income Tax (CIT) Calculation Report', companyInfo);
   
-  // Remove redundant Company Information Section since it's now in header
-  
-  const companyData = [
-    ['Company Name', citInput.company_name || 'N/A'],
-    ['Year of Assessment', citInput.year_of_assessment || 'Not specified'],
-    ['Tax Year', citInput.tax_year || 'Not specified'],
-    ['Annual Turnover', formatCurrency(citInput.annual_turnover)],
-    ['Total Fixed Assets', formatCurrency(citInput.total_fixed_assets)],
-    ['Company Classification', citResult.company_type || 'N/A'],
-    ['Professional Service Firm', citInput.is_professional_service ? 'Yes' : 'No'],
-    ['Multinational Enterprise', citInput.is_multinational ? 'Yes' : 'No']
-  ];
-  
-  autoTable(doc, {
-    head: [['Company Detail', 'Value']],
-    body: companyData,
-    startY: yPos,
-    theme: 'grid',
-    headStyles: { fillColor: [0, 0, 0], textColor: [255, 255, 255] },
-    margin: { left: 20, right: 20 }
-  });
-  
-  yPos = doc.lastAutoTable.finalY + 15;
-  
   // Revenue & Income Section
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
