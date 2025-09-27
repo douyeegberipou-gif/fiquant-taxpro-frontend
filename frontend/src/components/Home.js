@@ -125,20 +125,28 @@ const Home = ({ onNavigateToTab }) => {
                 </div>
               </div>
 
-              <h1 className="text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-8"
-                style={{
-                  fontFamily: "'GT America', 'Satoshi', 'Proxima Nova', sans-serif",
-                  letterSpacing: '-0.025em',
-                  textShadow: '0 2px 4px rgba(0,0,0,0.3)'
-                }}>
-                Did you know calculating & filing the wrong taxes can land you in 
-                <span className="text-red-400"> trouble</span>?
-              </h1>
-              
-              <p className="text-xl text-gray-200 mb-12 leading-relaxed max-w-2xl">
-                Fiquant TaxPro — NTA 2025-compliant tax calculators and compliance tools.<br/>
-                Get instant, accurate PAYE, CIT, VAT, CGT & payment calculations — free. Protect revenue. Avoid fines.
-              </p>
+              {/* Carousel Content */}
+              <div className="carousel-content transition-all duration-500 ease-in-out">
+                <h1 className="text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-8"
+                  style={{
+                    fontFamily: "'GT America', 'Satoshi', 'Proxima Nova', sans-serif",
+                    letterSpacing: '-0.025em',
+                    textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+                  }}>
+                  {currentSlide.title.includes('trouble') ? (
+                    <>
+                      Did you know calculating & filing the wrong taxes can land you in 
+                      <span className="text-red-400"> trouble</span>?
+                    </>
+                  ) : (
+                    currentSlide.title
+                  )}
+                </h1>
+                
+                <p className="text-xl text-gray-200 mb-12 leading-relaxed max-w-2xl">
+                  {currentSlide.subtitle}
+                </p>
+              </div>
               
               {/* CTA Row */}
               <div className="flex flex-col sm:flex-row gap-4 mb-16">
