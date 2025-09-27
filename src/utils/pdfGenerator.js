@@ -231,7 +231,8 @@ export const generatePayeReport = (taxInput, result) => {
 export const generateBulkPayeReport = (employees, totals) => {
   const doc = new jsPDF();
   
-  let yPos = addHeader(doc, 'Bulk PAYE Tax Calculation Report');
+  // Simple header for bulk report
+  let yPos = addTaxpayerHeader(doc, 'Bulk PAYE Tax Calculation Report', {});
   
   // Summary Section
   doc.setFontSize(14);
