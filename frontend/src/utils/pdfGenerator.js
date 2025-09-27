@@ -441,15 +441,15 @@ export const generateCitReport = (citInput, citResult) => {
 export const generateVatReport = (vatInput, vatResult) => {
   const doc = new jsPDF();
   
-  addHeader(doc, 'VAT Calculation Report');
+  // Prepare company info for header
+  const companyInfo = {
+    name: vatInput.company_name || 'Not specified',
+    month: vatInput.month || 'Not specified'
+  };
   
-  let yPos = 55;
+  let yPos = addTaxpayerHeader(doc, 'VAT Calculation Report', companyInfo);
   
-  // Report Title
-  doc.setFontSize(18);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(0, 0, 0);
-  doc.text('Value Added Tax (VAT) Report', 20, yPos);
+  // Remove redundant title since it's now in header
   yPos += 10;
   
   // Generated date
