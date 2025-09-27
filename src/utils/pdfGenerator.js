@@ -231,10 +231,10 @@ export const generatePayeReport = (taxInput, result) => {
     yPos += 10;
     
     const bracketData = result.tax_breakdown.map(bracket => [
-      bracket.range,
-      `${bracket.rate}%`,
-      formatCurrency(bracket.taxable_amount),
-      formatCurrency(bracket.tax_amount)
+      bracket.range || 'N/A',
+      bracket.rate ? `${bracket.rate}%` : '0%',
+      formatCurrency(bracket.taxable_amount || 0),
+      formatCurrency(bracket.tax_amount || 0)
     ]);
     
     autoTable(doc, {
