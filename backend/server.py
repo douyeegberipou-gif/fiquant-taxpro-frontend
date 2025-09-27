@@ -2228,7 +2228,7 @@ async def initialize_super_admin(email_data: dict):
 async def setup_owner_admin():
     """Setup the platform owner as super admin with verification bypass"""
     try:
-        owner_email = "douyeegberipou@gmail.com"
+        owner_email = "douyeegberipou@yahoo.com"
         owner_name = "Doutimiye Alfred-Egberipou"
         
         # Check if user exists
@@ -2281,7 +2281,7 @@ async def setup_owner_admin():
 async def reset_owner_password():
     """Reset password for the platform owner"""
     try:
-        owner_email = "douyeegberipou@gmail.com"
+        owner_email = "douyeegberipou@yahoo.com"
         new_password = "AdminPass123!"
         
         # Check if user exists
