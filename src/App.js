@@ -195,6 +195,18 @@ function AppContent() {
     }
   }, [user, isAuthenticated]);
 
+  useEffect(() => {
+    // Close notifications dropdown when clicking outside
+    const handleClickOutside = (event) => {
+      if (showNotifications && !event.target.closest('.notification-bell-container')) {
+        setShowNotifications(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showNotifications]);
+
   const handleEmailVerification = async (token, email) => {
     setVerificationStatus('verifying');
     setVerificationMessage('Verifying your email address...');
