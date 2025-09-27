@@ -212,6 +212,16 @@ const PaymentProcessingCalculator = ({ formatCurrency }) => {
                   />
                 </div>
                 <div className="space-y-2">
+                  <Label htmlFor="tin">Tax Identification Number (TIN)</Label>
+                  <Input
+                    id="tin"
+                    type="text"
+                    placeholder="12345678901"
+                    value={paymentInput.tin}
+                    onChange={(e) => handleInputChange('tin', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
                   <Label htmlFor="month">Month *</Label>
                   <select
                     id="month"
