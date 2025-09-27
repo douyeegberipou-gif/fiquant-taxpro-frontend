@@ -110,7 +110,7 @@ export const RegisterForm = ({ onSwitchToLogin, onClose, onRegistrationSuccess, 
   // Show success message after registration
   if (registrationComplete) {
     return (
-      <Card className="w-full max-w-md mx-auto">
+      <Card className="w-full max-w-md mx-auto bg-transparent border-none shadow-none">
         <CardHeader className="text-center">
           <CardTitle className="flex items-center justify-center space-x-2 text-green-600">
             <CheckCircle className="h-5 w-5" />
