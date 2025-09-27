@@ -275,7 +275,7 @@ function AppContent() {
       const numericInput = {};
       Object.keys(taxInput).forEach(key => {
         // Keep string fields as strings
-        if (key === 'staff_name' || key === 'month' || key === 'state_of_residence') {
+        if (key === 'staff_name' || key === 'tin' || key === 'month' || key === 'state_of_residence') {
           numericInput[key] = taxInput[key];
         } else {
           numericInput[key] = parseFloat(taxInput[key]) || 0;
