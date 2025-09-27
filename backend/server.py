@@ -635,6 +635,88 @@ async def login_user(login_data: UserLogin):
         user_id=user_data["id"]
     )
 
+# Password Reset Models
+class PasswordResetRequest(BaseModel):
+    email: EmailStr
+
+class PasswordReset(BaseModel):
+    reset_token: str
+    new_password: str = Field(min_length=8)
+
+@api_router.post("/auth/forgot-password")
+async def forgot_password(request: PasswordResetRequest):
+    """Send password reset email"""
+    # Find user by email
+    user = await db.users.find_one({"email": request.email.lower()})
+    
+    if not user:
+        # Don't reveal if email exists - always return success message
+        return {"message": "If an account with that email exists, you will receive a password reset link."}
+    
+    # Generate reset token
+    reset_token = secrets.token_urlsafe(32)
+    reset_expires = datetime.now(timezone.utc) + timedelta(hours=1)  # 1 hour expiry
+    
+    # Store reset token in database
+    await db.users.update_one(
+        {"email": request.email.lower()},
+        {"$set": {
+            "reset_token": reset_token,
+            "reset_token_expires": reset_expires.isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    # In production, send email here
+    # For now, just log the token (remove in production)
+    print(f"Password reset token for {request.email}: {reset_token}")
+    
+    return {"message": "If an account with that email exists, you will receive a password reset link."}
+
+@api_router.post("/auth/reset-password")
+async def reset_password(request: PasswordReset):
+    """Reset password with token"""
+    # Find user by reset token
+    user = await db.users.find_one({"reset_token": request.reset_token})
+    
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid or expired reset token"
+        )
+    
+    # Check if token has expired
+    if user.get("reset_token_expires"):
+        token_expires = datetime.fromisoformat(user["reset_token_expires"])
+        if datetime.now(timezone.utc) > token_expires:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Reset token has expired"
+            )
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid reset token"
+        )
+    
+    # Hash new password
+    hashed_password = pwd_context.hash(request.new_password)
+    
+    # Update user password and remove reset token
+    await db.users.update_one(
+        {"reset_token": request.reset_token},
+        {"$set": {
+            "password_hash": hashed_password,
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        },
+        "$unset": {
+            "reset_token": "",
+            "reset_token_expires": ""
+        }}
+    )
+    
+    return {"message": "Password has been reset successfully"}
+
 @api_router.get("/auth/me", response_model=UserResponse)
 async def get_current_user_profile(current_user: UserProfile = Depends(get_current_user)):
     """Get current user profile"""
