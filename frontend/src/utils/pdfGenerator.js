@@ -285,7 +285,7 @@ export const generateBulkPayeReport = (employees, totals) => {
     styles: { fontSize: 8 }
   });
   
-  addFooter(doc);
+  addFiquantFooter(doc);
   
   // Save the PDF
   doc.save(`Bulk_PAYE_Report_${new Date().toISOString().split('T')[0]}.pdf`);
