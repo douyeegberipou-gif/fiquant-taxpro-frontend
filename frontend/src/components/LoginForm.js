@@ -145,7 +145,7 @@ export const LoginForm = ({ onSwitchToRegister, onClose, setShowTerms }) => {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-full max-w-md mx-auto bg-transparent border-none shadow-none">
       <CardHeader className="text-center">
         <div className="flex items-center justify-center mb-4">
           <img 
