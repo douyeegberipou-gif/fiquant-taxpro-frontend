@@ -355,6 +355,10 @@ export const AdminDashboard = () => {
           <TabsContent value="audit">
             <AdminAuditLogs />
           </TabsContent>
+
+          <TabsContent value="carousel">
+            <CarouselManager />
+          </TabsContent>
         </Tabs>
       </div>
     </div>
