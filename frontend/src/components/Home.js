@@ -184,6 +184,24 @@ const Home = ({ onNavigateToTab }) => {
                   Try Demo — No account required, see results in 30 seconds
                 </span>
               </div>
+              
+              {/* Carousel Indicators */}
+              {carouselSlides.length > 1 && (
+                <div className="flex items-center space-x-2 mt-8">
+                  {carouselSlides.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentSlideIndex(index)}
+                      className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                        index === currentSlideIndex 
+                          ? 'bg-yellow-400 scale-110' 
+                          : 'bg-white/30 hover:bg-white/50'
+                      }`}
+                      aria-label={`Go to slide ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Right Column - Visual */}
