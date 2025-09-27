@@ -524,8 +524,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "History Tab Enhancement - Remove WHT Information"
-    - "Interactive History Component Implementation"
+    - "NTA 2025 Minimum Tax Implementation Testing"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
