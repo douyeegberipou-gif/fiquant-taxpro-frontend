@@ -251,21 +251,21 @@ export const LoginForm = ({ onSwitchToRegister, onClose, setShowTerms }) => {
           </Button>
           
           <div className="text-center space-y-2">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-white">
               <button
                 type="button"
                 onClick={() => setShowForgotPassword(true)}
-                className="text-blue-600 hover:text-blue-700 font-medium"
+                className="text-blue-300 hover:text-blue-100 font-medium"
               >
                 Forgot Password?
               </button>
             </p>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-white">
               Don't have an account?{' '}
               <button
                 type="button"
                 onClick={onSwitchToRegister}
-                className="text-blue-600 hover:text-blue-700 font-medium"
+                className="text-blue-300 hover:text-blue-100 font-medium"
               >
                 Sign Up
               </button>
