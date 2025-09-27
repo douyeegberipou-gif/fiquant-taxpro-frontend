@@ -30,8 +30,12 @@ class NigerianTaxCalculatorTester:
                 response = requests.post(url, json=data, headers=headers, timeout=30)
             elif method == 'PUT':
                 response = requests.put(url, json=data, headers=headers, timeout=30)
+            elif method == 'PATCH':
+                response = requests.patch(url, json=data, headers=headers, timeout=30)
             elif method == 'DELETE':
                 response = requests.delete(url, headers=headers, timeout=30)
+            else:
+                raise ValueError(f"Unsupported HTTP method: {method}")
 
             # Handle multiple expected status codes
             if isinstance(expected_status, list):
