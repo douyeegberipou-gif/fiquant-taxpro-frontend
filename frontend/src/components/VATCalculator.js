@@ -251,7 +251,7 @@ const VATCalculator = ({ formatCurrency }) => {
     
     try {
       const inputVatPaid = parseFloat(vatInput.input_vat_paid) || 0;
-      const vatRate = 0.10; // 10% VAT rate for 2025
+      const vatRate = 0.075; // 7.5% VAT rate per NTA 2025
 
       let totalSales = 0;
       let standardRatedSales = 0;
