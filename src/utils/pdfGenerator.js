@@ -106,31 +106,17 @@ const addFiquantFooter = (doc) => {
 export const generatePayeReport = (taxInput, result) => {
   const doc = new jsPDF();
   
-  let yPos = addHeader(doc, 'PAYE Tax Calculation Report');
+  // Prepare taxpayer info for header
+  const taxpayerInfo = {
+    name: taxInput.staff_name || 'Not specified',
+    tin: taxInput.tin || null,
+    month: taxInput.month || 'Not specified',
+    state: taxInput.state_of_residence || 'Not specified'
+  };
   
-  // Staff Information Section
-  doc.setFontSize(14);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Staff Information', 20, yPos);
-  yPos += 10;
+  let yPos = addTaxpayerHeader(doc, 'PAYE Tax Calculation Report', taxpayerInfo);
   
-  // Staff Details Table
-  const staffData = [
-    ['Name of Staff/Taxpayer', taxInput.staff_name || 'Not specified'],
-    ['Month', taxInput.month || 'Not specified'],
-    ['State of Residence', taxInput.state_of_residence || 'Not specified']
-  ];
-  
-  autoTable(doc, {
-    head: [['Detail', 'Information']],
-    body: staffData,
-    startY: yPos,
-    theme: 'grid',
-    headStyles: { fillColor: [0, 100, 0], textColor: [255, 255, 255] },
-    margin: { left: 20, right: 20 }
-  });
-  
-  yPos = doc.lastAutoTable.finalY + 15;
+  // Remove the redundant Staff Information Section since it's now in header
   
   // Income Details Section
   doc.setFontSize(14);
