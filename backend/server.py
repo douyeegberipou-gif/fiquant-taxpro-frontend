@@ -1754,6 +1754,105 @@ async def get_cit_calculation_history(limit: int = 20):
         result.append(CITCalculationResult(**calc))
     return result
 
+# ============================
+# NOTIFICATION API ENDPOINTS
+# ============================
+
+@api_router.get("/notifications", response_model=NotificationResponse)
+async def get_notifications(
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Get user's notifications"""
+    # Get notifications for current user
+    notifications_cursor = db.notifications.find(
+        {"user_id": current_user.id}
+    ).sort("created_at", -1).limit(50)
+    
+    notifications_data = await notifications_cursor.to_list(length=None)
+    notifications = []
+    unread_count = 0
+    
+    for notif_data in notifications_data:
+        notification = Notification(**notif_data)
+        notifications.append(notification)
+        if not notification.read:
+            unread_count += 1
+    
+    return NotificationResponse(
+        notifications=notifications,
+        unread_count=unread_count
+    )
+
+@api_router.patch("/notifications/{notification_id}/read")
+async def mark_notification_read(
+    notification_id: str,
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Mark a specific notification as read"""
+    result = await db.notifications.update_one(
+        {
+            "id": notification_id,
+            "user_id": current_user.id
+        },
+        {
+            "$set": {
+                "read": True,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }
+        }
+    )
+    
+    if result.modified_count == 0:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Notification not found"
+        )
+    
+    return {"message": "Notification marked as read"}
+
+@api_router.patch("/notifications/mark-all-read")
+async def mark_all_notifications_read(
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Mark all notifications as read for current user"""
+    await db.notifications.update_many(
+        {
+            "user_id": current_user.id,
+            "read": False
+        },
+        {
+            "$set": {
+                "read": True,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }
+        }
+    )
+    
+    return {"message": "All notifications marked as read"}
+
+@api_router.post("/notifications")
+async def create_notification(
+    title: str,
+    message: str,
+    user_id: str,
+    notification_type: str = "info"
+):
+    """Create a new notification (for system use)"""
+    notification = Notification(
+        user_id=user_id,
+        title=title,
+        message=message,
+        notification_type=notification_type
+    )
+    
+    notification_dict = notification.dict()
+    notification_dict["created_at"] = notification_dict["created_at"].isoformat()
+    if notification_dict["expires_at"]:
+        notification_dict["expires_at"] = notification_dict["expires_at"].isoformat()
+    
+    await db.notifications.insert_one(notification_dict)
+    
+    return {"message": "Notification created", "id": notification.id}
 
 # Include the router in the main app
 app.include_router(api_router)
