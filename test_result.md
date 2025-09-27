@@ -539,7 +539,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Placeholder Text Styling Verification Testing"
+    - "Forgot Password Functionality"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
