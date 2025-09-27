@@ -180,6 +180,16 @@ const CGTCalculator = ({ formatCurrency }) => {
                   />
                 </div>
                 <div className="space-y-2">
+                  <Label htmlFor="tin">Tax Identification Number (TIN)</Label>
+                  <Input
+                    id="tin"
+                    type="text"
+                    placeholder="12345678901"
+                    value={cgtInput.tin}
+                    onChange={(e) => handleInputChange('tin', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
                   <Label htmlFor="year">Year *</Label>
                   <select
                     id="year"
