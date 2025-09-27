@@ -240,6 +240,21 @@ backend:
         agent: "testing"
         comment: "🛡️ AUTHENTICATION MIDDLEWARE PROTECTION TESTING COMPLETED: Comprehensive testing of authentication middleware protection across all protected endpoints completed successfully. ✅ PROTECTED ENDPOINTS: All 5 protected endpoints (auth/me, profile/update, history/calculations, etc.) correctly require authentication. ✅ NO TOKEN HANDLING: Returns 403 Forbidden when no authentication token provided. ✅ INVALID TOKEN HANDLING: Returns 401 Unauthorized when invalid token provided. ✅ JWT VALIDATION: Proper token validation and error handling working correctly. ✅ SECURITY COMPLIANCE: All endpoints properly secured with correct HTTP status codes and security headers."
 
+  - task: "Forgot Password Functionality"
+    implemented: true
+    working: true
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "user"
+        comment: "Test the forgot password functionality endpoints to ensure they are working correctly: 1. Test Forgot Password Request (/api/auth/forgot-password) with email address, verify success message without revealing if email exists, check reset token generation and storage. 2. Test Password Reset (/api/auth/reset-password) with valid/invalid tokens, verify password hashing and token removal. 3. Test edge cases including invalid email formats, expired tokens, short passwords. 4. Security verification for information leakage prevention and 1-hour token expiry."
+      - working: true
+        agent: "testing"
+        comment: "🔑 COMPREHENSIVE FORGOT PASSWORD TESTING COMPLETED SUCCESSFULLY: All 7/7 forgot password tests passed with 100% success rate. ✅ FORGOT PASSWORD REQUEST: /api/auth/forgot-password endpoint working perfectly with proper email validation and security measures. Returns consistent message 'If an account with that email exists, you will receive a password reset link.' for both existing and non-existing emails to prevent email enumeration attacks. ✅ RESET TOKEN GENERATION: Reset tokens are properly generated using secure random methods and stored in database with 1-hour expiry. Tokens are prominently displayed in backend console logs for development/testing purposes. ✅ PASSWORD RESET: /api/auth/reset-password endpoint correctly validates reset tokens, enforces password requirements (minimum 8 characters), properly hashes new passwords, and removes reset tokens after successful reset. ✅ SECURITY FEATURES: Email enumeration protection working (same response for existing/non-existing emails), invalid/expired token rejection working correctly, password validation enforced, multiple reset requests handled securely. ✅ EDGE CASES: Invalid email format rejection (422 validation error), expired/invalid token rejection (400 error), short password rejection (422 validation error), non-existent token handling. ✅ COMPLETE FLOW: End-to-end password reset flow tested including user creation, reset request, token generation, invalid token testing, and password validation. All security best practices implemented correctly."
+
   - task: "Specific Admin Account Modification"
     implemented: true
     working: false
