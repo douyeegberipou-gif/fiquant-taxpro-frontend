@@ -1154,8 +1154,8 @@ class TaxHistory(BaseModel):
 def calculate_nigerian_cit_2026(cit_input: CITInput) -> CITCalculationResult:
     """Calculate Nigerian Corporate Income Tax based on 2026 tax laws"""
     
-    # Classify company size
-    is_small = (cit_input.annual_turnover <= 100_000_000 and 
+    # Classify company size - NTA 2025 criteria
+    is_small = (cit_input.annual_turnover <= 50_000_000 and 
                 cit_input.total_fixed_assets <= 250_000_000 and 
                 not cit_input.is_professional_service)
     
