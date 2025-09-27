@@ -516,42 +516,6 @@ export const generatePaymentProcessingReport = (paymentInput, paymentResult) => 
   
   let yPos = addTaxpayerHeader(doc, 'Payment Processing Report', payeeInfo);
   
-  // Remove redundant title since it's now in header
-  yPos += 10;
-  
-  // Generated date
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'normal');
-  doc.setTextColor(100, 100, 100);
-  doc.text(`Generated on: ${formatDate()}`, 20, yPos);
-  yPos += 20;
-  
-  // Payment Information
-  doc.setFontSize(14);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(0, 0, 0);
-  doc.text('Payment Information', 20, yPos);
-  yPos += 10;
-  
-  const paymentData = [
-    ['Payee Name/Company', paymentResult.payee_name],
-    ['Contract Amount', formatCurrency(paymentResult.contract_amount)],
-    ['Transaction Type', paymentResult.transaction_type],
-    ['Payee Status', paymentResult.is_resident ? 'Resident' : 'Non-Resident'],
-    ['Processing Month', paymentResult.month]
-  ];
-  
-  autoTable(doc, {
-    head: [['Payment Detail', 'Value']],
-    body: paymentData,
-    startY: yPos,
-    theme: 'grid',
-    headStyles: { fillColor: [0, 0, 0], textColor: [255, 255, 255] },
-    margin: { left: 20, right: 20 }
-  });
-  
-  yPos = doc.lastAutoTable.finalY + 15;
-  
   // Tax Calculations
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
