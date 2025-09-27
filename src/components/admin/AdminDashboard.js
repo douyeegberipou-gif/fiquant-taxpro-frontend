@@ -24,6 +24,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { AdminUserManagement } from './AdminUserManagement';
 import { AdminAnalytics } from './AdminAnalytics';
 import { AdminAuditLogs } from './AdminAuditLogs';
+import { CarouselManager } from './CarouselManager';
 
 export const AdminDashboard = () => {
   const { user } = useAuth();
