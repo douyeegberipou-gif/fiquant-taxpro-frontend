@@ -50,6 +50,16 @@ const CITCalculator = ({
                   onChange={(e) => handleCitInputChange('company_name', e.target.value)}
                 />
               </div>
+              <div className="space-y-2 sm:col-span-2">
+                <Label htmlFor="tin">Tax Identification Number (TIN) - Optional</Label>
+                <Input
+                  id="tin"
+                  type="text"
+                  placeholder="12345678901"
+                  value={citInput.tin}
+                  onChange={(e) => handleCitInputChange('tin', e.target.value)}
+                />
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="year_of_assessment">Year of Assessment *</Label>
                 <Input
