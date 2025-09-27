@@ -280,6 +280,65 @@ function AppContent() {
     });
   };
 
+  // Notification functions
+  const fetchNotifications = async () => {
+    if (!isAuthenticated()) return;
+    
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${API}/notifications`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      if (response.data) {
+        setNotifications(response.data.notifications || []);
+        setUnreadCount(response.data.unread_count || 0);
+      }
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+    }
+  };
+
+  const markAsRead = async (notificationId) => {
+    if (!isAuthenticated()) return;
+    
+    try {
+      const token = localStorage.getItem('token');
+      await axios.patch(`${API}/notifications/${notificationId}/read`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      // Update local state
+      setNotifications(prev => 
+        prev.map(notif => 
+          notif.id === notificationId ? { ...notif, read: true } : notif
+        )
+      );
+      setUnreadCount(prev => Math.max(0, prev - 1));
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+    }
+  };
+
+  const markAllAsRead = async () => {
+    if (!isAuthenticated()) return;
+    
+    try {
+      const token = localStorage.getItem('token');
+      await axios.patch(`${API}/notifications/mark-all-read`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      // Update local state
+      setNotifications(prev => 
+        prev.map(notif => ({ ...notif, read: true }))
+      );
+      setUnreadCount(0);
+    } catch (error) {
+      console.error('Error marking all notifications as read:', error);
+    }
+  };
+
   const calculateTax = async () => {
     console.log('calculateTax function called');
     console.log('taxInput:', taxInput);
