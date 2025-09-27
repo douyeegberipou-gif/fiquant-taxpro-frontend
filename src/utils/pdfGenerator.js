@@ -65,7 +65,8 @@ const addTaxpayerHeader = (doc, title, taxpayerInfo) => {
       columnStyles: {
         0: { fontStyle: 'bold', cellWidth: 50 },
         1: { cellWidth: 100 }
-      }
+      },
+      margin: { left: 20, right: 20 } // Add proper margins to align with rest of document
     });
     yPos = doc.lastAutoTable.finalY + 10;
   }
