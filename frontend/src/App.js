@@ -140,8 +140,15 @@ function AppContent() {
     fetchCitInfo();
     fetchCitHistory();
     
-    // Check for email verification on page load
+    // Check for reset token in URL
     const urlParams = new URLSearchParams(window.location.search);
+    const resetToken = urlParams.get('reset_token');
+    
+    if (resetToken) {
+      setShowPasswordReset(true);
+    }
+
+    // Check for email verification on page load
     const token = urlParams.get('token');
     const email = urlParams.get('email');
     
