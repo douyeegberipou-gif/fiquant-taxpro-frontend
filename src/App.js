@@ -316,6 +316,7 @@ function AppContent() {
       staff_name: '',
       tin: '',
       month: '',
+      year: '',
       state_of_residence: '',
       // Income Details
       basic_salary: '',
