@@ -163,6 +163,24 @@ class SystemAnalytics(BaseModel):
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 # ============================
+# NOTIFICATION MODELS
+# ============================
+
+class Notification(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str = Field(description="User ID who receives the notification")
+    title: str = Field(description="Notification title")
+    message: str = Field(description="Notification message")
+    notification_type: str = Field(default="info", description="info, success, warning, error")
+    read: bool = Field(default=False, description="Whether notification has been read")
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    expires_at: Optional[datetime] = Field(None, description="When notification expires")
+
+class NotificationResponse(BaseModel):
+    notifications: List[Notification]
+    unread_count: int
+
+# ============================
 # TAX CALCULATION HISTORY MODELS
 # ============================
 
