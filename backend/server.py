@@ -568,6 +568,21 @@ async def register_user(user_data: UserRegistration):
     
     await db.users.insert_one(user_doc)
     
+    # Create welcome notification
+    welcome_notification = Notification(
+        user_id=user_profile.id,
+        title="Welcome to Fiquant TaxPro! 🎉",
+        message=f"Hi {user_profile.full_name}! Welcome to Nigeria's premier tax calculation platform. Complete your email verification to get started with accurate PAYE, CIT, VAT, and CGT calculations.",
+        notification_type="success"
+    )
+    
+    welcome_doc = welcome_notification.dict()
+    welcome_doc["created_at"] = welcome_doc["created_at"].isoformat()
+    if welcome_doc["expires_at"]:
+        welcome_doc["expires_at"] = welcome_doc["expires_at"].isoformat()
+    
+    await db.notifications.insert_one(welcome_doc)
+    
     # Send verification email
     email_sent = send_verification_email(user_data.email, verification_token, user_data.full_name)
     if not email_sent:
