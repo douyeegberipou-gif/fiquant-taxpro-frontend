@@ -204,6 +204,89 @@ export const CarouselManager = () => {
         </Alert>
       )}
 
+      {/* Carousel Settings */}
+      <Card className="border-indigo-200">
+        <CardHeader className="bg-indigo-50">
+          <CardTitle className="text-indigo-800 flex items-center">
+            <Settings className="h-5 w-5 mr-2" />
+            Carousel Settings
+          </CardTitle>
+          <CardDescription>Configure carousel timing and behavior</CardDescription>
+        </CardHeader>
+        <CardContent className="pt-6">
+          {editingSettings ? (
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="transition-delay">Transition Delay (seconds)</Label>
+                  <Input
+                    id="transition-delay"
+                    type="number"
+                    min="1"
+                    max="30"
+                    value={tempSettings.transition_delay}
+                    onChange={(e) => setTempSettings({ 
+                      ...tempSettings, 
+                      transition_delay: parseInt(e.target.value) || 5 
+                    })}
+                    className="mt-1"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Time between slide transitions (1-30 seconds)</p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="auto-rotation"
+                    checked={tempSettings.auto_rotation}
+                    onChange={(e) => setTempSettings({ 
+                      ...tempSettings, 
+                      auto_rotation: e.target.checked 
+                    })}
+                    className="h-4 w-4 text-indigo-600"
+                  />
+                  <Label htmlFor="auto-rotation">Enable Auto-rotation</Label>
+                </div>
+              </div>
+              <div className="flex space-x-3">
+                <Button onClick={handleSaveSettings} className="bg-green-600 hover:bg-green-700">
+                  <Save className="h-4 w-4 mr-2" />
+                  Save Settings
+                </Button>
+                <Button 
+                  onClick={() => {
+                    setEditingSettings(false);
+                    setTempSettings(settings);
+                  }} 
+                  variant="outline"
+                >
+                  <X className="h-4 w-4 mr-2" />
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center justify-between">
+              <div className="space-y-2">
+                <p className="text-sm text-gray-600">
+                  <strong>Transition Delay:</strong> {settings.transition_delay} seconds
+                </p>
+                <p className="text-sm text-gray-600">
+                  <strong>Auto-rotation:</strong> {settings.auto_rotation ? 'Enabled' : 'Disabled'}
+                </p>
+              </div>
+              <Button 
+                onClick={() => setEditingSettings(true)} 
+                variant="outline"
+                className="text-indigo-600 border-indigo-200 hover:bg-indigo-50"
+              >
+                <Edit3 className="h-4 w-4 mr-2" />
+                Edit Settings
+              </Button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
       {/* Add New Slide Form */}
       {showAddForm && (
         <Card className="border-blue-200">
