@@ -296,13 +296,16 @@ export const generateBulkPayeReport = (employees, totals) => {
 export const generateCitReport = (citInput, citResult) => {
   const doc = new jsPDF();
   
-  let yPos = addHeader(doc, 'Corporate Income Tax (CIT) Calculation Report');
+  // Prepare company info for header
+  const companyInfo = {
+    name: citInput.company_name || 'Not specified',
+    tin: citInput.tin || null,
+    year: citInput.year_of_assessment || citInput.tax_year || 'Not specified'
+  };
   
-  // Company Information Section
-  doc.setFontSize(14);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Company Information', 20, yPos);
-  yPos += 10;
+  let yPos = addTaxpayerHeader(doc, 'Corporate Income Tax (CIT) Calculation Report', companyInfo);
+  
+  // Remove redundant Company Information Section since it's now in header
   
   const companyData = [
     ['Company Name', citInput.company_name || 'N/A'],
