@@ -972,6 +972,7 @@ class TaxInput(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     # Staff Information
     staff_name: Optional[str] = Field(default="", description="Name of staff/taxpayer")
+    tin: Optional[str] = Field(default="", description="Tax Identification Number (TIN) - Optional")
     month: Optional[str] = Field(default="", description="Month for which tax is calculated")
     state_of_residence: Optional[str] = Field(default="", description="State of residence")
     # Income Details
