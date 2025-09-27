@@ -3613,6 +3613,8 @@ class NigerianTaxCalculatorTester:
                     print(f"   Response: {response['message']}")
                 if 'updated_count' in response:
                     print(f"   Updated count: {response['updated_count']}")
+        else:
+            print(f"   ❌ Failed to mark all notifications as read")
         
         return success
     
