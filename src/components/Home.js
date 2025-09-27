@@ -211,7 +211,7 @@ const Home = ({ onNavigateToTab }) => {
                   {carouselSlides.map((_, index) => (
                     <button
                       key={index}
-                      onClick={() => setCurrentSlideIndex(index)}
+                      onClick={() => handleSlideChange(index)}
                       className={`w-3 h-3 rounded-full transition-all duration-300 ${
                         index === currentSlideIndex 
                           ? 'bg-yellow-400 scale-110' 
