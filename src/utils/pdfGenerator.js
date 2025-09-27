@@ -180,9 +180,10 @@ export const generatePayeReport = (taxInput, result) => {
   
   const taxData = [
     ['Annual Gross Income', formatCurrency(result.annual_gross_income)],
-    ['Annual Total Reliefs', formatCurrency(result.annual_total_reliefs)],
-    ['Annual Taxable Income', formatCurrency(result.annual_taxable_income)],
+    ['Annual Total Reliefs', formatCurrency(result.total_reliefs)],
+    ['Annual Taxable Income', formatCurrency(result.taxable_income)],
     ['Annual Tax Due', formatCurrency(result.tax_due)],
+    ['Effective Tax Rate', `${(result.effective_tax_rate * 100).toFixed(2)}%`],
     ['Monthly Tax (PAYE)', formatCurrency(result.monthly_tax)],
     ['Monthly Net Income', formatCurrency(result.monthly_net_income)]
   ];
