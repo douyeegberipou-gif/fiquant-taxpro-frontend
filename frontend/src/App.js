@@ -618,6 +618,79 @@ function AppContent() {
                       <span className="text-gray-400 text-xs">{user?.account_type}</span>
                     </div>
                   </div>
+                  
+                  {/* Notification Bell */}
+                  <div className="relative">
+                    <Button
+                      onClick={() => setShowNotifications(!showNotifications)}
+                      variant="outline"
+                      size="sm"
+                      className="border-yellow-400/50 text-yellow-300 hover:bg-yellow-400/10 backdrop-blur-sm"
+                    >
+                      <Bell className="h-4 w-4" />
+                      {unreadCount > 0 && (
+                        <span className="absolute -top-1 -right-1 h-5 w-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                          {unreadCount > 9 ? '9+' : unreadCount}
+                        </span>
+                      )}
+                    </Button>
+                    
+                    {/* Notification Dropdown */}
+                    {showNotifications && (
+                      <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                        <div className="p-4 border-b border-gray-200">
+                          <div className="flex items-center justify-between">
+                            <h3 className="text-lg font-medium text-gray-900">Notifications</h3>
+                            {unreadCount > 0 && (
+                              <Button
+                                onClick={markAllAsRead}
+                                variant="ghost"
+                                size="sm"
+                                className="text-blue-600 hover:text-blue-800"
+                              >
+                                Mark all read
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                        <div className="max-h-96 overflow-y-auto">
+                          {notifications.length === 0 ? (
+                            <div className="p-4 text-center text-gray-500">
+                              No notifications yet
+                            </div>
+                          ) : (
+                            notifications.map((notification) => (
+                              <div
+                                key={notification.id}
+                                className={`p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer ${
+                                  !notification.read ? 'bg-blue-50' : ''
+                                }`}
+                                onClick={() => markAsRead(notification.id)}
+                              >
+                                <div className="flex items-start space-x-3">
+                                  <div className={`w-2 h-2 rounded-full mt-2 ${
+                                    !notification.read ? 'bg-blue-500' : 'bg-gray-300'
+                                  }`}></div>
+                                  <div className="flex-1 min-w-0">
+                                    <p className="text-sm font-medium text-gray-900">
+                                      {notification.title}
+                                    </p>
+                                    <p className="text-sm text-gray-600 mt-1">
+                                      {notification.message}
+                                    </p>
+                                    <p className="text-xs text-gray-400 mt-1">
+                                      {new Date(notification.created_at).toLocaleString()}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            ))
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
                   {user?.admin_enabled && user?.admin_role && (
                     <Button
                       onClick={() => {
