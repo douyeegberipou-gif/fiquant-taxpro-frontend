@@ -140,11 +140,11 @@ const Home = ({ onNavigateToTab }) => {
                 </div>
               </div>
 
-              {/* Carousel Content Container */}
-              <div className="carousel-container overflow-hidden relative">
+              {/* Carousel Content */}
+              <div className="carousel-container">
                 <div 
-                  className={`carousel-slide ${isTransitioning ? 'slide-out' : 'slide-in'}`}
-                  key={currentSlideIndex}
+                  className="carousel-slide"
+                  key={`slide-${currentSlideIndex}`}
                 >
                   <h1 className="text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-8"
                     style={{
