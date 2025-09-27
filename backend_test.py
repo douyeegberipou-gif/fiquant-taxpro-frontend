@@ -3581,6 +3581,8 @@ class NigerianTaxCalculatorTester:
             print(f"   ✅ Notification marked as read successfully")
             if isinstance(response, dict) and 'message' in response:
                 print(f"   Response: {response['message']}")
+        else:
+            print(f"   ❌ Failed to mark notification as read")
         
         return success
     
