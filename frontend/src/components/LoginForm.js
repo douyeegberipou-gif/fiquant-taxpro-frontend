@@ -194,7 +194,7 @@ export const LoginForm = ({ onSwitchToRegister, onClose, setShowTerms }) => {
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password" className="text-white">Password</Label>
             <div className="relative">
               <Input
                 id="password"
@@ -202,7 +202,7 @@ export const LoginForm = ({ onSwitchToRegister, onClose, setShowTerms }) => {
                 placeholder="Enter your password"
                 value={formData.password}
                 onChange={(e) => handleInputChange('password', e.target.value)}
-                className="pl-10 pr-10"
+                className="pl-10 pr-10 bg-white text-black placeholder:text-gray-400"
               />
               <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <button
