@@ -552,67 +552,63 @@ html {
 
 /* Carousel Animations - Smooth Right-to-Left Sliding */
 .carousel-container {
+  overflow: hidden;
   position: relative;
-  min-height: 320px; /* Adjust based on content height */
 }
 
 .carousel-slide {
-  position: absolute;
-  width: 100%;
-  top: 0;
-  left: 0;
-  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
-              opacity 0.3s ease-in-out;
-}
-
-.slide-in {
-  transform: translateX(0);
-  opacity: 1;
-  animation: slideInFromRight 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-.slide-out {
-  transform: translateX(-100%);
-  opacity: 0;
-  animation: slideOutToLeft 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation: slideInFromRight 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateZ(0); /* Hardware acceleration */
 }
 
 @keyframes slideInFromRight {
-  from {
+  0% {
     transform: translateX(100%);
     opacity: 0;
   }
-  to {
+  20% {
+    opacity: 0.3;
+  }
+  100% {
     transform: translateX(0);
     opacity: 1;
   }
 }
 
-@keyframes slideOutToLeft {
-  from {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  to {
-    transform: translateX(-100%);
+/* Alternative slide animation for smoother effect */
+.carousel-slide-smooth {
+  animation: smoothSlideIn 0.7s ease-out;
+}
+
+@keyframes smoothSlideIn {
+  0% {
+    transform: translateX(50px);
     opacity: 0;
   }
-}
-
-/* Smooth carousel transitions for better performance */
-.carousel-slide * {
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
-
-/* Mobile optimization for carousel */
-@media (max-width: 640px) {
-  .carousel-container {
-    min-height: 280px;
+  50% {
+    opacity: 0.7;
   }
-  
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Mobile optimization */
+@media (max-width: 640px) {
   .carousel-slide h1 {
     font-size: 2.5rem !important;
     line-height: 1.1 !important;
+  }
+  
+  @keyframes slideInFromRight {
+    0% {
+      transform: translateX(30px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
   }
 }
