@@ -279,8 +279,8 @@ export const LoginForm = ({ onSwitchToRegister, onClose, setShowTerms }) => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <Card className="w-full max-w-md mx-auto bg-transparent border-none shadow-none">
             <CardHeader className="text-center">
-              <CardTitle>Reset Password</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-white">Reset Password</CardTitle>
+              <CardDescription className="text-gray-200">
                 Enter your email address and we'll send you a password reset link
               </CardDescription>
             </CardHeader>
@@ -296,7 +296,7 @@ export const LoginForm = ({ onSwitchToRegister, onClose, setShowTerms }) => {
                 )}
                 
                 <div className="space-y-2">
-                  <Label htmlFor="forgot-email">Email Address</Label>
+                  <Label htmlFor="forgot-email" className="text-white">Email Address</Label>
                   <div className="relative">
                     <Input
                       id="forgot-email"
@@ -304,7 +304,7 @@ export const LoginForm = ({ onSwitchToRegister, onClose, setShowTerms }) => {
                       placeholder="Enter your email"
                       value={forgotPasswordEmail}
                       onChange={(e) => setForgotPasswordEmail(e.target.value)}
-                      className="pl-10"
+                      className="pl-10 bg-white text-black placeholder:text-gray-400"
                     />
                     <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   </div>
