@@ -39,6 +39,11 @@ function AppContent() {
   const [showAdminDashboard, setShowAdminDashboard] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
   
+  // Notification state
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [showNotifications, setShowNotifications] = useState(false);
+  
   // Check for admin setup route
   if (window.location.pathname === '/admin-setup') {
     return <AdminSetup />;
