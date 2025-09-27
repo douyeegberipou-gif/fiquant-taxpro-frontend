@@ -136,6 +136,7 @@ export const generatePayeReport = (taxInput, result) => {
     name: taxInput.staff_name || 'Not specified',
     tin: taxInput.tin || null,
     month: taxInput.month || 'Not specified',
+    year: taxInput.year || 'Not specified',
     state: taxInput.state_of_residence || 'Not specified'
   };
   
