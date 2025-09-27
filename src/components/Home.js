@@ -57,22 +57,24 @@ const Home = ({ onNavigateToTab }) => {
     }
   };
 
-  // Auto-rotate carousel every 3 seconds
+  // Fetch initial data
   useEffect(() => {
     fetchCarouselSlides();
+    fetchCarouselSettings();
   }, []);
 
+  // Auto-rotate carousel based on settings
   useEffect(() => {
-    if (carouselSlides.length > 1) {
+    if (carouselSlides.length > 1 && carouselSettings.auto_rotation) {
       const interval = setInterval(() => {
         handleSlideChange((prevIndex) => 
           (prevIndex + 1) % carouselSlides.length
         );
-      }, 5000); // 5 seconds
+      }, carouselSettings.transition_delay * 1000); // Convert seconds to milliseconds
 
       return () => clearInterval(interval);
     }
-  }, [carouselSlides.length]);
+  }, [carouselSlides.length, carouselSettings.transition_delay, carouselSettings.auto_rotation]);
 
   // Handle slide change with transition
   const handleSlideChange = (newIndexOrFunction) => {
