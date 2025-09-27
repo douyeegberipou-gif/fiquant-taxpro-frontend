@@ -764,7 +764,7 @@ function AppContent() {
                     onClick={() => setPayeMode('single')}
                     variant={payeMode === 'single' ? 'default' : 'outline'}
                     className={`flex-1 h-20 flex flex-col items-center justify-center space-y-2 ${
-                      payeMode === 'single' ? 'bg-emerald-600 hover:bg-emerald-700' : ''
+                      payeMode === 'single' ? 'bg-emerald-600 hover:bg-emerald-700 text-white' : ''
                     }`}
                   >
                     <Users className="h-6 w-6" />
@@ -777,7 +777,7 @@ function AppContent() {
                     onClick={() => setPayeMode('bulk')}
                     variant={payeMode === 'bulk' ? 'default' : 'outline'}
                     className={`flex-1 h-20 flex flex-col items-center justify-center space-y-2 ${
-                      payeMode === 'bulk' ? 'bg-blue-600 hover:bg-blue-700' : ''
+                      payeMode === 'bulk' ? 'bg-blue-600 hover:bg-blue-700 text-white' : ''
                     }`}
                   >
                     <Building2 className="h-6 w-6" />
