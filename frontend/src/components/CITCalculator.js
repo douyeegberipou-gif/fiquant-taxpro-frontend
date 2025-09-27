@@ -76,6 +76,7 @@ const CITCalculator = ({
                   id="annual_turnover"
                   type="number"
                   placeholder="₦500,000,000"
+                  className="placeholder:text-gray-400"
                   value={citInput.annual_turnover}
                   onChange={(e) => handleCitInputChange('annual_turnover', e.target.value)}
                 />
@@ -85,7 +86,8 @@ const CITCalculator = ({
                 <Input
                   id="total_fixed_assets"
                   type="number"
-                  placeholder="200,000,000"
+                  placeholder="₦200,000,000"
+                  className="placeholder:text-gray-400"
                   value={citInput.total_fixed_assets}
                   onChange={(e) => handleCitInputChange('total_fixed_assets', e.target.value)}
                 />
