@@ -427,7 +427,7 @@ export const generateCitReport = (citInput, citResult) => {
     });
   }
   
-  addFooter(doc);
+  addFiquantFooter(doc);
   
   // Save the PDF
   doc.save(`CIT_Tax_Report_${citInput.company_name || 'Company'}_${new Date().toISOString().split('T')[0]}.pdf`);
