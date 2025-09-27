@@ -11,6 +11,11 @@ import {
 const Home = ({ onNavigateToTab }) => {
   const [activeTab, setActiveTab] = useState('pro');
   const [expandedFaq, setExpandedFaq] = useState(null);
+  
+  // Carousel state
+  const [carouselSlides, setCarouselSlides] = useState([]);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   return (
     <div className="min-h-screen bg-white"
