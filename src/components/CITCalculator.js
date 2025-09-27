@@ -94,21 +94,29 @@ const CITCalculator = ({
 
             {/* Company Type Switches */}
             <div className="grid sm:grid-cols-2 gap-4 p-4 bg-blue-50 rounded-lg">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="is_professional_service" className="text-sm">Professional Service Firm</Label>
-                <Switch
-                  id="is_professional_service"
-                  checked={citInput.is_professional_service}
-                  onCheckedChange={(checked) => handleCitInputChange('is_professional_service', checked)}
-                />
+              <div className="flex flex-col space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="is_professional_service" className="text-sm font-medium">Professional Service Firm</Label>
+                  <Switch
+                    id="is_professional_service"
+                    checked={citInput.is_professional_service}
+                    onCheckedChange={(checked) => handleCitInputChange('is_professional_service', checked)}
+                    className="data-[state=checked]:bg-blue-600 data-[state=unchecked]:bg-white border-2 border-gray-300"
+                  />
+                </div>
+                <p className="text-xs text-gray-600 italic">Select if applicable</p>
               </div>
-              <div className="flex items-center justify-between">
-                <Label htmlFor="is_multinational" className="text-sm">Multinational Enterprise</Label>
-                <Switch
-                  id="is_multinational"
-                  checked={citInput.is_multinational}
-                  onCheckedChange={(checked) => handleCitInputChange('is_multinational', checked)}
-                />
+              <div className="flex flex-col space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="is_multinational" className="text-sm font-medium">Multinational Enterprise</Label>
+                  <Switch
+                    id="is_multinational"
+                    checked={citInput.is_multinational}
+                    onCheckedChange={(checked) => handleCitInputChange('is_multinational', checked)}
+                    className="data-[state=checked]:bg-blue-600 data-[state=unchecked]:bg-white border-2 border-gray-300"
+                  />
+                </div>
+                <p className="text-xs text-gray-600 italic">Select if applicable</p>
               </div>
               {citInput.is_multinational && (
                 <div className="space-y-2 sm:col-span-2">
@@ -116,7 +124,8 @@ const CITCalculator = ({
                   <Input
                     id="global_revenue_eur"
                     type="number"
-                    placeholder="750000000"
+                    placeholder="750,000,000"
+                    className="placeholder:text-gray-400"
                     value={citInput.global_revenue_eur}
                     onChange={(e) => handleCitInputChange('global_revenue_eur', e.target.value)}
                   />
