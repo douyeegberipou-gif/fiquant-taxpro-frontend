@@ -921,7 +921,6 @@ function AppContent() {
                         </select>
                       </div>
                     </div>
-                  </div>
 
                   {/* Basic Income Section */}
                   <div className="space-y-4">
