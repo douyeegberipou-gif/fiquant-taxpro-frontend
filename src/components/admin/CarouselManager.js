@@ -16,7 +16,8 @@ import {
   MoveDown,
   Eye,
   EyeOff,
-  RotateCw
+  RotateCw,
+  Settings
 } from 'lucide-react';
 
 export const CarouselManager = () => {
