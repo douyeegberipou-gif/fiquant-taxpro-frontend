@@ -173,7 +173,7 @@ export const LoginForm = ({ onSwitchToRegister, onClose, setShowTerms }) => {
           )}
           
           <div className="space-y-2">
-            <Label htmlFor="email_or_phone">Email or Phone Number</Label>
+            <Label htmlFor="email_or_phone" className="text-white">Email or Phone Number</Label>
             <div className="relative">
               <Input
                 id="email_or_phone"
@@ -181,7 +181,7 @@ export const LoginForm = ({ onSwitchToRegister, onClose, setShowTerms }) => {
                 placeholder="john@example.com or +234800123456"
                 value={formData.email_or_phone}
                 onChange={(e) => handleInputChange('email_or_phone', e.target.value)}
-                className="pl-10"
+                className="pl-10 bg-white text-black placeholder:text-gray-400"
               />
               <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
                 {formData.email_or_phone.includes('@') ? (
