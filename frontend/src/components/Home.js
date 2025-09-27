@@ -50,14 +50,28 @@ const Home = ({ onNavigateToTab }) => {
   useEffect(() => {
     if (carouselSlides.length > 1) {
       const interval = setInterval(() => {
-        setCurrentSlideIndex((prevIndex) => 
+        handleSlideChange((prevIndex) => 
           (prevIndex + 1) % carouselSlides.length
         );
-      }, 3000); // 3 seconds
+      }, 5000); // 5 seconds
 
       return () => clearInterval(interval);
     }
   }, [carouselSlides.length]);
+
+  // Handle slide change with transition
+  const handleSlideChange = (newIndexOrFunction) => {
+    setIsTransitioning(true);
+    
+    setTimeout(() => {
+      if (typeof newIndexOrFunction === 'function') {
+        setCurrentSlideIndex(newIndexOrFunction);
+      } else {
+        setCurrentSlideIndex(newIndexOrFunction);
+      }
+      setIsTransitioning(false);
+    }, 150); // Half of transition duration for smooth effect
+  };
 
   // Get current slide
   const getCurrentSlide = () => {
