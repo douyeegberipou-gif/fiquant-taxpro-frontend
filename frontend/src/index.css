@@ -550,31 +550,69 @@ html {
   background: var(--gold-accent);
 }
 
-/* Carousel Animations */
-.carousel-content {
-  animation: slideIn 0.5s ease-in-out;
+/* Carousel Animations - Smooth Right-to-Left Sliding */
+.carousel-container {
+  position: relative;
+  min-height: 320px; /* Adjust based on content height */
 }
 
-@keyframes slideIn {
+.carousel-slide {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              opacity 0.3s ease-in-out;
+}
+
+.slide-in {
+  transform: translateX(0);
+  opacity: 1;
+  animation: slideInFromRight 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.slide-out {
+  transform: translateX(-100%);
+  opacity: 0;
+  animation: slideOutToLeft 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes slideInFromRight {
   from {
+    transform: translateX(100%);
     opacity: 0;
-    transform: translateY(10px);
   }
   to {
+    transform: translateX(0);
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
-.carousel-fade-in {
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-@keyframes fadeIn {
+@keyframes slideOutToLeft {
   from {
-    opacity: 0;
+    transform: translateX(0);
+    opacity: 1;
   }
   to {
-    opacity: 1;
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+/* Smooth carousel transitions for better performance */
+.carousel-slide * {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Mobile optimization for carousel */
+@media (max-width: 640px) {
+  .carousel-container {
+    min-height: 280px;
+  }
+  
+  .carousel-slide h1 {
+    font-size: 2.5rem !important;
+    line-height: 1.1 !important;
   }
 }
