@@ -277,7 +277,7 @@ export const LoginForm = ({ onSwitchToRegister, onClose, setShowTerms }) => {
       {/* Forgot Password Modal */}
       {showForgotPassword && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <Card className="w-full max-w-md mx-auto">
+          <Card className="w-full max-w-md mx-auto bg-transparent border-none shadow-none">
             <CardHeader className="text-center">
               <CardTitle>Reset Password</CardTitle>
               <CardDescription>
