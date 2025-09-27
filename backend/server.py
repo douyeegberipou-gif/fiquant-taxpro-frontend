@@ -15,6 +15,7 @@ import jwt
 import bcrypt
 import re
 import secrets
+from passlib.context import CryptContext
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
