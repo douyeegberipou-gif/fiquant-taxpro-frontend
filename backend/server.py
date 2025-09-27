@@ -1483,6 +1483,11 @@ def calculate_nigerian_paye_2026(tax_input: TaxInput) -> TaxCalculationResult:
     # Calculate net income
     net_annual_income = annual_gross - tax_due
     
+    # Calculate effective tax rate
+    effective_tax_rate = 0.0
+    if annual_gross > 0:
+        effective_tax_rate = tax_due / annual_gross
+    
     return TaxCalculationResult(
         id=tax_input.id,
         annual_gross_income=annual_gross,
@@ -1500,6 +1505,7 @@ def calculate_nigerian_paye_2026(tax_input: TaxInput) -> TaxCalculationResult:
         total_reliefs=total_reliefs,
         taxable_income=taxable_income,
         tax_due=tax_due,
+        effective_tax_rate=effective_tax_rate,
         net_annual_income=net_annual_income,
         monthly_gross_income=annual_gross / 12,
         monthly_tax=tax_due / 12,
