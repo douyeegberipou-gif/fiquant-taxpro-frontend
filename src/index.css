@@ -58,6 +58,23 @@
   animation: pulseGlow 3s ease-in-out infinite;
 }
 
+/* Universal Placeholder Styling */
+input::placeholder,
+textarea::placeholder,
+select::placeholder {
+  color: #9CA3AF !important;
+  opacity: 1 !important;
+}
+
+/* Ensure user-entered text remains black */
+input {
+  color: #000000;
+}
+
+input:focus {
+  color: #000000;
+}
+
 /* Component Library - Premium Design System */
 .btn-primary {
   background-color: var(--gold-accent);  /* #D4AF37 */
