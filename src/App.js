@@ -33,6 +33,7 @@ const API = `${BACKEND_URL}/api`;
 function AppContent() {
   const { user, logout, isAuthenticated } = useAuth();
   const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [showPasswordReset, setShowPasswordReset] = useState(false);
   const [verificationStatus, setVerificationStatus] = useState(null); // 'verifying', 'success', 'error'
   const [verificationMessage, setVerificationMessage] = useState('');
   const [showAdminDashboard, setShowAdminDashboard] = useState(false);
