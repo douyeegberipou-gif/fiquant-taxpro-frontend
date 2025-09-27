@@ -312,6 +312,7 @@ function AppContent() {
     setTaxInput({
       // Staff Information
       staff_name: '',
+      tin: '',
       month: '',
       state_of_residence: '',
       // Income Details
