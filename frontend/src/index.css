@@ -58,7 +58,7 @@
   animation: pulseGlow 3s ease-in-out infinite;
 }
 
-/* Universal Placeholder Styling */
+/* Universal Placeholder Styling - High Priority Override */
 input::placeholder,
 textarea::placeholder,
 select::placeholder {
@@ -66,13 +66,24 @@ select::placeholder {
   opacity: 1 !important;
 }
 
+/* Alternative placeholder styling for broader browser support */
+input::-webkit-input-placeholder { color: #9CA3AF !important; }
+input::-moz-placeholder { color: #9CA3AF !important; opacity: 1 !important; }
+input:-ms-input-placeholder { color: #9CA3AF !important; }
+input:-moz-placeholder { color: #9CA3AF !important; opacity: 1 !important; }
+
+textarea::-webkit-input-placeholder { color: #9CA3AF !important; }
+textarea::-moz-placeholder { color: #9CA3AF !important; opacity: 1 !important; }
+textarea:-ms-input-placeholder { color: #9CA3AF !important; }
+textarea:-moz-placeholder { color: #9CA3AF !important; opacity: 1 !important; }
+
 /* Ensure user-entered text remains black */
 input {
-  color: #000000;
+  color: #000000 !important;
 }
 
 input:focus {
-  color: #000000;
+  color: #000000 !important;
 }
 
 /* Component Library - Premium Design System */
