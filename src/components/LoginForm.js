@@ -71,6 +71,50 @@ export const LoginForm = ({ onSwitchToRegister, onClose, setShowTerms }) => {
     setLoading(false);
   };
 
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    setForgotPasswordLoading(true);
+    setForgotPasswordMessage('');
+
+    // Basic email validation
+    if (!forgotPasswordEmail || !forgotPasswordEmail.includes('@')) {
+      setForgotPasswordMessage('Please enter a valid email address');
+      setForgotPasswordLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(`${import.meta.env.REACT_APP_BACKEND_URL}/api/auth/forgot-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: forgotPasswordEmail
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        setForgotPasswordMessage(
+          <div className="text-green-700">
+            <p>✅ Password reset instructions have been sent to your email.</p>
+            <p className="text-sm mt-1">Check your spam folder if you don't see the email.</p>
+          </div>
+        );
+        // Reset form
+        setForgotPasswordEmail('');
+      } else {
+        setForgotPasswordMessage(data.detail || 'Failed to send reset email. Please try again.');
+      }
+    } catch (error) {
+      setForgotPasswordMessage('Network error. Please check your connection and try again.');
+    } finally {
+      setForgotPasswordLoading(false);
+    }
+  };
+
   const handleResendVerification = async (emailOrPhone) => {
     try {
       setLoading(true);
