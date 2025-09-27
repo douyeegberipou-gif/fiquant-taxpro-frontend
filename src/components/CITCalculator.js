@@ -20,12 +20,7 @@ const CITCalculator = ({
   formatCurrency
 }) => {
   return (
-    <div className="grid lg:grid-cols-2 gap-8 cit-calculator">
-      <style jsx global>{`
-        .cit-calculator input::placeholder {
-          color: #9ca3af !important;
-        }
-      `}</style>
+    <div className="grid lg:grid-cols-2 gap-8">
       {/* Input Form */}
       <Card className="bg-white border-emerald-100 shadow-lg">
         <CardHeader className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-t-lg">
