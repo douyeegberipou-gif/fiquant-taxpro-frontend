@@ -26,6 +26,11 @@ export const CarouselManager = () => {
   const [editingSlide, setEditingSlide] = useState(null);
   const [newSlide, setNewSlide] = useState({ title: '', subtitle: '', order_index: 0, active: true });
   const [showAddForm, setShowAddForm] = useState(false);
+  
+  // Settings state
+  const [settings, setSettings] = useState({ transition_delay: 5, auto_rotation: true });
+  const [editingSettings, setEditingSettings] = useState(false);
+  const [tempSettings, setTempSettings] = useState({ transition_delay: 5, auto_rotation: true });
 
   const API_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
