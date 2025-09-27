@@ -263,6 +263,13 @@ export const AdminDashboard = () => {
               <Eye className="h-4 w-4 mr-2" />
               Audit Logs
             </TabsTrigger>
+            <TabsTrigger 
+              value="carousel" 
+              className="data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700"
+            >
+              <RotateCw className="h-4 w-4 mr-2" />
+              Carousel
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
