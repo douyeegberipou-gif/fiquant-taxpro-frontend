@@ -3511,36 +3511,43 @@ class NigerianTaxCalculatorTester:
         
         user_id = user_response.get('id')
         
-        # Create test notification
-        notification_data = {
+        # Create test notification using query parameters (as expected by the endpoint)
+        import requests
+        url = f"{self.base_url}/notifications"
+        headers = {'Authorization': f'Bearer {self.admin_token}'}
+        params = {
             "user_id": user_id,
             "title": "Test Notification",
             "message": "This is a test notification created during API testing",
             "notification_type": "info"
         }
         
-        success, response = self.run_test(
-            "Create Notification - POST",
-            "POST",
-            "notifications",
-            [200, 201],  # Accept both 200 and 201
-            notification_data,
-            auth_required=True
-        )
+        try:
+            response = requests.post(url, headers=headers, params=params, timeout=30)
+            success = response.status_code in [200, 201]
+            
+            if success:
+                print(f"   ✅ Notification created successfully")
+                try:
+                    response_data = response.json()
+                    print(f"   Notification ID: {response_data.get('id')}")
+                    print(f"   Title: {response_data.get('title')}")
+                    print(f"   Message: {response_data.get('message')}")
+                    print(f"   Type: {response_data.get('notification_type')}")
+                    
+                    # Store notification ID for later tests
+                    self.test_notification_id = response_data.get('id')
+                except:
+                    print(f"   Response: {response.text}")
+            else:
+                print(f"   ❌ Failed to create notification: {response.status_code}")
+                print(f"   Response: {response.text}")
+        except Exception as e:
+            print(f"   ❌ Error creating notification: {str(e)}")
+            success = False
         
         # Restore original token
         self.auth_token = old_token
-        
-        if success:
-            print(f"   ✅ Notification created successfully")
-            if isinstance(response, dict):
-                print(f"   Notification ID: {response.get('id')}")
-                print(f"   Title: {response.get('title')}")
-                print(f"   Message: {response.get('message')}")
-                print(f"   Type: {response.get('notification_type')}")
-                
-                # Store notification ID for later tests
-                self.test_notification_id = response.get('id')
         
         return success
     
