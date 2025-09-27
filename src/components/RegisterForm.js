@@ -255,7 +255,7 @@ export const RegisterForm = ({ onSwitchToLogin, onClose, onRegistrationSuccess, 
                 placeholder="Minimum 8 characters"
                 value={formData.password}
                 onChange={(e) => handleInputChange('password', e.target.value)}
-                className="pl-10 pr-10"
+                className="pl-10 pr-10 bg-white text-black placeholder:text-gray-400"
               />
               <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <button
@@ -273,7 +273,7 @@ export const RegisterForm = ({ onSwitchToLogin, onClose, onRegistrationSuccess, 
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Confirm Password *</Label>
+            <Label htmlFor="confirmPassword" className="text-white">Confirm Password *</Label>
             <div className="relative">
               <Input
                 id="confirmPassword"
@@ -281,7 +281,7 @@ export const RegisterForm = ({ onSwitchToLogin, onClose, onRegistrationSuccess, 
                 placeholder="Re-enter your password"
                 value={formData.confirmPassword}
                 onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
-                className="pl-10 pr-10"
+                className="pl-10 pr-10 bg-white text-black placeholder:text-gray-400"
               />
               <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <button
