@@ -3,8 +3,32 @@ import autoTable from 'jspdf-autotable';
 
 // Utility function to format currency for PDF (with proper encoding)
 const formatCurrency = (amount) => {
-  if (amount === null || amount === undefined || isNaN(amount)) return 'N 0.00'; // Use 'N' for Naira in PDF
-  return `N ${parseFloat(amount).toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  // Handle null, undefined, and NaN values
+  if (amount === null || amount === undefined || isNaN(amount) || amount === '') {
+    return '₦ 0.00';
+  }
+  
+  // Convert to number and handle edge cases
+  const numAmount = parseFloat(amount);
+  if (isNaN(numAmount)) {
+    return '₦ 0.00';
+  }
+  
+  return `₦ ${numAmount.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+};
+
+// Utility function to format percentage
+const formatPercentage = (rate) => {
+  if (rate === null || rate === undefined || isNaN(rate) || rate === '') {
+    return '0.00%';
+  }
+  
+  const numRate = parseFloat(rate);
+  if (isNaN(numRate)) {
+    return '0.00%';
+  }
+  
+  return `${(numRate * 100).toFixed(2)}%`;
 };
 
 // Utility function to format date
