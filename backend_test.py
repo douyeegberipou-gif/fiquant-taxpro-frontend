@@ -2531,6 +2531,393 @@ class NigerianTaxCalculatorTester:
         
         return success
 
+    # ============================
+    # NTA 2025 MINIMUM TAX TESTS
+    # ============================
+    
+    def test_small_company_no_minimum_tax(self):
+        """Test Scenario 1 - Small Company (No minimum tax should apply)"""
+        test_data = {
+            "company_name": "Small Business Ltd",
+            "annual_turnover": 40000000,  # ₦40M (below ₦50M threshold)
+            "total_fixed_assets": 200000000,  # ₦200M (below ₦250M threshold)
+            "gross_income": 40000000,
+            "other_income": 0,
+            "cost_of_goods_sold": 15000000,
+            "staff_costs": 10000000,
+            "rent_expenses": 2000000,
+            "professional_fees": 1000000,
+            "depreciation": 1000000,
+            "interest_paid_unrelated": 0,
+            "interest_paid_related": 0,
+            "other_deductible_expenses": 2000000,
+            "entertainment_expenses": 0,
+            "fines_penalties": 0,
+            "personal_expenses": 0,
+            "excessive_interest": 0,
+            "other_non_deductible": 0,
+            "carry_forward_losses": 0,
+            "total_debt": 0,
+            "total_equity": 50000000,
+            "ebitda": 0,
+            "buildings_cost": 0,
+            "furniture_fittings_cost": 0,
+            "plant_machinery_cost": 0,
+            "motor_vehicles_cost": 0,
+            "other_assets_cost": 0,
+            "buildings_wdv": 0,
+            "furniture_fittings_wdv": 0,
+            "plant_machinery_wdv": 0,
+            "motor_vehicles_wdv": 0,
+            "other_assets_wdv": 0,
+            "wht_on_contracts": 0,
+            "wht_on_dividends": 0,
+            "wht_on_rent": 0,
+            "wht_on_interest": 0,
+            "other_wht_credits": 0,
+            "is_professional_service": False,
+            "is_multinational": False,
+            "global_revenue_eur": 0
+        }
+        
+        success, response = self.run_test(
+            "NTA 2025 Minimum Tax - Small Company (No minimum tax)",
+            "POST",
+            "calculate-cit",
+            200,
+            test_data
+        )
+        
+        if success:
+            print(f"   Company: {response['company_name']}")
+            print(f"   Annual Turnover: ₦{response['annual_turnover']:,.0f}")
+            print(f"   Total Fixed Assets: ₦{response['total_fixed_assets']:,.0f}")
+            print(f"   Company Size: {response['company_size']}")
+            print(f"   Qualifies Small Exemption: {response['qualifies_small_exemption']}")
+            print(f"   CIT Rate: {response['cit_rate'] * 100:.0f}%")
+            print(f"   CIT Due: ₦{response['cit_due']:,.0f}")
+            print(f"   Minimum ETR Rate: {response['minimum_etr_rate'] * 100:.0f}%")
+            print(f"   Minimum ETR Tax: ₦{response['minimum_etr_tax']:,.0f}")
+            print(f"   Total Tax Due: ₦{response['total_tax_due']:,.0f}")
+            
+            # Verify small company classification and no minimum tax
+            if (response['annual_turnover'] <= 50000000 and  # ₦50M threshold
+                response['total_fixed_assets'] <= 250000000 and  # ₦250M threshold
+                response['company_size'] == 'Small' and
+                response['qualifies_small_exemption'] and
+                response['cit_rate'] == 0.0 and
+                response['minimum_etr_rate'] == 0.0 and
+                response['minimum_etr_tax'] == 0.0):
+                print(f"   ✅ Small company correctly classified with ₦50M turnover threshold")
+                print(f"   ✅ No minimum tax applied to small company")
+            else:
+                print(f"   ❌ Small company classification or minimum tax rules incorrect")
+        
+        return success
+
+    def test_medium_company_standard_cit_no_minimum_tax(self):
+        """Test Scenario 2 - Medium Company (Standard CIT, no minimum tax)"""
+        test_data = {
+            "company_name": "Medium Enterprise Ltd",
+            "annual_turnover": 5000000000,  # ₦5B (above small threshold but below ₦50B large threshold)
+            "total_fixed_assets": 1000000000,  # ₦1B
+            "gross_income": 5000000000,
+            "other_income": 0,
+            "cost_of_goods_sold": 2500000000,
+            "staff_costs": 800000000,
+            "rent_expenses": 200000000,
+            "professional_fees": 100000000,
+            "depreciation": 150000000,
+            "interest_paid_unrelated": 50000000,
+            "interest_paid_related": 0,
+            "other_deductible_expenses": 200000000,
+            "entertainment_expenses": 0,
+            "fines_penalties": 0,
+            "personal_expenses": 0,
+            "excessive_interest": 0,
+            "other_non_deductible": 0,
+            "carry_forward_losses": 0,
+            "total_debt": 500000000,
+            "total_equity": 1500000000,
+            "ebitda": 0,
+            "buildings_cost": 0,
+            "furniture_fittings_cost": 0,
+            "plant_machinery_cost": 0,
+            "motor_vehicles_cost": 0,
+            "other_assets_cost": 0,
+            "buildings_wdv": 0,
+            "furniture_fittings_wdv": 0,
+            "plant_machinery_wdv": 0,
+            "motor_vehicles_wdv": 0,
+            "other_assets_wdv": 0,
+            "wht_on_contracts": 0,
+            "wht_on_dividends": 0,
+            "wht_on_rent": 0,
+            "wht_on_interest": 0,
+            "other_wht_credits": 0,
+            "is_professional_service": False,
+            "is_multinational": False,
+            "global_revenue_eur": 0
+        }
+        
+        success, response = self.run_test(
+            "NTA 2025 Minimum Tax - Medium Company (Standard CIT, no minimum tax)",
+            "POST",
+            "calculate-cit",
+            200,
+            test_data
+        )
+        
+        if success:
+            print(f"   Company: {response['company_name']}")
+            print(f"   Annual Turnover: ₦{response['annual_turnover']:,.0f}")
+            print(f"   Company Size: {response['company_size']}")
+            print(f"   Taxable Profit: ₦{response['taxable_profit']:,.0f}")
+            print(f"   CIT Rate: {response['cit_rate'] * 100:.0f}%")
+            print(f"   CIT Due: ₦{response['cit_due']:,.0f}")
+            print(f"   Development Levy: ₦{response['development_levy']:,.0f}")
+            print(f"   Minimum ETR Rate: {response['minimum_etr_rate'] * 100:.0f}%")
+            print(f"   Minimum ETR Tax: ₦{response['minimum_etr_tax']:,.0f}")
+            print(f"   Total Tax Due: ₦{response['total_tax_due']:,.0f}")
+            
+            # Expected taxable profit calculation
+            expected_taxable_profit = 1000000000  # ₦1B as specified in test scenario
+            expected_cit = expected_taxable_profit * 0.30  # 30% CIT
+            expected_dev_levy = expected_taxable_profit * 0.04  # 4% development levy
+            expected_total_tax = expected_cit + expected_dev_levy  # ₦340M
+            
+            # Verify medium company classification and standard CIT with no minimum tax
+            if (response['annual_turnover'] > 50000000 and  # Above small threshold
+                response['annual_turnover'] < 50000000000 and  # Below large threshold (₦50B)
+                response['company_size'] == 'Medium' and
+                not response['qualifies_small_exemption'] and
+                response['cit_rate'] == 0.30 and
+                response['development_levy_rate'] == 0.04 and
+                response['minimum_etr_rate'] == 0.0 and
+                response['minimum_etr_tax'] == 0.0):
+                print(f"   ✅ Medium company correctly classified (₦5B turnover)")
+                print(f"   ✅ Standard 30% CIT rate applied")
+                print(f"   ✅ No minimum ETR applied to medium company")
+                print(f"   Expected CIT: ₦{expected_cit:,.0f}, Actual: ₦{response['cit_due']:,.0f}")
+            else:
+                print(f"   ❌ Medium company classification or tax calculation incorrect")
+        
+        return success
+
+    def test_large_company_minimum_etr(self):
+        """Test Scenario 3 - Large Company (Minimum ETR should apply)"""
+        test_data = {
+            "company_name": "Large Corporation Ltd",
+            "annual_turnover": 60000000000,  # ₦60B (above ₦50B large threshold)
+            "total_fixed_assets": 10000000000,  # ₦10B
+            "gross_income": 60000000000,
+            "other_income": 0,
+            "cost_of_goods_sold": 35000000000,
+            "staff_costs": 10000000000,
+            "rent_expenses": 2000000000,
+            "professional_fees": 1000000000,
+            "depreciation": 3000000000,
+            "interest_paid_unrelated": 500000000,
+            "interest_paid_related": 0,
+            "other_deductible_expenses": 6500000000,
+            "entertainment_expenses": 0,
+            "fines_penalties": 0,
+            "personal_expenses": 0,
+            "excessive_interest": 0,
+            "other_non_deductible": 0,
+            "carry_forward_losses": 0,
+            "total_debt": 5000000000,
+            "total_equity": 15000000000,
+            "ebitda": 0,
+            "buildings_cost": 0,
+            "furniture_fittings_cost": 0,
+            "plant_machinery_cost": 0,
+            "motor_vehicles_cost": 0,
+            "other_assets_cost": 0,
+            "buildings_wdv": 0,
+            "furniture_fittings_wdv": 0,
+            "plant_machinery_wdv": 0,
+            "motor_vehicles_wdv": 0,
+            "other_assets_wdv": 0,
+            "wht_on_contracts": 0,
+            "wht_on_dividends": 0,
+            "wht_on_rent": 0,
+            "wht_on_interest": 0,
+            "other_wht_credits": 0,
+            "is_professional_service": False,
+            "is_multinational": False,
+            "global_revenue_eur": 0
+        }
+        
+        success, response = self.run_test(
+            "NTA 2025 Minimum Tax - Large Company (Minimum ETR should apply)",
+            "POST",
+            "calculate-cit",
+            200,
+            test_data
+        )
+        
+        if success:
+            print(f"   Company: {response['company_name']}")
+            print(f"   Annual Turnover: ₦{response['annual_turnover']:,.0f}")
+            print(f"   Company Size: {response['company_size']}")
+            print(f"   Taxable Profit: ₦{response['taxable_profit']:,.0f}")
+            print(f"   CIT Due: ₦{response['cit_due']:,.0f}")
+            print(f"   Development Levy: ₦{response['development_levy']:,.0f}")
+            print(f"   Minimum ETR Rate: {response['minimum_etr_rate'] * 100:.0f}%")
+            print(f"   Minimum ETR Tax: ₦{response['minimum_etr_tax']:,.0f}")
+            print(f"   Total Tax Due: ₦{response['total_tax_due']:,.0f}")
+            print(f"   Effective Tax Rate: {response['effective_tax_rate'] * 100:.2f}%")
+            
+            # Expected calculations for ₦2B taxable profit scenario
+            expected_taxable_profit = 2000000000  # ₦2B as specified
+            expected_cit = expected_taxable_profit * 0.30  # ₦600M
+            expected_dev_levy = expected_taxable_profit * 0.04  # ₦80M
+            expected_standard_tax = expected_cit + expected_dev_levy  # ₦680M
+            
+            # Minimum ETR calculation: 15% of adjusted profit (profit - 5% deduction)
+            adjusted_profit = expected_taxable_profit * 0.95  # ₦1.9B (5% deduction)
+            expected_minimum_tax = adjusted_profit * 0.15  # ₦285M
+            
+            # Top-up tax if standard tax < minimum tax
+            expected_top_up = max(0, expected_minimum_tax - expected_standard_tax)
+            
+            # Verify large company classification and minimum ETR
+            if (response['annual_turnover'] > 50000000000 and  # Above ₦50B threshold
+                response['company_size'] == 'Large' and
+                response['minimum_etr_rate'] == 0.15):
+                print(f"   ✅ Large company correctly classified (₦60B turnover > ₦50B threshold)")
+                print(f"   ✅ 15% minimum ETR rate applied")
+                print(f"   Expected standard tax: ₦{expected_standard_tax:,.0f}")
+                print(f"   Expected minimum tax (15% of adjusted profit): ₦{expected_minimum_tax:,.0f}")
+                
+                # Check if minimum tax calculation is working
+                if response['minimum_etr_tax'] > 0:
+                    print(f"   ✅ Top-up tax applied: ₦{response['minimum_etr_tax']:,.0f}")
+                else:
+                    print(f"   ℹ️ No top-up tax needed (standard tax ≥ minimum tax)")
+                    
+                # Verify effective tax rate meets minimum 15%
+                if response['effective_tax_rate'] >= 0.15:
+                    print(f"   ✅ Effective tax rate ({response['effective_tax_rate'] * 100:.2f}%) meets 15% minimum")
+                else:
+                    print(f"   ❌ Effective tax rate ({response['effective_tax_rate'] * 100:.2f}%) below 15% minimum")
+            else:
+                print(f"   ❌ Large company classification or minimum ETR rules incorrect")
+        
+        return success
+
+    def test_multinational_enterprise_minimum_etr(self):
+        """Test Scenario 4 - Multinational Enterprise (Minimum ETR should apply)"""
+        test_data = {
+            "company_name": "Global MNE Nigeria Ltd",
+            "annual_turnover": 30000000000,  # ₦30B
+            "total_fixed_assets": 5000000000,  # ₦5B
+            "gross_income": 30000000000,
+            "other_income": 0,
+            "cost_of_goods_sold": 18000000000,
+            "staff_costs": 5000000000,
+            "rent_expenses": 1000000000,
+            "professional_fees": 500000000,
+            "depreciation": 1500000000,
+            "interest_paid_unrelated": 200000000,
+            "interest_paid_related": 0,
+            "other_deductible_expenses": 2800000000,
+            "entertainment_expenses": 0,
+            "fines_penalties": 0,
+            "personal_expenses": 0,
+            "excessive_interest": 0,
+            "other_non_deductible": 0,
+            "carry_forward_losses": 0,
+            "total_debt": 3000000000,
+            "total_equity": 8000000000,
+            "ebitda": 0,
+            "buildings_cost": 0,
+            "furniture_fittings_cost": 0,
+            "plant_machinery_cost": 0,
+            "motor_vehicles_cost": 0,
+            "other_assets_cost": 0,
+            "buildings_wdv": 0,
+            "furniture_fittings_wdv": 0,
+            "plant_machinery_wdv": 0,
+            "motor_vehicles_wdv": 0,
+            "other_assets_wdv": 0,
+            "wht_on_contracts": 0,
+            "wht_on_dividends": 0,
+            "wht_on_rent": 0,
+            "wht_on_interest": 0,
+            "other_wht_credits": 0,
+            "is_professional_service": False,
+            "is_multinational": True,  # MNE flag
+            "global_revenue_eur": 800000000  # €800M (above €750M threshold)
+        }
+        
+        success, response = self.run_test(
+            "NTA 2025 Minimum Tax - Multinational Enterprise (Minimum ETR should apply)",
+            "POST",
+            "calculate-cit",
+            200,
+            test_data
+        )
+        
+        if success:
+            print(f"   Company: {response['company_name']}")
+            print(f"   Annual Turnover: ₦{response['annual_turnover']:,.0f}")
+            print(f"   Is Multinational: {test_data['is_multinational']}")
+            print(f"   Global Revenue: €{test_data['global_revenue_eur']:,.0f}")
+            print(f"   Company Size: {response['company_size']}")
+            print(f"   Taxable Profit: ₦{response['taxable_profit']:,.0f}")
+            print(f"   CIT Due: ₦{response['cit_due']:,.0f}")
+            print(f"   Development Levy: ₦{response['development_levy']:,.0f}")
+            print(f"   Minimum ETR Rate: {response['minimum_etr_rate'] * 100:.0f}%")
+            print(f"   Minimum ETR Tax: ₦{response['minimum_etr_tax']:,.0f}")
+            print(f"   Total Tax Due: ₦{response['total_tax_due']:,.0f}")
+            print(f"   Effective Tax Rate: {response['effective_tax_rate'] * 100:.2f}%")
+            
+            # Expected calculations for ₦1B taxable profit scenario
+            expected_taxable_profit = 1000000000  # ₦1B as specified
+            expected_cit = expected_taxable_profit * 0.30  # ₦300M
+            expected_dev_levy = expected_taxable_profit * 0.04  # ₦40M
+            expected_standard_tax = expected_cit + expected_dev_levy  # ₦340M
+            
+            # Minimum ETR calculation: 15% of adjusted profit (profit - 5% deduction)
+            adjusted_profit = expected_taxable_profit * 0.95  # ₦950M (5% deduction)
+            expected_minimum_tax = adjusted_profit * 0.15  # ₦142.5M
+            
+            # Verify MNE qualification and minimum ETR
+            if (test_data['is_multinational'] and
+                test_data['global_revenue_eur'] >= 750000000 and  # Above €750M threshold
+                response['minimum_etr_rate'] == 0.15):
+                print(f"   ✅ MNE correctly identified (€{test_data['global_revenue_eur']:,.0f} > €750M threshold)")
+                print(f"   ✅ 15% minimum ETR rate applied to qualifying MNE")
+                print(f"   Expected standard tax: ₦{expected_standard_tax:,.0f}")
+                print(f"   Expected minimum tax (15% of adjusted profit): ₦{expected_minimum_tax:,.0f}")
+                
+                # Check if minimum tax calculation is working
+                if expected_standard_tax >= expected_minimum_tax:
+                    print(f"   ℹ️ Standard tax exceeds minimum tax - no top-up needed")
+                    if response['minimum_etr_tax'] == 0:
+                        print(f"   ✅ No top-up tax correctly applied")
+                    else:
+                        print(f"   ❌ Unexpected top-up tax: ₦{response['minimum_etr_tax']:,.0f}")
+                else:
+                    expected_top_up = expected_minimum_tax - expected_standard_tax
+                    print(f"   ✅ Top-up tax needed: ₦{expected_top_up:,.0f}")
+                    if abs(response['minimum_etr_tax'] - expected_top_up) < 1:
+                        print(f"   ✅ Top-up tax correctly calculated")
+                    else:
+                        print(f"   ❌ Top-up tax calculation error")
+                        
+                # Verify effective tax rate meets minimum 15%
+                if response['effective_tax_rate'] >= 0.15:
+                    print(f"   ✅ Effective tax rate ({response['effective_tax_rate'] * 100:.2f}%) meets 15% minimum")
+                else:
+                    print(f"   ❌ Effective tax rate ({response['effective_tax_rate'] * 100:.2f}%) below 15% minimum")
+            else:
+                print(f"   ❌ MNE qualification or minimum ETR rules incorrect")
+        
+        return success
+
 def main():
     print("🚀 Starting Nigerian Tax Calculator API Tests")
     print("=" * 60)
