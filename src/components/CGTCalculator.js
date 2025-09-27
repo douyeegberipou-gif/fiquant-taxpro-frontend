@@ -11,6 +11,7 @@ import { generateCgtReport } from '../utils/pdfGenerator';
 const CGTCalculator = ({ formatCurrency }) => {
   const [cgtInput, setCgtInput] = useState({
     taxpayer_name: '',
+    tin: '',
     year: '',
     taxpayer_type: 'individual', // individual or company
     asset_type: '',
