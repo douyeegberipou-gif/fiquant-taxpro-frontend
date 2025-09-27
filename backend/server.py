@@ -1131,6 +1131,7 @@ class TaxCalculationResult(BaseModel):
     # Tax calculation
     taxable_income: float
     tax_due: float
+    effective_tax_rate: float
     net_annual_income: float
     
     # Monthly breakdown
