@@ -202,7 +202,7 @@ export const RegisterForm = ({ onSwitchToLogin, onClose, onRegistrationSuccess, 
           )}
           
           <div className="space-y-2">
-            <Label htmlFor="full_name">Full Name *</Label>
+            <Label htmlFor="full_name" className="text-white">Full Name *</Label>
             <div className="relative">
               <Input
                 id="full_name"
@@ -210,14 +210,14 @@ export const RegisterForm = ({ onSwitchToLogin, onClose, onRegistrationSuccess, 
                 placeholder="John Doe"
                 value={formData.full_name}
                 onChange={(e) => handleInputChange('full_name', e.target.value)}
-                className="pl-10"
+                className="pl-10 bg-white text-black placeholder:text-gray-400"
               />
               <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             </div>
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="email">Email Address *</Label>
+            <Label htmlFor="email" className="text-white">Email Address *</Label>
             <div className="relative">
               <Input
                 id="email"
@@ -225,14 +225,14 @@ export const RegisterForm = ({ onSwitchToLogin, onClose, onRegistrationSuccess, 
                 placeholder="john@example.com"
                 value={formData.email}
                 onChange={(e) => handleInputChange('email', e.target.value)}
-                className="pl-10"
+                className="pl-10 bg-white text-black placeholder:text-gray-400"
               />
               <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             </div>
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="phone">Phone Number (Optional)</Label>
+            <Label htmlFor="phone" className="text-white">Phone Number (Optional)</Label>
             <div className="relative">
               <Input
                 id="phone"
@@ -240,14 +240,14 @@ export const RegisterForm = ({ onSwitchToLogin, onClose, onRegistrationSuccess, 
                 placeholder="+234800123456"
                 value={formData.phone}
                 onChange={(e) => handleInputChange('phone', e.target.value)}
-                className="pl-10"
+                className="pl-10 bg-white text-black placeholder:text-gray-400"
               />
               <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             </div>
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="password">Password *</Label>
+            <Label htmlFor="password" className="text-white">Password *</Label>
             <div className="relative">
               <Input
                 id="password"
