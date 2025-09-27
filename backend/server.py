@@ -994,6 +994,7 @@ class CITInput(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     # Company Information
     company_name: str = Field(description="Company name")
+    tin: Optional[str] = Field(default="", description="Tax Identification Number (TIN) - Optional")
     year_of_assessment: Optional[str] = Field(default="", description="Year of assessment")
     tax_year: Optional[str] = Field(default="", description="Tax year")
     # Financial Information
