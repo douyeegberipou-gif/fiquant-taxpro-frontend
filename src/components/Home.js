@@ -17,6 +17,7 @@ const Home = ({ onNavigateToTab }) => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [carouselSettings, setCarouselSettings] = useState({ transition_delay: 5, auto_rotation: true });
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
