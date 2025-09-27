@@ -815,7 +815,7 @@ function AppContent() {
                       <User className="h-4 w-4 mr-2 text-emerald-600" />
                       Staff Information
                     </h3>
-                    <div className="grid sm:grid-cols-2 gap-4">
+                    <div className="grid sm:grid-cols-3 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="staff_name">Name of Staff/Taxpayer *</Label>
                         <Input
@@ -859,9 +859,23 @@ function AppContent() {
                           <option value="December">December</option>
                         </select>
                       </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="state_of_residence">State of Residence *</Label>
+                      <div className="space-y-2">
+                        <Label htmlFor="year">Year *</Label>
+                        <select
+                          id="year"
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                          value={taxInput.year}
+                          onChange={(e) => handleInputChange('year', e.target.value)}
+                        >
+                          <option value="">Select Year</option>
+                          <option value="2023">2023</option>
+                          <option value="2024">2024</option>
+                          <option value="2025">2025</option>
+                          <option value="2026">2026</option>
+                        </select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="state_of_residence">State of Residence *</Label>
                       <select
                         id="state_of_residence"
                         className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
