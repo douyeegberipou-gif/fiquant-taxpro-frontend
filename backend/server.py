@@ -1291,14 +1291,19 @@ def calculate_nigerian_cit_2026(cit_input: CITInput) -> CITCalculationResult:
     development_levy_rate = 0.0 if is_small else 0.04
     development_levy = taxable_profit * development_levy_rate
     
-    # Minimum Effective Tax Rate (15% for large multinationals)
+    # Minimum Effective Tax Rate (15% for large companies and MNEs per NTA 2025)
     minimum_etr_rate = 0.0
     minimum_etr_tax = 0.0
-    if (is_large and cit_input.is_multinational and 
-        cit_input.global_revenue_eur >= 750_000_000):  # €750 million threshold
+    
+    # Apply minimum tax for large companies (turnover > ₦50B) or qualifying MNEs
+    if (is_large or (cit_input.is_multinational and cit_input.global_revenue_eur >= 750_000_000)):
         minimum_etr_rate = 0.15
-        minimum_required_tax = taxable_profit * minimum_etr_rate
+        # Calculate minimum tax on adjusted profit (profit before tax - 5% deduction for depreciation/personnel)
+        adjusted_profit_for_minimum_tax = max(0, taxable_profit * 0.95)  # Allow 5% deduction as per NTA
+        minimum_required_tax = adjusted_profit_for_minimum_tax * minimum_etr_rate
         current_tax = cit_due + development_levy
+        
+        # Apply top-up tax if current tax is below minimum
         if current_tax < minimum_required_tax:
             minimum_etr_tax = minimum_required_tax - current_tax
     
