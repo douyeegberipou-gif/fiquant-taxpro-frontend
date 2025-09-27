@@ -5,16 +5,16 @@ import autoTable from 'jspdf-autotable';
 const formatCurrency = (amount) => {
   // Handle null, undefined, and NaN values
   if (amount === null || amount === undefined || isNaN(amount) || amount === '') {
-    return '₦ 0.00';
+    return 'N 0.00';
   }
   
   // Convert to number and handle edge cases
   const numAmount = parseFloat(amount);
   if (isNaN(numAmount)) {
-    return '₦ 0.00';
+    return 'N 0.00';
   }
   
-  return `₦ ${numAmount.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  return `N ${numAmount.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 };
 
 // Utility function to format percentage
