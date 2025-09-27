@@ -451,41 +451,6 @@ export const generateVatReport = (vatInput, vatResult) => {
   
   let yPos = addTaxpayerHeader(doc, 'VAT Calculation Report', companyInfo);
   
-  // Remove redundant title since it's now in header
-  yPos += 10;
-  
-  // Generated date
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'normal');
-  doc.setTextColor(100, 100, 100);
-  doc.text(`Generated on: ${formatDate()}`, 20, yPos);
-  yPos += 20;
-  
-  // Company Information
-  doc.setFontSize(14);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(0, 0, 0);
-  doc.text('Company Information', 20, yPos);
-  yPos += 10;
-  
-  const companyData = [
-    ['Company Name', vatInput.company_name],
-    ['Reporting Month', vatInput.month],
-    ['VAT Registration Status', vatInput.is_registered_business ? 'Registered' : 'Not Registered'],
-    ['Report Date', formatDate()]
-  ];
-  
-  autoTable(doc, {
-    head: [['Company Detail', 'Value']],
-    body: companyData,
-    startY: yPos,
-    theme: 'grid',
-    headStyles: { fillColor: [0, 0, 0], textColor: [255, 255, 255] },
-    margin: { left: 20, right: 20 }
-  });
-  
-  yPos = doc.lastAutoTable.finalY + 15;
-  
   // Sales Breakdown
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
