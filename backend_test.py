@@ -3301,6 +3301,9 @@ def main():
     # Run Comprehensive Authentication tests first
     tester.run_comprehensive_authentication_tests()
     
+    # Run Comprehensive Forgot Password tests
+    tester.run_comprehensive_forgot_password_tests()
+    
     # Run Admin System tests
     print("\n🔐 ADMIN SYSTEM INITIALIZATION TESTS")
     print("-" * 40)
