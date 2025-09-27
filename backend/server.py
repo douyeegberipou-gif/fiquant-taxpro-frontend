@@ -209,6 +209,20 @@ class CarouselResponse(BaseModel):
     slides: List[CarouselSlide]
     total_slides: int
 
+class CarouselSettings(BaseModel):
+    id: str = Field(default="carousel_settings", description="Settings ID (always 'carousel_settings')")
+    transition_delay: int = Field(default=5, description="Time delay between transitions in seconds")
+    auto_rotation: bool = Field(default=True, description="Whether carousel auto-rotates")
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class CarouselSettingsUpdate(BaseModel):
+    transition_delay: Optional[int] = Field(None, ge=1, le=30, description="Time delay between transitions (1-30 seconds)")
+    auto_rotation: Optional[bool] = None
+
+class CarouselSettingsResponse(BaseModel):
+    settings: CarouselSettings
+
 # ============================
 # TAX CALCULATION HISTORY MODELS
 # ============================
