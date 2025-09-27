@@ -89,8 +89,8 @@ export const PasswordResetForm = ({ onClose }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <Card className="w-full max-w-md mx-auto">
         <CardHeader className="text-center">
-          <CardTitle>Set New Password</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-white">Set New Password</CardTitle>
+          <CardDescription className="text-gray-200">
             Enter your reset token and choose a new password
           </CardDescription>
         </CardHeader>
@@ -108,18 +108,19 @@ export const PasswordResetForm = ({ onClose }) => {
             {!success && (
               <>
                 <div className="space-y-2">
-                  <Label htmlFor="reset-token">Reset Token</Label>
+                  <Label htmlFor="reset-token" className="text-white">Reset Token</Label>
                   <Input
                     id="reset-token"
                     type="text"
                     placeholder="Enter reset token from email"
                     value={resetToken}
                     onChange={(e) => setResetToken(e.target.value)}
+                    className="bg-white text-black placeholder:text-gray-400"
                   />
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="new-password">New Password</Label>
+                  <Label htmlFor="new-password" className="text-white">New Password</Label>
                   <div className="relative">
                     <Input
                       id="new-password"
@@ -127,7 +128,7 @@ export const PasswordResetForm = ({ onClose }) => {
                       placeholder="Enter new password (min. 8 characters)"
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
-                      className="pl-10 pr-10"
+                      className="pl-10 pr-10 bg-white text-black placeholder:text-gray-400"
                     />
                     <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <button
@@ -145,7 +146,7 @@ export const PasswordResetForm = ({ onClose }) => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="confirm-password">Confirm New Password</Label>
+                  <Label htmlFor="confirm-password" className="text-white">Confirm New Password</Label>
                   <div className="relative">
                     <Input
                       id="confirm-password"
@@ -153,7 +154,7 @@ export const PasswordResetForm = ({ onClose }) => {
                       placeholder="Confirm new password"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
-                      className="pl-10 pr-10"
+                      className="pl-10 pr-10 bg-white text-black placeholder:text-gray-400"
                     />
                     <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <button
