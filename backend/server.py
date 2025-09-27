@@ -1902,6 +1902,130 @@ async def create_notification(
     
     return {"message": "Notification created", "id": notification.id}
 
+# ============================
+# HERO CAROUSEL API ENDPOINTS
+# ============================
+
+@api_router.get("/carousel/slides", response_model=CarouselResponse)
+async def get_carousel_slides():
+    """Get all active carousel slides"""
+    slides_cursor = db.carousel_slides.find({"active": True}).sort("order_index", 1)
+    slides_data = await slides_cursor.to_list(length=None)
+    
+    slides = []
+    for slide_data in slides_data:
+        slide = CarouselSlide(**slide_data)
+        slides.append(slide)
+    
+    return CarouselResponse(
+        slides=slides,
+        total_slides=len(slides)
+    )
+
+@api_router.post("/carousel/slides", response_model=CarouselSlide)
+async def create_carousel_slide(
+    slide_data: CarouselSlideCreate,
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Create a new carousel slide (admin only)"""
+    # Check if user is admin
+    if not current_user.admin_enabled or not current_user.admin_role:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required"
+        )
+    
+    slide = CarouselSlide(**slide_data.dict())
+    
+    slide_dict = slide.dict()
+    slide_dict["created_at"] = slide_dict["created_at"].isoformat()
+    slide_dict["updated_at"] = slide_dict["updated_at"].isoformat()
+    
+    await db.carousel_slides.insert_one(slide_dict)
+    
+    return slide
+
+@api_router.put("/carousel/slides/{slide_id}", response_model=CarouselSlide)
+async def update_carousel_slide(
+    slide_id: str,
+    slide_data: CarouselSlideUpdate,
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Update a carousel slide (admin only)"""
+    # Check if user is admin
+    if not current_user.admin_enabled or not current_user.admin_role:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required"
+        )
+    
+    # Prepare update data
+    update_data = {k: v for k, v in slide_data.dict().items() if v is not None}
+    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    
+    result = await db.carousel_slides.update_one(
+        {"id": slide_id},
+        {"$set": update_data}
+    )
+    
+    if result.modified_count == 0:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Carousel slide not found"
+        )
+    
+    # Get updated slide
+    slide_data = await db.carousel_slides.find_one({"id": slide_id})
+    return CarouselSlide(**slide_data)
+
+@api_router.delete("/carousel/slides/{slide_id}")
+async def delete_carousel_slide(
+    slide_id: str,
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Delete a carousel slide (admin only)"""
+    # Check if user is admin
+    if not current_user.admin_enabled or not current_user.admin_role:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required"
+        )
+    
+    result = await db.carousel_slides.delete_one({"id": slide_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Carousel slide not found"
+        )
+    
+    return {"message": "Carousel slide deleted successfully"}
+
+@api_router.get("/admin/carousel/slides", response_model=CarouselResponse)
+async def get_all_carousel_slides_admin(
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Get all carousel slides including inactive ones (admin only)"""
+    # Check if user is admin
+    if not current_user.admin_enabled or not current_user.admin_role:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required"
+        )
+    
+    slides_cursor = db.carousel_slides.find({}).sort("order_index", 1)
+    slides_data = await slides_cursor.to_list(length=None)
+    
+    slides = []
+    for slide_data in slides_data:
+        slide = CarouselSlide(**slide_data)
+        slides.append(slide)
+    
+    return CarouselResponse(
+        slides=slides,
+        total_slides=len(slides)
+    )
+
 # Include the router in the main app
 app.include_router(api_router)
 
