@@ -181,6 +181,35 @@ class NotificationResponse(BaseModel):
     unread_count: int
 
 # ============================
+# HERO CAROUSEL MODELS
+# ============================
+
+class CarouselSlide(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str = Field(description="Main headline of the slide")
+    subtitle: str = Field(description="Supporting text/description")
+    order_index: int = Field(description="Display order (0-based)")
+    active: bool = Field(default=True, description="Whether slide is active")
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class CarouselSlideCreate(BaseModel):
+    title: str = Field(description="Main headline of the slide")
+    subtitle: str = Field(description="Supporting text/description")
+    order_index: int = Field(description="Display order (0-based)")
+    active: bool = Field(default=True, description="Whether slide is active")
+
+class CarouselSlideUpdate(BaseModel):
+    title: Optional[str] = None
+    subtitle: Optional[str] = None
+    order_index: Optional[int] = None
+    active: Optional[bool] = None
+
+class CarouselResponse(BaseModel):
+    slides: List[CarouselSlide]
+    total_slides: int
+
+# ============================
 # TAX CALCULATION HISTORY MODELS
 # ============================
 
