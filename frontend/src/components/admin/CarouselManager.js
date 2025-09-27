@@ -36,6 +36,7 @@ export const CarouselManager = () => {
 
   useEffect(() => {
     loadSlides();
+    loadSettings();
   }, []);
 
   const loadSlides = async () => {
