@@ -43,6 +43,20 @@ const Home = ({ onNavigateToTab }) => {
     }
   };
 
+  // Fetch carousel settings
+  const fetchCarouselSettings = async () => {
+    try {
+      const response = await axios.get(`${BACKEND_URL}/api/carousel/settings`);
+      if (response.data && response.data.settings) {
+        setCarouselSettings(response.data.settings);
+      }
+    } catch (error) {
+      console.error('Error fetching carousel settings:', error);
+      // Use default settings if API fails
+      setCarouselSettings({ transition_delay: 5, auto_rotation: true });
+    }
+  };
+
   // Auto-rotate carousel every 3 seconds
   useEffect(() => {
     fetchCarouselSlides();
