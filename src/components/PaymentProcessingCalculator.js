@@ -11,6 +11,7 @@ import { generatePaymentProcessingReport } from '../utils/pdfGenerator';
 const PaymentProcessingCalculator = ({ formatCurrency }) => {
   const [paymentInput, setPaymentInput] = useState({
     payee_name: '',
+    tin: '',
     contract_amount: '',
     transaction_type: '',
     is_resident: true,
