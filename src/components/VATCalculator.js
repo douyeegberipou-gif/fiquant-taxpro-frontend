@@ -11,6 +11,7 @@ import { generateVatReport } from '../utils/pdfGenerator';
 const VATCalculator = ({ formatCurrency }) => {
   const [vatInput, setVatInput] = useState({
     company_name: '',
+    tin: '',
     month: '',
     transactions: [
       {
