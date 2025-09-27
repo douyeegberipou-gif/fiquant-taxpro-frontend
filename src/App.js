@@ -1129,6 +1129,10 @@ function AppContent() {
                           <span className="text-gray-600">Tax Due:</span>
                           <span className="font-medium text-red-600">{formatCurrency(result.tax_due)}</span>
                         </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Effective Tax Rate:</span>
+                          <span className="font-medium text-blue-600">{(result.effective_tax_rate * 100).toFixed(2)}%</span>
+                        </div>
                         <div className="flex justify-between font-semibold text-lg border-t pt-2">
                           <span>Net Annual Income:</span>
                           <span className="text-green-600">{formatCurrency(result.net_annual_income)}</span>
