@@ -802,7 +802,7 @@ export const generateCgtReport = (cgtInput, cgtResult) => {
     }
   }
   
-  addFooter(doc);
+  addFiquantFooter(doc);
   
   // Save the PDF
   doc.save(`CGT_Report_${cgtResult.taxpayer_name || 'Taxpayer'}_${cgtResult.year || 'Report'}_${new Date().toISOString().split('T')[0]}.pdf`);
