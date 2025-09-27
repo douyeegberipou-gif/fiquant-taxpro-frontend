@@ -181,6 +181,20 @@ function AppContent() {
     }
   }, [user]);
 
+  useEffect(() => {
+    // Fetch notifications when user is authenticated
+    if (isAuthenticated() && user) {
+      fetchNotifications();
+      
+      // Set up periodic refresh of notifications (every 30 seconds)
+      const interval = setInterval(() => {
+        fetchNotifications();
+      }, 30000);
+      
+      return () => clearInterval(interval);
+    }
+  }, [user, isAuthenticated]);
+
   const handleEmailVerification = async (token, email) => {
     setVerificationStatus('verifying');
     setVerificationMessage('Verifying your email address...');
