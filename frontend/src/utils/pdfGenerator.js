@@ -667,15 +667,15 @@ export const generatePaymentProcessingReport = (paymentInput, paymentResult) => 
 export const generateCgtReport = (cgtInput, cgtResult) => {
   const doc = new jsPDF();
   
-  addHeader(doc, 'Capital Gains Tax Report');
+  // Prepare taxpayer info for header
+  const taxpayerInfo = {
+    name: cgtResult.taxpayer_name || 'Not specified',
+    year: cgtResult.year || 'Not specified'
+  };
   
-  let yPos = 55;
+  let yPos = addTaxpayerHeader(doc, 'Capital Gains Tax Report', taxpayerInfo);
   
-  // Report Title
-  doc.setFontSize(18);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(0, 0, 0);
-  doc.text('Capital Gains Tax (CGT) Report', 20, yPos);
+  // Remove redundant title since it's now in header
   yPos += 10;
   
   // Generated date
