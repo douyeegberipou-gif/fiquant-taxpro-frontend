@@ -183,10 +183,10 @@ export const RegisterForm = ({ onSwitchToLogin, onClose, onRegistrationSuccess, 
             className="w-16 h-16 object-contain"
           />
         </div>
-        <CardTitle className="flex items-center justify-center space-x-2">
+        <CardTitle className="flex items-center justify-center space-x-2 text-white">
           <span>Create Account</span>
         </CardTitle>
-        <CardDescription>
+        <CardDescription className="text-gray-200">
           Join Fiquant Consult for professional tax calculations
         </CardDescription>
       </CardHeader>
