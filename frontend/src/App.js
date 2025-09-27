@@ -632,7 +632,7 @@ function AppContent() {
                   </div>
                   
                   {/* Notification Bell */}
-                  <div className="relative">
+                  <div className="relative notification-bell-container">
                     <Button
                       onClick={() => setShowNotifications(!showNotifications)}
                       variant="outline"
