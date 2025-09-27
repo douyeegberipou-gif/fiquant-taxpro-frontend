@@ -826,7 +826,7 @@ function AppContent() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="tin">Tax Identification Number (TIN) - Optional</Label>
+                        <Label htmlFor="tin">Tax Identification Number (TIN)</Label>
                         <Input
                           id="tin"
                           type="text"
