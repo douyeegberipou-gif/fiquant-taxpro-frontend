@@ -221,7 +221,7 @@ export const generatePayeReport = (taxInput, result) => {
     });
   }
   
-  addFooter(doc);
+  addFiquantFooter(doc);
   
   // Save the PDF
   doc.save(`PAYE_Tax_Report_${new Date().toISOString().split('T')[0]}.pdf`);
