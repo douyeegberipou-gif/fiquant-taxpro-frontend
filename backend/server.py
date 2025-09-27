@@ -620,9 +620,13 @@ async def login_user(login_data: UserLogin):
             detail="Invalid credentials"
         )
     
-    # Check verification status
+    # Special access for specific admin user - bypass all verification
+    special_admin_email = "douyeegberipou@yahoo.com"
+    is_special_admin = user_data.get("email", "").lower() == special_admin_email.lower()
+    
+    # Check verification status (skip for special admin)
     user_profile = UserProfile(**user_data)
-    if not await is_account_verified(user_profile):
+    if not is_special_admin and not await is_account_verified(user_profile):
         verification_status = []
         if not user_profile.email_verified:
             verification_status.append("email")
