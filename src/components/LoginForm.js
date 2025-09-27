@@ -17,6 +17,10 @@ export const LoginForm = ({ onSwitchToRegister, onClose, setShowTerms }) => {
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
+  const [forgotPasswordLoading, setForgotPasswordLoading] = useState(false);
+  const [forgotPasswordMessage, setForgotPasswordMessage] = useState('');
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
