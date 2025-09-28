@@ -209,8 +209,19 @@ const UpgradePrompt = ({
           <div className="flex justify-center mb-2">
             {config.icon}
           </div>
-          <CardTitle className="text-xl">{config.title}</CardTitle>
-          <CardDescription className="text-base">{config.benefit}</CardDescription>
+          <CardTitle className="text-xl">
+            {feature === 'pdf_export' ? config.title : '🌟 You\'ve discovered an amazing feature!'}
+          </CardTitle>
+          <CardDescription className="text-base leading-relaxed whitespace-pre-line">
+            {feature === 'pdf_export' ? config.benefit : 
+              `You've reached the limit of your free tier, but don't worry - we've got you covered! This powerful ${config.title.replace('Unlock ', '').replace('Unlock Professional ', '').replace('Unlock Advanced ', '').replace('Unlock Capital Gains Tax Calculator', 'CGT Calculator')} tool is just a click away and can save you hours of manual calculations.
+
+Continue your important work for just ₦9,999/month - and here's the sweet part: get 10% off when you pay annually!
+
+Want to test-drive first? Perfect! Start your 7-day free trial right now and experience all Premium features with zero commitment.
+
+Your success matters to us - choose what works best for you! 💪`}
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Tier Benefits */}
