@@ -551,7 +551,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Forgot Password Functionality"
+    - "Frontend Feature Gating Integration"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
