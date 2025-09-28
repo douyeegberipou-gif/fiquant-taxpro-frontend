@@ -454,7 +454,7 @@ const BulkPaymentCalculator = ({ formatCurrency }) => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor={`transaction_type_${payment.id}`}>Transaction Type *</Label>
+                      <Label htmlFor={`transaction_type_${payment.id}`}>Transaction Type * (For WHT deduction computation)</Label>
                       <select
                         id={`transaction_type_${payment.id}`}
                         className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
