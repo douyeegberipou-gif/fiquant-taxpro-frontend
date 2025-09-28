@@ -272,6 +272,28 @@ const PaymentProcessingCalculator = ({ formatCurrency }) => {
                   onChange={(e) => handleInputChange('contract_amount', e.target.value)}
                 />
               </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="transaction_details">Transaction Details</Label>
+                <Input
+                  id="transaction_details"
+                  type="text"
+                  placeholder="Brief description of the transaction/service"
+                  value={paymentInput.transaction_details}
+                  onChange={(e) => handleInputChange('transaction_details', e.target.value)}
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="payee_email">Email Address of Payee</Label>
+                <Input
+                  id="payee_email"
+                  type="email"
+                  placeholder="payee@example.com"
+                  value={paymentInput.payee_email}
+                  onChange={(e) => handleInputChange('payee_email', e.target.value)}
+                />
+              </div>
             </div>
 
             <Separator />
