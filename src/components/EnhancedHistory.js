@@ -19,8 +19,26 @@ import { generatePayeReport, generateCitReport } from '../utils/pdfGenerator';
 import UpgradePrompt from './UpgradePrompt';
 import { useUpgrade } from '../hooks/useUpgrade';
 
-const EnhancedHistory = ({ history, citHistory, formatCurrency }) => {
+const EnhancedHistory = ({ history, citHistory, formatCurrency, hasFeature }) => {
   const [expandedItems, setExpandedItems] = useState(new Set());
+  const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
+  const { startTrial, requestUpgrade } = useUpgrade();
+
+  const handleUpgrade = async () => {
+    const result = await requestUpgrade('pro');
+    if (result.success) {
+      setShowUpgradePrompt(false);
+    }
+  };
+
+  const handleTrial = async () => {
+    const result = await startTrial('pro');
+    if (result.success) {
+      setShowUpgradePrompt(false);
+    } else {
+      alert(result.message);
+    }
+  };
 
   const toggleExpanded = (id, type) => {
     const itemKey = `${type}-${id}`;
