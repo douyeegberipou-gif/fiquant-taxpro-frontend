@@ -237,6 +237,7 @@ const UpgradePrompt = ({
               </div>
             </div>
             
+            <div className="space-y-4">
               {/* Tier Benefits */}
               <div className="bg-gradient-to-r from-indigo-50 to-blue-50 p-5 rounded-lg border border-indigo-200 shadow-sm">
                 <div className="flex items-center justify-between mb-3">
