@@ -21,8 +21,7 @@ const VATCalculator = ({ formatCurrency }) => {
         amount: ''
       }
     ],
-    is_registered_business: true,
-    input_vat_paid: ''
+    is_registered_business: true
   });
 
   const [vatResult, setVatResult] = useState(null);
