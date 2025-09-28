@@ -163,13 +163,13 @@ const UpgradePrompt = ({
               🎯
             </div>
             <CardTitle className="text-lg text-white">You're making great progress!</CardTitle>
-            <CardDescription className="text-sm leading-relaxed">
+            <CardDescription className="text-sm leading-relaxed text-purple-100">
               <div dangerouslySetInnerHTML={{ 
                 __html: `You've used up your monthly quota, which shows you're really putting our tools to work! No worries though - you don't have to stop here.<br/><br/><strong>Keep the momentum going for just ₦9,999/month</strong> and unlock unlimited runs plus advanced features. Or save big with our <strong>annual plan at 10% off</strong>!<br/><br/><strong>Not ready to commit yet?</strong> We totally understand! Start your <strong>7-day free trial</strong> and continue your work immediately - no strings attached.<br/><br/>Let's keep you moving forward! 🚀` 
               }} />
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 p-6">
             <div className="flex flex-col space-y-2">
               <Button onClick={onTrial} className="bg-green-600 hover:bg-green-700">
                 <Zap className="h-4 w-4 mr-2" />
