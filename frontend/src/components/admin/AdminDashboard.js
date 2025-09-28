@@ -19,7 +19,8 @@ import {
   Search,
   Filter,
   RefreshCw,
-  RotateCw
+  RotateCw,
+  Zap
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { AdminUserManagement } from './AdminUserManagement';
