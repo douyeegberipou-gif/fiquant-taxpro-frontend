@@ -5,6 +5,8 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
+import UpgradePrompt from './UpgradePrompt';
+import { useUpgrade } from '../hooks/useUpgrade';
 import { Separator } from './ui/separator';
 import { Alert, AlertDescription } from './ui/alert';
 import { Switch } from './ui/switch';
