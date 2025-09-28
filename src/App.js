@@ -148,6 +148,7 @@ function AppContent() {
 
   // PAYE Calculator Mode State
   const [payeMode, setPayeMode] = useState('single'); // 'single' or 'bulk'
+  const [paymentMode, setPaymentMode] = useState('single'); // 'single' or 'bulk'
   
   // Terms and Conditions Modal State
   const [showTerms, setShowTerms] = useState(false);
