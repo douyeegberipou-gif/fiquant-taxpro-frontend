@@ -2762,6 +2762,10 @@ async def check_feature_access(user: UserProfile, feature: str) -> tuple[bool, s
     Check if user has access to a specific feature
     Returns (has_access, error_message)
     """
+    # Admin users have access to all features
+    if user.admin_enabled and user.admin_role:
+        return True, ""
+    
     tier, features = await get_user_effective_tier_and_features(user.id)
     
     feature_checks = {
