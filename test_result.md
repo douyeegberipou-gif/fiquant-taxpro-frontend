@@ -574,6 +574,18 @@ test_plan:
   test_all: false
   test_priority: "high_first"
 
+  - task: "Messaging Dashboard in Admin Dashboard"
+    implemented: true
+    working: "NA"
+    file: "components/admin/MessagingDashboard.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "New Messaging Dashboard implemented as 8th tab in Admin Dashboard with 5 sub-tabs: Overview (analytics cards), Templates (create/manage email templates with merge tags), Campaigns (create/send campaigns with template/segment selection), Segments (create user segments with tier filters), Compliance (tax filing reminders for PAYE, VAT, CIT). Features include channel selection (email/SMS/in-app), form functionality for creating templates/campaigns/segments, UI with proper icons and status indicators. Ready for comprehensive testing."
+
 agent_communication:
   - agent: "main"
     message: "HISTORY TAB ENHANCEMENT COMPLETED: Successfully replaced the existing static History tab content with the new EnhancedHistory component. Key changes: 1) Completely removed all WHT (Withholding Tax) information including rates, requirements, and compliance details from the History tab, 2) Replaced the basic PAYE/CIT history display with the interactive EnhancedHistory component that provides expand/collapse functionality, detailed calculation breakdowns, and print report options, 3) Fixed import statements in EnhancedHistory.js to use correct .jsx file extensions, 4) The History tab now focuses exclusively on calculation history with enhanced interactivity and better user experience. Need comprehensive testing to verify all functionality works correctly."
