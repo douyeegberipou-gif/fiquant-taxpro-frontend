@@ -4,6 +4,8 @@ import { Input } from './ui/input.jsx';
 import { Label } from './ui/label.jsx';
 import { Button } from './ui/button.jsx';
 import { Badge } from './ui/badge.jsx';
+import UpgradePrompt from './UpgradePrompt';
+import { useUpgrade } from '../hooks/useUpgrade';
 import { Separator } from './ui/separator.jsx';
 import { Alert, AlertDescription } from './ui/alert.jsx';
 import { Calculator, Building2, AlertTriangle, Printer, Plus, Trash2 } from 'lucide-react';
