@@ -512,10 +512,43 @@ export const generatePaymentProcessingReport = (paymentInput, paymentResult) => 
   // Prepare payee info for header
   const payeeInfo = {
     name: paymentResult.payee_name || 'Not specified',
-    month: paymentResult.month || 'Not specified'
+    month: paymentResult.month || 'Not specified',
+    year: paymentResult.year || 'Not specified'
   };
   
-  let yPos = addTaxpayerHeader(doc, 'Payment Processing Report', payeeInfo);
+  let yPos = addTaxpayerHeader(doc, 'Payment Processing Report (For WHT deduction computation)', payeeInfo);
+  
+  // Add Transaction Details Section
+  if (paymentResult.transaction_details || paymentResult.payee_email) {
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Transaction Information', 20, yPos);
+    yPos += 10;
+    
+    const transactionData = [];
+    if (paymentResult.transaction_details) {
+      transactionData.push(['Transaction Details', paymentResult.transaction_details]);
+    }
+    if (paymentResult.payee_email) {
+      transactionData.push(['Payee Email', paymentResult.payee_email]);
+    }
+    if (paymentResult.year) {
+      transactionData.push(['Year', paymentResult.year]);
+    }
+    
+    if (transactionData.length > 0) {
+      autoTable(doc, {
+        head: [['Field', 'Information']],
+        body: transactionData,
+        startY: yPos,
+        theme: 'grid',
+        headStyles: { fillColor: [99, 102, 241], textColor: [255, 255, 255] },
+        margin: { left: 20, right: 20 }
+      });
+      
+      yPos = doc.lastAutoTable.finalY + 15;
+    }
+  }
   
   // Tax Calculations
   doc.setFontSize(14);
