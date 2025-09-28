@@ -8,6 +8,7 @@ import logging
 from pathlib import Path
 from pydantic import BaseModel, Field, EmailStr
 from typing import List, Optional
+from enum import Enum
 import uuid
 from datetime import datetime, timezone, timedelta
 from decimal import Decimal, ROUND_HALF_UP
