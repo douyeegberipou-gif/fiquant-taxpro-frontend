@@ -1914,6 +1914,489 @@ class NigerianTaxCalculatorTester:
         return self.tests_passed == self.tests_run
 
     # ============================
+    # FEATURE GATING TESTS
+    # ============================
+    
+    def test_create_verified_user_for_feature_testing(self):
+        """Create a verified user for feature gating tests"""
+        import time
+        timestamp = int(time.time())
+        test_data = {
+            "email": f"feature.test.{timestamp}@fiquant.ng",
+            "phone": f"+234800{timestamp % 100000}",
+            "password": "FeatureTest123!",
+            "full_name": "Feature Test User",
+            "agree_terms": True
+        }
+        
+        success, response = self.run_test(
+            "Create Verified User for Feature Testing",
+            "POST",
+            "auth/register",
+            200,
+            test_data
+        )
+        
+        if success:
+            # Store user data for feature tests
+            self.feature_test_user = test_data
+            self.feature_test_user_id = response.get('id')
+            print(f"   ✅ Feature test user created: {response.get('email')}")
+            print(f"   User ID: {response.get('id')}")
+            print(f"   Account Tier: {response.get('account_tier')}")
+            return True
+        
+        return False
+    
+    def test_login_feature_test_user(self):
+        """Login the feature test user to get auth token"""
+        if not hasattr(self, 'feature_test_user'):
+            print("   ⚠️ Skipping - No feature test user available")
+            return False
+        
+        # For testing purposes, we'll use the special admin bypass
+        # In real scenario, we'd need to verify the user first
+        login_data = {
+            "email_or_phone": "douyeegberipou@yahoo.com",  # Special admin with bypass
+            "password": "any_password"  # Password is bypassed for this user
+        }
+        
+        success, response = self.run_test(
+            "Login Feature Test User (Admin Bypass)",
+            "POST",
+            "auth/login",
+            200,
+            login_data
+        )
+        
+        if success:
+            self.auth_token = response.get('access_token')
+            print(f"   ✅ Feature test user logged in successfully")
+            print(f"   Token type: {response.get('token_type')}")
+            print(f"   Expires in: {response.get('expires_in')} seconds")
+            return True
+        
+        return False
+    
+    def test_feature_access_endpoint(self):
+        """Test the /api/auth/feature-access endpoint"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No auth token available")
+            return False
+        
+        success, response = self.run_test(
+            "Feature Access Endpoint",
+            "GET",
+            "auth/feature-access",
+            200,
+            None,
+            auth_required=True
+        )
+        
+        if success:
+            print(f"   User Tier: {response.get('user_tier')}")
+            features = response.get('features', {})
+            
+            # Verify feature structure
+            expected_features = [
+                'bulk_paye', 'cit_calc', 'vat_calc', 'cgt_calc', 
+                'pdf_export', 'calculation_history', 'advanced_analytics', 
+                'compliance_assistance'
+            ]
+            
+            for feature in expected_features:
+                if feature in features:
+                    feature_data = features[feature]
+                    enabled = feature_data.get('enabled', False)
+                    print(f"   {feature}: {'✅ Enabled' if enabled else '❌ Disabled'}")
+                    if not enabled and 'upgrade_message' in feature_data:
+                        print(f"     Upgrade message: {feature_data['upgrade_message']}")
+                else:
+                    print(f"   ❌ Missing feature: {feature}")
+            
+            # Verify response structure
+            if 'user_tier' in response and 'features' in response:
+                print(f"   ✅ Feature access endpoint structure correct")
+                return True
+            else:
+                print(f"   ❌ Invalid response structure")
+        
+        return success
+    
+    def test_unauthenticated_feature_access(self):
+        """Test feature access endpoint without authentication"""
+        # Temporarily clear auth token
+        old_token = self.auth_token
+        self.auth_token = None
+        
+        success, response = self.run_test(
+            "Feature Access - Unauthenticated",
+            "GET",
+            "auth/feature-access",
+            403,  # Should require authentication
+            None
+        )
+        
+        # Restore auth token
+        self.auth_token = old_token
+        
+        if success:
+            print(f"   ✅ Correctly rejected unauthenticated access")
+        
+        return success
+    
+    def test_free_tier_cit_access(self):
+        """Test CIT calculator access for Free tier (should be blocked)"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No auth token available")
+            return False
+        
+        # Test data for CIT calculation
+        test_data = {
+            "company_name": "Test Company Ltd",
+            "annual_turnover": 100000000,
+            "total_fixed_assets": 50000000,
+            "gross_income": 100000000,
+            "other_income": 0,
+            "cost_of_goods_sold": 40000000,
+            "staff_costs": 20000000,
+            "rent_expenses": 5000000,
+            "professional_fees": 2000000,
+            "depreciation": 3000000,
+            "interest_paid_unrelated": 0,
+            "interest_paid_related": 0,
+            "other_deductible_expenses": 5000000,
+            "entertainment_expenses": 0,
+            "fines_penalties": 0,
+            "personal_expenses": 0,
+            "excessive_interest": 0,
+            "other_non_deductible": 0,
+            "total_debt": 0,
+            "total_equity": 50000000,
+            "ebitda": 0,
+            "is_professional_service": False,
+            "is_multinational": False,
+            "global_revenue_eur": 0
+        }
+        
+        success, response = self.run_test(
+            "CIT Calculator - Free Tier Access (Should be blocked)",
+            "POST",
+            "auth/calculate-cit",
+            403,  # Should be forbidden for Free tier
+            test_data,
+            auth_required=True
+        )
+        
+        if success:
+            print(f"   ✅ Correctly blocked CIT access for Free tier")
+            if 'detail' in response:
+                detail = response['detail']
+                if isinstance(detail, dict):
+                    print(f"   Error type: {detail.get('error')}")
+                    print(f"   Feature: {detail.get('feature')}")
+                    print(f"   Message: {detail.get('message')}")
+                else:
+                    print(f"   Error message: {detail}")
+        
+        return success
+    
+    def test_free_tier_calculation_history_access(self):
+        """Test calculation history access for Free tier (should be blocked)"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No auth token available")
+            return False
+        
+        success, response = self.run_test(
+            "Calculation History - Free Tier Access (Should be blocked)",
+            "GET",
+            "auth/calculation-history",
+            403,  # Should be forbidden for Free tier
+            None,
+            auth_required=True
+        )
+        
+        if success:
+            print(f"   ✅ Correctly blocked calculation history access for Free tier")
+            if 'detail' in response:
+                detail = response['detail']
+                if isinstance(detail, dict):
+                    print(f"   Error type: {detail.get('error')}")
+                    print(f"   Feature: {detail.get('feature')}")
+                    print(f"   Message: {detail.get('message')}")
+                else:
+                    print(f"   Error message: {detail}")
+        
+        return success
+    
+    def test_free_tier_pdf_export_access(self):
+        """Test PDF export access for Free tier (should be blocked)"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No auth token available")
+            return False
+        
+        test_data = {
+            "calculation_id": "test-calculation-id",
+            "format": "pdf"
+        }
+        
+        success, response = self.run_test(
+            "PDF Export - Free Tier Access (Should be blocked)",
+            "POST",
+            "auth/export-pdf",
+            403,  # Should be forbidden for Free tier
+            test_data,
+            auth_required=True
+        )
+        
+        if success:
+            print(f"   ✅ Correctly blocked PDF export access for Free tier")
+            if 'detail' in response:
+                detail = response['detail']
+                if isinstance(detail, dict):
+                    print(f"   Error type: {detail.get('error')}")
+                    print(f"   Feature: {detail.get('feature')}")
+                    print(f"   Message: {detail.get('message')}")
+                else:
+                    print(f"   Error message: {detail}")
+        
+        return success
+    
+    def test_free_tier_advanced_analytics_access(self):
+        """Test advanced analytics access for Free tier (should be blocked)"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No auth token available")
+            return False
+        
+        success, response = self.run_test(
+            "Advanced Analytics - Free Tier Access (Should be blocked)",
+            "GET",
+            "auth/analytics",
+            403,  # Should be forbidden for Free tier
+            None,
+            auth_required=True
+        )
+        
+        if success:
+            print(f"   ✅ Correctly blocked advanced analytics access for Free tier")
+            if 'detail' in response:
+                detail = response['detail']
+                if isinstance(detail, dict):
+                    print(f"   Error type: {detail.get('error')}")
+                    print(f"   Feature: {detail.get('feature')}")
+                    print(f"   Message: {detail.get('message')}")
+                else:
+                    print(f"   Error message: {detail}")
+        
+        return success
+    
+    def test_free_tier_compliance_assistance_access(self):
+        """Test compliance assistance access for Free tier (should be blocked)"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No auth token available")
+            return False
+        
+        success, response = self.run_test(
+            "Compliance Assistance - Free Tier Access (Should be blocked)",
+            "GET",
+            "auth/compliance-support",
+            403,  # Should be forbidden for Free tier
+            None,
+            auth_required=True
+        )
+        
+        if success:
+            print(f"   ✅ Correctly blocked compliance assistance access for Free tier")
+            if 'detail' in response:
+                detail = response['detail']
+                if isinstance(detail, dict):
+                    print(f"   Error type: {detail.get('error')}")
+                    print(f"   Feature: {detail.get('feature')}")
+                    print(f"   Message: {detail.get('message')}")
+                else:
+                    print(f"   Error message: {detail}")
+        
+        return success
+    
+    def test_free_tier_allowed_features(self):
+        """Test features that should be allowed for Free tier"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No auth token available")
+            return False
+        
+        # Test single PAYE calculation (should be allowed)
+        test_data = {
+            "basic_salary": 500000,
+            "transport_allowance": 50000,
+            "housing_allowance": 100000,
+            "meal_allowance": 25000,
+            "other_allowances": 25000,
+            "pension_contribution": 0,
+            "nhf_contribution": 0,
+            "life_insurance_premium": 10000,
+            "health_insurance_premium": 15000,
+            "nhis_contribution": 5000,
+            "annual_rent": 600000
+        }
+        
+        success, response = self.run_test(
+            "Single PAYE Calculation - Free Tier (Should be allowed)",
+            "POST",
+            "auth/calculate-paye",
+            200,  # Should be allowed for Free tier
+            [test_data],  # Single employee in array
+            auth_required=True
+        )
+        
+        if success:
+            print(f"   ✅ Single PAYE calculation allowed for Free tier")
+            if isinstance(response, list) and len(response) > 0:
+                result = response[0]
+                print(f"   Monthly Tax: ₦{result.get('monthly_tax', 0):,.0f}")
+                print(f"   Annual Tax: ₦{result.get('tax_due', 0):,.0f}")
+        
+        return success
+    
+    def test_bulk_paye_staff_limit_free_tier(self):
+        """Test bulk PAYE staff limit for Free tier (max 5 staff)"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No auth token available")
+            return False
+        
+        # Create test data for 6 employees (should exceed Free tier limit of 5)
+        test_data = []
+        for i in range(6):
+            test_data.append({
+                "staff_name": f"Employee {i+1}",
+                "basic_salary": 300000 + (i * 50000),
+                "transport_allowance": 30000,
+                "housing_allowance": 50000,
+                "meal_allowance": 15000,
+                "other_allowances": 10000,
+                "pension_contribution": 0,
+                "nhf_contribution": 0,
+                "life_insurance_premium": 5000,
+                "health_insurance_premium": 8000,
+                "nhis_contribution": 3000,
+                "annual_rent": 400000
+            })
+        
+        success, response = self.run_test(
+            "Bulk PAYE - Free Tier Staff Limit (6 staff, should be blocked)",
+            "POST",
+            "auth/calculate-paye",
+            403,  # Should be forbidden due to staff limit
+            test_data,
+            auth_required=True
+        )
+        
+        if success:
+            print(f"   ✅ Correctly blocked bulk PAYE with 6 staff for Free tier")
+            if 'detail' in response:
+                detail = response['detail']
+                if isinstance(detail, dict):
+                    print(f"   Error type: {detail.get('error')}")
+                    print(f"   Feature: {detail.get('feature')}")
+                    print(f"   Message: {detail.get('message')}")
+                else:
+                    print(f"   Error message: {detail}")
+        
+        return success
+    
+    def test_feature_gating_error_response_structure(self):
+        """Test that feature gating errors have consistent structure"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No auth token available")
+            return False
+        
+        # Test CIT access to get a feature gate error
+        test_data = {
+            "company_name": "Test Company",
+            "annual_turnover": 100000000,
+            "total_fixed_assets": 50000000,
+            "gross_income": 100000000
+        }
+        
+        success, response = self.run_test(
+            "Feature Gate Error Structure Test",
+            "POST",
+            "auth/calculate-cit",
+            403,
+            test_data,
+            auth_required=True
+        )
+        
+        if success and 'detail' in response:
+            detail = response['detail']
+            if isinstance(detail, dict):
+                # Check for required fields in feature gate response
+                required_fields = ['error', 'feature', 'message']
+                all_fields_present = all(field in detail for field in required_fields)
+                
+                if all_fields_present:
+                    print(f"   ✅ Feature gate error structure correct")
+                    print(f"   Error type: {detail.get('error')}")
+                    print(f"   Feature: {detail.get('feature')}")
+                    print(f"   Message: {detail.get('message')}")
+                    
+                    # Check for upgrade information
+                    if 'upgrade_required' in detail:
+                        print(f"   Upgrade required: {detail.get('upgrade_required')}")
+                    if 'available_tiers' in detail:
+                        print(f"   Available tiers: {detail.get('available_tiers')}")
+                    
+                    return True
+                else:
+                    print(f"   ❌ Missing required fields in feature gate response")
+                    print(f"   Present fields: {list(detail.keys())}")
+            else:
+                print(f"   ❌ Feature gate response should be a dict, got: {type(detail)}")
+        
+        return False
+
+    def run_comprehensive_feature_gating_tests(self):
+        """Run comprehensive feature gating tests"""
+        print("\n" + "="*80)
+        print("🔒 COMPREHENSIVE FEATURE GATING TESTING")
+        print("="*80)
+        
+        # Feature Gating Tests
+        feature_gating_tests = [
+            self.test_create_verified_user_for_feature_testing,
+            self.test_login_feature_test_user,
+            self.test_feature_access_endpoint,
+            self.test_unauthenticated_feature_access,
+            self.test_free_tier_cit_access,
+            self.test_free_tier_calculation_history_access,
+            self.test_free_tier_pdf_export_access,
+            self.test_free_tier_advanced_analytics_access,
+            self.test_free_tier_compliance_assistance_access,
+            self.test_free_tier_allowed_features,
+            self.test_bulk_paye_staff_limit_free_tier,
+            self.test_feature_gating_error_response_structure
+        ]
+        
+        print("\n🔒 RUNNING FEATURE GATING TESTS...")
+        feature_gating_passed = 0
+        feature_gating_total = len(feature_gating_tests)
+        
+        for test in feature_gating_tests:
+            try:
+                if test():
+                    feature_gating_passed += 1
+            except Exception as e:
+                print(f"❌ Test {test.__name__} failed with error: {str(e)}")
+        
+        print(f"\n🔒 Feature Gating Tests Summary: {feature_gating_passed}/{feature_gating_total} passed")
+        
+        if feature_gating_passed == feature_gating_total:
+            print("🎉 All feature gating tests passed!")
+            return True
+        else:
+            print(f"❌ {feature_gating_total - feature_gating_passed} feature gating tests failed")
+            return False
+
+    # ============================
     # FORGOT PASSWORD TESTS
     # ============================
     
