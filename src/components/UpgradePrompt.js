@@ -303,9 +303,11 @@ const UpgradePrompt = ({
                   Maybe Later
                 </Button>
               </div>
-
+            </div>
+          </div>
+          
           {/* Trust Elements */}
-          <div className="text-center text-xs text-gray-500 border-t pt-3">
+          <div className="text-center text-xs text-gray-500 border-t pt-3 mt-6">
             <div className="flex items-center justify-center space-x-4">
               <span>✅ Instant Access</span>
               <span>🔒 Secure Payment</span>
