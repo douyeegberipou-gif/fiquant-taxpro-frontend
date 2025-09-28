@@ -516,7 +516,7 @@ export const generatePaymentProcessingReport = (paymentInput, paymentResult) => 
     year: paymentResult.year || 'Not specified'
   };
   
-  let yPos = addTaxpayerHeader(doc, 'Payment Processing Report (For WHT deduction computation)', payeeInfo);
+  let yPos = addTaxpayerHeader(doc, 'Payment Advice (For WHT deduction computation)', payeeInfo);
   
   // Add Transaction Details Section
   if (paymentResult.transaction_details || paymentResult.payee_email) {
