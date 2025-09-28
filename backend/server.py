@@ -2191,6 +2191,233 @@ async def update_carousel_settings(
     
     return CarouselSettingsResponse(settings=updated_settings)
 
+# ============================
+# SUBSCRIPTION & TIER API ENDPOINTS
+# ============================
+
+def get_tier_features(tier: UserTier) -> TierFeatures:
+    """Get features for a specific tier"""
+    tier_configs = {
+        UserTier.FREE: TierFeatures(
+            single_paye_unlimited=True,
+            bulk_paye_enabled=True,
+            bulk_paye_max_staff=5,
+            bulk_paye_runs_per_month=1,
+            cit_enabled=False,
+            vat_enabled=False,
+            cgt_enabled=False,
+            pdf_export=False,
+            calculation_history=False,
+            email_notifications=False,
+            priority_support=False,
+            ads_enabled=True,
+            rewarded_ads=True,
+            advanced_analytics=False,
+            api_access=False,
+            compliance_assistance=False
+        ),
+        UserTier.PRO: TierFeatures(
+            single_paye_unlimited=True,
+            bulk_paye_enabled=True,
+            bulk_paye_max_staff=15,
+            bulk_paye_runs_per_month=None,  # Unlimited
+            cit_enabled=True,
+            vat_enabled=True,
+            cgt_enabled=True,
+            pdf_export=True,
+            calculation_history=True,
+            email_notifications=True,
+            priority_support=False,
+            ads_enabled=False,
+            rewarded_ads=False,
+            advanced_analytics=False,
+            api_access=False,
+            compliance_assistance=False
+        ),
+        UserTier.PREMIUM: TierFeatures(
+            single_paye_unlimited=True,
+            bulk_paye_enabled=True,
+            bulk_paye_max_staff=50,
+            bulk_paye_runs_per_month=None,  # Unlimited
+            cit_enabled=True,
+            vat_enabled=True,
+            cgt_enabled=True,
+            pdf_export=True,
+            calculation_history=True,
+            email_notifications=True,
+            priority_support=True,
+            ads_enabled=False,
+            rewarded_ads=False,
+            advanced_analytics=True,
+            api_access=True,
+            compliance_assistance=True
+        ),
+        UserTier.ENTERPRISE: TierFeatures(
+            single_paye_unlimited=True,
+            bulk_paye_enabled=True,
+            bulk_paye_max_staff=999999,  # Unlimited
+            bulk_paye_runs_per_month=None,  # Unlimited
+            cit_enabled=True,
+            vat_enabled=True,
+            cgt_enabled=True,
+            pdf_export=True,
+            calculation_history=True,
+            email_notifications=True,
+            priority_support=True,
+            ads_enabled=False,
+            rewarded_ads=False,
+            advanced_analytics=True,
+            api_access=True,
+            compliance_assistance=True
+        )
+    }
+    return tier_configs.get(tier, tier_configs[UserTier.FREE])
+
+@api_router.get("/pricing", response_model=List[TierPricing])
+async def get_pricing_tiers():
+    """Get all pricing tiers and their features"""
+    tiers = [
+        TierPricing(
+            tier=UserTier.FREE,
+            name="Free",
+            monthly_price=0,
+            annual_price=0,
+            features=get_tier_features(UserTier.FREE),
+            recommended_for="Individuals & freelancers"
+        ),
+        TierPricing(
+            tier=UserTier.PRO,
+            name="Pro",
+            monthly_price=9999,
+            annual_price=109990,
+            features=get_tier_features(UserTier.PRO),
+            popular=False,
+            recommended_for="Small & medium enterprises (SMEs)"
+        ),
+        TierPricing(
+            tier=UserTier.PREMIUM,
+            name="Premium", 
+            monthly_price=19999,
+            annual_price=219990,
+            features=get_tier_features(UserTier.PREMIUM),
+            popular=True,
+            recommended_for="Growing businesses & corporates"
+        ),
+        TierPricing(
+            tier=UserTier.ENTERPRISE,
+            name="Enterprise",
+            monthly_price=0,  # Custom pricing
+            annual_price=0,   # Custom pricing
+            features=get_tier_features(UserTier.ENTERPRISE),
+            recommended_for="Large organizations & enterprises"
+        )
+    ]
+    return tiers
+
+@api_router.get("/subscription", response_model=SubscriptionResponse)
+async def get_user_subscription(
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Get current user's subscription details"""
+    # Get subscription from database
+    subscription_data = await db.subscriptions.find_one({"user_id": current_user.id})
+    
+    if not subscription_data:
+        # Create default free subscription
+        subscription = UserSubscription(
+            user_id=current_user.id,
+            tier=current_user.account_tier
+        )
+        
+        subscription_dict = subscription.dict()
+        subscription_dict["created_at"] = subscription_dict["created_at"].isoformat()
+        subscription_dict["updated_at"] = subscription_dict["updated_at"].isoformat()
+        if subscription_dict["trial_ends_at"]:
+            subscription_dict["trial_ends_at"] = subscription_dict["trial_ends_at"].isoformat()
+        if subscription_dict["expires_at"]:
+            subscription_dict["expires_at"] = subscription_dict["expires_at"].isoformat()
+        
+        await db.subscriptions.insert_one(subscription_dict)
+    else:
+        subscription = UserSubscription(**subscription_data)
+    
+    features = get_tier_features(subscription.tier)
+    
+    return SubscriptionResponse(
+        subscription=subscription,
+        features=features
+    )
+
+@api_router.post("/subscription/upgrade", response_model=SubscriptionResponse)
+async def upgrade_subscription(
+    subscription_update: SubscriptionUpdate,
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Upgrade user subscription (mock implementation - integrate with payment processor)"""
+    
+    # Get existing subscription
+    subscription_data = await db.subscriptions.find_one({"user_id": current_user.id})
+    
+    if not subscription_data:
+        # Create new subscription
+        subscription = UserSubscription(user_id=current_user.id)
+    else:
+        subscription = UserSubscription(**subscription_data)
+    
+    # Update subscription details
+    if subscription_update.tier:
+        subscription.tier = subscription_update.tier
+        
+        # Set pricing based on tier
+        tier_pricing = {
+            UserTier.FREE: (0, 0),
+            UserTier.PRO: (9999, 109990),
+            UserTier.PREMIUM: (19999, 219990),
+            UserTier.ENTERPRISE: (0, 0)  # Custom
+        }
+        
+        monthly_price, annual_price = tier_pricing.get(subscription_update.tier, (0, 0))
+        subscription.monthly_price = monthly_price
+        subscription.annual_price = annual_price
+        
+        # Set trial period for paid tiers
+        if subscription_update.tier != UserTier.FREE:
+            subscription.status = SubscriptionStatus.TRIAL
+            subscription.trial_ends_at = datetime.now(timezone.utc) + timedelta(days=7)
+    
+    if subscription_update.is_annual is not None:
+        subscription.is_annual = subscription_update.is_annual
+    
+    subscription.updated_at = datetime.now(timezone.utc)
+    
+    # Save to database
+    subscription_dict = subscription.dict()
+    subscription_dict["created_at"] = subscription_dict["created_at"].isoformat()
+    subscription_dict["updated_at"] = subscription_dict["updated_at"].isoformat()
+    if subscription_dict["trial_ends_at"]:
+        subscription_dict["trial_ends_at"] = subscription_dict["trial_ends_at"].isoformat()
+    if subscription_dict["expires_at"]:
+        subscription_dict["expires_at"] = subscription_dict["expires_at"].isoformat()
+    
+    await db.subscriptions.update_one(
+        {"user_id": current_user.id},
+        {"$set": subscription_dict},
+        upsert=True
+    )
+    
+    # Update user profile tier
+    await db.users.update_one(
+        {"id": current_user.id},
+        {"$set": {"account_tier": subscription_update.tier.value}}
+    )
+    
+    features = get_tier_features(subscription.tier)
+    
+    return SubscriptionResponse(
+        subscription=subscription,
+        features=features
+    )
+
 # Include the router in the main app
 app.include_router(api_router)
 
