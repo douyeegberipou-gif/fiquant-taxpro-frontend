@@ -928,6 +928,9 @@ async def register_user(user_data: UserRegistration):
     
     await db.notifications.insert_one(welcome_doc)
     
+    # Track registration for analytics
+    await update_conversion_funnel("registration")
+    
     # Send verification email
     email_sent = send_verification_email(user_data.email, verification_token, user_data.full_name)
     if not email_sent:
