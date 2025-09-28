@@ -630,7 +630,7 @@ const CITCalculator = ({
             <Button 
               onClick={() => {
                 if (!hasFeature || !hasFeature('cit_calc')) {
-                  alert('CIT Calculator requires Pro+ tier. Please upgrade your account to access this feature.');
+                  setShowUpgradePrompt(true);
                   return;
                 }
                 calculateCitTax();
