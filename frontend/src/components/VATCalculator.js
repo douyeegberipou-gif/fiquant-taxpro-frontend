@@ -549,11 +549,22 @@ const VATCalculator = ({ formatCurrency, hasFeature }) => {
 
             <div className="flex space-x-3 pt-4">
               <Button 
-                onClick={calculateVAT} 
+                onClick={() => {
+                  if (!hasFeature || !hasFeature('vat_calc')) {
+                    alert('VAT Calculator requires Pro+ tier. Please upgrade your account to access this feature.');
+                    return;
+                  }
+                  calculateVAT();
+                }}
                 disabled={vatLoading || !vatInput.company_name || vatInput.transactions.length === 0}
                 className="flex-1 bg-blue-600 hover:bg-blue-700"
               >
                 {vatLoading ? 'Calculating...' : 'Calculate VAT'}
+                {hasFeature && !hasFeature('vat_calc') && (
+                  <Badge variant="outline" className="ml-2 text-xs bg-blue-50 text-blue-600 border-blue-200">
+                    PRO+
+                  </Badge>
+                )}
               </Button>
               <Button 
                 onClick={resetForm} 
