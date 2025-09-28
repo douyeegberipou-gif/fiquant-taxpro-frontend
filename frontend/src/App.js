@@ -577,6 +577,11 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50">
+      {/* Top Banner Ad */}
+      {canShowAds() && (
+        <TopBanner className="sticky top-0 z-40" />
+      )}
+      
       {/* Header */}
       <div className="relative overflow-hidden">
         {/* Background with black and gold gradient */}
