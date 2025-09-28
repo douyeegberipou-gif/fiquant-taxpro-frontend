@@ -980,13 +980,30 @@ function AppContent() {
               
               <TabsTrigger 
                 value="compliance" 
-                className="flex-1 md:flex-none bg-gray-50 px-6 py-4 text-gray-700 font-medium rounded-lg hover:bg-gray-100 data-[state=active]:bg-gray-400 data-[state=active]:text-white transition-all duration-200 flex flex-col items-center justify-center space-y-2 shadow-sm hover:shadow-md data-[state=active]:shadow-md"
+                disabled={!hasFeature('compliance_assistance')}
+                className={`flex-1 md:flex-none px-6 py-4 text-gray-700 font-medium rounded-lg transition-all duration-200 flex flex-col items-center justify-center space-y-2 shadow-sm relative ${
+                  !hasFeature('compliance_assistance') 
+                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed opacity-60' 
+                    : 'bg-gray-50 hover:bg-gray-100 data-[state=active]:bg-gray-400 data-[state=active]:text-white hover:shadow-md data-[state=active]:shadow-md'
+                }`}
                 style={{
                   boxShadow: activeTab === 'compliance' ? '0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)' : '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
                 }}
+                onClick={!hasFeature('compliance_assistance') ? (e) => {
+                  e.preventDefault();
+                  setAuthModalOpen(true);
+                } : undefined}
               >
+                {!hasFeature('compliance_assistance') && (
+                  <Lock className="absolute top-2 right-2 h-3 w-3 text-gray-400" />
+                )}
                 <Briefcase className="h-5 w-5" />
                 <span className="text-xs font-semibold tracking-wide">COMPLIANCE</span>
+                {!hasFeature('compliance_assistance') && (
+                  <Badge variant="outline" className="text-[10px] px-1 py-0 bg-yellow-50 text-yellow-600 border-yellow-200">
+                    PREMIUM+
+                  </Badge>
+                )}
               </TabsTrigger>
               {isAuthenticated() && (
                 <TabsTrigger 
