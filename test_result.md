@@ -569,7 +569,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Frontend Feature Gating Integration"
+    - "Monetization Dashboard Backend Endpoints"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
