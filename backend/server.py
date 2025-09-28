@@ -4482,6 +4482,22 @@ async def get_user_subscriptions(
             subscription = await db.subscriptions.find_one({"user_id": user["id"]})
             trial = await db.user_trials.find_one({"user_id": user["id"]})
             
+            # Clean up subscription data
+            if subscription and "_id" in subscription:
+                del subscription["_id"]
+                # Convert datetime fields
+                for field in ["created_at", "updated_at", "trial_ends_at", "expires_at"]:
+                    if field in subscription and isinstance(subscription[field], datetime):
+                        subscription[field] = subscription[field].isoformat()
+            
+            # Clean up trial data
+            if trial and "_id" in trial:
+                del trial["_id"]
+                # Convert datetime fields
+                for field in ["created_at", "updated_at", "started_at", "expires_at"]:
+                    if field in trial and isinstance(trial[field], datetime):
+                        trial[field] = trial[field].isoformat()
+            
             user_subscriptions.append({
                 "id": user["id"],
                 "full_name": user["full_name"],
