@@ -537,28 +537,6 @@ const VATCalculator = ({ formatCurrency }) => {
 
             <Separator />
 
-            {/* Input VAT */}
-            {vatInput.is_registered_business && (
-              <div className="space-y-4">
-                <h3 className="font-semibold text-gray-900">Input VAT</h3>
-                <div className="space-y-2">
-                  <Label htmlFor="input_vat_paid">Input VAT Paid (Recoverable)</Label>
-                  <Input
-                    id="input_vat_paid"
-                    type="number"
-                    placeholder="₦500,000"
-                    value={vatInput.input_vat_paid}
-                    onChange={(e) => handleInputChange('input_vat_paid', e.target.value)}
-                  />
-                </div>
-                <Alert className="bg-green-50 border-green-200">
-                  <AlertDescription className="text-green-800 text-sm">
-                    Input VAT on purchases that can be recovered/credited against output VAT
-                  </AlertDescription>
-                </Alert>
-              </div>
-            )}
-
             {/* Disclaimer Note */}
             <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mt-4">
               <p className="text-xs text-amber-800 flex items-start">
