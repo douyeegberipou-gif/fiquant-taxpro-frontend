@@ -42,6 +42,7 @@ function AppContent() {
   const { user, logout, isAuthenticated } = useAuth();
   const { trialStatus, showTrialModal, setShowTrialModal, showExpiredModal, setShowExpiredModal } = useTrial();
   const { showInterstitial, setShowInterstitial, showRewardedAd, setShowRewardedAd, rewardType, canShowAds } = useAds();
+  const { hasFeature, getUserTier } = useFeatureGate();
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [showPasswordReset, setShowPasswordReset] = useState(false);
   const [verificationStatus, setVerificationStatus] = useState(null); // 'verifying', 'success', 'error'
