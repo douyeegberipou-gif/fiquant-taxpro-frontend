@@ -608,11 +608,22 @@ const CITCalculator = ({
 
           <div className="flex space-x-3 pt-4">
             <Button 
-              onClick={calculateCitTax} 
+              onClick={() => {
+                if (!hasFeature || !hasFeature('cit_calc')) {
+                  alert('CIT Calculator requires Pro+ tier. Please upgrade your account to access this feature.');
+                  return;
+                }
+                calculateCitTax();
+              }}
               disabled={citLoading || !citInput.company_name || !citInput.annual_turnover || !citInput.gross_income}
               className="flex-1 bg-blue-600 hover:bg-blue-700"
             >
               {citLoading ? 'Calculating...' : 'Calculate CIT'}
+              {hasFeature && !hasFeature('cit_calc') && (
+                <Badge variant="outline" className="ml-2 text-xs bg-blue-50 text-blue-600 border-blue-200">
+                  PRO+
+                </Badge>
+              )}
             </Button>
             <Button 
               onClick={resetCitForm} 
