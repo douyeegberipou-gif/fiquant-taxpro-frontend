@@ -3104,56 +3104,147 @@ async def upgrade_subscription(
 # TRIAL SYSTEM API ENDPOINTS
 # ============================
 
-async def check_and_expire_trials():
-    """Check for expired trials and automatically revert them"""
-    now = datetime.now(timezone.utc)
-    
-    # Find expired trials
-    expired_trials = await db.trial_tracking.find({
-        "trial_status": TrialStatus.TRIAL_ACTIVE.value,
-        "trial_ends_at": {"$lt": now.isoformat()}
-    }).to_list(length=None)
-    
-    for trial_data in expired_trials:
-        trial = TrialTracking(**trial_data)
+async def check_and_revert_expired_trials():
+    """Check for expired trials and revert users to their original tier"""
+    try:
+        now = datetime.now(timezone.utc)
         
-        # Update trial status
-        await db.trial_tracking.update_one(
-            {"user_id": trial.user_id},
-            {"$set": {
-                "trial_status": TrialStatus.TRIAL_EXPIRED.value,
-                "updated_at": now.isoformat()
-            }}
+        # Find expired trials
+        expired_trials = await db.user_trials.find({
+            "status": "TRIAL_ACTIVE",
+            "expires_at": {"$lt": now}
+        }).to_list(length=None)
+        
+        for trial in expired_trials:
+            # Update trial status
+            await db.user_trials.update_one(
+                {"id": trial["id"]},
+                {"$set": {"status": "TRIAL_EXPIRED"}}
+            )
+            
+            # Revert user to original tier
+            await db.users.update_one(
+                {"id": trial["user_id"]},
+                {"$set": {"account_tier": trial["original_tier"]}}
+            )
+            
+            # Update subscription
+            await db.subscriptions.update_one(
+                {"user_id": trial["user_id"]},
+                {"$set": {
+                    "tier": UserTier(trial["original_tier"]),
+                    "is_trial_active": False,
+                    "trial_ends_at": None
+                }}
+            )
+            
+        return len(expired_trials)
+    except Exception as e:
+        print(f"Error checking expired trials: {e}")
+        return 0
+
+# ============================
+# MONETIZATION ANALYTICS HELPERS
+# ============================
+
+async def track_user_activity(user_id: str, activity: str):
+    """Track user activity for analytics"""
+    try:
+        today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        
+        # Update or create daily activity record
+        await db.daily_activities.update_one(
+            {"user_id": user_id, "date": today},
+            {
+                "$push": {"activities": activity},
+                "$setOnInsert": {
+                    "id": str(uuid.uuid4()),
+                    "date": today,
+                    "user_id": user_id,
+                    "created_at": datetime.now(timezone.utc)
+                }
+            },
+            upsert=True
+        )
+    except Exception as e:
+        print(f"Error tracking user activity: {e}")
+
+async def update_conversion_funnel(event_type: str):
+    """Update conversion funnel data"""
+    try:
+        today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        
+        update_field = {}
+        if event_type == "registration":
+            update_field = {"$inc": {"total_registrations": 1}}
+        elif event_type == "demo_activation":
+            update_field = {"$inc": {"demo_activations": 1}}
+        elif event_type == "trial_activation":
+            update_field = {"$inc": {"trial_activations": 1}}
+        elif event_type == "trial_conversion":
+            update_field = {"$inc": {"trial_conversions": 1}}
+        elif event_type == "paid_user":
+            update_field = {"$inc": {"total_paid_users": 1}}
+        
+        if update_field:
+            await db.conversion_funnel.update_one(
+                {"date": today},
+                {
+                    **update_field,
+                    "$setOnInsert": {
+                        "id": str(uuid.uuid4()),
+                        "date": today,
+                        "created_at": datetime.now(timezone.utc)
+                    }
+                },
+                upsert=True
+            )
+    except Exception as e:
+        print(f"Error updating conversion funnel: {e}")
+
+async def track_ad_impression(ad_type: str, estimated_revenue: float = 0.001):
+    """Track ad impression and revenue"""
+    try:
+        today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        
+        impression_field = f"{ad_type}_impressions"
+        
+        # Update daily ad revenue data
+        result = await db.ad_revenue.update_one(
+            {"date": today},
+            {
+                "$inc": {
+                    impression_field: 1,
+                    "estimated_revenue": estimated_revenue
+                },
+                "$setOnInsert": {
+                    "id": str(uuid.uuid4()),
+                    "date": today,
+                    "created_at": datetime.now(timezone.utc)
+                }
+            },
+            upsert=True
         )
         
-        # Revert subscription
-        subscription_data = await db.subscriptions.find_one({"user_id": trial.user_id})
-        if subscription_data:
-            subscription = UserSubscription(**subscription_data)
-            original_tier = subscription.original_tier or UserTier.FREE
-            
-            subscription.tier = original_tier
-            subscription.status = SubscriptionStatus.ACTIVE
-            subscription.is_trial_active = False
-            subscription.trial_ends_at = None
-            subscription.updated_at = now
-            
-            subscription_dict = subscription.dict()
-            subscription_dict["created_at"] = subscription_dict["created_at"].isoformat()
-            subscription_dict["updated_at"] = subscription_dict["updated_at"].isoformat()
-            if subscription_dict["expires_at"]:
-                subscription_dict["expires_at"] = subscription_dict["expires_at"].isoformat()
-            
-            await db.subscriptions.update_one(
-                {"user_id": trial.user_id},
-                {"$set": subscription_dict}
+        # Recalculate RPM
+        ad_data = await db.ad_revenue.find_one({"date": today})
+        if ad_data:
+            total_impressions = (
+                ad_data.get("banner_impressions", 0) + 
+                ad_data.get("native_impressions", 0) + 
+                ad_data.get("interstitial_impressions", 0) + 
+                ad_data.get("rewarded_impressions", 0)
             )
             
-            # Update user profile
-            await db.users.update_one(
-                {"id": trial.user_id},
-                {"$set": {"account_tier": original_tier.value}}
-            )
+            if total_impressions > 0:
+                rpm = (ad_data.get("estimated_revenue", 0) / total_impressions) * 1000
+                await db.ad_revenue.update_one(
+                    {"date": today},
+                    {"$set": {"rpm": rpm}}
+                )
+                
+    except Exception as e:
+        print(f"Error tracking ad impression: {e}")
 
 async def get_device_info(request: Request):
     """Extract device/browser info for fingerprinting"""
