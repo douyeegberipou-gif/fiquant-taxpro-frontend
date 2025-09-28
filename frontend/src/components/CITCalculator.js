@@ -898,6 +898,17 @@ const CITCalculator = ({
           </CardContent>
         </Card>
       )}
+
+      {/* Upgrade Prompt */}
+      {showUpgradePrompt && (
+        <UpgradePrompt
+          type="feature"
+          feature="cit_calc"
+          onUpgrade={handleUpgrade}
+          onTrial={handleTrial}
+          onClose={() => setShowUpgradePrompt(false)}
+        />
+      )}
     </div>
   );
 };
