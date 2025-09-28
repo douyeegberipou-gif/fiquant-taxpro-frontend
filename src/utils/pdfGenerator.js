@@ -625,7 +625,7 @@ export const generatePaymentProcessingReport = (paymentInput, paymentResult) => 
   addFiquantFooter(doc);
   
   // Save the PDF
-  const fileName = `Payment_Processing_Report_${paymentResult.payee_name || 'Payee'}_${paymentResult.month || 'Month'}_${paymentResult.year || new Date().getFullYear()}_${new Date().toISOString().split('T')[0]}.pdf`;
+  const fileName = `Payment_Advice_${paymentResult.payee_name || 'Payee'}_${paymentResult.month || 'Month'}_${paymentResult.year || new Date().getFullYear()}_${new Date().toISOString().split('T')[0]}.pdf`;
   doc.save(fileName);
 };
 
