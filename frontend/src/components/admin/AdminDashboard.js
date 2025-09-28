@@ -29,6 +29,7 @@ import { AdminAuditLogs } from './AdminAuditLogs';
 import { CarouselManager } from './CarouselManager';
 import MonetizationDashboard from './MonetizationDashboard';
 import IntegrationManager from './IntegrationManager';
+import MessagingDashboard from './MessagingDashboard';
 
 export const AdminDashboard = () => {
   const { user } = useAuth();
