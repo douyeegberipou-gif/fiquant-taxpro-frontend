@@ -1579,7 +1579,8 @@ function AppContent() {
 
           {/* Compliance Tab */}
           <TabsContent value="compliance">
-            <div className="grid lg:grid-cols-3 gap-6">
+            <FeatureGate feature="compliance_assistance">
+              <div className="grid lg:grid-cols-3 gap-6">
               {/* PAYE Compliance */}
               <Card className="bg-white border-emerald-100 shadow-lg">
                 <CardHeader>
