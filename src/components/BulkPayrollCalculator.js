@@ -1033,11 +1033,24 @@ If the problem persists, please contact Fiquant Consult support with this error 
       {showResults && totals.employeeCount > 0 && (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
           <button
-            onClick={() => generateBulkPayeReport(employees, totals)}
+            onClick={() => {
+              // Check if user has PDF export feature
+              if (!hasFeature || !hasFeature('pdf_export')) {
+                setUpgradeContext({ type: 'feature', feature: 'pdf_export' });
+                setShowUpgradePrompt(true);
+                return;
+              }
+              generateBulkPayeReport(employees, totals);
+            }}
             className="w-full inline-flex items-center justify-center px-6 py-3 bg-gray-900 text-white text-sm font-medium rounded-xl hover:bg-gray-800 transition-all duration-200 shadow-sm"
           >
             <Printer className="h-4 w-4 mr-2" />
             Print Bulk Report (PDF)
+            {hasFeature && !hasFeature('pdf_export') && (
+              <Badge variant="outline" className="ml-2 text-xs bg-gray-800 text-yellow-300 border-yellow-300">
+                PRO+
+              </Badge>
+            )}
           </button>
         </div>
       )}
