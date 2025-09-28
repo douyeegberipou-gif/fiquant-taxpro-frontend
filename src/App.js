@@ -1536,8 +1536,27 @@ function AppContent() {
 
           {/* Compliance Tab */}
           <TabsContent value="compliance">
-            <FeatureGate feature="compliance_assistance">
-              <div className="grid lg:grid-cols-3 gap-6">
+            <div className="grid lg:grid-cols-3 gap-6">
+              {!hasFeature('compliance_assistance') && (
+                <div className="col-span-full">
+                  <Card className="bg-yellow-50 border-yellow-200">
+                    <CardHeader>
+                      <CardTitle className="flex items-center text-yellow-800">
+                        <AlertTriangle className="h-5 w-5 mr-2" />
+                        Premium Feature Required
+                      </CardTitle>
+                      <CardDescription className="text-yellow-700">
+                        Compliance assistance requires Premium or Enterprise tier
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Button className="bg-yellow-600 hover:bg-yellow-700 text-white">
+                        Upgrade to Premium
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
               {/* PAYE Compliance */}
               <Card className="bg-white border-emerald-100 shadow-lg">
                 <CardHeader>
