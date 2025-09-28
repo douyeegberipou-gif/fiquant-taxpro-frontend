@@ -2269,13 +2269,26 @@ async def export_calculation_pdf(
                 detail=create_feature_gate_response("pdf_export", error_msg)
             )
         
+        tier, features = await get_user_effective_tier_and_features(current_user.id)
+        
+        # Apply per-print charge for Free tier users
+        charge_info = None
+        if tier == UserTier.FREE and features.pdf_export:
+            charge_info = await charge_pdf_print(current_user)
+        
         # PDF generation logic would go here
         # For now, return success message
-        return {
+        response = {
             "message": "PDF export functionality enabled",
-            "user_tier": (await get_user_effective_tier_and_features(current_user.id))[0].value,
+            "user_tier": tier.value,
             "pdf_url": "/api/generated-pdf-placeholder"
         }
+        
+        if charge_info:
+            response["charge_applied"] = charge_info
+            response["message"] = f"PDF generated. Charge applied: ₦{charge_info['charge_amount']}"
+        
+        return response
     
     except HTTPException:
         raise
