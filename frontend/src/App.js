@@ -48,6 +48,30 @@ function AppContent() {
   const { trialStatus, showTrialModal, setShowTrialModal, showExpiredModal, setShowExpiredModal } = useTrial();
   const { showInterstitial, setShowInterstitial, showRewardedAd, setShowRewardedAd, rewardType, canShowAds } = useAds();
   const { hasFeature, getUserTier } = useFeatureGate();
+  const { startTrial, requestUpgrade, requestAddon } = useUpgrade();
+
+  const handleUpgrade = async () => {
+    const result = await requestUpgrade('pro');
+    if (result.success) {
+      setShowUpgradePrompt(false);
+    }
+  };
+
+  const handleTrial = async () => {
+    const result = await startTrial('pro');
+    if (result.success) {
+      setShowUpgradePrompt(false);
+    } else {
+      alert(result.message);
+    }
+  };
+
+  const handleAddon = async () => {
+    const result = await requestAddon(upgradeContext.feature, 1);
+    if (result.success) {
+      setShowUpgradePrompt(false);
+    }
+  };
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [showPasswordReset, setShowPasswordReset] = useState(false);
   const [verificationStatus, setVerificationStatus] = useState(null); // 'verifying', 'success', 'error'
