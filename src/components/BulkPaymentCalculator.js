@@ -292,6 +292,29 @@ const BulkPaymentCalculator = ({ formatCurrency }) => {
     }
   };
 
+  const generateBulkPaymentReports = () => {
+    const calculatedPayments = payments.filter(p => p.calculated && p.result);
+    
+    if (calculatedPayments.length === 0) {
+      alert('No calculated payments found to print.');
+      return;
+    }
+
+    try {
+      // Generate individual reports for each payment
+      calculatedPayments.forEach((payment, index) => {
+        setTimeout(() => {
+          generatePaymentProcessingReport(payment, payment.result);
+        }, index * 500); // Small delay between reports to avoid browser issues
+      });
+      
+      alert(`Generated ${calculatedPayments.length} payment reports successfully!`);
+    } catch (error) {
+      console.error('Error generating bulk reports:', error);
+      alert('Error generating reports. Please try again.');
+    }
+  };
+
   const getTotalSummary = () => {
     const calculatedPayments = payments.filter(p => p.calculated && p.result);
     
