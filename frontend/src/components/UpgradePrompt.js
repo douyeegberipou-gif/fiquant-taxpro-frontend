@@ -250,20 +250,20 @@ const UpgradePrompt = ({
           </div>
 
           {/* Action Buttons */}
-          <div className="flex flex-col space-y-2">
-            <Button onClick={onTrial} className="bg-green-600 hover:bg-green-700">
+          <div className="flex flex-col space-y-3">
+            <Button onClick={onTrial} className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold py-3 shadow-lg">
               <Zap className="h-4 w-4 mr-2" />
               Start 7-Day Free Trial
             </Button>
-            <Button onClick={onUpgrade} className="bg-blue-600 hover:bg-blue-700">
+            <Button onClick={onUpgrade} className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3 shadow-lg">
               <Crown className="h-4 w-4 mr-2" />
               Upgrade to Pro (₦9,999/month)
             </Button>
-            <Button variant="outline" onClick={onUpgrade} className="border-green-300 text-green-700 hover:bg-green-50">
+            <Button variant="outline" onClick={onUpgrade} className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-3 shadow-lg border-0">
               <CreditCard className="h-4 w-4 mr-2" />
-              Save 10% - Pay Annually
+              Get 2 Months Free - Pay Annually
             </Button>
-            <Button variant="ghost" onClick={handleClose} className="text-gray-600">
+            <Button variant="ghost" onClick={handleClose} className="text-gray-600 hover:bg-gray-100">
               Maybe Later
             </Button>
           </div>
