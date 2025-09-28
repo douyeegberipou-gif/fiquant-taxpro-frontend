@@ -572,7 +572,7 @@ const VATCalculator = ({ formatCurrency, hasFeature }) => {
               <Button 
                 onClick={() => {
                   if (!hasFeature || !hasFeature('vat_calc')) {
-                    alert('VAT Calculator requires Pro+ tier. Please upgrade your account to access this feature.');
+                    setShowUpgradePrompt(true);
                     return;
                   }
                   calculateVAT();
