@@ -410,11 +410,22 @@ const PaymentProcessingCalculator = ({ formatCurrency, hasFeature }) => {
 
             <div className="flex space-x-3 pt-4">
               <Button 
-                onClick={calculatePayment} 
+                onClick={() => {
+                  if (!hasFeature || !hasFeature('payment_calc')) {
+                    setShowUpgradePrompt(true);
+                    return;
+                  }
+                  calculatePayment();
+                }}
                 disabled={paymentLoading || !paymentInput.payee_name || !paymentInput.contract_amount || !paymentInput.transaction_type}
                 className="flex-1 bg-purple-600 hover:bg-purple-700"
               >
                 {paymentLoading ? 'Processing...' : 'Calculate Payment'}
+                {hasFeature && !hasFeature('payment_calc') && (
+                  <Badge variant="outline" className="ml-2 text-xs bg-purple-50 text-purple-600 border-purple-200">
+                    PRO+
+                  </Badge>
+                )}
               </Button>
               <Button 
                 onClick={resetForm} 
