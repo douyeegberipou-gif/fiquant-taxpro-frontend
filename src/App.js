@@ -1459,27 +1459,24 @@ function AppContent() {
                     
                     {/* Print Report Button */}
                     <div className="pt-4 border-t">
-                      <FeatureGate 
-                        feature="pdf_export"
-                        fallback={
-                          <Button
-                            disabled
-                            className="w-full bg-gray-300 text-gray-500 cursor-not-allowed flex items-center justify-center space-x-2"
-                          >
-                            <Lock className="h-4 w-4" />
-                            <span>PDF Export (Pro+ Required)</span>
-                          </Button>
-                        }
-                        showUpgradePrompt={false}
+                      <Button
+                        onClick={() => {
+                          if (!hasFeature('pdf_export')) {
+                            alert('PDF export requires Pro+ tier. Please upgrade your account.');
+                            return;
+                          }
+                          generatePayeReport(taxInput, result);
+                        }}
+                        className="w-full bg-gray-900 hover:bg-gray-800 text-white flex items-center justify-center space-x-2"
                       >
-                        <Button
-                          onClick={() => generatePayeReport(taxInput, result)}
-                          className="w-full bg-gray-900 hover:bg-gray-800 text-white flex items-center justify-center space-x-2"
-                        >
-                          <Printer className="h-4 w-4" />
-                          <span>Print Report (PDF)</span>
-                        </Button>
-                      </FeatureGate>
+                        <Printer className="h-4 w-4" />
+                        <span>Print Report (PDF)</span>
+                        {!hasFeature('pdf_export') && (
+                          <Badge variant="outline" className="ml-2 text-xs bg-blue-50 text-blue-600 border-blue-200">
+                            PRO+
+                          </Badge>
+                        )}
+                      </Button>
                     </div>
                     
                     {/* Results Disclaimer */}
