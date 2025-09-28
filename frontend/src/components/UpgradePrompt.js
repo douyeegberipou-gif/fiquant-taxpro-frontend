@@ -154,7 +154,7 @@ const UpgradePrompt = ({
             <Button 
               variant="ghost" 
               size="sm" 
-              className="absolute right-2 top-2 h-6 w-6 p-0"
+              className="absolute right-2 top-2 h-8 w-8 p-0 text-white hover:bg-white/20"
               onClick={handleClose}
             >
               <X className="h-4 w-4" />
