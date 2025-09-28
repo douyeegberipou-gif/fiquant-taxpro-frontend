@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Building2, TrendingDown, TrendingUp, AlertTriangle, CheckCircle, Settings, CreditCard, Printer } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Input } from './ui/input';
