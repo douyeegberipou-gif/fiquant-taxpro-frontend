@@ -15,7 +15,10 @@ const PaymentProcessingCalculator = ({ formatCurrency }) => {
     contract_amount: '',
     transaction_type: '',
     is_resident: true,
-    month: ''
+    month: '',
+    year: '',
+    transaction_details: '',
+    payee_email: ''
   });
 
   const [paymentResult, setPaymentResult] = useState(null);
