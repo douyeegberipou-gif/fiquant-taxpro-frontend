@@ -4598,7 +4598,16 @@ async def get_subscription_events(
         
         events = await db.subscription_events.find(query).sort("created_at", -1).to_list(length=None)
         
-        return {"events": events}
+        # Convert datetime fields and remove ObjectId for JSON serialization
+        serialized_events = []
+        for event in events:
+            if "_id" in event:
+                del event["_id"]  # Remove MongoDB ObjectId
+            if "created_at" in event and isinstance(event["created_at"], datetime):
+                event["created_at"] = event["created_at"].isoformat()
+            serialized_events.append(event)
+        
+        return serialized_events
     except Exception as e:
         print(f"Error getting subscription events: {e}")
         raise HTTPException(status_code=500, detail="Failed to get subscription events")
