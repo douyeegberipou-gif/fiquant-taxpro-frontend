@@ -16,6 +16,8 @@ import {
   History as HistoryIcon
 } from 'lucide-react';
 import { generatePayeReport, generateCitReport } from '../utils/pdfGenerator';
+import UpgradePrompt from './UpgradePrompt';
+import { useUpgrade } from '../hooks/useUpgrade';
 
 const EnhancedHistory = ({ history, citHistory, formatCurrency }) => {
   const [expandedItems, setExpandedItems] = useState(new Set());
