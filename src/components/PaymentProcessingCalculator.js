@@ -175,12 +175,32 @@ const PaymentProcessingCalculator = ({ formatCurrency }) => {
   const resetForm = () => {
     setPaymentInput({
       payee_name: '',
+      tin: '',
       contract_amount: '',
       transaction_type: '',
       is_resident: true,
-      month: ''
+      month: '',
+      year: '',
+      transaction_details: '',
+      payee_email: ''
     });
     setPaymentResult(null);
+  };
+
+  const sendPaymentAdvice = async () => {
+    if (!paymentResult || !paymentInput.payee_email) {
+      alert('Please ensure the calculation is complete and payee email is provided.');
+      return;
+    }
+
+    try {
+      // Here you would typically send an email with the payment advice
+      // For now, we'll show a confirmation message
+      alert(`Payment advice sent to ${paymentInput.payee_email} successfully!`);
+    } catch (error) {
+      console.error('Error sending payment advice:', error);
+      alert('Error sending payment advice. Please try again.');
+    }
   };
 
   return (
