@@ -323,7 +323,7 @@ const PaymentProcessingCalculator = ({ formatCurrency }) => {
 
             {/* Transaction Type */}
             <div className="space-y-4">
-              <h3 className="font-semibold text-gray-900">Transaction Type</h3>
+              <h3 className="font-semibold text-gray-900">Transaction Type (For WHT deduction computation)</h3>
               <div className="space-y-2">
                 <Label htmlFor="transaction_type">Select Transaction/Contract Type *</Label>
                 <select
