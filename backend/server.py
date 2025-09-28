@@ -4256,6 +4256,286 @@ async def use_reward(
 # Include the router in the main app
 app.include_router(api_router)
 
+# ============================
+# INTEGRATION MANAGER API ENDPOINTS
+# ============================
+
+integration_router = APIRouter(prefix="/api/admin/integrations", tags=["integrations"])
+
+# Mock integration data structure
+MOCK_INTEGRATIONS = {
+    "payments": {
+        "stripe": {
+            "name": "Stripe",
+            "description": "Global payment processing platform",
+            "status": "disconnected",
+            "environment": "sandbox",
+            "config": {"publishable_key": "", "secret_key": "", "webhook_secret": "", "currency": "NGN"},
+            "endpoints": {"base_url": "https://api.stripe.com/v1", "webhook_url": "/api/webhooks/stripe"},
+            "features": ["Subscriptions", "Cards", "Bank Transfers", "Webhooks"],
+            "lastSync": None,
+            "requestCount": 0,
+            "errorCount": 0
+        },
+        "paystack": {
+            "name": "Paystack",
+            "description": "African payment gateway",
+            "status": "connected",
+            "environment": "sandbox",
+            "config": {"public_key": "pk_test_***", "secret_key": "sk_test_***", "webhook_secret": "***"},
+            "endpoints": {"base_url": "https://api.paystack.co", "webhook_url": "/api/webhooks/paystack"},
+            "features": ["Cards", "Bank Transfer", "USSD", "QR Code"],
+            "lastSync": "2024-01-15T10:30:00Z",
+            "requestCount": 1247,
+            "errorCount": 3
+        },
+    },
+    "communications": {
+        "sendgrid": {
+            "name": "SendGrid",
+            "description": "Email delivery service",
+            "status": "connected",
+            "environment": "production",
+            "config": {"api_key": "SG.***", "from_email": "noreply@fiquantconsult.com", "from_name": "Fiquant TaxPro"},
+            "endpoints": {"base_url": "https://api.sendgrid.com/v3", "webhook_url": "/api/webhooks/sendgrid"},
+            "features": ["Transactional Email", "Marketing Campaigns", "Analytics"],
+            "lastSync": "2024-01-15T09:45:00Z",
+            "requestCount": 892,
+            "errorCount": 1
+        },
+        "mailgun": {
+            "name": "Mailgun",
+            "description": "Email automation service (Backup)",
+            "status": "standby",
+            "environment": "production",
+            "config": {"api_key": "", "domain": "", "from_email": "noreply@fiquantconsult.com"},
+            "endpoints": {"base_url": "https://api.mailgun.net/v3", "webhook_url": "/api/webhooks/mailgun"},
+            "features": ["Email Sending", "Email Validation", "Analytics"],
+            "lastSync": None,
+            "requestCount": 0,
+            "errorCount": 0
+        },
+    },
+    "analytics": {
+        "google_analytics": {
+            "name": "Google Analytics",
+            "description": "Web analytics service",
+            "status": "connected",
+            "environment": "production",
+            "config": {"tracking_id": "GA4-***", "measurement_id": "G-***", "api_secret": "***"},
+            "endpoints": {"base_url": "https://www.google-analytics.com", "api_url": "https://analyticsreporting.googleapis.com/v4"},
+            "features": ["Page Views", "Events", "Conversions", "Real-time"],
+            "lastSync": "2024-01-15T11:00:00Z",
+            "requestCount": 2341,
+            "errorCount": 0
+        },
+    }
+}
+
+@integration_router.get("/")
+async def get_integrations(admin_user: dict = Depends(get_admin_middleware)):
+    """Get all integration configurations"""
+    try:
+        # Check if user is super admin
+        if admin_user.get("admin_role") != "super_admin":
+            raise HTTPException(status_code=403, detail="Only super admins can access integrations")
+        
+        return MOCK_INTEGRATIONS
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error getting integrations: {e}")
+        raise HTTPException(status_code=500, detail="Failed to get integrations")
+
+@integration_router.post("/{category}/{service}/toggle")
+async def toggle_integration(
+    category: str,
+    service: str,
+    request_data: dict,
+    admin_user: dict = Depends(get_admin_middleware)
+):
+    """Enable/disable an integration"""
+    try:
+        # Check if user is super admin
+        if admin_user.get("admin_role") != "super_admin":
+            raise HTTPException(status_code=403, detail="Only super admins can modify integrations")
+        
+        if category not in MOCK_INTEGRATIONS or service not in MOCK_INTEGRATIONS[category]:
+            raise HTTPException(status_code=404, detail="Integration not found")
+        
+        enabled = request_data.get("enabled", False)
+        MOCK_INTEGRATIONS[category][service]["status"] = "connected" if enabled else "disconnected"
+        MOCK_INTEGRATIONS[category][service]["lastSync"] = datetime.now(timezone.utc).isoformat() if enabled else None
+        
+        # Record activity log
+        log_entry = {
+            "id": str(uuid.uuid4()),
+            "service": service,
+            "category": category,
+            "event": "integration_enabled" if enabled else "integration_disabled",
+            "status": "success",
+            "message": f"{MOCK_INTEGRATIONS[category][service]['name']} {'enabled' if enabled else 'disabled'} by admin",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "admin_id": admin_user["id"]
+        }
+        
+        await db.integration_logs.insert_one(log_entry)
+        
+        return {"message": f"Integration {'enabled' if enabled else 'disabled'} successfully"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error toggling integration: {e}")
+        raise HTTPException(status_code=500, detail="Failed to toggle integration")
+
+@integration_router.post("/{category}/{service}/config")
+async def update_integration_config(
+    category: str,
+    service: str,
+    config_data: dict,
+    admin_user: dict = Depends(get_admin_middleware)
+):
+    """Update integration configuration"""
+    try:
+        # Check if user is super admin
+        if admin_user.get("admin_role") != "super_admin":
+            raise HTTPException(status_code=403, detail="Only super admins can modify integrations")
+        
+        if category not in MOCK_INTEGRATIONS or service not in MOCK_INTEGRATIONS[category]:
+            raise HTTPException(status_code=404, detail="Integration not found")
+        
+        # Update configuration (mock - in production this would be encrypted and stored securely)
+        MOCK_INTEGRATIONS[category][service]["config"].update(config_data)
+        
+        # Record activity log
+        log_entry = {
+            "id": str(uuid.uuid4()),
+            "service": service,
+            "category": category,
+            "event": "config_updated",
+            "status": "success",
+            "message": f"{MOCK_INTEGRATIONS[category][service]['name']} configuration updated by admin",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "admin_id": admin_user["id"]
+        }
+        
+        await db.integration_logs.insert_one(log_entry)
+        
+        return {"message": "Configuration updated successfully"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error updating config: {e}")
+        raise HTTPException(status_code=500, detail="Failed to update configuration")
+
+@integration_router.post("/{category}/{service}/test")
+async def test_integration_connection(
+    category: str,
+    service: str,
+    admin_user: dict = Depends(get_admin_middleware)
+):
+    """Test integration connection"""
+    try:
+        # Check if user is super admin
+        if admin_user.get("admin_role") != "super_admin":
+            raise HTTPException(status_code=403, detail="Only super admins can test integrations")
+        
+        if category not in MOCK_INTEGRATIONS or service not in MOCK_INTEGRATIONS[category]:
+            raise HTTPException(status_code=404, detail="Integration not found")
+        
+        # Mock connection test (in production this would make actual API calls)
+        MOCK_INTEGRATIONS[category][service]["lastSync"] = datetime.now(timezone.utc).isoformat()
+        MOCK_INTEGRATIONS[category][service]["status"] = "connected"
+        
+        # Record activity log
+        log_entry = {
+            "id": str(uuid.uuid4()),
+            "service": service,
+            "category": category,
+            "event": "connection_test",
+            "status": "success",
+            "message": f"{MOCK_INTEGRATIONS[category][service]['name']} connection test successful",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "admin_id": admin_user["id"]
+        }
+        
+        await db.integration_logs.insert_one(log_entry)
+        
+        return {"message": "Connection test successful", "status": "connected"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error testing connection: {e}")
+        # Record failure log
+        log_entry = {
+            "id": str(uuid.uuid4()),
+            "service": service,
+            "category": category,
+            "event": "connection_test",
+            "status": "error",
+            "message": f"{MOCK_INTEGRATIONS[category][service]['name']} connection test failed: {str(e)}",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "admin_id": admin_user["id"]
+        }
+        await db.integration_logs.insert_one(log_entry)
+        raise HTTPException(status_code=500, detail="Connection test failed")
+
+@integration_router.get("/logs")
+async def get_integration_logs(
+    limit: int = 50,
+    admin_user: dict = Depends(get_admin_middleware)
+):
+    """Get integration activity logs"""
+    try:
+        # Check if user is super admin
+        if admin_user.get("admin_role") != "super_admin":
+            raise HTTPException(status_code=403, detail="Only super admins can view integration logs")
+        
+        # Get logs from database
+        logs = await db.integration_logs.find().sort("timestamp", -1).limit(limit).to_list(length=None)
+        
+        # If no logs exist, return mock data
+        if not logs:
+            mock_logs = [
+                {
+                    "id": str(uuid.uuid4()),
+                    "service": "paystack",
+                    "category": "payments",
+                    "event": "webhook_received",
+                    "status": "success",
+                    "message": "Payment successful webhook processed",
+                    "timestamp": "2024-01-15T11:30:00Z"
+                },
+                {
+                    "id": str(uuid.uuid4()),
+                    "service": "sendgrid",
+                    "category": "communications",
+                    "event": "email_sent",
+                    "status": "success",
+                    "message": "Welcome email sent to user@example.com",
+                    "timestamp": "2024-01-15T11:15:00Z"
+                },
+                {
+                    "id": str(uuid.uuid4()),
+                    "service": "stripe",
+                    "category": "payments",
+                    "event": "api_call",
+                    "status": "error",
+                    "message": "Authentication failed - invalid API key",
+                    "timestamp": "2024-01-15T10:45:00Z"
+                }
+            ]
+            return mock_logs
+        
+        return logs
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error getting integration logs: {e}")
+        raise HTTPException(status_code=500, detail="Failed to get logs")
+
+app.include_router(integration_router)
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
