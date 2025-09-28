@@ -148,7 +148,7 @@ const UpgradePrompt = ({
 
   if (type === 'quota') {
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 overflow-y-auto">
         <Card className="max-w-md w-full bg-white">
           <CardHeader className="text-center relative">
             <Button 
