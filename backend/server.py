@@ -2795,6 +2795,10 @@ async def check_feature_access(user: UserProfile, feature: str) -> tuple[bool, s
 
 async def check_bulk_paye_limits(user: UserProfile, staff_count: int) -> tuple[bool, str]:
     """Check if user can perform bulk PAYE with given staff count"""
+    # Admin users have unlimited access
+    if user.admin_enabled and user.admin_role:
+        return True, ""
+    
     tier, features = await get_user_effective_tier_and_features(user.id)
     
     # Check if bulk PAYE is enabled for tier
