@@ -5,7 +5,7 @@ import { Label } from './ui/label.jsx';
 import { Button } from './ui/button.jsx';
 import { Separator } from './ui/separator.jsx';
 import { Alert, AlertDescription } from './ui/alert.jsx';
-import { CreditCard, Calculator, AlertTriangle, Printer, Building2 } from 'lucide-react';
+import { CreditCard, Calculator, AlertTriangle, Printer, Building2, Mail, Send } from 'lucide-react';
 import { generatePaymentProcessingReport } from '../utils/pdfGenerator';
 
 const PaymentProcessingCalculator = ({ formatCurrency }) => {
