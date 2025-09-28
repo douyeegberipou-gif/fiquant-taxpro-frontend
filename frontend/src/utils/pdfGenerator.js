@@ -484,10 +484,9 @@ export const generateVatReport = (vatInput, vatResult) => {
   yPos += 10;
   
   const vatSummaryData = [
-    ['Output VAT (VAT Collected)', formatCurrency(vatResult.output_vat)],
-    ['Input VAT (VAT Recoverable)', formatCurrency(vatResult.input_vat_recoverable)],
-    [vatResult.is_refund ? 'VAT Refund Due' : 'Net VAT Payable', formatCurrency(Math.abs(vatResult.net_vat_payable))],
-    ['Position', vatResult.is_refund ? 'Refund Position' : 'Payable Position']
+    ['Total Output VAT Due', formatCurrency(vatResult.output_vat)],
+    ['VAT Rate Applied', `${vatResult.vat_rate}%`],
+    ['Period', vatResult.month || 'Not specified']
   ];
   
   autoTable(doc, {
