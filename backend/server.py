@@ -224,6 +224,92 @@ class CarouselSettingsResponse(BaseModel):
     settings: CarouselSettings
 
 # ============================
+# SUBSCRIPTION & TIER MODELS  
+# ============================
+
+class UserTier(str, Enum):
+    FREE = "free"
+    PRO = "pro"
+    PREMIUM = "premium"
+    ENTERPRISE = "enterprise"
+
+class SubscriptionStatus(str, Enum):
+    ACTIVE = "active"
+    TRIAL = "trial"
+    EXPIRED = "expired"
+    CANCELLED = "cancelled"
+
+class UserSubscription(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str = Field(description="User ID")
+    tier: UserTier = Field(default=UserTier.FREE, description="Current subscription tier")
+    status: SubscriptionStatus = Field(default=SubscriptionStatus.ACTIVE, description="Subscription status")
+    
+    # Subscription details
+    monthly_price: int = Field(default=0, description="Monthly price in Naira")
+    annual_price: int = Field(default=0, description="Annual price in Naira")
+    is_annual: bool = Field(default=False, description="Annual billing")
+    
+    # Trial and expiry
+    trial_ends_at: Optional[datetime] = None
+    expires_at: Optional[datetime] = None
+    
+    # Usage tracking
+    bulk_paye_runs_this_month: int = Field(default=0, description="Number of bulk PAYE runs this month")
+    rewarded_ads_this_week: int = Field(default=0, description="Rewarded ads used this week")
+    
+    # Timestamps
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class TierFeatures(BaseModel):
+    # PAYE & Bulk PAYE
+    single_paye_unlimited: bool = Field(default=True, description="Unlimited single PAYE calculations")
+    bulk_paye_enabled: bool = Field(default=False, description="Bulk PAYE access")
+    bulk_paye_max_staff: int = Field(default=0, description="Max staff per bulk run")
+    bulk_paye_runs_per_month: Optional[int] = Field(None, description="Monthly bulk runs limit (None = unlimited)")
+    
+    # Other calculators
+    cit_enabled: bool = Field(default=False, description="CIT calculator access")
+    vat_enabled: bool = Field(default=False, description="VAT calculator access") 
+    cgt_enabled: bool = Field(default=False, description="CGT calculator access")
+    
+    # Export & History
+    pdf_export: bool = Field(default=False, description="PDF export/download")
+    calculation_history: bool = Field(default=False, description="Save calculation history")
+    
+    # Notifications & Support
+    email_notifications: bool = Field(default=False, description="Email notifications")
+    priority_support: bool = Field(default=False, description="Priority support")
+    
+    # Ads & Monetization
+    ads_enabled: bool = Field(default=True, description="Show ads")
+    rewarded_ads: bool = Field(default=False, description="Rewarded ads available")
+    
+    # Advanced features
+    advanced_analytics: bool = Field(default=False, description="Advanced analytics dashboard")
+    api_access: bool = Field(default=False, description="API export access")
+    compliance_assistance: bool = Field(default=False, description="Compliance assistance")
+
+class SubscriptionUpdate(BaseModel):
+    tier: Optional[UserTier] = None
+    is_annual: Optional[bool] = None
+    
+class SubscriptionResponse(BaseModel):
+    subscription: UserSubscription
+    features: TierFeatures
+    
+class TierPricing(BaseModel):
+    tier: UserTier
+    name: str
+    monthly_price: int
+    annual_price: int
+    annual_discount_months: int = Field(default=2, description="Free months on annual plan")
+    features: TierFeatures
+    popular: bool = Field(default=False)
+    recommended_for: str = Field(description="Who this tier is recommended for")
+
+# ============================
 # TAX CALCULATION HISTORY MODELS
 # ============================
 
