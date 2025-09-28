@@ -262,9 +262,13 @@ Your success matters to us - choose what works best for you! 💪`}
               <Zap className="h-4 w-4 mr-2" />
               Start 7-Day Free Trial
             </Button>
-            <Button onClick={onUpgrade} variant="outline" className="border-blue-300 text-blue-700 hover:bg-blue-50">
+            <Button onClick={onUpgrade} className="bg-blue-600 hover:bg-blue-700">
               <Crown className="h-4 w-4 mr-2" />
-              Upgrade Now
+              Upgrade to Pro (₦9,999/month)
+            </Button>
+            <Button variant="outline" onClick={onUpgrade} className="border-green-300 text-green-700 hover:bg-green-50">
+              <CreditCard className="h-4 w-4 mr-2" />
+              Save 10% - Pay Annually
             </Button>
             <Button variant="ghost" onClick={handleClose} className="text-gray-600">
               Maybe Later
