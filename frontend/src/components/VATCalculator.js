@@ -579,31 +579,12 @@ const VATCalculator = ({ formatCurrency }) => {
               {/* Summary Cards */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                  <p className="text-sm text-blue-600 font-medium">Output VAT</p>
-                  <p className="text-xl font-bold text-blue-800">
+                  <p className="text-sm text-blue-600 font-medium">Total Output VAT Due</p>
+                  <p className="text-2xl font-bold text-blue-800">
                     {formatCurrency(vatResult.output_vat)}
                   </p>
-                </div>
-                {vatResult.is_registered_business && (
-                  <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                    <p className="text-sm text-green-600 font-medium">Input VAT Recoverable</p>
-                    <p className="text-xl font-bold text-green-800">
-                      {formatCurrency(vatResult.input_vat_recoverable)}
-                    </p>
-                  </div>
-                )}
-                <div className={`p-4 rounded-lg border col-span-2 ${
-                  vatResult.is_refund ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'
-                }`}>
-                  <p className={`text-sm font-medium ${
-                    vatResult.is_refund ? 'text-green-600' : 'text-red-600'
-                  }`}>
-                    {vatResult.is_refund ? 'VAT Refund Due' : 'Net VAT Payable'}
-                  </p>
-                  <p className={`text-2xl font-bold ${
-                    vatResult.is_refund ? 'text-green-800' : 'text-red-800'
-                  }`}>
-                    {formatCurrency(Math.abs(vatResult.net_vat_payable))}
+                  <p className="text-xs text-blue-600 mt-1">
+                    VAT to be charged on standard-rated sales
                   </p>
                 </div>
               </div>
