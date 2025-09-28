@@ -1,0 +1,275 @@
+import React, { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Button } from './ui/button';
+import { Badge } from './ui/badge';
+import { 
+  Crown, 
+  Zap, 
+  Users, 
+  FileText, 
+  BarChart3, 
+  Shield, 
+  CreditCard,
+  Clock,
+  CheckCircle,
+  X
+} from 'lucide-react';
+
+const UpgradePrompt = ({ 
+  type = 'feature', // 'feature' or 'quota'
+  feature, 
+  currentTier = 'free',
+  onUpgrade,
+  onTrial,
+  onAddOns,
+  onClose
+}) => {
+  const [isVisible, setIsVisible] = useState(true);
+
+  if (!isVisible) return null;
+
+  const handleClose = () => {
+    setIsVisible(false);
+    onClose?.();
+  };
+
+  const getFeatureConfig = () => {
+    const configs = {
+      cit_calc: {
+        icon: <Crown className="h-6 w-6 text-blue-600" />,
+        title: "Unlock Professional CIT Calculator",
+        benefit: "Calculate corporate income tax with advanced features including loss relief, tax credits, and automated compliance checks",
+        requiredTier: "Pro",
+        tierColor: "blue"
+      },
+      vat_calc: {
+        icon: <FileText className="h-6 w-6 text-purple-600" />,
+        title: "Unlock Advanced VAT Calculator", 
+        benefit: "Process multiple transactions, track VAT categories, and generate compliant VAT returns with ease",
+        requiredTier: "Pro",
+        tierColor: "purple"
+      },
+      cgt_calc: {
+        icon: <BarChart3 className="h-6 w-6 text-green-600" />,
+        title: "Unlock Capital Gains Tax Calculator",
+        benefit: "Calculate CGT on investments, property sales, and business disposals with NTA-compliant rates",
+        requiredTier: "Pro", 
+        tierColor: "green"
+      },
+      pdf_export: {
+        icon: <FileText className="h-6 w-6 text-gray-600" />,
+        title: "Unlock Unlimited PDF Reports",
+        benefit: "Generate professional tax reports, calculations, and compliance documents instantly",
+        requiredTier: "Pro",
+        tierColor: "gray"
+      },
+      calculation_history: {
+        icon: <Clock className="h-6 w-6 text-indigo-600" />,
+        title: "Unlock Tax History & Records",
+        benefit: "Access your complete calculation history, track tax trends, and maintain audit-ready records",
+        requiredTier: "Pro",
+        tierColor: "indigo"
+      },
+      bulk_paye: {
+        icon: <Users className="h-6 w-6 text-orange-600" />,
+        title: "Unlock Unlimited Bulk Processing",
+        benefit: "Process unlimited employee payrolls with higher staff caps and automated bulk calculations",
+        requiredTier: "Pro",
+        tierColor: "orange"
+      },
+      advanced_analytics: {
+        icon: <BarChart3 className="h-6 w-6 text-pink-600" />,
+        title: "Unlock Advanced Tax Analytics",
+        benefit: "Get detailed insights, tax trends, forecasting, and comprehensive reporting dashboards",
+        requiredTier: "Premium",
+        tierColor: "pink"
+      },
+      compliance_assistance: {
+        icon: <Shield className="h-6 w-6 text-red-600" />,
+        title: "Unlock Compliance Support",
+        benefit: "Get expert compliance reviews, audit preparation, and direct access to tax professionals",
+        requiredTier: "Premium", 
+        tierColor: "red"
+      }
+    };
+
+    return configs[feature] || configs.cit_calc;
+  };
+
+  const getQuotaConfig = () => {
+    const configs = {
+      bulk_employees: {
+        icon: <Users className="h-6 w-6 text-blue-600" />,
+        title: "Need More Employee Capacity?",
+        benefit: "Add extra employees to your bulk processing without upgrading your entire plan",
+        addonPrice: "₦100 per employee per run",
+        addonDescription: "Pay only for what you use"
+      },
+      pdf_prints: {
+        icon: <FileText className="h-6 w-6 text-purple-600" />,
+        title: "Need PDF Reports?",
+        benefit: "Generate professional PDF reports for your calculations and compliance needs", 
+        addonPrice: "₦200 per PDF",
+        addonDescription: "One-time charge per report"
+      },
+      compliance_review: {
+        icon: <Shield className="h-6 w-6 text-green-600" />,
+        title: "Need Expert Review?", 
+        benefit: "Get professional compliance review and audit preparation assistance",
+        addonPrice: "₦25,000 per review",
+        addonDescription: "Professional tax expert review"
+      }
+    };
+
+    return configs[feature] || configs.bulk_employees;
+  };
+
+  const config = type === 'quota' ? getQuotaConfig() : getFeatureConfig();
+
+  const getTierBenefits = (tier) => {
+    const benefits = {
+      pro: [
+        "Unlimited bulk PAYE runs",
+        "All premium calculators (CIT, VAT, CGT)", 
+        "Unlimited PDF exports",
+        "Complete calculation history",
+        "Email support"
+      ],
+      premium: [
+        "Everything in Pro",
+        "Advanced tax analytics", 
+        "Compliance assistance",
+        "Priority support",
+        "API access"
+      ]
+    };
+    return benefits[tier] || benefits.pro;
+  };
+
+  if (type === 'quota') {
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <Card className="max-w-md w-full bg-white">
+          <CardHeader className="text-center relative">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="absolute right-2 top-2 h-6 w-6 p-0"
+              onClick={handleClose}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+            <div className="flex justify-center mb-2">
+              {config.icon}
+            </div>
+            <CardTitle className="text-lg">{config.title}</CardTitle>
+            <CardDescription>{config.benefit}</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
+              <div className="text-center">
+                <div className="font-bold text-blue-900">{config.addonPrice}</div>
+                <div className="text-sm text-blue-700">{config.addonDescription}</div>
+              </div>
+            </div>
+            
+            <div className="flex flex-col space-y-2">
+              <Button onClick={onAddOns} className="bg-blue-600 hover:bg-blue-700">
+                <CreditCard className="h-4 w-4 mr-2" />
+                Buy Add-on Now
+              </Button>
+              <Button variant="outline" onClick={handleClose}>
+                Maybe Later
+              </Button>
+            </div>
+            
+            <div className="text-center text-xs text-gray-500">
+              💡 <strong>Tip:</strong> Upgrade to {config.requiredTier || 'Pro'}+ for unlimited access to all features
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <Card className="max-w-lg w-full bg-white">
+        <CardHeader className="text-center relative">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="absolute right-2 top-2 h-6 w-6 p-0"
+            onClick={handleClose}
+          >
+            <X className="h-4 w-4" />
+          </Button>
+          <div className="flex justify-center mb-2">
+            {config.icon}
+          </div>
+          <CardTitle className="text-xl">{config.title}</CardTitle>
+          <CardDescription className="text-base">{config.benefit}</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Tier Benefits */}
+          <div className={`bg-${config.tierColor}-50 p-4 rounded-lg border border-${config.tierColor}-200`}>
+            <div className="flex items-center justify-between mb-2">
+              <Badge className={`bg-${config.tierColor}-100 text-${config.tierColor}-800`}>
+                {config.requiredTier}+ Required
+              </Badge>
+              <div className="text-right">
+                <div className="font-bold text-gray-900">₦9,999/month</div>
+                <div className="text-sm text-gray-600">or ₦109,990/year</div>
+              </div>
+            </div>
+            <div className="space-y-1">
+              {getTierBenefits(config.requiredTier.toLowerCase()).map((benefit, idx) => (
+                <div key={idx} className="flex items-center text-sm">
+                  <CheckCircle className="h-3 w-3 text-green-600 mr-2 flex-shrink-0" />
+                  <span>{benefit}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Trial Highlight */}
+          <div className="bg-gradient-to-r from-green-50 to-blue-50 p-3 rounded-lg border border-green-200">
+            <div className="flex items-center justify-center space-x-2">
+              <Zap className="h-4 w-4 text-green-600" />
+              <span className="font-medium text-green-800">7-Day Free Trial Available</span>
+            </div>
+            <div className="text-center text-sm text-green-700 mt-1">
+              Try all {config.requiredTier} features risk-free. Cancel anytime.
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex flex-col space-y-2">
+            <Button onClick={onTrial} className="bg-green-600 hover:bg-green-700">
+              <Zap className="h-4 w-4 mr-2" />
+              Start 7-Day Free Trial
+            </Button>
+            <Button onClick={onUpgrade} variant="outline" className="border-blue-300 text-blue-700 hover:bg-blue-50">
+              <Crown className="h-4 w-4 mr-2" />
+              Upgrade Now
+            </Button>
+            <Button variant="ghost" onClick={handleClose} className="text-gray-600">
+              Maybe Later
+            </Button>
+          </div>
+
+          {/* Trust Elements */}
+          <div className="text-center text-xs text-gray-500 border-t pt-3">
+            <div className="flex items-center justify-center space-x-4">
+              <span>✅ Instant Access</span>
+              <span>🔒 Secure Payment</span>
+              <span>📞 Nigerian Support</span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default UpgradePrompt;
