@@ -4233,6 +4233,253 @@ async def reset_owner_password():
         print(f"Error resetting owner password: {e}")
         raise HTTPException(status_code=500, detail="Failed to reset owner password")
 
+# ============================
+# ADMIN MONETIZATION ENDPOINTS
+# ============================
+
+@admin_router.get("/monetization/analytics/dashboard")
+async def get_monetization_dashboard(
+    days: int = 30,
+    admin_user: dict = Depends(get_admin_middleware)
+):
+    """Get comprehensive monetization analytics dashboard"""
+    try:
+        end_date = datetime.now(timezone.utc)
+        start_date = end_date - timedelta(days=days)
+        
+        # Get user statistics
+        total_users = await db.users.count_documents({})
+        
+        # Get active users (last 30 days)
+        month_ago = datetime.now(timezone.utc) - timedelta(days=30)
+        mau = await db.daily_activities.distinct("user_id", {
+            "created_at": {"$gte": month_ago}
+        })
+        
+        # Get daily active users (last 24 hours)
+        day_ago = datetime.now(timezone.utc) - timedelta(days=1)
+        dau = await db.daily_activities.distinct("user_id", {
+            "created_at": {"$gte": day_ago}
+        })
+        
+        # Get conversion funnel data
+        funnel_data = await db.conversion_funnel.find({
+            "date": {"$gte": start_date.strftime("%Y-%m-%d")}
+        }).to_list(length=None)
+        
+        # Get subscription statistics
+        subscription_stats = {}
+        for tier in UserTier:
+            count = await db.subscriptions.count_documents({"tier": tier.value})
+            subscription_stats[tier.value] = count
+        
+        # Get ad revenue data
+        ad_revenue_data = await db.ad_revenue.find({
+            "date": {"$gte": start_date.strftime("%Y-%m-%d")}
+        }).sort("date", -1).to_list(length=None)
+        
+        return {
+            "total_users": total_users,
+            "mau": len(mau) if mau else 0,
+            "dau": len(dau) if dau else 0,
+            "subscription_stats": subscription_stats,
+            "funnel_data": funnel_data,
+            "ad_revenue_data": ad_revenue_data
+        }
+    except Exception as e:
+        print(f"Error getting monetization dashboard: {e}")
+        raise HTTPException(status_code=500, detail="Failed to get analytics data")
+
+@admin_router.get("/monetization/tiers")
+async def get_tier_configurations(admin_user: dict = Depends(get_admin_middleware)):
+    """Get all tier configurations"""
+    try:
+        tier_configs = await db.tier_configurations.find({}).to_list(length=None)
+        return tier_configs
+    except Exception as e:
+        print(f"Error getting tier configurations: {e}")
+        raise HTTPException(status_code=500, detail="Failed to get tier configurations")
+
+@admin_router.put("/monetization/tiers/{tier}")
+async def update_tier_configuration(
+    tier: UserTier,
+    config: TierConfiguration,
+    admin_user: dict = Depends(get_admin_middleware)
+):
+    """Update tier configuration"""
+    try:
+        config.tier = tier
+        config.updated_at = datetime.now(timezone.utc)
+        
+        await db.tier_configurations.update_one(
+            {"tier": tier.value},
+            {"$set": config.dict()},
+            upsert=True
+        )
+        
+        return {"message": "Tier configuration updated successfully"}
+    except Exception as e:
+        print(f"Error updating tier configuration: {e}")
+        raise HTTPException(status_code=500, detail="Failed to update tier configuration")
+
+@admin_router.get("/monetization/users")
+async def get_user_subscriptions(
+    page: int = 1,
+    limit: int = 50,
+    tier_filter: Optional[str] = None,
+    admin_user: dict = Depends(get_admin_middleware)
+):
+    """Get users with subscription information"""
+    try:
+        skip = (page - 1) * limit
+        
+        # Build query
+        user_query = {}
+        if tier_filter:
+            user_query["account_tier"] = tier_filter
+        
+        # Get users
+        users = await db.users.find(user_query).skip(skip).limit(limit).to_list(length=None)
+        
+        # Get subscription data for each user
+        user_subscriptions = []
+        for user in users:
+            subscription = await db.subscriptions.find_one({"user_id": user["id"]})
+            trial = await db.user_trials.find_one({"user_id": user["id"]})
+            
+            user_subscriptions.append({
+                "id": user["id"],
+                "full_name": user["full_name"],
+                "email": user["email"],
+                "account_tier": user.get("account_tier", "free"),
+                "subscription": subscription,
+                "trial": trial,
+                "created_at": user.get("created_at")
+            })
+        
+        total_count = await db.users.count_documents(user_query)
+        
+        return {
+            "users": user_subscriptions,
+            "total": total_count,
+            "page": page,
+            "limit": limit,
+            "total_pages": (total_count + limit - 1) // limit
+        }
+    except Exception as e:
+        print(f"Error getting user subscriptions: {e}")
+        raise HTTPException(status_code=500, detail="Failed to get user subscriptions")
+
+@admin_router.post("/monetization/manual-change")
+async def apply_manual_subscription_change(
+    change: ManualSubscriptionChange,
+    admin_user: dict = Depends(get_admin_middleware)
+):
+    """Apply manual subscription change"""
+    try:
+        user = await db.users.find_one({"id": change.user_id})
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        # Get current subscription
+        current_subscription = await db.subscriptions.find_one({"user_id": change.user_id})
+        old_tier = UserTier(user.get("account_tier", "free"))
+        
+        # Create subscription event
+        event = SubscriptionEvent(
+            user_id=change.user_id,
+            event_type=change.action,
+            from_tier=old_tier,
+            to_tier=change.tier,
+            reason=change.reason,
+            admin_initiated=True,
+            admin_user_id=admin_user["id"]
+        )
+        
+        # Apply the change
+        if change.action == "upgrade":
+            # Update user tier
+            await db.users.update_one(
+                {"id": change.user_id},
+                {"$set": {"account_tier": change.tier.value}}
+            )
+            
+            # Create or update subscription
+            subscription_data = {
+                "user_id": change.user_id,
+                "tier": change.tier,
+                "status": SubscriptionStatus.ACTIVE,
+                "is_annual": False,
+                "created_at": datetime.now(timezone.utc)
+            }
+            
+            if change.duration_months:
+                subscription_data["ends_at"] = datetime.now(timezone.utc) + timedelta(days=change.duration_months * 30)
+            
+            await db.subscriptions.update_one(
+                {"user_id": change.user_id},
+                {"$set": subscription_data},
+                upsert=True
+            )
+            
+        elif change.action == "trial":
+            # Start trial
+            trial_data = {
+                "user_id": change.user_id,
+                "trial_type": "admin_granted",
+                "tier": change.tier,
+                "status": "TRIAL_ACTIVE",
+                "started_at": datetime.now(timezone.utc),
+                "expires_at": datetime.now(timezone.utc) + timedelta(days=change.duration_months * 30 if change.duration_months else 7)
+            }
+            
+            await db.user_trials.update_one(
+                {"user_id": change.user_id},
+                {"$set": trial_data},
+                upsert=True
+            )
+            
+            # Update subscription to trial
+            await db.subscriptions.update_one(
+                {"user_id": change.user_id},
+                {"$set": {
+                    "tier": change.tier,
+                    "is_trial_active": True,
+                    "trial_ends_at": trial_data["expires_at"]
+                }},
+                upsert=True
+            )
+        
+        # Log the event
+        await db.subscription_events.insert_one(event.dict())
+        
+        return {"message": f"Successfully applied {change.action} for user"}
+        
+    except Exception as e:
+        print(f"Error applying manual subscription change: {e}")
+        raise HTTPException(status_code=500, detail="Failed to apply subscription change")
+
+@admin_router.get("/monetization/events")
+async def get_subscription_events(
+    days: int = 30,
+    event_type: Optional[str] = None,
+    admin_user: dict = Depends(get_admin_middleware)
+):
+    """Get subscription events log"""
+    try:
+        start_date = datetime.now(timezone.utc) - timedelta(days=days)
+        
+        query = {"created_at": {"$gte": start_date}}
+        if event_type:
+            query["event_type"] = event_type
+        
+        events = await db.subscription_events.find(query).sort("created_at", -1).to_list(length=None)
+        
+        return {"events": events}
+    except Exception as e:
+        print(f"Error getting subscription events: {e}")
+        raise HTTPException(status_code=500, detail="Failed to get subscription events")
+
 # Include admin router
 app.include_router(admin_router)
 
