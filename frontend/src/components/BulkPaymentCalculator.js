@@ -715,12 +715,25 @@ const BulkPaymentCalculator = ({ formatCurrency, hasFeature }) => {
                           ✓ Calculated
                         </Badge>
                         <Button
-                          onClick={() => generatePaymentProcessingReport(payment, payment.result)}
+                          onClick={() => {
+                            // Check if user has PDF export feature  
+                            if (!hasFeature || !hasFeature('pdf_export')) {
+                              setUpgradeContext({ type: 'feature', feature: 'pdf_export' });
+                              setShowUpgradePrompt(true);
+                              return;
+                            }
+                            generatePaymentProcessingReport(payment, payment.result);
+                          }}
                           size="sm"
                           className="bg-gray-900 hover:bg-gray-800 text-white text-xs px-3 py-1"
                         >
                           <Printer className="h-3 w-3 mr-1" />
                           Print Report
+                          {hasFeature && !hasFeature('pdf_export') && (
+                            <Badge variant="outline" className="ml-1 text-[10px] px-1 py-0 bg-gray-50 text-gray-600 border-gray-200">
+                              PRO+
+                            </Badge>
+                          )}
                         </Button>
                       </div>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
