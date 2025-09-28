@@ -1738,6 +1738,13 @@ function AppContent() {
             </TabsContent>
           )}
 
+          {/* Add-ons Tab */}
+          {isAuthenticated() && (
+            <TabsContent value="addons" className="space-y-6">
+              <AddOnManager />
+            </TabsContent>
+          )}
+
           {/* VAT Calculator Tab */}
           <TabsContent value="vat">
             <FeatureGate feature="vat_calc">
