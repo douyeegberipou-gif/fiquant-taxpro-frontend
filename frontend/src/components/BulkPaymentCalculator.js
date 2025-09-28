@@ -582,7 +582,7 @@ const BulkPaymentCalculator = ({ formatCurrency }) => {
             {summary.count > 0 && (
               <>
                 <Button
-                  onClick={() => {/* Add bulk PDF generation */}}
+                  onClick={() => generateBulkPaymentReports()}
                   variant="outline"
                   className="border-gray-300 text-gray-700 hover:bg-gray-50"
                 >
