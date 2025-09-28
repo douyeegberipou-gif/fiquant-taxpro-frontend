@@ -13,8 +13,35 @@ import { useUpgrade } from '../hooks/useUpgrade';
 
 const BulkPayrollCalculator = ({ 
   formatCurrency, 
-  calculatePayeTax
+  calculatePayeTax,
+  hasFeature
 }) => {
+  const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
+  const [upgradeContext, setUpgradeContext] = useState({ type: 'feature', feature: 'bulk_paye' });
+  const { startTrial, requestUpgrade, requestAddon } = useUpgrade();
+
+  const handleUpgrade = async () => {
+    const result = await requestUpgrade('pro');
+    if (result.success) {
+      setShowUpgradePrompt(false);
+    }
+  };
+
+  const handleTrial = async () => {
+    const result = await startTrial('pro');
+    if (result.success) {
+      setShowUpgradePrompt(false);
+    } else {
+      alert(result.message);
+    }
+  };
+
+  const handleAddon = async () => {
+    const result = await requestAddon(upgradeContext.feature, 1);
+    if (result.success) {
+      setShowUpgradePrompt(false);
+    }
+  };
   const [employees, setEmployees] = useState([
     {
       id: 1,
