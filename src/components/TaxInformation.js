@@ -518,6 +518,9 @@ const TaxInformation = () => {
                   </div>
                 </CardContent>
               </Card>
+
+              {/* Native Ad */}
+              <NativeAd />
             </div>
 
           </div>
