@@ -289,6 +289,13 @@ export const AdminDashboard = () => {
               <Zap className="h-4 w-4 mr-2" />
               Integrations
             </TabsTrigger>
+            <TabsTrigger 
+              value="messaging" 
+              className="data-[state=active]:bg-purple-50 data-[state=active]:text-purple-700"
+            >
+              <Send className="h-4 w-4 mr-2" />
+              Messaging
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
