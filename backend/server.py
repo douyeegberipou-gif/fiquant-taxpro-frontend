@@ -22,6 +22,22 @@ from email.mime.multipart import MIMEMultipart
 import random
 
 # ============================
+# ENUMS
+# ============================
+
+class UserTier(str, Enum):
+    FREE = "free"
+    PRO = "pro"
+    PREMIUM = "premium"
+    ENTERPRISE = "enterprise"
+
+class SubscriptionStatus(str, Enum):
+    ACTIVE = "active"
+    TRIAL = "trial"
+    EXPIRED = "expired"
+    CANCELLED = "cancelled"
+
+# ============================
 # USER AUTHENTICATION & PROFILE MODELS
 # ============================
 
