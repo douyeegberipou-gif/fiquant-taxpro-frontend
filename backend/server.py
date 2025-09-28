@@ -3717,6 +3717,35 @@ async def record_calculation_for_ads(
         "calculations_until_next": 10 - tracking.calculations_since_interstitial if not show_interstitial else 10
     }
 
+@api_router.post("/ads/impression")
+async def record_ad_impression(
+    ad_type: str,
+    ad_placement: str,
+    clicked: bool = False,
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Record ad impression for analytics"""
+    try:
+        # Track ad impression for analytics
+        await track_ad_impression(ad_type)
+        
+        # Record detailed impression data
+        impression_data = {
+            "id": str(uuid.uuid4()),
+            "user_id": current_user.id,
+            "ad_type": ad_type,
+            "ad_placement": ad_placement,
+            "clicked": clicked,
+            "created_at": datetime.now(timezone.utc)
+        }
+        
+        await db.ad_impressions.insert_one(impression_data)
+        
+        return {"recorded": True}
+    except Exception as e:
+        print(f"Error recording ad impression: {e}")
+        return {"recorded": False}
+
 @api_router.post("/ads/rewarded/request")
 async def request_rewarded_ad(
     reward_request: RewardedAdRequest,
