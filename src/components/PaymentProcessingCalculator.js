@@ -248,6 +248,18 @@ const PaymentProcessingCalculator = ({ formatCurrency }) => {
                     <option value="December">December</option>
                   </select>
                 </div>
+                <div className="space-y-2">
+                  <Label htmlFor="year">Year *</Label>
+                  <Input
+                    id="year"
+                    type="number"
+                    placeholder="2024"
+                    min="2020"
+                    max="2030"
+                    value={paymentInput.year}
+                    onChange={(e) => handleInputChange('year', e.target.value)}
+                  />
+                </div>
               </div>
               
               <div className="space-y-2">
