@@ -1687,6 +1687,11 @@ function AppContent() {
           </div>
         </div>
       )}
+
+      {/* Bottom Banner Ad */}
+      {canShowAds() && (
+        <BottomBanner className="mt-8" />
+      )}
     </div>
   );
 }
