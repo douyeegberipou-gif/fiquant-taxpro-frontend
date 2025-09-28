@@ -467,9 +467,24 @@ const Home = ({ onNavigateToTab }) => {
           <div className="text-center mb-16">
             <h3 className="text-3xl font-bold text-white mb-4">Choose Your Plan</h3>
             <p className="text-xl text-gray-200">Start free, upgrade when you need more features</p>
+            
+            {/* Monthly/Annual Toggle */}
+            <div className="flex items-center justify-center mt-8">
+              <span className={`text-lg ${!activeTab === 'annual' ? 'text-white font-semibold' : 'text-gray-300'}`}>Monthly</span>
+              <button
+                onClick={() => setActiveTab(activeTab === 'annual' ? 'monthly' : 'annual')}
+                className="mx-4 relative inline-flex h-6 w-11 items-center rounded-full bg-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
+              >
+                <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${activeTab === 'annual' ? 'translate-x-6' : 'translate-x-1'}`} />
+              </button>
+              <span className={`text-lg ${activeTab === 'annual' ? 'text-white font-semibold' : 'text-gray-300'}`}>
+                Annual
+                <span className="ml-2 px-2 py-1 text-xs bg-green-500 text-white rounded-full">2 months free</span>
+              </span>
+            </div>
           </div>
           
-          <div className="grid lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
             {/* Free Plan */}
             <div className="relative rounded-2xl p-8 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
               style={{
