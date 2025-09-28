@@ -8,6 +8,7 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Alert, AlertDescription } from './ui/alert';
 import { Separator } from './ui/separator';
+import { generatePaymentProcessingReport } from '../utils/pdfGenerator';
 
 const BulkPaymentCalculator = ({ formatCurrency }) => {
   const [payments, setPayments] = useState([
