@@ -456,6 +456,18 @@ frontend:
 
   - task: "Currency Symbol Validation COMPLETED: Comprehensive testing of currency symbol fixes and UI improvements completed successfully. ✅ ALL CURRENCY PLACEHOLDERS: PAYE (9/9 fields), CIT (4/4 fields), Bulk Payroll (3/3 field types) all display ₦ symbols correctly. ✅ NAVIGATION TABS: Slanted tab design working perfectly with proper hover/active states. ✅ LOSS RELIEF SECTION: Found in CIT calculator with proper NTA compliance text: 'Nigerian Tax Law: Companies can carry forward tax losses indefinitely to offset future taxable profits. Losses cannot be carried back to previous years.' ✅ CARRY FORWARD LOSSES FIELD: Has ₦5,000,000 placeholder with proper currency symbol. ✅ FORM FUNCTIONALITY: All input fields accept values properly. ✅ MOBILE RESPONSIVENESS: Tabs functional on mobile devices. ⚠️ MINOR ISSUE: Tax calculation API may have backend connectivity issues (500 errors on CIT history endpoint), but core UI functionality is working perfectly. The currency symbol fixes are 100% successful and ready for production."
 
+  - task: "Frontend Feature Gating Integration"
+    implemented: false
+    working: "NA"
+    file: "App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Starting frontend feature gating integration. Backend feature gating system is complete, FeatureGateContext and FeatureGate components exist. Need to integrate these into navigation tabs, calculator access, PDF export buttons, history tab, and compliance features based on user subscription tier."
+
   - task: "User Registration Form"
     implemented: true
     working: true
