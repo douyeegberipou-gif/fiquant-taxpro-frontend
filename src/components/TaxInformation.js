@@ -224,6 +224,9 @@ const TaxInformation = () => {
               </CardContent>
             </Card>
 
+            {/* Native Ad */}
+            <NativeAd />
+
             <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
               <div className="flex items-start space-x-3">
                 <AlertTriangle className="h-5 w-5 text-amber-600 mt-0.5" />
