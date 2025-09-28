@@ -586,6 +586,7 @@ const Home = ({ onNavigateToTab }) => {
               </ul>
               
               <Button 
+                onClick={() => isAuthenticated() ? setShowTrialModal(true) : setAuthModalOpen(true)}
                 className="w-full py-3 text-white font-semibold rounded-lg hover:scale-105 transition-transform bg-blue-600 hover:bg-blue-700"
               >
                 Start 7-Day Trial
