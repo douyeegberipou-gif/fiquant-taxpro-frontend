@@ -1526,13 +1526,12 @@ function AppContent() {
 
           {/* History Tab */}
           <TabsContent value="history">
-            <FeatureGate feature="calculation_history">
-              <EnhancedHistory 
-                history={history} 
-                citHistory={citHistory} 
-                formatCurrency={formatCurrency} 
-              />
-            </FeatureGate>
+            <EnhancedHistory 
+              history={history} 
+              citHistory={citHistory} 
+              formatCurrency={formatCurrency} 
+              hasFeature={hasFeature}
+            />
           </TabsContent>
 
           {/* Compliance Tab */}
