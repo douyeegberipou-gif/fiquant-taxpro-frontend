@@ -15,7 +15,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { TrialProvider, useTrial } from './contexts/TrialContext';
 import { AdProvider, useAds } from './contexts/AdContext';
 import { FeatureGateProvider, useFeatureGate } from './contexts/FeatureGateContext';
-import { FeatureGate } from './components/FeatureGate';
+import { FeatureGate, BulkLimitGate } from './components/FeatureGate';
 import { AuthModal } from './components/AuthModal';
 import { TrialModal } from './components/TrialModal';
 import { TrialExpiredModal } from './components/TrialExpiredModal';
