@@ -387,6 +387,84 @@ class DemoCalculation(BaseModel):
     performed_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 # ============================
+# ADS & MONETIZATION MODELS
+# ============================
+
+class AdImpression(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str = Field(description="User who viewed the ad")
+    ad_type: AdType = Field(description="Type of ad")
+    ad_placement: AdPlacement = Field(description="Where the ad was shown")
+    
+    # Ad details
+    ad_network: str = Field(default="mock", description="Ad network (AdMob, AdSense, etc)")
+    ad_unit_id: str = Field(description="Ad unit identifier")
+    revenue: Optional[float] = Field(None, description="Revenue from this impression")
+    
+    # Interaction
+    clicked: bool = Field(default=False, description="Whether ad was clicked")
+    watched_to_completion: Optional[bool] = Field(None, description="For video ads")
+    
+    # Metadata
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    user_agent: Optional[str] = None
+    ip_address: Optional[str] = None
+
+class AdFrequencyTracking(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str = Field(description="User ID")
+    
+    # Weekly tracking (resets every Monday)
+    week_start: datetime = Field(description="Start of current tracking week")
+    rewarded_ads_this_week: int = Field(default=0, description="Rewarded ads watched this week")
+    
+    # Calculation-based tracking
+    calculations_since_interstitial: int = Field(default=0, description="Calculations since last interstitial")
+    last_interstitial_at: Optional[datetime] = None
+    
+    # Rewards earned
+    extra_bulk_runs: int = Field(default=0, description="Extra bulk runs earned via rewarded ads")
+    extra_cit_calcs: int = Field(default=0, description="Extra CIT calculations earned via rewarded ads")
+    
+    # Timestamps
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class RewardedAdRequest(BaseModel):
+    reward_type: str = Field(description="bulk_run or cit_calc")
+    ad_placement: AdPlacement = AdPlacement.REWARDED_UNLOCK
+
+class RewardedAdCompletion(BaseModel):
+    user_id: str
+    reward_type: str  # "bulk_run" or "cit_calc"
+    ad_network: str = "mock"
+    ad_unit_id: str
+    reward_granted: bool = Field(default=True)
+
+class AdConfig(BaseModel):
+    # Frequency caps
+    max_rewarded_ads_per_week: int = Field(default=2)
+    interstitial_frequency: int = Field(default=10, description="Show interstitial every N calculations")
+    
+    # Ad units (these would be real ad unit IDs in production)
+    top_banner_unit: str = Field(default="ca-app-pub-test/top-banner")
+    bottom_banner_unit: str = Field(default="ca-app-pub-test/bottom-banner")
+    interstitial_unit: str = Field(default="ca-app-pub-test/interstitial")
+    rewarded_unit: str = Field(default="ca-app-pub-test/rewarded")
+    
+    # Native ad settings
+    native_ad_frequency: int = Field(default=3, description="Show native ad every N paragraphs")
+
+class AdStatusResponse(BaseModel):
+    ads_enabled: bool = Field(description="Whether ads should be shown for this user")
+    can_show_rewarded: bool = Field(description="Whether rewarded ads are available")
+    rewarded_ads_remaining: int = Field(description="Rewarded ads remaining this week")
+    calculations_until_interstitial: int = Field(description="Calculations until next interstitial")
+    ad_config: AdConfig
+    extra_runs_available: int = Field(description="Extra bulk runs available from rewards")
+    extra_cit_available: int = Field(description="Extra CIT calcs available from rewards")
+
+# ============================
 # TAX CALCULATION HISTORY MODELS
 # ============================
 
