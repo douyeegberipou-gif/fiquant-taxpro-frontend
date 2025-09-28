@@ -473,14 +473,14 @@ const Home = ({ onNavigateToTab }) => {
             
             {/* Monthly/Annual Toggle */}
             <div className="flex items-center justify-center mt-8">
-              <span className={`text-lg ${!activeTab === 'annual' ? 'text-white font-semibold' : 'text-gray-300'}`}>Monthly</span>
+              <span className={`text-lg ${!isAnnual ? 'text-white font-semibold' : 'text-gray-300'}`}>Monthly</span>
               <button
-                onClick={() => setActiveTab(activeTab === 'annual' ? 'monthly' : 'annual')}
+                onClick={() => setIsAnnual(!isAnnual)}
                 className="mx-4 relative inline-flex h-6 w-11 items-center rounded-full bg-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
               >
-                <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${activeTab === 'annual' ? 'translate-x-6' : 'translate-x-1'}`} />
+                <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${isAnnual ? 'translate-x-6' : 'translate-x-1'}`} />
               </button>
-              <span className={`text-lg ${activeTab === 'annual' ? 'text-white font-semibold' : 'text-gray-300'}`}>
+              <span className={`text-lg ${isAnnual ? 'text-white font-semibold' : 'text-gray-300'}`}>
                 Annual
                 <span className="ml-2 px-2 py-1 text-xs bg-green-500 text-white rounded-full">2 months free</span>
               </span>
