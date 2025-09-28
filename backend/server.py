@@ -3934,6 +3934,135 @@ async def record_ad_impression(
         print(f"Error recording ad impression: {e}")
         return {"recorded": False}
 
+# ============================
+# ADD-ON MONETIZATION ENDPOINTS
+# ============================
+
+@api_router.get("/addons/pricing")
+async def get_addon_pricing():
+    """Get pricing for all add-on services"""
+    return {
+        "extra_employees": {
+            "monthly_rate": 250,  # ₦250 per employee per month
+            "per_run_rate": 100,  # ₦100 per employee per bulk run
+            "description": "Additional employees beyond your plan's limit"
+        },
+        "pdf_print": {
+            "rate": 200,  # ₦200 per print
+            "description": "PDF report generation (Free tier only)",
+            "applies_to": ["FREE"]
+        },
+        "compliance_review": {
+            "rate": 25000,  # ₦25,000 per review
+            "description": "One-off compliance report review",
+            "applies_to": ["FREE", "PRO", "PREMIUM_EXPEDITED"]
+        }
+    }
+
+@api_router.get("/addons/user/balances")
+async def get_user_addon_balances(current_user: UserProfile = Depends(get_current_user)):
+    """Get user's add-on balances and recent purchases"""
+    try:
+        balances = await get_user_addon_balances(current_user.id)
+        recent_purchases = await get_user_addon_purchases(current_user.id, 30)
+        
+        # Calculate monthly stats
+        monthly_stats = {}
+        current_month = datetime.now(timezone.utc).strftime("%Y-%m")
+        
+        for purchase in recent_purchases:
+            if purchase["created_at"].strftime("%Y-%m") == current_month:
+                addon_type = purchase["addon_type"]
+                if addon_type not in monthly_stats:
+                    monthly_stats[addon_type] = {"quantity": 0, "amount": 0}
+                monthly_stats[addon_type]["quantity"] += purchase["quantity"]
+                monthly_stats[addon_type]["amount"] += purchase["total_amount"]
+        
+        return {
+            "balances": balances,
+            "recent_purchases": recent_purchases[:10],  # Last 10 purchases
+            "monthly_stats": monthly_stats
+        }
+    except Exception as e:
+        print(f"Error getting user addon balances: {e}")
+        raise HTTPException(status_code=500, detail="Failed to get addon balances")
+
+@api_router.post("/addons/compliance-review/request")
+async def request_compliance_review(
+    review_type: str,
+    description: str,
+    is_expedited: bool = False,
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Request compliance report review"""
+    try:
+        tier, features = await get_user_effective_tier_and_features(current_user.id)
+        
+        # Check eligibility
+        if tier == UserTier.ENTERPRISE:
+            raise HTTPException(status_code=400, detail="Enterprise customers should contact support directly")
+        
+        if tier == UserTier.PREMIUM and not is_expedited:
+            raise HTTPException(status_code=400, detail="Premium users have compliance support included. Use expedited option for faster service.")
+        
+        # Create compliance review request
+        review_request = ComplianceReviewRequest(
+            user_id=current_user.id,
+            review_type=review_type,
+            description=description,
+            is_expedited=is_expedited,
+            amount_paid=25000
+        )
+        
+        await db.compliance_reviews.insert_one(review_request.dict())
+        
+        # Record the purchase
+        addon_purchase = AddOnPurchase(
+            user_id=current_user.id,
+            addon_type=AddOnType.COMPLIANCE_REVIEW,
+            quantity=1,
+            unit_price=25000,
+            total_amount=25000,
+            description=f"Compliance review: {review_type}" + (" (Expedited)" if is_expedited else ""),
+            auto_charged=False
+        )
+        
+        await db.addon_purchases.insert_one(addon_purchase.dict())
+        
+        return {
+            "review_id": review_request.id,
+            "amount": 25000,
+            "status": "pending",
+            "message": "Compliance review request submitted successfully"
+        }
+        
+    except Exception as e:
+        print(f"Error requesting compliance review: {e}")
+        raise HTTPException(status_code=500, detail="Failed to request compliance review")
+
+@api_router.get("/addons/bulk-run/preview-charges")
+async def preview_bulk_run_charges(
+    employee_count: int,
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Preview charges for bulk run with given employee count"""
+    try:
+        excess_employees, charge_amount, tier_limit = await calculate_excess_employee_charge(
+            current_user, employee_count
+        )
+        
+        return {
+            "employee_count": employee_count,
+            "tier_limit": tier_limit,
+            "excess_employees": excess_employees,
+            "charge_per_employee": 100,
+            "total_charge": charge_amount,
+            "within_limit": excess_employees == 0
+        }
+    except Exception as e:
+        print(f"Error previewing bulk run charges: {e}")
+        raise HTTPException(status_code=500, detail="Failed to preview charges")
+
 @api_router.post("/ads/rewarded/request")
 async def request_rewarded_ad(
     reward_request: RewardedAdRequest,
