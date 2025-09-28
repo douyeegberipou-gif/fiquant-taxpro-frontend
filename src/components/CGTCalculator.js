@@ -3,10 +3,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/
 import { Input } from './ui/input.jsx';
 import { Label } from './ui/label.jsx';
 import { Button } from './ui/button.jsx';
+import { Badge } from './ui/badge.jsx';
 import { Separator } from './ui/separator.jsx';
 import { Alert, AlertDescription } from './ui/alert.jsx';
 import { TrendingUp, Calculator, AlertTriangle, Printer, User } from 'lucide-react';
 import { generateCgtReport } from '../utils/pdfGenerator';
+import UpgradePrompt from './UpgradePrompt';
+import { useUpgrade } from '../hooks/useUpgrade';
 
 const CGTCalculator = ({ formatCurrency }) => {
   const [cgtInput, setCgtInput] = useState({
