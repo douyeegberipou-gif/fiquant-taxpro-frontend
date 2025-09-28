@@ -11,7 +11,26 @@ import { generateCgtReport } from '../utils/pdfGenerator';
 import UpgradePrompt from './UpgradePrompt';
 import { useUpgrade } from '../hooks/useUpgrade';
 
-const CGTCalculator = ({ formatCurrency }) => {
+const CGTCalculator = ({ formatCurrency, hasFeature }) => {
+  const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
+  const { startTrial, requestUpgrade } = useUpgrade();
+
+  const handleUpgrade = async () => {
+    const result = await requestUpgrade('pro');
+    if (result.success) {
+      setShowUpgradePrompt(false);
+    }
+  };
+
+  const handleTrial = async () => {
+    const result = await startTrial('pro');
+    if (result.success) {
+      setShowUpgradePrompt(false);
+    } else {
+      alert(result.message);
+    }
+  };
+
   const [cgtInput, setCgtInput] = useState({
     taxpayer_name: '',
     tin: '',
