@@ -103,6 +103,13 @@ const BulkPayrollCalculator = ({
   };
 
   const calculateBulkPayroll = async () => {
+    // Check if user has the bulk PAYE feature
+    if (!hasFeature || !hasFeature('bulk_paye')) {
+      setUpgradeContext({ type: 'feature', feature: 'bulk_paye' });
+      setShowUpgradePrompt(true);
+      return;
+    }
+
     setLoading(true);
     const updatedEmployees = [];
 
