@@ -4653,6 +4653,328 @@ async def get_integration_logs(
 
 app.include_router(integration_router)
 
+# ============================
+# MESSAGING SYSTEM API ENDPOINTS
+# ============================
+
+messaging_router = APIRouter(prefix="/api/admin/messaging", tags=["messaging"])
+
+# Template Management
+@messaging_router.get("/templates")
+async def get_message_templates(admin_user: dict = Depends(get_admin_middleware)):
+    """Get all message templates"""
+    try:
+        if admin_user.get("admin_role") not in ["super_admin", "marketer"]:
+            raise HTTPException(status_code=403, detail="Insufficient permissions")
+        
+        templates = await db.message_templates.find({"is_active": True}).to_list(length=None)
+        return templates
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error getting templates: {e}")
+        raise HTTPException(status_code=500, detail="Failed to get templates")
+
+@messaging_router.post("/templates")
+async def create_message_template(
+    template_data: dict,
+    admin_user: dict = Depends(get_admin_middleware)
+):
+    """Create a new message template"""
+    try:
+        if admin_user.get("admin_role") not in ["super_admin", "marketer"]:
+            raise HTTPException(status_code=403, detail="Insufficient permissions")
+        
+        template = MessageTemplate(
+            name=template_data["name"],
+            channel=MessageChannel(template_data["channel"]),
+            subject_template=template_data.get("subject_template"),
+            body_template=template_data["body_template"],
+            merge_tags=template_data.get("merge_tags", []),
+            need_approval=template_data.get("need_approval", False),
+            created_by=admin_user["id"]
+        )
+        
+        template_dict = template.dict()
+        template_dict["created_at"] = template_dict["created_at"].isoformat()
+        template_dict["updated_at"] = template_dict["updated_at"].isoformat()
+        
+        await db.message_templates.insert_one(template_dict)
+        
+        return {"message": "Template created successfully", "template_id": template.id}
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error creating template: {e}")
+        raise HTTPException(status_code=500, detail="Failed to create template")
+
+# User Segmentation
+@messaging_router.get("/segments")
+async def get_user_segments(admin_user: dict = Depends(get_admin_middleware)):
+    """Get all user segments"""
+    try:
+        if admin_user.get("admin_role") not in ["super_admin", "marketer"]:
+            raise HTTPException(status_code=403, detail="Insufficient permissions")
+        
+        segments = await db.user_segments.find().to_list(length=None)
+        return segments
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error getting segments: {e}")
+        raise HTTPException(status_code=500, detail="Failed to get segments")
+
+@messaging_router.post("/segments")
+async def create_user_segment(
+    segment_data: dict,
+    admin_user: dict = Depends(get_admin_middleware)
+):
+    """Create a new user segment"""
+    try:
+        if admin_user.get("admin_role") not in ["super_admin", "marketer"]:
+            raise HTTPException(status_code=403, detail="Insufficient permissions")
+        
+        # Calculate estimated count based on filters
+        estimated_count = await calculate_segment_count(segment_data["filters_json"])
+        
+        segment = UserSegment(
+            name=segment_data["name"],
+            description=segment_data.get("description", ""),
+            filters_json=segment_data["filters_json"],
+            created_by=admin_user["id"],
+            estimated_count=estimated_count
+        )
+        
+        segment_dict = segment.dict()
+        segment_dict["created_at"] = segment_dict["created_at"].isoformat()
+        
+        await db.user_segments.insert_one(segment_dict)
+        
+        return {"message": "Segment created successfully", "segment_id": segment.id, "estimated_count": estimated_count}
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error creating segment: {e}")
+        raise HTTPException(status_code=500, detail="Failed to create segment")
+
+async def calculate_segment_count(filters: dict) -> int:
+    """Calculate estimated user count for segment filters"""
+    try:
+        query = {}
+        
+        # Tier filter
+        if "tier" in filters:
+            query["account_tier"] = {"$in": filters["tier"]}
+        
+        # Trial status filter  
+        if "trial_status" in filters:
+            if "active" in filters["trial_status"]:
+                # Users with active trials
+                subscription_users = await db.subscriptions.find({
+                    "is_trial_active": True,
+                    "trial_ends_at": {"$gt": datetime.now(timezone.utc).isoformat()}
+                }).to_list(length=None)
+                trial_user_ids = [sub["user_id"] for sub in subscription_users]
+                query["id"] = {"$in": trial_user_ids}
+        
+        # Last active filter
+        if "last_active_days" in filters:
+            days = filters["last_active_days"]
+            cutoff_date = datetime.now(timezone.utc) - timedelta(days=days)
+            query["last_login"] = {"$gte": cutoff_date.isoformat()}
+        
+        count = await db.users.count_documents(query)
+        return count
+    except Exception as e:
+        print(f"Error calculating segment count: {e}")
+        return 0
+
+# Message Campaigns
+@messaging_router.get("/campaigns")
+async def get_message_campaigns(admin_user: dict = Depends(get_admin_middleware)):
+    """Get all message campaigns"""
+    try:
+        if admin_user.get("admin_role") not in ["super_admin", "marketer", "auditor"]:
+            raise HTTPException(status_code=403, detail="Insufficient permissions")
+        
+        campaigns = await db.messages.find().sort("created_at", -1).to_list(length=None)
+        return campaigns
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error getting campaigns: {e}")
+        raise HTTPException(status_code=500, detail="Failed to get campaigns")
+
+@messaging_router.post("/campaigns")
+async def create_message_campaign(
+    campaign_data: dict,
+    admin_user: dict = Depends(get_admin_middleware)
+):
+    """Create a new message campaign"""
+    try:
+        if admin_user.get("admin_role") not in ["super_admin", "marketer"]:
+            raise HTTPException(status_code=403, detail="Insufficient permissions")
+        
+        message = Message(
+            campaign_name=campaign_data["campaign_name"],
+            channel=MessageChannel(campaign_data["channel"]),
+            template_id=campaign_data.get("template_id"),
+            subject_template=campaign_data.get("subject_template"),
+            body_template=campaign_data["body_template"],
+            segment_id=campaign_data.get("segment_id"),
+            target_user_ids=campaign_data.get("target_user_ids", []),
+            scheduled_at=datetime.fromisoformat(campaign_data["scheduled_at"]) if campaign_data.get("scheduled_at") else None,
+            need_approval=campaign_data.get("need_approval", False),
+            created_by=admin_user["id"]
+        )
+        
+        message_dict = message.dict()
+        message_dict["created_at"] = message_dict["created_at"].isoformat()
+        if message_dict["scheduled_at"]:
+            message_dict["scheduled_at"] = message_dict["scheduled_at"].isoformat()
+        
+        await db.messages.insert_one(message_dict)
+        
+        return {"message": "Campaign created successfully", "campaign_id": message.id}
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error creating campaign: {e}")
+        raise HTTPException(status_code=500, detail="Failed to create campaign")
+
+# Mock Message Sending
+@messaging_router.post("/campaigns/{campaign_id}/send")
+async def send_message_campaign(
+    campaign_id: str,
+    admin_user: dict = Depends(get_admin_middleware)
+):
+    """Send a message campaign (mock implementation)"""
+    try:
+        if admin_user.get("admin_role") not in ["super_admin", "marketer"]:
+            raise HTTPException(status_code=403, detail="Insufficient permissions")
+        
+        # Get campaign
+        campaign = await db.messages.find_one({"id": campaign_id})
+        if not campaign:
+            raise HTTPException(status_code=404, detail="Campaign not found")
+        
+        # Mock sending process
+        await db.messages.update_one(
+            {"id": campaign_id},
+            {"$set": {
+                "status": MessageStatus.SENDING.value,
+                "sent_count": 0
+            }}
+        )
+        
+        # Simulate successful send
+        mock_sent_count = 25  # Mock number
+        await db.messages.update_one(
+            {"id": campaign_id},
+            {"$set": {
+                "status": MessageStatus.SENT.value,
+                "sent_count": mock_sent_count
+            }}
+        )
+        
+        return {"message": "Campaign sent successfully", "sent_count": mock_sent_count}
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error sending campaign: {e}")
+        raise HTTPException(status_code=500, detail="Failed to send campaign")
+
+# Compliance Reminders
+@messaging_router.get("/compliance-reminders")
+async def get_compliance_reminders(admin_user: dict = Depends(get_admin_middleware)):
+    """Get all compliance reminders"""
+    try:
+        if admin_user.get("admin_role") not in ["super_admin", "marketer"]:
+            raise HTTPException(status_code=403, detail="Insufficient permissions")
+        
+        reminders = await db.compliance_reminders.find({"is_active": True}).to_list(length=None)
+        return reminders
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error getting compliance reminders: {e}")
+        raise HTTPException(status_code=500, detail="Failed to get compliance reminders")
+
+@messaging_router.post("/compliance-reminders")
+async def create_compliance_reminder(
+    reminder_data: dict,
+    admin_user: dict = Depends(get_admin_middleware)
+):
+    """Create a new compliance reminder"""
+    try:
+        if admin_user.get("admin_role") != "super_admin":
+            raise HTTPException(status_code=403, detail="Only super admins can create compliance reminders")
+        
+        reminder = ComplianceReminder(
+            title=reminder_data["title"],
+            description=reminder_data["description"],
+            due_date=datetime.fromisoformat(reminder_data["due_date"]),
+            reminder_days=reminder_data.get("reminder_days", [7, 3, 1]),
+            applicable_tiers=[UserTier(tier) for tier in reminder_data.get("applicable_tiers", ["premium", "enterprise"])],
+            message_template_id=reminder_data["message_template_id"]
+        )
+        
+        reminder_dict = reminder.dict()
+        reminder_dict["created_at"] = reminder_dict["created_at"].isoformat()
+        reminder_dict["due_date"] = reminder_dict["due_date"].isoformat()
+        
+        await db.compliance_reminders.insert_one(reminder_dict)
+        
+        return {"message": "Compliance reminder created successfully", "reminder_id": reminder.id}
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error creating compliance reminder: {e}")
+        raise HTTPException(status_code=500, detail="Failed to create compliance reminder")
+
+# Analytics
+@messaging_router.get("/analytics/dashboard")
+async def get_messaging_analytics(admin_user: dict = Depends(get_admin_middleware)):
+    """Get messaging analytics dashboard"""
+    try:
+        if admin_user.get("admin_role") not in ["super_admin", "marketer", "auditor"]:
+            raise HTTPException(status_code=403, detail="Insufficient permissions")
+        
+        # Mock analytics data
+        analytics = {
+            "total_campaigns": await db.messages.count_documents({}),
+            "total_sent": 1250,
+            "delivery_rate": 96.5,
+            "open_rate": 24.3,
+            "click_rate": 3.8,
+            "recent_campaigns": [
+                {
+                    "campaign_name": "Tax Filing Reminder - January 2024",
+                    "channel": "email",
+                    "sent_count": 245,
+                    "delivery_rate": 98.0,
+                    "open_rate": 32.1,
+                    "sent_at": "2024-01-15T10:00:00Z"
+                },
+                {
+                    "campaign_name": "Premium Upgrade Offer",
+                    "channel": "sms",
+                    "sent_count": 89,
+                    "delivery_rate": 94.4,
+                    "sent_at": "2024-01-10T14:30:00Z"
+                }
+            ]
+        }
+        
+        return analytics
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error getting messaging analytics: {e}")
+        raise HTTPException(status_code=500, detail="Failed to get analytics")
+
+app.include_router(messaging_router)
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
