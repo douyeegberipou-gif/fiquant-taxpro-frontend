@@ -1,0 +1,835 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { Button } from '../ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
+import { Badge } from '../ui/badge';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import { Alert, AlertDescription } from '../ui/alert';
+import { 
+  Mail, 
+  MessageSquare, 
+  Bell, 
+  Users, 
+  Send,
+  Calendar,
+  BarChart3,
+  Settings,
+  Plus,
+  Eye,
+  Edit,
+  CheckCircle,
+  Clock,
+  AlertTriangle,
+  FileText,
+  Target
+} from 'lucide-react';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
+const MessagingDashboard = () => {
+  const [activeTab, setActiveTab] = useState('overview');
+  const [templates, setTemplates] = useState([]);
+  const [campaigns, setCampaigns] = useState([]);
+  const [segments, setSegments] = useState([]);
+  const [analytics, setAnalytics] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  // Template Creation State
+  const [showTemplateForm, setShowTemplateForm] = useState(false);
+  const [templateForm, setTemplateForm] = useState({
+    name: '',
+    channel: 'email',
+    subject_template: '',
+    body_template: '',
+    merge_tags: [],
+    need_approval: false
+  });
+
+  // Campaign Creation State
+  const [showCampaignForm, setShowCampaignForm] = useState(false);
+  const [campaignForm, setCampaignForm] = useState({
+    campaign_name: '',
+    channel: 'email',
+    template_id: '',
+    subject_template: '',
+    body_template: '',
+    segment_id: '',
+    scheduled_at: '',
+    need_approval: false
+  });
+
+  // Segment Creation State
+  const [showSegmentForm, setShowSegmentForm] = useState(false);
+  const [segmentForm, setSegmentForm] = useState({
+    name: '',
+    description: '',
+    filters_json: {
+      tier: [],
+      trial_status: [],
+      last_active_days: 30
+    }
+  });
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const headers = { Authorization: `Bearer ${token}` };
+
+      const [templatesRes, campaignsRes, segmentsRes, analyticsRes] = await Promise.all([
+        axios.get(`${BACKEND_URL}/api/admin/messaging/templates`, { headers }),
+        axios.get(`${BACKEND_URL}/api/admin/messaging/campaigns`, { headers }),
+        axios.get(`${BACKEND_URL}/api/admin/messaging/segments`, { headers }),
+        axios.get(`${BACKEND_URL}/api/admin/messaging/analytics/dashboard`, { headers })
+      ]);
+
+      setTemplates(templatesRes.data);
+      setCampaigns(campaignsRes.data);
+      setSegments(segmentsRes.data);
+      setAnalytics(analyticsRes.data);
+    } catch (error) {
+      console.error('Error fetching messaging data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createTemplate = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post(`${BACKEND_URL}/api/admin/messaging/templates`, templateForm, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      setShowTemplateForm(false);
+      setTemplateForm({
+        name: '',
+        channel: 'email',
+        subject_template: '',
+        body_template: '',
+        merge_tags: [],
+        need_approval: false
+      });
+      fetchData();
+      alert('Template created successfully!');
+    } catch (error) {
+      console.error('Error creating template:', error);
+      alert('Failed to create template');
+    }
+  };
+
+  const createCampaign = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post(`${BACKEND_URL}/api/admin/messaging/campaigns`, campaignForm, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      setShowCampaignForm(false);
+      setCampaignForm({
+        campaign_name: '',
+        channel: 'email',
+        template_id: '',
+        subject_template: '',
+        body_template: '',
+        segment_id: '',
+        scheduled_at: '',
+        need_approval: false
+      });
+      fetchData();
+      alert('Campaign created successfully!');
+    } catch (error) {
+      console.error('Error creating campaign:', error);
+      alert('Failed to create campaign');
+    }
+  };
+
+  const createSegment = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post(`${BACKEND_URL}/api/admin/messaging/segments`, segmentForm, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      setShowSegmentForm(false);
+      setSegmentForm({
+        name: '',
+        description: '',
+        filters_json: {
+          tier: [],
+          trial_status: [],
+          last_active_days: 30
+        }
+      });
+      fetchData();
+      alert(`Segment created successfully! Estimated reach: ${response.data.estimated_count} users`);
+    } catch (error) {
+      console.error('Error creating segment:', error);
+      alert('Failed to create segment');
+    }
+  };
+
+  const sendCampaign = async (campaignId) => {
+    if (!window.confirm('Are you sure you want to send this campaign?')) return;
+    
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post(`${BACKEND_URL}/api/admin/messaging/campaigns/${campaignId}/send`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      alert(`Campaign sent successfully to ${response.data.sent_count} users!`);
+      fetchData();
+    } catch (error) {
+      console.error('Error sending campaign:', error);
+      alert('Failed to send campaign');
+    }
+  };
+
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case 'sent':
+        return <CheckCircle className="h-4 w-4 text-green-600" />;
+      case 'scheduled':
+        return <Clock className="h-4 w-4 text-blue-600" />;
+      case 'draft':
+        return <Edit className="h-4 w-4 text-gray-600" />;
+      default:
+        return <AlertTriangle className="h-4 w-4 text-orange-600" />;
+    }
+  };
+
+  const getChannelIcon = (channel) => {
+    switch (channel) {
+      case 'email':
+        return <Mail className="h-4 w-4" />;
+      case 'sms':
+        return <MessageSquare className="h-4 w-4" />;
+      case 'in_app':
+        return <Bell className="h-4 w-4" />;
+      default:
+        return <Send className="h-4 w-4" />;
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="p-6">
+        <div className="animate-pulse space-y-4">
+          <div className="h-8 bg-gray-200 rounded w-1/3"></div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="h-32 bg-gray-200 rounded"></div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Messaging & Compliance</h1>
+          <p className="text-gray-600 mt-2">Manage user communications and compliance reminders</p>
+        </div>
+        <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">
+          <Send className="h-4 w-4 mr-2" />
+          Admin Messaging
+        </Badge>
+      </div>
+
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="grid w-full grid-cols-5">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="templates">Templates</TabsTrigger>
+          <TabsTrigger value="campaigns">Campaigns</TabsTrigger>
+          <TabsTrigger value="segments">Segments</TabsTrigger>
+          <TabsTrigger value="compliance">Compliance</TabsTrigger>
+        </TabsList>
+
+        {/* Overview Tab */}
+        <TabsContent value="overview" className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-gray-600">Total Campaigns</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{analytics.total_campaigns || 0}</div>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-gray-600">Messages Sent</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{analytics.total_sent || 0}</div>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-gray-600">Delivery Rate</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-green-600">{analytics.delivery_rate || 0}%</div>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-gray-600">Open Rate</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-blue-600">{analytics.open_rate || 0}%</div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Recent Campaigns</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {analytics.recent_campaigns?.map((campaign, index) => (
+                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      {getChannelIcon(campaign.channel)}
+                      <div>
+                        <div className="font-medium">{campaign.campaign_name}</div>
+                        <div className="text-sm text-gray-600">
+                          {campaign.sent_count} sent • {campaign.delivery_rate}% delivered
+                          {campaign.open_rate && ` • ${campaign.open_rate}% opened`}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      {new Date(campaign.sent_at).toLocaleDateString()}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Templates Tab */}
+        <TabsContent value="templates" className="space-y-6">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-semibold">Message Templates</h2>
+            <Button onClick={() => setShowTemplateForm(true)}>
+              <Plus className="h-4 w-4 mr-2" />
+              Create Template
+            </Button>
+          </div>
+
+          {showTemplateForm && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Create New Template</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>Template Name</Label>
+                    <Input
+                      value={templateForm.name}
+                      onChange={(e) => setTemplateForm({...templateForm, name: e.target.value})}
+                      placeholder="e.g., Tax Filing Reminder"
+                    />
+                  </div>
+                  <div>
+                    <Label>Channel</Label>
+                    <select
+                      className="w-full p-2 border rounded-md"
+                      value={templateForm.channel}
+                      onChange={(e) => setTemplateForm({...templateForm, channel: e.target.value})}
+                    >
+                      <option value="email">Email</option>
+                      <option value="sms">SMS</option>
+                      <option value="in_app">In-App</option>
+                    </select>
+                  </div>
+                </div>
+
+                {templateForm.channel === 'email' && (
+                  <div>
+                    <Label>Subject Template</Label>
+                    <Input
+                      value={templateForm.subject_template}
+                      onChange={(e) => setTemplateForm({...templateForm, subject_template: e.target.value})}
+                      placeholder="e.g., {{FirstName}}, your tax filing is due in {{DaysLeft}} days"
+                    />
+                  </div>
+                )}
+
+                <div>
+                  <Label>Body Template</Label>
+                  <textarea
+                    className="w-full p-3 border rounded-md h-32"
+                    value={templateForm.body_template}
+                    onChange={(e) => setTemplateForm({...templateForm, body_template: e.target.value})}
+                    placeholder={templateForm.channel === 'email' 
+                      ? "Dear {{FirstName}},\n\nThis is a reminder that your tax filing deadline is approaching..."
+                      : "Hi {{FirstName}}! Tax filing due in {{DaysLeft}} days. File now to avoid penalties."}
+                  />
+                </div>
+
+                <div className="text-sm text-gray-600">
+                  <strong>Available merge tags:</strong> {'{{'}}FirstName{'}}'}, {'{{'}}Tier{'}}'}, {'{{'}}TrialEnds{'}}'}, {'{{'}}StaffCount{'}}'}, {'{{'}}DaysLeft{'}}'}
+                </div>
+
+                <div className="flex space-x-2">
+                  <Button onClick={createTemplate}>Create Template</Button>
+                  <Button variant="outline" onClick={() => setShowTemplateForm(false)}>Cancel</Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          <div className="grid gap-4">
+            {templates.map((template) => (
+              <Card key={template.id}>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="flex items-center">
+                      {getChannelIcon(template.channel)}
+                      <span className="ml-2">{template.name}</span>
+                    </CardTitle>
+                    <Badge variant={template.channel === 'email' ? 'default' : template.channel === 'sms' ? 'secondary' : 'outline'}>
+                      {template.channel.toUpperCase()}
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {template.subject_template && (
+                    <div className="mb-2">
+                      <strong>Subject:</strong> {template.subject_template}
+                    </div>
+                  )}
+                  <div className="text-sm text-gray-600 line-clamp-2">
+                    {template.body_template}
+                  </div>
+                  <div className="flex items-center justify-between mt-4">
+                    <div className="text-xs text-gray-500">
+                      Created {new Date(template.created_at).toLocaleDateString()}
+                    </div>
+                    <div className="flex space-x-2">
+                      <Button size="sm" variant="outline">
+                        <Eye className="h-4 w-4 mr-1" />
+                        Preview
+                      </Button>
+                      <Button size="sm" variant="outline">
+                        <Edit className="h-4 w-4 mr-1" />
+                        Edit
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </TabsContent>
+
+        {/* Campaigns Tab */}
+        <TabsContent value="campaigns" className="space-y-6">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-semibold">Message Campaigns</h2>
+            <Button onClick={() => setShowCampaignForm(true)}>
+              <Plus className="h-4 w-4 mr-2" />
+              Create Campaign
+            </Button>
+          </div>
+
+          {showCampaignForm && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Create New Campaign</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>Campaign Name</Label>
+                    <Input
+                      value={campaignForm.campaign_name}
+                      onChange={(e) => setCampaignForm({...campaignForm, campaign_name: e.target.value})}
+                      placeholder="e.g., January Tax Filing Reminder"
+                    />
+                  </div>
+                  <div>
+                    <Label>Channel</Label>
+                    <select
+                      className="w-full p-2 border rounded-md"
+                      value={campaignForm.channel}
+                      onChange={(e) => setCampaignForm({...campaignForm, channel: e.target.value})}
+                    >
+                      <option value="email">Email</option>
+                      <option value="sms">SMS</option>
+                      <option value="in_app">In-App</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>Template (Optional)</Label>
+                    <select
+                      className="w-full p-2 border rounded-md"
+                      value={campaignForm.template_id}
+                      onChange={(e) => setCampaignForm({...campaignForm, template_id: e.target.value})}
+                    >
+                      <option value="">Select a template...</option>
+                      {templates.filter(t => t.channel === campaignForm.channel).map(template => (
+                        <option key={template.id} value={template.id}>{template.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <Label>Target Segment</Label>
+                    <select
+                      className="w-full p-2 border rounded-md"
+                      value={campaignForm.segment_id}
+                      onChange={(e) => setCampaignForm({...campaignForm, segment_id: e.target.value})}
+                    >
+                      <option value="">Select a segment...</option>
+                      {segments.map(segment => (
+                        <option key={segment.id} value={segment.id}>
+                          {segment.name} ({segment.estimated_count} users)
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                {campaignForm.channel === 'email' && (
+                  <div>
+                    <Label>Subject</Label>
+                    <Input
+                      value={campaignForm.subject_template}
+                      onChange={(e) => setCampaignForm({...campaignForm, subject_template: e.target.value})}
+                      placeholder="Email subject line"
+                    />
+                  </div>
+                )}
+
+                <div>
+                  <Label>Message Body</Label>
+                  <textarea
+                    className="w-full p-3 border rounded-md h-32"
+                    value={campaignForm.body_template}
+                    onChange={(e) => setCampaignForm({...campaignForm, body_template: e.target.value})}
+                    placeholder="Your message content..."
+                  />
+                </div>
+
+                <div>
+                  <Label>Schedule (Optional)</Label>
+                  <Input
+                    type="datetime-local"
+                    value={campaignForm.scheduled_at}
+                    onChange={(e) => setCampaignForm({...campaignForm, scheduled_at: e.target.value})}
+                  />
+                </div>
+
+                <div className="flex space-x-2">
+                  <Button onClick={createCampaign}>Create Campaign</Button>
+                  <Button variant="outline" onClick={() => setShowCampaignForm(false)}>Cancel</Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          <div className="grid gap-4">
+            {campaigns.map((campaign) => (
+              <Card key={campaign.id}>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="flex items-center">
+                      {getChannelIcon(campaign.channel)}
+                      <span className="ml-2">{campaign.campaign_name}</span>
+                    </CardTitle>
+                    <div className="flex items-center space-x-2">
+                      {getStatusIcon(campaign.status)}
+                      <Badge variant="outline">
+                        {campaign.status.toUpperCase()}
+                      </Badge>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <strong>Channel:</strong> {campaign.channel.toUpperCase()}
+                      </div>
+                      <div>
+                        <strong>Created:</strong> {new Date(campaign.created_at).toLocaleDateString()}
+                      </div>
+                    </div>
+                    
+                    {campaign.sent_count > 0 && (
+                      <div className="grid grid-cols-3 gap-4 text-sm mt-4 p-3 bg-gray-50 rounded">
+                        <div>
+                          <strong>Sent:</strong> {campaign.sent_count}
+                        </div>
+                        <div>
+                          <strong>Delivered:</strong> {campaign.delivered_count}
+                        </div>
+                        <div>
+                          <strong>Opened:</strong> {campaign.opened_count}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="flex space-x-2 mt-4">
+                    {campaign.status === 'draft' && (
+                      <Button size="sm" onClick={() => sendCampaign(campaign.id)}>
+                        <Send className="h-4 w-4 mr-1" />
+                        Send Now
+                      </Button>
+                    )}
+                    <Button size="sm" variant="outline">
+                      <BarChart3 className="h-4 w-4 mr-1" />
+                      Analytics
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </TabsContent>
+
+        {/* Segments Tab */}
+        <TabsContent value="segments" className="space-y-6">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-semibold">User Segments</h2>
+            <Button onClick={() => setShowSegmentForm(true)}>
+              <Plus className="h-4 w-4 mr-2" />
+              Create Segment
+            </Button>
+          </div>
+
+          {showSegmentForm && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Create New Segment</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label>Segment Name</Label>
+                  <Input
+                    value={segmentForm.name}
+                    onChange={(e) => setSegmentForm({...segmentForm, name: e.target.value})}
+                    placeholder="e.g., Premium Users - Active Trial"
+                  />
+                </div>
+
+                <div>
+                  <Label>Description</Label>
+                  <Input
+                    value={segmentForm.description}
+                    onChange={(e) => setSegmentForm({...segmentForm, description: e.target.value})}
+                    placeholder="Brief description of this segment"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>User Tiers</Label>
+                    <div className="space-y-2 mt-2">
+                      {['free', 'pro', 'premium', 'enterprise'].map(tier => (
+                        <label key={tier} className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            checked={segmentForm.filters_json.tier.includes(tier)}
+                            onChange={(e) => {
+                              const tiers = segmentForm.filters_json.tier;
+                              if (e.target.checked) {
+                                setSegmentForm({
+                                  ...segmentForm,
+                                  filters_json: {
+                                    ...segmentForm.filters_json,
+                                    tier: [...tiers, tier]
+                                  }
+                                });
+                              } else {
+                                setSegmentForm({
+                                  ...segmentForm,
+                                  filters_json: {
+                                    ...segmentForm.filters_json,
+                                    tier: tiers.filter(t => t !== tier)
+                                  }
+                                });
+                              }
+                            }}
+                          />
+                          <span className="capitalize">{tier}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label>Last Active (Days)</Label>
+                    <Input
+                      type="number"
+                      value={segmentForm.filters_json.last_active_days}
+                      onChange={(e) => setSegmentForm({
+                        ...segmentForm,
+                        filters_json: {
+                          ...segmentForm.filters_json,
+                          last_active_days: parseInt(e.target.value)
+                        }
+                      })}
+                      placeholder="30"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex space-x-2">
+                  <Button onClick={createSegment}>Create Segment</Button>
+                  <Button variant="outline" onClick={() => setShowSegmentForm(false)}>Cancel</Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          <div className="grid gap-4">
+            {segments.map((segment) => (
+              <Card key={segment.id}>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="flex items-center">
+                      <Target className="h-5 w-5 mr-2 text-blue-600" />
+                      {segment.name}
+                    </CardTitle>
+                    <Badge variant="outline">
+                      {segment.estimated_count} users
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-600 mb-4">{segment.description}</p>
+                  <div className="text-xs text-gray-500">
+                    Created {new Date(segment.created_at).toLocaleDateString()}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </TabsContent>
+
+        {/* Compliance Tab */}
+        <TabsContent value="compliance" className="space-y-6">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-semibold">Compliance Management</h2>
+            <Button>
+              <Plus className="h-4 w-4 mr-2" />
+              Add Compliance Reminder
+            </Button>
+          </div>
+
+          <Alert>
+            <AlertTriangle className="h-4 w-4" />
+            <AlertDescription>
+              Compliance reminders are automatically sent to Premium and Enterprise users based on Nigerian tax laws and filing deadlines.
+            </AlertDescription>
+          </Alert>
+
+          <div className="grid gap-4">
+            {/* Mock compliance reminders */}
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="flex items-center">
+                    <Calendar className="h-5 w-5 mr-2 text-red-600" />
+                    Corporate Income Tax Filing
+                  </CardTitle>
+                  <Badge className="bg-red-100 text-red-800">Due Jan 31</Badge>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-600 mb-4">
+                  Annual CIT filing deadline for companies. Reminders sent 7, 3, and 1 days before due date.
+                </p>
+                <div className="flex items-center justify-between">
+                  <div className="text-xs text-gray-500">
+                    Applies to: Premium, Enterprise • Active
+                  </div>
+                  <div className="flex space-x-2">
+                    <Button size="sm" variant="outline">Edit</Button>
+                    <Button size="sm" variant="outline">View History</Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="flex items-center">
+                    <Calendar className="h-5 w-5 mr-2 text-orange-600" />
+                    VAT Return Filing
+                  </CardTitle>
+                  <Badge className="bg-orange-100 text-orange-800">Monthly</Badge>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-600 mb-4">
+                  Monthly VAT return filing deadline (21st of following month). SMS and email reminders.
+                </p>
+                <div className="flex items-center justify-between">
+                  <div className="text-xs text-gray-500">
+                    Applies to: Premium, Enterprise • Active
+                  </div>
+                  <div className="flex space-x-2">
+                    <Button size="sm" variant="outline">Edit</Button>
+                    <Button size="sm" variant="outline">View History</Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="flex items-center">
+                    <Calendar className="h-5 w-5 mr-2 text-yellow-600" />
+                    PAYE Remittance
+                  </CardTitle>
+                  <Badge className="bg-yellow-100 text-yellow-800">Monthly</Badge>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-600 mb-4">
+                  Monthly PAYE tax remittance deadline (10th of following month). Includes penalty warnings.
+                </p>
+                <div className="flex items-center justify-between">
+                  <div className="text-xs text-gray-500">
+                    Applies to: Premium, Enterprise • Active
+                  </div>
+                  <div className="flex space-x-2">
+                    <Button size="sm" variant="outline">Edit</Button>
+                    <Button size="sm" variant="outline">View History</Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+};
+
+export default MessagingDashboard;
