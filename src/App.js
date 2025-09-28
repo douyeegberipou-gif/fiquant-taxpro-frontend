@@ -1674,9 +1674,7 @@ function AppContent() {
 
           {/* VAT Calculator Tab */}
           <TabsContent value="vat">
-            <FeatureGate feature="vat_calc">
-              <VATCalculator formatCurrency={formatCurrency} />
-            </FeatureGate>
+            <VATCalculator formatCurrency={formatCurrency} hasFeature={hasFeature} />
           </TabsContent>
 
           {/* Payment Processing Calculator Tab */}
