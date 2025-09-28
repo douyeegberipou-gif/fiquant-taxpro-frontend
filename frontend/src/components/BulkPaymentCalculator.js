@@ -672,11 +672,61 @@ const BulkPaymentCalculator = ({ formatCurrency }) => {
                     </div>
                   </div>
 
-                  {/* Calculation status indicator only */}
-                  {payment.calculated && (
+                  {/* Individual Payment Result Summary */}
+                  {payment.calculated && payment.result && (
+                    <div className="mt-4 p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border border-purple-200">
+                      <div className="flex items-center justify-between mb-3">
+                        <Badge variant="default" className="bg-green-100 text-green-800 text-xs">
+                          ✓ Calculated
+                        </Badge>
+                        <Button
+                          onClick={() => generatePaymentProcessingReport(payment, payment.result)}
+                          size="sm"
+                          className="bg-gray-900 hover:bg-gray-800 text-white text-xs px-3 py-1"
+                        >
+                          <Printer className="h-3 w-3 mr-1" />
+                          Print Report
+                        </Button>
+                      </div>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                        <div>
+                          <span className="text-gray-600">Net Payment:</span>
+                          <div className="font-bold text-purple-600">
+                            {formatCurrency(payment.result.net_payment)}
+                          </div>
+                        </div>
+                        <div>
+                          <span className="text-gray-600">VAT Amount:</span>
+                          <div className="font-medium text-red-600">
+                            {formatCurrency(payment.result.vat_amount)}
+                          </div>
+                        </div>
+                        <div>
+                          <span className="text-gray-600">WHT Amount:</span>
+                          <div className="font-medium text-orange-600">
+                            {formatCurrency(payment.result.wht_amount)}
+                          </div>
+                        </div>
+                        <div>
+                          <span className="text-gray-600">Gov't Total:</span>
+                          <div className="font-medium text-gray-800">
+                            {formatCurrency(payment.result.total_government_remittance)}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mt-2 text-xs text-gray-600">
+                        Contract: {formatCurrency(payment.result.contract_amount)} | 
+                        Transaction: {payment.result.transaction_type} | 
+                        Status: {payment.is_resident ? 'Resident' : 'Non-Resident'}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Calculation status for uncalculated payments */}
+                  {!payment.calculated && (
                     <div className="mt-2">
-                      <Badge variant="default" className="bg-green-100 text-green-800 text-xs">
-                        ✓ Calculated
+                      <Badge variant="outline" className="bg-gray-100 text-gray-600 text-xs">
+                        Pending Calculation
                       </Badge>
                     </div>
                   )}
