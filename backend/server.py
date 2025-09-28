@@ -2482,6 +2482,315 @@ async def upgrade_subscription(
         features=features
     )
 
+# ============================
+# TRIAL SYSTEM API ENDPOINTS
+# ============================
+
+async def get_device_info(request: Request):
+    """Extract device/browser info for fingerprinting"""
+    user_agent = request.headers.get('user-agent', '')
+    client_ip = request.client.host
+    
+    # Simple fingerprint based on user agent and other headers
+    fingerprint_data = f"{user_agent}-{request.headers.get('accept-language', '')}-{client_ip}"
+    import hashlib
+    device_fingerprint = hashlib.md5(fingerprint_data.encode()).hexdigest()[:16]
+    
+    return {
+        "ip": client_ip,
+        "fingerprint": device_fingerprint
+    }
+
+@api_router.get("/trial/status", response_model=TrialStatus_Response)
+async def get_trial_status(
+    request: Request,
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Get user's trial status and availability"""
+    
+    # Get existing trial tracking
+    trial_data = await db.trial_tracking.find_one({"user_id": current_user.id})
+    
+    if not trial_data:
+        # No trial history - user can use both demo and trial
+        return TrialStatus_Response(
+            trial_available=True,
+            demo_available=True,
+            current_trial=None,
+            days_remaining=None,
+            trial_features=None
+        )
+    
+    trial_tracking = TrialTracking(**trial_data)
+    
+    # Check if currently in active trial
+    if trial_tracking.trial_status == TrialStatus.TRIAL_ACTIVE and trial_tracking.trial_ends_at:
+        days_remaining = (trial_tracking.trial_ends_at - datetime.now(timezone.utc)).days
+        
+        if days_remaining > 0:
+            # Active trial
+            trial_features = get_tier_features(trial_tracking.trial_tier)
+            return TrialStatus_Response(
+                trial_available=False,
+                demo_available=not trial_tracking.demo_used,
+                current_trial=trial_tracking,
+                days_remaining=days_remaining,
+                trial_features=trial_features
+            )
+        else:
+            # Trial expired - update status
+            await db.trial_tracking.update_one(
+                {"user_id": current_user.id},
+                {"$set": {"trial_status": TrialStatus.TRIAL_EXPIRED.value}}
+            )
+            trial_tracking.trial_status = TrialStatus.TRIAL_EXPIRED
+    
+    # Determine availability based on status
+    trial_available = trial_tracking.trial_status in [TrialStatus.NEVER_USED, TrialStatus.DEMO_USED]
+    demo_available = not trial_tracking.demo_used
+    
+    return TrialStatus_Response(
+        trial_available=trial_available,
+        demo_available=demo_available,
+        current_trial=trial_tracking if trial_tracking.trial_status == TrialStatus.TRIAL_ACTIVE else None,
+        days_remaining=None,
+        trial_features=None
+    )
+
+@api_router.post("/trial/start", response_model=TrialStatus_Response)
+async def start_trial(
+    trial_request: TrialStartRequest,
+    request: Request,
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Start a trial (demo or full trial)"""
+    
+    device_info = await get_device_info(request)
+    
+    # Get existing trial tracking
+    trial_data = await db.trial_tracking.find_one({"user_id": current_user.id})
+    
+    if trial_data:
+        trial_tracking = TrialTracking(**trial_data)
+        
+        # Abuse prevention checks
+        if trial_request.trial_type == TrialType.FULL_TRIAL:
+            if trial_tracking.trial_status not in [TrialStatus.NEVER_USED, TrialStatus.DEMO_USED]:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Trial already used or active"
+                )
+        
+        if trial_request.trial_type == TrialType.DEMO:
+            if trial_tracking.demo_used:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Demo mode already used"
+                )
+    else:
+        # Create new trial tracking
+        trial_tracking = TrialTracking(
+            user_id=current_user.id,
+            email=current_user.email,
+            phone=current_user.phone,
+            device_fingerprint=device_info["fingerprint"],
+            ip_addresses=[device_info["ip"]]
+        )
+    
+    now = datetime.now(timezone.utc)
+    
+    if trial_request.trial_type == TrialType.DEMO:
+        # Start demo mode
+        trial_tracking.demo_used = True
+        trial_tracking.demo_used_at = now
+        if trial_tracking.trial_status == TrialStatus.NEVER_USED:
+            trial_tracking.trial_status = TrialStatus.DEMO_USED
+    
+    elif trial_request.trial_type == TrialType.FULL_TRIAL:
+        if not trial_request.trial_tier or trial_request.trial_tier not in [UserTier.PRO, UserTier.PREMIUM]:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid trial tier. Must be PRO or PREMIUM"
+            )
+        
+        # Start full trial
+        trial_tracking.trial_status = TrialStatus.TRIAL_ACTIVE
+        trial_tracking.trial_tier = trial_request.trial_tier
+        trial_tracking.trial_started_at = now
+        trial_tracking.trial_ends_at = now + timedelta(days=7)
+        
+        # Update user subscription to trial status
+        subscription_data = await db.subscriptions.find_one({"user_id": current_user.id})
+        
+        if subscription_data:
+            subscription = UserSubscription(**subscription_data)
+        else:
+            subscription = UserSubscription(user_id=current_user.id)
+        
+        # Store original tier and set trial tier
+        subscription.original_tier = subscription.tier
+        subscription.tier = trial_request.trial_tier
+        subscription.status = SubscriptionStatus.TRIAL
+        subscription.is_trial_active = True
+        subscription.trial_ends_at = trial_tracking.trial_ends_at
+        subscription.updated_at = now
+        
+        # Save subscription
+        subscription_dict = subscription.dict()
+        subscription_dict["created_at"] = subscription_dict["created_at"].isoformat()
+        subscription_dict["updated_at"] = subscription_dict["updated_at"].isoformat()
+        if subscription_dict["trial_ends_at"]:
+            subscription_dict["trial_ends_at"] = subscription_dict["trial_ends_at"].isoformat()
+        if subscription_dict["expires_at"]:
+            subscription_dict["expires_at"] = subscription_dict["expires_at"].isoformat()
+        
+        await db.subscriptions.update_one(
+            {"user_id": current_user.id},
+            {"$set": subscription_dict},
+            upsert=True
+        )
+        
+        # Update user profile tier
+        await db.users.update_one(
+            {"id": current_user.id},
+            {"$set": {"account_tier": trial_request.trial_tier.value}}
+        )
+    
+    # Update trial tracking
+    trial_tracking.updated_at = now
+    
+    trial_dict = trial_tracking.dict()
+    trial_dict["created_at"] = trial_dict["created_at"].isoformat()
+    trial_dict["updated_at"] = trial_dict["updated_at"].isoformat()
+    if trial_dict["demo_used_at"]:
+        trial_dict["demo_used_at"] = trial_dict["demo_used_at"].isoformat()
+    if trial_dict["trial_started_at"]:
+        trial_dict["trial_started_at"] = trial_dict["trial_started_at"].isoformat()
+    if trial_dict["trial_ends_at"]:
+        trial_dict["trial_ends_at"] = trial_dict["trial_ends_at"].isoformat()
+    
+    await db.trial_tracking.update_one(
+        {"user_id": current_user.id},
+        {"$set": trial_dict},
+        upsert=True
+    )
+    
+    # Return updated status
+    if trial_request.trial_type == TrialType.FULL_TRIAL:
+        trial_features = get_tier_features(trial_request.trial_tier)
+        days_remaining = 7
+    else:
+        trial_features = None
+        days_remaining = None
+    
+    return TrialStatus_Response(
+        trial_available=trial_request.trial_type == TrialType.DEMO,
+        demo_available=trial_request.trial_type == TrialType.FULL_TRIAL,
+        current_trial=trial_tracking if trial_request.trial_type == TrialType.FULL_TRIAL else None,
+        days_remaining=days_remaining,
+        trial_features=trial_features
+    )
+
+@api_router.post("/trial/demo-calculation")
+async def perform_demo_calculation(
+    calculation_data: dict,
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Perform a one-time demo calculation (Pro-level features, no download)"""
+    
+    # Check if demo is available
+    trial_data = await db.trial_tracking.find_one({"user_id": current_user.id})
+    
+    if trial_data:
+        trial_tracking = TrialTracking(**trial_data)
+        if trial_tracking.demo_used:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Demo mode already used. Please start a full trial or upgrade."
+            )
+    
+    # TODO: Integrate with existing calculation logic
+    # This would call the existing PAYE/CIT calculation functions
+    # but mark the result as demo-only (no PDF generation)
+    
+    demo_calc = DemoCalculation(
+        calculation_type=calculation_data.get("type", "paye"),
+        input_data=calculation_data,
+        result_data={"demo": True, "message": "This is a demo calculation"}
+    )
+    
+    return {
+        "demo": True,
+        "calculation": demo_calc.dict(),
+        "message": "Demo calculation completed. Start a 7-day trial for full features including PDF download."
+    }
+
+@api_router.post("/trial/end")
+async def end_trial(
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """End active trial and revert to original tier"""
+    
+    # Get trial tracking
+    trial_data = await db.trial_tracking.find_one({"user_id": current_user.id})
+    
+    if not trial_data:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No trial found"
+        )
+    
+    trial_tracking = TrialTracking(**trial_data)
+    
+    if trial_tracking.trial_status != TrialStatus.TRIAL_ACTIVE:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No active trial to end"
+        )
+    
+    # Update trial status
+    await db.trial_tracking.update_one(
+        {"user_id": current_user.id},
+        {"$set": {
+            "trial_status": TrialStatus.TRIAL_EXPIRED.value,
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    # Revert subscription
+    subscription_data = await db.subscriptions.find_one({"user_id": current_user.id})
+    
+    if subscription_data:
+        subscription = UserSubscription(**subscription_data)
+        
+        # Revert to original tier
+        original_tier = subscription.original_tier or UserTier.FREE
+        subscription.tier = original_tier
+        subscription.status = SubscriptionStatus.ACTIVE
+        subscription.is_trial_active = False
+        subscription.trial_ends_at = None
+        subscription.updated_at = datetime.now(timezone.utc)
+        
+        # Save subscription
+        subscription_dict = subscription.dict()
+        subscription_dict["created_at"] = subscription_dict["created_at"].isoformat()
+        subscription_dict["updated_at"] = subscription_dict["updated_at"].isoformat()
+        if subscription_dict["expires_at"]:
+            subscription_dict["expires_at"] = subscription_dict["expires_at"].isoformat()
+        
+        await db.subscriptions.update_one(
+            {"user_id": current_user.id},
+            {"$set": subscription_dict}
+        )
+        
+        # Update user profile
+        await db.users.update_one(
+            {"id": current_user.id},
+            {"$set": {"account_tier": original_tier.value}}
+        )
+    
+    return {"message": "Trial ended successfully", "reverted_to": original_tier.value}
+
 # Include the router in the main app
 app.include_router(api_router)
 
