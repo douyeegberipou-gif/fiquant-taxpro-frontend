@@ -2108,9 +2108,20 @@ async def calculate_paye_authenticated(
                 calculation_dict['calculation_type'] = 'bulk_paye' if is_bulk else 'paye'
                 await db.calculation_history.insert_one(calculation_dict)
         
-        # Consume bulk run if applicable
+        # Record bulk run and apply charges if applicable
         if is_bulk:
             await use_bulk_paye_run(current_user)
+            
+            # Record bulk run with potential excess charges
+            bulk_run_info = await record_bulk_run_with_charges(
+                current_user, "paye", len(tax_inputs)
+            )
+            
+            # Add billing info to response if there were charges
+            if bulk_run_info and bulk_run_info["charge_amount"] > 0:
+                for result in results:
+                    result.excess_employee_charge = bulk_run_info["charge_amount"]
+                    result.excess_employees = bulk_run_info["excess_employees"]
         
         return results
     
