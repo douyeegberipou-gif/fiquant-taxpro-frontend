@@ -322,7 +322,7 @@ const BulkPaymentCalculator = ({ formatCurrency }) => {
             <span>Bulk Payment Processing Calculator</span>
           </CardTitle>
           <CardDescription className="text-purple-100">
-            Process multiple payments with WHT & VAT calculations (For WHT deduction computation)
+            Process multiple payments with WHT & VAT calculations
           </CardDescription>
         </CardHeader>
         <CardContent className="p-6">
