@@ -4418,7 +4418,19 @@ async def get_tier_configurations(admin_user: dict = Depends(get_admin_middlewar
     """Get all tier configurations"""
     try:
         tier_configs = await db.tier_configurations.find({}).to_list(length=None)
-        return tier_configs
+        
+        # Remove ObjectId and convert datetime fields for JSON serialization
+        serialized_configs = []
+        for config in tier_configs:
+            if "_id" in config:
+                del config["_id"]
+            if "created_at" in config and isinstance(config["created_at"], datetime):
+                config["created_at"] = config["created_at"].isoformat()
+            if "updated_at" in config and isinstance(config["updated_at"], datetime):
+                config["updated_at"] = config["updated_at"].isoformat()
+            serialized_configs.append(config)
+        
+        return serialized_configs
     except Exception as e:
         print(f"Error getting tier configurations: {e}")
         raise HTTPException(status_code=500, detail="Failed to get tier configurations")
