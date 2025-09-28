@@ -194,7 +194,7 @@ const PaymentProcessingCalculator = ({ formatCurrency }) => {
               <span>Payment Processing</span>
             </CardTitle>
             <CardDescription className="text-purple-100">
-              Calculate net payment after VAT & WHT deductions
+              Calculate net payment after VAT & WHT deductions (For WHT deduction computation)
             </CardDescription>
           </CardHeader>
           <CardContent className="p-6 space-y-6">
