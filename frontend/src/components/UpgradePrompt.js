@@ -212,15 +212,12 @@ const UpgradePrompt = ({
           <CardTitle className="text-xl">
             {feature === 'pdf_export' ? config.title : '🌟 You\'ve discovered an amazing feature!'}
           </CardTitle>
-          <CardDescription className="text-base leading-relaxed whitespace-pre-line">
-            {feature === 'pdf_export' ? config.benefit : 
-              `You've reached the limit of your free tier, but don't worry - we've got you covered! This powerful ${config.title.replace('Unlock ', '').replace('Unlock Professional ', '').replace('Unlock Advanced ', '').replace('Unlock Capital Gains Tax Calculator', 'CGT Calculator')} tool is just a click away and can save you hours of manual calculations.
-
-Continue your important work for just ₦9,999/month - and here's the sweet part: get 10% off when you pay annually!
-
-Want to test-drive first? Perfect! Start your 7-day free trial right now and experience all Premium features with zero commitment.
-
-Your success matters to us - choose what works best for you! 💪`}
+          <CardDescription className="text-base leading-relaxed">
+            <div dangerouslySetInnerHTML={{ 
+              __html: (feature === 'pdf_export' ? config.benefit : 
+                `You've reached the limit of your free tier, but don't worry - we've got you covered! This powerful <strong>${config.title.replace('Unlock ', '').replace('Unlock Professional ', '').replace('Unlock Advanced ', '').replace('Unlock Capital Gains Tax Calculator', 'CGT Calculator')}</strong> tool is just a click away and can save you hours of manual calculations.<br/><br/><strong>Continue your important work for just ₦9,999/month</strong> - and here's the sweet part: get <strong>10% off</strong> when you pay annually!<br/><br/><strong>Want to test-drive first?</strong> Perfect! Start your <strong>7-day free trial</strong> right now and experience all Premium features with zero commitment.<br/><br/>Your success matters to us - choose what works best for you! 💪`
+              ).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n\n/g, '<br/><br/>').replace(/\n/g, '<br/>') 
+            }} />
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
