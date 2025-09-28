@@ -2383,6 +2383,10 @@ async def get_user_subscription(
     current_user: UserProfile = Depends(get_current_user)
 ):
     """Get current user's subscription details"""
+    
+    # Check for expired trials first
+    await check_and_expire_trials()
+    
     # Get subscription from database
     subscription_data = await db.subscriptions.find_one({"user_id": current_user.id})
     
