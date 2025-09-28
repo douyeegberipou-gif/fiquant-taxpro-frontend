@@ -1702,7 +1702,9 @@ function App() {
     <AuthProvider>
       <TrialProvider>
         <AdProvider>
-          <AppContent />
+          <FeatureGateProvider>
+            <AppContent />
+          </FeatureGateProvider>
         </AdProvider>
       </TrialProvider>
     </AuthProvider>
