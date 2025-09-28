@@ -2486,6 +2486,57 @@ async def upgrade_subscription(
 # TRIAL SYSTEM API ENDPOINTS
 # ============================
 
+async def check_and_expire_trials():
+    """Check for expired trials and automatically revert them"""
+    now = datetime.now(timezone.utc)
+    
+    # Find expired trials
+    expired_trials = await db.trial_tracking.find({
+        "trial_status": TrialStatus.TRIAL_ACTIVE.value,
+        "trial_ends_at": {"$lt": now.isoformat()}
+    }).to_list(length=None)
+    
+    for trial_data in expired_trials:
+        trial = TrialTracking(**trial_data)
+        
+        # Update trial status
+        await db.trial_tracking.update_one(
+            {"user_id": trial.user_id},
+            {"$set": {
+                "trial_status": TrialStatus.TRIAL_EXPIRED.value,
+                "updated_at": now.isoformat()
+            }}
+        )
+        
+        # Revert subscription
+        subscription_data = await db.subscriptions.find_one({"user_id": trial.user_id})
+        if subscription_data:
+            subscription = UserSubscription(**subscription_data)
+            original_tier = subscription.original_tier or UserTier.FREE
+            
+            subscription.tier = original_tier
+            subscription.status = SubscriptionStatus.ACTIVE
+            subscription.is_trial_active = False
+            subscription.trial_ends_at = None
+            subscription.updated_at = now
+            
+            subscription_dict = subscription.dict()
+            subscription_dict["created_at"] = subscription_dict["created_at"].isoformat()
+            subscription_dict["updated_at"] = subscription_dict["updated_at"].isoformat()
+            if subscription_dict["expires_at"]:
+                subscription_dict["expires_at"] = subscription_dict["expires_at"].isoformat()
+            
+            await db.subscriptions.update_one(
+                {"user_id": trial.user_id},
+                {"$set": subscription_dict}
+            )
+            
+            # Update user profile
+            await db.users.update_one(
+                {"id": trial.user_id},
+                {"$set": {"account_tier": original_tier.value}}
+            )
+
 async def get_device_info(request: Request):
     """Extract device/browser info for fingerprinting"""
     user_agent = request.headers.get('user-agent', '')
