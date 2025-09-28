@@ -604,6 +604,91 @@ const BulkPaymentCalculator = ({ formatCurrency }) => {
         </CardContent>
       </Card>
 
+      {/* Results Table */}
+      {showResults && summary.count > 0 && (
+        <Card className="bg-white border-purple-100 shadow-lg">
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <span>Payment Processing Results</span>
+              <Badge className="bg-purple-100 text-purple-800">
+                {summary.count} Calculated
+              </Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payee</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Transaction Type</th>
+                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Contract Amount</th>
+                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">VAT Amount</th>
+                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">WHT Amount</th>
+                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Net Payment</th>
+                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Gov't Total</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {payments.filter(p => p.calculated && p.result).map((payment) => (
+                    <tr key={payment.id}>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {payment.payee_name}
+                        {payment.payee_email && (
+                          <div className="text-xs text-gray-500">{payment.payee_email}</div>
+                        )}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                        {payment.result.transaction_type}
+                        {payment.transaction_details && (
+                          <div className="text-xs text-gray-400">{payment.transaction_details}</div>
+                        )}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 text-right">
+                        {formatCurrency(payment.result.contract_amount)}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-red-600 text-right">
+                        {formatCurrency(payment.result.vat_amount)}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-orange-600 text-right">
+                        {formatCurrency(payment.result.wht_amount)}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-purple-600 text-right font-medium">
+                        {formatCurrency(payment.result.net_payment)}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-800 text-right">
+                        {formatCurrency(payment.result.total_government_remittance)}
+                      </td>
+                    </tr>
+                  ))}
+                  {/* Totals Row */}
+                  <tr className="bg-purple-50 border-t-2 border-purple-200">
+                    <td className="px-4 py-3 whitespace-nowrap text-sm font-bold text-purple-900" colSpan="2">
+                      TOTALS ({summary.count} payments)
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm font-bold text-purple-900 text-right">
+                      {formatCurrency(summary.totalContracts)}
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm font-bold text-red-700 text-right">
+                      {formatCurrency(summary.totalVAT)}
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm font-bold text-orange-700 text-right">
+                      {formatCurrency(summary.totalWHT)}
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm font-bold text-purple-700 text-right">
+                      {formatCurrency(summary.totalNetPayments)}
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm font-bold text-gray-700 text-right">
+                      {formatCurrency(summary.totalGovernmentRemittance)}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Summary Results */}
       {showResults && summary.count > 0 && (
         <Card className="bg-white border-purple-100 shadow-lg">
