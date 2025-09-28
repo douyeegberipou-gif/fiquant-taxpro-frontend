@@ -14,6 +14,7 @@ import BulkPayrollCalculator from './components/BulkPayrollCalculator';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { TrialProvider, useTrial } from './contexts/TrialContext';
 import { AdProvider, useAds } from './contexts/AdContext';
+import { FeatureGateProvider, useFeatureGate } from './contexts/FeatureGateContext';
 import { AuthModal } from './components/AuthModal';
 import { TrialModal } from './components/TrialModal';
 import { TrialExpiredModal } from './components/TrialExpiredModal';
