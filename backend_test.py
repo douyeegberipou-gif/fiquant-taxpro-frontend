@@ -1861,6 +1861,509 @@ class NigerianTaxCalculatorTester:
         
         return True
 
+    # ============================
+    # MONETIZATION DASHBOARD TESTS
+    # ============================
+    
+    def test_admin_login(self):
+        """Login as super admin for monetization testing"""
+        login_data = {
+            "email_or_phone": "douyeegberipou@yahoo.com",
+            "password": "any_password"  # Special admin bypass
+        }
+        
+        success, response = self.run_test(
+            "Admin Login - Super Admin",
+            "POST",
+            "auth/login",
+            200,
+            login_data
+        )
+        
+        if success:
+            self.auth_token = response.get('access_token')
+            print(f"   ✅ Admin login successful")
+            print(f"   Token expires in: {response.get('expires_in')} seconds")
+            return True
+        else:
+            print(f"   ❌ Admin login failed")
+            return False
+    
+    def test_monetization_analytics_dashboard(self):
+        """Test monetization analytics dashboard endpoint"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No admin token available")
+            return False
+            
+        success, response = self.run_test(
+            "Monetization Analytics Dashboard",
+            "GET",
+            "admin/monetization/analytics/dashboard?days=30",
+            200,
+            auth_required=True
+        )
+        
+        if success:
+            print(f"   Total Users: {response.get('total_users', 0)}")
+            print(f"   MAU (Monthly Active Users): {response.get('mau', 0)}")
+            print(f"   DAU (Daily Active Users): {response.get('dau', 0)}")
+            
+            # Check subscription stats
+            subscription_stats = response.get('subscription_stats', {})
+            print(f"   Subscription Stats:")
+            for tier, count in subscription_stats.items():
+                print(f"     {tier.upper()}: {count} users")
+            
+            # Check funnel data
+            funnel_data = response.get('funnel_data', [])
+            print(f"   Funnel Data Points: {len(funnel_data)}")
+            
+            # Check ad revenue data
+            ad_revenue_data = response.get('ad_revenue_data', [])
+            print(f"   Ad Revenue Data Points: {len(ad_revenue_data)}")
+            
+            # Verify response structure
+            required_fields = ['total_users', 'mau', 'dau', 'subscription_stats', 'funnel_data', 'ad_revenue_data']
+            for field in required_fields:
+                if field not in response:
+                    print(f"   ❌ Missing required field: {field}")
+                    return False
+            
+            print(f"   ✅ Analytics dashboard data retrieved successfully")
+        
+        return success
+    
+    def test_tier_configurations_get(self):
+        """Test getting tier configurations"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No admin token available")
+            return False
+            
+        success, response = self.run_test(
+            "Get Tier Configurations",
+            "GET",
+            "admin/monetization/tiers",
+            200,
+            auth_required=True
+        )
+        
+        if success:
+            if isinstance(response, list):
+                print(f"   Retrieved {len(response)} tier configurations")
+                for tier_config in response:
+                    if isinstance(tier_config, dict):
+                        print(f"     Tier: {tier_config.get('tier', 'Unknown')}")
+                        print(f"     Name: {tier_config.get('name', 'Unknown')}")
+                        print(f"     Monthly Price: ₦{tier_config.get('monthly_price', 0):,}")
+                        print(f"     Staff Limit: {tier_config.get('staff_limit', 0)}")
+            else:
+                print(f"   ✅ Tier configurations endpoint accessible")
+        
+        return success
+    
+    def test_tier_configuration_update(self):
+        """Test updating a tier configuration"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No admin token available")
+            return False
+        
+        # Test updating PRO tier configuration
+        tier_update_data = {
+            "tier": "pro",
+            "name": "Professional",
+            "monthly_price": 999900,  # ₦9,999 in kobo
+            "annual_price": 9999000,  # ₦99,990 in kobo
+            "staff_limit": 15,
+            "features": {
+                "single_paye_unlimited": True,
+                "bulk_paye_enabled": True,
+                "bulk_paye_max_staff": 15,
+                "bulk_paye_runs_per_month": None,
+                "cit_enabled": True,
+                "vat_enabled": False,
+                "cgt_enabled": False,
+                "pdf_export": True,
+                "calculation_history": True,
+                "email_notifications": True,
+                "priority_support": False,
+                "ads_enabled": False,
+                "rewarded_ads": False,
+                "advanced_analytics": False,
+                "api_access": False,
+                "compliance_assistance": False
+            },
+            "active": True
+        }
+        
+        success, response = self.run_test(
+            "Update Tier Configuration - PRO",
+            "PUT",
+            "admin/monetization/tiers/pro",
+            200,
+            tier_update_data,
+            auth_required=True
+        )
+        
+        if success:
+            print(f"   ✅ PRO tier configuration updated successfully")
+            if 'message' in response:
+                print(f"   Message: {response['message']}")
+        
+        return success
+    
+    def test_user_subscriptions_list(self):
+        """Test getting users with subscription information"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No admin token available")
+            return False
+            
+        success, response = self.run_test(
+            "Get User Subscriptions",
+            "GET",
+            "admin/monetization/users?page=1&limit=10",
+            200,
+            auth_required=True
+        )
+        
+        if success:
+            users = response.get('users', [])
+            total = response.get('total', 0)
+            page = response.get('page', 1)
+            limit = response.get('limit', 10)
+            total_pages = response.get('total_pages', 0)
+            
+            print(f"   Total Users: {total}")
+            print(f"   Page: {page}/{total_pages}")
+            print(f"   Users on this page: {len(users)}")
+            
+            # Show sample user data
+            if users:
+                sample_user = users[0]
+                print(f"   Sample User:")
+                print(f"     Name: {sample_user.get('full_name', 'Unknown')}")
+                print(f"     Email: {sample_user.get('email', 'Unknown')}")
+                print(f"     Tier: {sample_user.get('account_tier', 'free')}")
+                
+                if sample_user.get('subscription'):
+                    sub = sample_user['subscription']
+                    print(f"     Subscription Status: {sub.get('status', 'N/A')}")
+                
+                if sample_user.get('trial'):
+                    trial = sample_user['trial']
+                    print(f"     Trial Status: {trial.get('status', 'N/A')}")
+            
+            # Verify response structure
+            required_fields = ['users', 'total', 'page', 'limit', 'total_pages']
+            for field in required_fields:
+                if field not in response:
+                    print(f"   ❌ Missing required field: {field}")
+                    return False
+            
+            print(f"   ✅ User subscriptions data retrieved successfully")
+        
+        return success
+    
+    def test_user_subscriptions_with_filter(self):
+        """Test getting users with tier filter"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No admin token available")
+            return False
+            
+        success, response = self.run_test(
+            "Get User Subscriptions - FREE Tier Filter",
+            "GET",
+            "admin/monetization/users?page=1&limit=5&tier_filter=free",
+            200,
+            auth_required=True
+        )
+        
+        if success:
+            users = response.get('users', [])
+            print(f"   FREE tier users found: {len(users)}")
+            
+            # Verify all users are free tier
+            all_free = all(user.get('account_tier') == 'free' for user in users)
+            if all_free:
+                print(f"   ✅ Tier filter working correctly - all users are FREE tier")
+            else:
+                print(f"   ❌ Tier filter not working - found non-FREE users")
+        
+        return success
+    
+    def test_manual_subscription_change(self):
+        """Test manual subscription change"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No admin token available")
+            return False
+        
+        # First, get a user to test with
+        users_success, users_response = self.run_test(
+            "Get Users for Manual Change Test",
+            "GET",
+            "admin/monetization/users?page=1&limit=1",
+            200,
+            auth_required=True
+        )
+        
+        if not users_success or not users_response.get('users'):
+            print("   ⚠️ Skipping - No users available for testing")
+            return False
+        
+        test_user = users_response['users'][0]
+        user_id = test_user['id']
+        
+        # Test upgrade scenario
+        manual_change_data = {
+            "user_id": user_id,
+            "action": "upgrade",
+            "tier": "pro",
+            "duration_months": 1,
+            "reason": "Testing manual upgrade functionality"
+        }
+        
+        success, response = self.run_test(
+            "Manual Subscription Change - Upgrade",
+            "POST",
+            "admin/monetization/manual-change",
+            200,
+            manual_change_data,
+            auth_required=True
+        )
+        
+        if success:
+            print(f"   ✅ Manual upgrade applied successfully")
+            print(f"   User: {test_user.get('full_name', 'Unknown')}")
+            print(f"   Action: Upgrade to PRO tier")
+            if 'message' in response:
+                print(f"   Message: {response['message']}")
+        
+        return success
+    
+    def test_manual_trial_activation(self):
+        """Test manual trial activation"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No admin token available")
+            return False
+        
+        # Get a user for trial testing
+        users_success, users_response = self.run_test(
+            "Get Users for Trial Test",
+            "GET",
+            "admin/monetization/users?page=1&limit=1&tier_filter=free",
+            200,
+            auth_required=True
+        )
+        
+        if not users_success or not users_response.get('users'):
+            print("   ⚠️ Skipping - No free users available for trial testing")
+            return False
+        
+        test_user = users_response['users'][0]
+        user_id = test_user['id']
+        
+        # Test trial activation
+        trial_data = {
+            "user_id": user_id,
+            "action": "trial",
+            "tier": "premium",
+            "duration_months": None,  # Default 7 days
+            "reason": "Testing manual trial activation"
+        }
+        
+        success, response = self.run_test(
+            "Manual Trial Activation - Premium",
+            "POST",
+            "admin/monetization/manual-change",
+            200,
+            trial_data,
+            auth_required=True
+        )
+        
+        if success:
+            print(f"   ✅ Manual trial activated successfully")
+            print(f"   User: {test_user.get('full_name', 'Unknown')}")
+            print(f"   Action: Premium trial activation")
+            if 'message' in response:
+                print(f"   Message: {response['message']}")
+        
+        return success
+    
+    def test_subscription_events_log(self):
+        """Test subscription events log"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No admin token available")
+            return False
+            
+        success, response = self.run_test(
+            "Subscription Events Log",
+            "GET",
+            "admin/monetization/events?days=30",
+            200,
+            auth_required=True
+        )
+        
+        if success:
+            if isinstance(response, list):
+                print(f"   Retrieved {len(response)} subscription events")
+                
+                # Show sample events
+                for i, event in enumerate(response[:3]):  # Show first 3 events
+                    if isinstance(event, dict):
+                        print(f"   Event {i+1}:")
+                        print(f"     Type: {event.get('event_type', 'Unknown')}")
+                        print(f"     From Tier: {event.get('from_tier', 'N/A')}")
+                        print(f"     To Tier: {event.get('to_tier', 'N/A')}")
+                        print(f"     Admin Initiated: {event.get('admin_initiated', False)}")
+                        print(f"     Reason: {event.get('reason', 'N/A')}")
+            else:
+                print(f"   ✅ Events endpoint accessible")
+        
+        return success
+    
+    def test_subscription_events_with_filter(self):
+        """Test subscription events with event type filter"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No admin token available")
+            return False
+            
+        success, response = self.run_test(
+            "Subscription Events - Upgrade Filter",
+            "GET",
+            "admin/monetization/events?days=30&event_type=upgrade",
+            200,
+            auth_required=True
+        )
+        
+        if success:
+            if isinstance(response, list):
+                print(f"   Retrieved {len(response)} upgrade events")
+                
+                # Verify all events are upgrade type
+                upgrade_events = [e for e in response if isinstance(e, dict) and e.get('event_type') == 'upgrade']
+                if len(upgrade_events) == len(response):
+                    print(f"   ✅ Event type filter working correctly")
+                else:
+                    print(f"   ❌ Event type filter not working properly")
+            else:
+                print(f"   ✅ Filtered events endpoint accessible")
+        
+        return success
+    
+    def test_ad_impression_tracking(self):
+        """Test ad impression tracking endpoint"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No admin token available")
+            return False
+        
+        # Test banner ad impression
+        impression_data = {
+            "ad_type": "banner",
+            "ad_placement": "top_banner",
+            "clicked": False,
+            "revenue": 0.05  # $0.05 revenue
+        }
+        
+        success, response = self.run_test(
+            "Ad Impression Tracking - Banner",
+            "POST",
+            "ads/impression?ad_type=banner&ad_placement=top_banner&clicked=false&revenue=0.05",
+            200,
+            auth_required=True
+        )
+        
+        if success:
+            print(f"   ✅ Banner ad impression recorded successfully")
+            if 'impression_id' in response:
+                print(f"   Impression ID: {response['impression_id']}")
+            if 'message' in response:
+                print(f"   Message: {response['message']}")
+        
+        return success
+    
+    def test_ad_impression_interstitial(self):
+        """Test interstitial ad impression tracking"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No admin token available")
+            return False
+        
+        success, response = self.run_test(
+            "Ad Impression Tracking - Interstitial",
+            "POST",
+            "ads/impression?ad_type=interstitial&ad_placement=post_calculation&clicked=true&revenue=0.15",
+            200,
+            auth_required=True
+        )
+        
+        if success:
+            print(f"   ✅ Interstitial ad impression recorded successfully")
+            print(f"   Ad was clicked: True")
+            print(f"   Revenue: $0.15")
+        
+        return success
+    
+    def test_ad_impression_rewarded(self):
+        """Test rewarded ad impression tracking"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No admin token available")
+            return False
+        
+        success, response = self.run_test(
+            "Ad Impression Tracking - Rewarded",
+            "POST",
+            "ads/impression?ad_type=rewarded&ad_placement=rewarded_unlock&clicked=false&revenue=0.25",
+            200,
+            auth_required=True
+        )
+        
+        if success:
+            print(f"   ✅ Rewarded ad impression recorded successfully")
+            print(f"   Revenue: $0.25")
+        
+        return success
+
+    def run_comprehensive_monetization_tests(self):
+        """Run comprehensive monetization dashboard tests"""
+        print("\n" + "="*80)
+        print("💰 COMPREHENSIVE MONETIZATION DASHBOARD TESTING")
+        print("="*80)
+        
+        # Monetization Dashboard Tests
+        monetization_tests = [
+            self.test_admin_login,
+            self.test_monetization_analytics_dashboard,
+            self.test_tier_configurations_get,
+            self.test_tier_configuration_update,
+            self.test_user_subscriptions_list,
+            self.test_user_subscriptions_with_filter,
+            self.test_manual_subscription_change,
+            self.test_manual_trial_activation,
+            self.test_subscription_events_log,
+            self.test_subscription_events_with_filter,
+            self.test_ad_impression_tracking,
+            self.test_ad_impression_interstitial,
+            self.test_ad_impression_rewarded
+        ]
+        
+        print("\n💰 RUNNING MONETIZATION DASHBOARD TESTS...")
+        monetization_passed = 0
+        monetization_total = len(monetization_tests)
+        
+        for test in monetization_tests:
+            try:
+                if test():
+                    monetization_passed += 1
+            except Exception as e:
+                print(f"❌ Test {test.__name__} failed with error: {str(e)}")
+        
+        print(f"\n💰 Monetization Tests Summary: {monetization_passed}/{monetization_total} passed")
+        
+        if monetization_passed == monetization_total:
+            print("🎉 All monetization dashboard tests passed!")
+            return True
+        else:
+            print(f"❌ {monetization_total - monetization_passed} monetization tests failed")
+            return False
+
     def run_comprehensive_authentication_tests(self):
         """Run comprehensive authentication flow tests"""
         print("\n" + "="*80)
