@@ -66,7 +66,7 @@ class UserProfile(BaseModel):
     business_type: Optional[str] = Field(None, description="Type of business")
     
     # Account Settings
-    account_tier: str = Field(default="free", description="free, basic, premium, enterprise")
+    account_tier: UserTier = Field(default=UserTier.FREE, description="User subscription tier")
     permissions: List[str] = Field(default_factory=lambda: ["basic_calculator"], description="Account permissions")
     
     # Admin fields
