@@ -5,7 +5,7 @@ import { Button } from './ui/button.jsx';
 import { 
   AlertTriangle, Users, Building2, Calculator, Receipt, TrendingUp, CreditCard, Target, CheckCircle, 
   Shield, Clock, FileCheck, Star, ArrowRight, ChevronDown, ChevronUp, Award, Lock, Phone, Mail,
-  Heart, Zap, MousePointer, Download, History, DollarSign, BarChart3, Globe, Play, Eye, Briefcase
+  Heart, Zap, MousePointer, Download, History, DollarSign, BarChart3, Globe, Play, Eye, Briefcase, X
 } from 'lucide-react';
 
 const Home = ({ onNavigateToTab }) => {
