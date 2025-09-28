@@ -616,6 +616,11 @@ If the problem persists, please contact Fiquant Consult support with this error 
               >
                 <Calculator className="h-4 w-4 mr-2" />
                 {loading ? 'Calculating...' : 'Calculate All'}
+                {hasFeature && !hasFeature('bulk_paye') && (
+                  <Badge variant="outline" className="ml-2 text-xs bg-gray-800 text-yellow-300 border-yellow-300">
+                    PRO+
+                  </Badge>
+                )}
               </button>
             </div>
 
