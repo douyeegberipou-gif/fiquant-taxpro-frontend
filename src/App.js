@@ -889,7 +889,7 @@ function AppContent() {
                 <CreditCard className="h-5 w-5" />
                 <span className="text-xs font-semibold tracking-wide">PAYMENTS</span>
                 {!hasFeature('cgt_calc') && (
-                  <Badge variant="outline" className="text-[10px] px-1 py-0 bg-blue-50 text-blue-600 border-blue-200">
+                  <Badge variant="outline" className="absolute -top-1 -right-1 text-[10px] px-1 py-0 bg-blue-50 text-blue-600 border-blue-200">
                     PRO+
                   </Badge>
                 )}
