@@ -162,7 +162,7 @@ const UpgradePrompt = ({
             <div className="flex justify-center mb-2">
               🎯
             </div>
-            <CardTitle className="text-lg">You're making great progress!</CardTitle>
+            <CardTitle className="text-lg text-white">You're making great progress!</CardTitle>
             <CardDescription className="text-sm leading-relaxed">
               <div dangerouslySetInnerHTML={{ 
                 __html: `You've used up your monthly quota, which shows you're really putting our tools to work! No worries though - you don't have to stop here.<br/><br/><strong>Keep the momentum going for just ₦9,999/month</strong> and unlock unlimited runs plus advanced features. Or save big with our <strong>annual plan at 10% off</strong>!<br/><br/><strong>Not ready to commit yet?</strong> We totally understand! Start your <strong>7-day free trial</strong> and continue your work immediately - no strings attached.<br/><br/>Let's keep you moving forward! 🚀` 
