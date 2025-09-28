@@ -1642,6 +1642,19 @@ function AppContent() {
         trialTier={trialStatus?.current_trial?.trial_tier || 'Pro'}
       />
 
+      {/* Interstitial Ad Modal */}
+      <InterstitialAd
+        isOpen={showInterstitial}
+        onClose={() => setShowInterstitial(false)}
+      />
+
+      {/* Rewarded Ad Modal */}
+      <RewardedAd
+        isOpen={showRewardedAd}
+        onClose={() => setShowRewardedAd(false)}
+        rewardType={rewardType}
+      />
+
       {/* Password Reset Modal */}
       {showPasswordReset && (
         <PasswordResetForm 
