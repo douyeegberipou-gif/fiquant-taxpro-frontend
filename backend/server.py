@@ -493,6 +493,67 @@ class CalculationSummary(BaseModel):
     total_tax: Optional[float] = None
     notes: Optional[str] = None
 
+# ============================
+# MONETIZATION ANALYTICS MODELS
+# ============================
+
+class DailyUserActivity(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    date: str = Field(description="Date in YYYY-MM-DD format")
+    user_id: str = Field(description="User ID")
+    activities: List[str] = Field(default=[], description="List of activities performed")
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class ConversionFunnelData(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    date: str = Field(description="Date in YYYY-MM-DD format")
+    total_registrations: int = Field(default=0)
+    demo_activations: int = Field(default=0)
+    trial_activations: int = Field(default=0)
+    trial_conversions: int = Field(default=0)
+    total_paid_users: int = Field(default=0)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class AdRevenueData(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    date: str = Field(description="Date in YYYY-MM-DD format")
+    banner_impressions: int = Field(default=0)
+    native_impressions: int = Field(default=0)
+    interstitial_impressions: int = Field(default=0)
+    rewarded_impressions: int = Field(default=0)
+    estimated_revenue: float = Field(default=0.0, description="Estimated revenue in USD")
+    rpm: float = Field(default=0.0, description="Revenue per mille")
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class SubscriptionEvent(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str = Field(description="User ID")
+    event_type: str = Field(description="upgrade, downgrade, cancel, trial_start, trial_end")
+    from_tier: Optional[UserTier] = None
+    to_tier: Optional[UserTier] = None
+    reason: Optional[str] = Field(description="Reason for change")
+    admin_initiated: bool = Field(default=False, description="Was this change made by admin")
+    admin_user_id: Optional[str] = Field(description="Admin who made the change")
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class TierConfiguration(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    tier: UserTier
+    name: str
+    monthly_price: int = Field(description="Price in cents/kobo")
+    annual_price: int = Field(description="Annual price in cents/kobo") 
+    staff_limit: int = Field(description="Max staff for bulk PAYE")
+    features: TierFeatures
+    active: bool = Field(default=True)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class ManualSubscriptionChange(BaseModel):
+    user_id: str = Field(description="Target user ID")
+    action: str = Field(description="upgrade, trial, enterprise")
+    tier: UserTier = Field(description="New tier")
+    duration_months: Optional[int] = Field(description="Duration in months, None for permanent")
+    reason: str = Field(description="Reason for manual change")
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
