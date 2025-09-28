@@ -181,7 +181,7 @@ const UpgradePrompt = ({
               </Button>
               <Button onClick={onAddOns} className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-3 shadow-lg">
                 <CreditCard className="h-4 w-4 mr-2" />
-                Save 10% - Pay Annually
+                Get 2 Months Free - Pay Annually
               </Button>
             </div>
           </CardContent>
