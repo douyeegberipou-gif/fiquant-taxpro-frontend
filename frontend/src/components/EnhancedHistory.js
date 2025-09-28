@@ -58,6 +58,12 @@ const EnhancedHistory = ({ history, citHistory, formatCurrency, hasFeature }) =>
   };
 
   const handlePrintPAYE = (calculation) => {
+    // Check if user has PDF export feature
+    if (!hasFeature || !hasFeature('pdf_export')) {
+      setShowUpgradePrompt(true);
+      return;
+    }
+    
     try {
       // Reconstruct the tax input from the calculation history
       const taxInput = {
