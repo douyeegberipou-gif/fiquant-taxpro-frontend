@@ -932,7 +932,7 @@ function AppContent() {
                 <Briefcase className="h-5 w-5" />
                 <span className="text-xs font-semibold tracking-wide">COMPLIANCE</span>
                 {!hasFeature('compliance_assistance') && (
-                  <Badge variant="outline" className="text-[10px] px-1 py-0 bg-yellow-50 text-yellow-600 border-yellow-200">
+                  <Badge variant="outline" className="absolute -top-1 -right-1 text-[10px] px-1 py-0 bg-yellow-50 text-yellow-600 border-yellow-200">
                     PREMIUM+
                   </Badge>
                 )}
