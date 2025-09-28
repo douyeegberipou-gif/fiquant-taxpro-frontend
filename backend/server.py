@@ -48,6 +48,19 @@ class TrialStatus(str, Enum):
     TRIAL_ACTIVE = "trial_active"
     TRIAL_EXPIRED = "trial_expired"
 
+class AdType(str, Enum):
+    BANNER = "banner"
+    NATIVE = "native"
+    INTERSTITIAL = "interstitial"
+    REWARDED = "rewarded"
+
+class AdPlacement(str, Enum):
+    TOP_BANNER = "top_banner"
+    BOTTOM_BANNER = "bottom_banner"
+    INFO_PAGE_NATIVE = "info_page_native"
+    POST_CALCULATION = "post_calculation"
+    REWARDED_UNLOCK = "rewarded_unlock"
+
 # ============================
 # USER AUTHENTICATION & PROFILE MODELS
 # ============================
