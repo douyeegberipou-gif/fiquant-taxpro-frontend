@@ -35,6 +35,7 @@ const API = `${BACKEND_URL}/api`;
 
 function AppContent() {
   const { user, logout, isAuthenticated } = useAuth();
+  const { trialStatus, showTrialModal, setShowTrialModal, showExpiredModal, setShowExpiredModal } = useTrial();
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [showPasswordReset, setShowPasswordReset] = useState(false);
   const [verificationStatus, setVerificationStatus] = useState(null); // 'verifying', 'success', 'error'
