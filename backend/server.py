@@ -554,6 +554,58 @@ class ManualSubscriptionChange(BaseModel):
     tier: UserTier = Field(description="New tier")
     duration_months: Optional[int] = Field(description="Duration in months, None for permanent")
     reason: str = Field(description="Reason for manual change")
+
+# ============================
+# ADD-ON MONETIZATION MODELS
+# ============================
+
+class AddOnType(str, Enum):
+    EXTRA_EMPLOYEE_MONTHLY = "extra_employee_monthly"
+    EXTRA_EMPLOYEE_PER_RUN = "extra_employee_per_run"
+    PDF_PRINT = "pdf_print"
+    COMPLIANCE_REVIEW = "compliance_review"
+
+class AddOnPurchase(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str = Field(description="User ID")
+    addon_type: AddOnType = Field(description="Type of add-on purchased")
+    quantity: int = Field(default=1, description="Number of units purchased")
+    unit_price: float = Field(description="Price per unit in Naira")
+    total_amount: float = Field(description="Total amount paid")
+    description: str = Field(description="Description of purchase")
+    auto_charged: bool = Field(default=False, description="Was this auto-charged?")
+    bulk_run_id: Optional[str] = Field(description="Associated bulk run ID if applicable")
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    expires_at: Optional[datetime] = Field(description="Expiration date for time-based add-ons")
+
+class BulkRunRecord(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str = Field(description="User ID")
+    run_type: str = Field(description="paye, payment, etc.")
+    employee_count: int = Field(description="Number of employees/items processed")
+    excess_employees: int = Field(default=0, description="Employees beyond tier limit")
+    tier_limit: int = Field(description="User's tier employee limit")
+    auto_charge_applied: bool = Field(default=False, description="Was excess employee charge applied")
+    charge_amount: float = Field(default=0.0, description="Amount charged for excess")
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class ComplianceReviewRequest(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str = Field(description="User ID")
+    review_type: str = Field(description="Type of compliance review requested")
+    description: str = Field(description="Details of what needs review")
+    is_expedited: bool = Field(default=False, description="Is this an expedited review")
+    status: str = Field(default="pending", description="pending, in_progress, completed")
+    amount_paid: float = Field(description="Amount paid for review")
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    completed_at: Optional[datetime] = Field(description="When review was completed")
+
+class UserAddOnBalance(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str = Field(description="User ID")
+    addon_type: AddOnType = Field(description="Type of add-on balance")
+    balance: int = Field(default=0, description="Remaining balance/credits")
+    last_updated: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
