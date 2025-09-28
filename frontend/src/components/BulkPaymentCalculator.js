@@ -789,12 +789,25 @@ const BulkPaymentCalculator = ({ formatCurrency, hasFeature }) => {
             {summary.count > 0 && (
               <>
                 <Button
-                  onClick={() => generateBulkPaymentReports()}
+                  onClick={() => {
+                    // Check if user has PDF export feature
+                    if (!hasFeature || !hasFeature('pdf_export')) {
+                      setUpgradeContext({ type: 'feature', feature: 'pdf_export' });
+                      setShowUpgradePrompt(true);
+                      return;
+                    }
+                    generateBulkPaymentReports();
+                  }}
                   variant="outline"
                   className="border-gray-300 text-gray-700 hover:bg-gray-50"
                 >
                   <Printer className="h-4 w-4 mr-2" />
                   Print All Reports
+                  {hasFeature && !hasFeature('pdf_export') && (
+                    <Badge variant="outline" className="ml-2 text-xs bg-gray-50 text-gray-600 border-gray-200">
+                      PRO+
+                    </Badge>
+                  )}
                 </Button>
                 
                 <Button
