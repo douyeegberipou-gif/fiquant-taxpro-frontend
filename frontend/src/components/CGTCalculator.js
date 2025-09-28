@@ -516,6 +516,17 @@ const CGTCalculator = ({ formatCurrency, hasFeature }) => {
           </Card>
         )}
       </div>
+
+      {/* Upgrade Prompt */}
+      {showUpgradePrompt && (
+        <UpgradePrompt
+          type="feature"
+          feature="cgt_calc"
+          onUpgrade={handleUpgrade}
+          onTrial={handleTrial}
+          onClose={() => setShowUpgradePrompt(false)}
+        />
+      )}
     </div>
   );
 };
