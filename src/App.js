@@ -1735,7 +1735,58 @@ function AppContent() {
           {/* Payment Processing Calculator Tab */}
           <TabsContent value="payment">
             <FeatureGate feature="cgt_calc">
-              <PaymentProcessingCalculator formatCurrency={formatCurrency} />
+              <div className="space-y-6">
+                {/* Payment Mode Toggle */}
+                <Card className="bg-white border-purple-100 shadow-lg">
+                  <CardHeader>
+                    <CardTitle className="flex items-center justify-between">
+                      <span className="flex items-center">
+                        <CreditCard className="h-5 w-5 mr-2 text-purple-600" />
+                        Payment Processing Mode
+                      </span>
+                    </CardTitle>
+                    <CardDescription>
+                      Choose between single payment or bulk payment processing
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <div className="flex space-x-2">
+                      <Button
+                        onClick={() => setPaymentMode('single')}
+                        variant={paymentMode === 'single' ? 'default' : 'outline'}
+                        className={
+                          paymentMode === 'single' ? 'bg-purple-600 hover:bg-purple-700 text-white' : ''
+                        }
+                      >
+                        <CreditCard className="h-4 w-4 mr-2" />
+                        Single Payment
+                      </Button>
+                      <Button
+                        onClick={() => setPaymentMode('bulk')}
+                        variant={paymentMode === 'bulk' ? 'default' : 'outline'}
+                        className={
+                          paymentMode === 'bulk' ? 'bg-pink-600 hover:bg-pink-700 text-white' : ''
+                        }
+                      >
+                        <CreditCard className="h-4 w-4 mr-2" />
+                        Bulk Payments
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Single Payment Calculator */}
+                {paymentMode === 'single' && (
+                  <PaymentProcessingCalculator formatCurrency={formatCurrency} />
+                )}
+
+                {/* Bulk Payment Calculator */}
+                {paymentMode === 'bulk' && (
+                  <FeatureGate feature="bulk_paye">
+                    <BulkPaymentCalculator formatCurrency={formatCurrency} />
+                  </FeatureGate>
+                )}
+              </div>
             </FeatureGate>
           </TabsContent>
 
