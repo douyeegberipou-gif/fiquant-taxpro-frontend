@@ -91,6 +91,12 @@ const EnhancedHistory = ({ history, citHistory, formatCurrency, hasFeature }) =>
   };
 
   const handlePrintCIT = (calculation) => {
+    // Check if user has PDF export feature
+    if (!hasFeature || !hasFeature('pdf_export')) {
+      setShowUpgradePrompt(true);
+      return;
+    }
+    
     try {
       // Reconstruct the CIT input from the calculation history
       const citInput = {
