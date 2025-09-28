@@ -235,7 +235,7 @@ export const AdminDashboard = () => {
 
         {/* Admin Tabs */}
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5 bg-white border border-gray-200">
+          <TabsList className="grid w-full grid-cols-6 bg-white border border-gray-200">
             <TabsTrigger 
               value="overview" 
               className="data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700"
