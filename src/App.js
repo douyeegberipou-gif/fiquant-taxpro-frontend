@@ -152,6 +152,8 @@ function AppContent() {
   // PAYE Calculator Mode State
   const [payeMode, setPayeMode] = useState('single'); // 'single' or 'bulk'
   const [paymentMode, setPaymentMode] = useState('single'); // 'single' or 'bulk'
+  const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
+  const [upgradeContext, setUpgradeContext] = useState({ type: 'feature', feature: 'pdf_export' });
   
   // Terms and Conditions Modal State
   const [showTerms, setShowTerms] = useState(false);
