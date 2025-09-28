@@ -609,10 +609,10 @@ const Home = ({ onNavigateToTab }) => {
               <div className="text-center mb-6">
                 <h4 className="text-xl font-bold text-white mb-2">Premium</h4>
                 <p className="text-3xl font-bold text-white">
-                  ₦{activeTab === 'annual' ? '18,333' : '19,999'}
+                  ₦{isAnnual ? '18,333' : '19,999'}
                   <span className="text-base font-normal text-gray-200">/month</span>
                 </p>
-                {activeTab === 'annual' && (
+                {isAnnual && (
                   <p className="text-green-400 text-sm">₦219,990/year (2 months free)</p>
                 )}
                 <p className="text-gray-200 mt-1 text-sm">Everything in Pro, plus:</p>
