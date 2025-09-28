@@ -22,6 +22,24 @@ const CITCalculator = ({
   formatCurrency,
   hasFeature
 }) => {
+  const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
+  const { startTrial, requestUpgrade, isLoading } = useUpgrade();
+
+  const handleUpgrade = async () => {
+    const result = await requestUpgrade('pro');
+    if (result.success) {
+      setShowUpgradePrompt(false);
+    }
+  };
+
+  const handleTrial = async () => {
+    const result = await startTrial('pro');
+    if (result.success) {
+      setShowUpgradePrompt(false);
+    } else {
+      alert(result.message);
+    }
+  };
   return (
     <div className="grid lg:grid-cols-2 gap-8">
       {/* Input Form */}
