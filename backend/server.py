@@ -3301,6 +3301,142 @@ async def track_ad_impression(ad_type: str, estimated_revenue: float = 0.001):
     except Exception as e:
         print(f"Error tracking ad impression: {e}")
 
+# ============================
+# ADD-ON MONETIZATION HELPERS
+# ============================
+
+async def get_tier_employee_limits():
+    """Get employee limits for each tier"""
+    return {
+        UserTier.FREE: 5,
+        UserTier.PRO: 15,
+        UserTier.PREMIUM: 50,
+        UserTier.ENTERPRISE: 999999  # Unlimited
+    }
+
+async def calculate_excess_employee_charge(user: UserProfile, employee_count: int, charge_per_run: bool = True):
+    """Calculate charge for excess employees in bulk run"""
+    tier, features = await get_user_effective_tier_and_features(user.id)
+    
+    # Admin users have unlimited access
+    if user.admin_enabled and user.admin_role:
+        return 0, 0, 0
+    
+    tier_limits = await get_tier_employee_limits()
+    tier_limit = tier_limits.get(tier, 5)
+    
+    if employee_count <= tier_limit:
+        return 0, 0, tier_limit  # No excess, no charge
+    
+    excess_employees = employee_count - tier_limit
+    
+    if charge_per_run:
+        # ₦100 per employee per bulk run
+        charge_amount = excess_employees * 100
+    else:
+        # ₦250 per employee per month (would be handled separately)
+        charge_amount = excess_employees * 250
+    
+    return excess_employees, charge_amount, tier_limit
+
+async def record_bulk_run_with_charges(user: UserProfile, run_type: str, employee_count: int):
+    """Record bulk run and apply excess employee charges if needed"""
+    try:
+        excess_employees, charge_amount, tier_limit = await calculate_excess_employee_charge(user, employee_count)
+        
+        # Create bulk run record
+        bulk_run = BulkRunRecord(
+            user_id=user.id,
+            run_type=run_type,
+            employee_count=employee_count,
+            excess_employees=excess_employees,
+            tier_limit=tier_limit,
+            auto_charge_applied=charge_amount > 0,
+            charge_amount=charge_amount
+        )
+        
+        await db.bulk_runs.insert_one(bulk_run.dict())
+        
+        # If there's a charge, record the add-on purchase
+        if charge_amount > 0:
+            addon_purchase = AddOnPurchase(
+                user_id=user.id,
+                addon_type=AddOnType.EXTRA_EMPLOYEE_PER_RUN,
+                quantity=excess_employees,
+                unit_price=100,
+                total_amount=charge_amount,
+                description=f"Extra {excess_employees} employees for {run_type} bulk run",
+                auto_charged=True,
+                bulk_run_id=bulk_run.id
+            )
+            
+            await db.addon_purchases.insert_one(addon_purchase.dict())
+        
+        return {
+            "bulk_run_id": bulk_run.id,
+            "excess_employees": excess_employees,
+            "charge_amount": charge_amount,
+            "tier_limit": tier_limit
+        }
+        
+    except Exception as e:
+        print(f"Error recording bulk run: {e}")
+        return None
+
+async def charge_pdf_print(user: UserProfile):
+    """Charge for PDF print (Free tier only)"""
+    tier, features = await get_user_effective_tier_and_features(user.id)
+    
+    # Only charge Free tier users
+    if tier != UserTier.FREE or not features.pdf_export:
+        return None
+    
+    try:
+        # Record PDF print charge
+        addon_purchase = AddOnPurchase(
+            user_id=user.id,
+            addon_type=AddOnType.PDF_PRINT,
+            quantity=1,
+            unit_price=200,
+            total_amount=200,
+            description="PDF report generation",
+            auto_charged=True
+        )
+        
+        await db.addon_purchases.insert_one(addon_purchase.dict())
+        
+        return {
+            "charge_amount": 200,
+            "description": "PDF print charge applied"
+        }
+        
+    except Exception as e:
+        print(f"Error charging PDF print: {e}")
+        return None
+
+async def get_user_addon_balances(user_id: str):
+    """Get user's add-on balances"""
+    try:
+        balances = await db.addon_balances.find({"user_id": user_id}).to_list(length=None)
+        return {balance["addon_type"]: balance["balance"] for balance in balances}
+    except Exception as e:
+        print(f"Error getting addon balances: {e}")
+        return {}
+
+async def get_user_addon_purchases(user_id: str, days: int = 30):
+    """Get user's recent add-on purchases"""
+    try:
+        start_date = datetime.now(timezone.utc) - timedelta(days=days)
+        purchases = await db.addon_purchases.find({
+            "user_id": user_id,
+            "created_at": {"$gte": start_date}
+        }).sort("created_at", -1).to_list(length=None)
+        
+        return purchases
+    except Exception as e:
+        print(f"Error getting addon purchases: {e}")
+        return []
+
 async def get_device_info(request: Request):
     """Extract device/browser info for fingerprinting"""
     user_agent = request.headers.get('user-agent', '')
