@@ -8,7 +8,7 @@ import { Alert, AlertDescription } from './ui/alert.jsx';
 import { Calculator, Building2, AlertTriangle, Printer, Plus, Trash2 } from 'lucide-react';
 import { generateVatReport } from '../utils/pdfGenerator';
 
-const VATCalculator = ({ formatCurrency }) => {
+const VATCalculator = ({ formatCurrency, hasFeature }) => {
   const [vatInput, setVatInput] = useState({
     company_name: '',
     tin: '',
