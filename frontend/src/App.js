@@ -1738,9 +1738,7 @@ function AppContent() {
 
           {/* CGT Calculator Tab */}
           <TabsContent value="cgt">
-            <FeatureGate feature="cgt_calc">
-              <CGTCalculator formatCurrency={formatCurrency} />
-            </FeatureGate>
+            <CGTCalculator formatCurrency={formatCurrency} hasFeature={hasFeature} />
           </TabsContent>
         </Tabs>
       </div>
