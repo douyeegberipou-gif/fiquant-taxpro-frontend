@@ -2428,6 +2428,155 @@ def get_tier_features(tier: UserTier) -> TierFeatures:
     }
     return tier_configs.get(tier, tier_configs[UserTier.FREE])
 
+# ============================
+# FEATURE GATING ENFORCEMENT
+# ============================
+
+async def get_user_effective_tier_and_features(user_id: str):
+    """Get user's current effective tier and features (including active trials)"""
+    # Get subscription
+    subscription_data = await db.subscriptions.find_one({"user_id": user_id})
+    
+    if subscription_data:
+        subscription = UserSubscription(**subscription_data)
+        
+        # Check if in active trial
+        if subscription.is_trial_active and subscription.trial_ends_at:
+            if datetime.now(timezone.utc) < subscription.trial_ends_at:
+                # In active trial - use trial tier
+                return subscription.tier, get_tier_features(subscription.tier)
+        
+        # Use regular subscription tier
+        return subscription.tier, get_tier_features(subscription.tier)
+    
+    # No subscription - default to FREE
+    return UserTier.FREE, get_tier_features(UserTier.FREE)
+
+async def check_feature_access(user: UserProfile, feature: str) -> tuple[bool, str]:
+    """
+    Check if user has access to a specific feature
+    Returns (has_access, error_message)
+    """
+    tier, features = await get_user_effective_tier_and_features(user.id)
+    
+    feature_checks = {
+        'bulk_paye': features.bulk_paye_enabled,
+        'cit_calc': features.cit_enabled,
+        'vat_calc': features.vat_enabled,
+        'cgt_calc': features.cgt_enabled,
+        'pdf_export': features.pdf_export,
+        'calculation_history': features.calculation_history,
+        'advanced_analytics': features.advanced_analytics,
+        'compliance_assistance': features.compliance_assistance,
+        'api_access': features.api_access,
+        'email_notifications': features.email_notifications
+    }
+    
+    has_access = feature_checks.get(feature, False)
+    
+    if not has_access:
+        if tier == UserTier.FREE:
+            return False, f"Feature '{feature}' requires Pro tier or higher. Upgrade to unlock this feature."
+        elif tier == UserTier.PRO and feature in ['advanced_analytics', 'compliance_assistance', 'api_access']:
+            return False, f"Feature '{feature}' requires Premium tier or higher. Upgrade to unlock this feature."
+        else:
+            return False, f"Feature '{feature}' is not available for your current plan."
+    
+    return True, ""
+
+async def check_bulk_paye_limits(user: UserProfile, staff_count: int) -> tuple[bool, str]:
+    """Check if user can perform bulk PAYE with given staff count"""
+    tier, features = await get_user_effective_tier_and_features(user.id)
+    
+    # Check if bulk PAYE is enabled for tier
+    if not features.bulk_paye_enabled:
+        return False, "Bulk PAYE is not available for your tier. Upgrade to Pro or higher."
+    
+    # Check staff count limits
+    if staff_count > features.bulk_paye_max_staff:
+        tier_names = {
+            UserTier.FREE: "Free (max 5 staff)",
+            UserTier.PRO: "Pro (max 15 staff)", 
+            UserTier.PREMIUM: "Premium (max 50 staff)",
+            UserTier.ENTERPRISE: "Enterprise (unlimited)"
+        }
+        current_tier_name = tier_names.get(tier, "current tier")
+        return False, f"Staff count ({staff_count}) exceeds your {current_tier_name} limit. Upgrade for higher limits."
+    
+    # Check monthly run limits for FREE tier
+    if features.bulk_paye_runs_per_month is not None:  # Only FREE tier has monthly limits
+        # Get current month usage
+        now = datetime.now(timezone.utc)
+        month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        
+        # Count bulk PAYE runs this month
+        monthly_runs = await db.calculation_history.count_documents({
+            "user_id": user.id,
+            "calculation_type": "bulk_paye",
+            "timestamp": {"$gte": month_start.isoformat()}
+        })
+        
+        # Check for extra runs from rewarded ads
+        ad_tracking = await db.ad_frequency.find_one({"user_id": user.id})
+        extra_runs = 0
+        if ad_tracking:
+            extra_runs = ad_tracking.get("extra_bulk_runs", 0)
+        
+        total_allowed = features.bulk_paye_runs_per_month + extra_runs
+        
+        if monthly_runs >= total_allowed:
+            if extra_runs > 0:
+                return False, f"Monthly bulk PAYE limit reached ({total_allowed} runs including {extra_runs} from ads). Upgrade to Pro for unlimited runs."
+            else:
+                return False, f"Monthly bulk PAYE limit reached ({features.bulk_paye_runs_per_month} runs). Watch rewarded ads or upgrade to Pro for unlimited runs."
+    
+    return True, ""
+
+async def use_bulk_paye_run(user: UserProfile, from_reward: bool = False):
+    """Consume a bulk PAYE run (for FREE tier tracking)"""
+    tier, features = await get_user_effective_tier_and_features(user.id)
+    
+    # Only track for FREE tier with monthly limits
+    if features.bulk_paye_runs_per_month is not None:
+        if from_reward:
+            # Use reward run
+            ad_tracking = await db.ad_frequency.find_one({"user_id": user.id})
+            if ad_tracking and ad_tracking.get("extra_bulk_runs", 0) > 0:
+                await db.ad_frequency.update_one(
+                    {"user_id": user.id},
+                    {"$inc": {"extra_bulk_runs": -1}}
+                )
+        
+        # Record the calculation for tracking
+        await db.calculation_history.insert_one({
+            "id": str(uuid.uuid4()),
+            "user_id": user.id,
+            "calculation_type": "bulk_paye",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "input_data": {},  # Minimal tracking
+            "result_data": {}
+        })
+
+async def use_cit_calculation(user: UserProfile, from_reward: bool = False):
+    """Consume a CIT calculation (for FREE tier with rewards)"""
+    if from_reward:
+        # Use reward CIT calculation
+        ad_tracking = await db.ad_frequency.find_one({"user_id": user.id})
+        if ad_tracking and ad_tracking.get("extra_cit_calcs", 0) > 0:
+            await db.ad_frequency.update_one(
+                {"user_id": user.id},
+                {"$inc": {"extra_cit_calcs": -1}}
+            )
+
+def create_feature_gate_response(feature: str, error_message: str):
+    """Create standardized error response for feature gating"""
+    return {
+        "error": "feature_gated",
+        "feature": feature,
+        "message": error_message,
+        "upgrade_required": True
+    }
+
 @api_router.get("/pricing", response_model=List[TierPricing])
 async def get_pricing_tiers():
     """Get all pricing tiers and their features"""
