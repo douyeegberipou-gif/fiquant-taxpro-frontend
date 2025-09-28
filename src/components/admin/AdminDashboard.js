@@ -380,6 +380,10 @@ export const AdminDashboard = () => {
           <TabsContent value="monetization">
             <MonetizationDashboard />
           </TabsContent>
+
+          <TabsContent value="integrations">
+            <IntegrationManager />
+          </TabsContent>
         </Tabs>
       </div>
     </div>
