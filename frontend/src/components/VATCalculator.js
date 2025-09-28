@@ -250,7 +250,6 @@ const VATCalculator = ({ formatCurrency }) => {
     setVatLoading(true);
     
     try {
-      const inputVatPaid = parseFloat(vatInput.input_vat_paid) || 0;
       const vatRate = 0.075; // 7.5% VAT rate per NTA 2025
 
       let totalSales = 0;
@@ -300,25 +299,13 @@ const VATCalculator = ({ formatCurrency }) => {
       // Calculate VAT amounts
       const outputVat = standardRatedSales * vatRate;
       
-      // Input VAT (for registered businesses)
-      let inputVatRecoverable = 0;
-      if (vatInput.is_registered_business) {
-        inputVatRecoverable = inputVatPaid;
-      }
-      
-      // Calculate net VAT position
-      const netVatPayable = outputVat - inputVatRecoverable;
-      
       const result = {
         total_sales: totalSales,
         standard_rated_sales: standardRatedSales,
         vat_exempt_sales: vatExemptSales,
         zero_rated_sales: zeroRatedSales,
         output_vat: outputVat,
-        input_vat_recoverable: inputVatRecoverable,
-        net_vat_payable: netVatPayable,
         vat_rate: vatRate * 100,
-        is_refund: netVatPayable < 0,
         company_name: vatInput.company_name,
         month: vatInput.month,
         transaction_breakdown: transactionBreakdown,
