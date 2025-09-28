@@ -881,7 +881,7 @@ function AppContent() {
               
               <TabsTrigger 
                 value="payment" 
-                className="flex-1 md:flex-none bg-gray-50 px-6 py-4 text-gray-700 font-medium rounded-lg hover:bg-gray-100 data-[state=active]:bg-gray-400 data-[state=active]:text-white transition-all duration-200 flex flex-col items-center justify-center space-y-2 shadow-sm hover:shadow-md data-[state=active]:shadow-md relative"
+                className="flex-1 md:flex-none bg-gray-50 px-6 py-4 text-gray-700 font-medium rounded-lg hover:bg-gray-100 data-[state=active]:bg-teal-600 data-[state=active]:text-white transition-all duration-200 flex flex-col items-center justify-center space-y-2 shadow-sm hover:shadow-md data-[state=active]:shadow-md relative"
                 style={{
                   boxShadow: activeTab === 'payment' ? '0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)' : '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
                 }}
