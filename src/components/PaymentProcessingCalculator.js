@@ -485,8 +485,8 @@ const PaymentProcessingCalculator = ({ formatCurrency }) => {
                 </div>
               </div>
 
-              {/* Print Report Button */}
-              <div className="pt-4 border-t">
+              {/* Action Buttons */}
+              <div className="pt-4 border-t space-y-3">
                 <Button
                   onClick={() => generatePaymentProcessingReport(paymentInput, paymentResult)}
                   className="w-full bg-gray-900 hover:bg-gray-800 text-white flex items-center justify-center space-x-2"
@@ -494,6 +494,16 @@ const PaymentProcessingCalculator = ({ formatCurrency }) => {
                   <Printer className="h-4 w-4" />
                   <span>Print Report (PDF)</span>
                 </Button>
+                
+                {paymentInput.payee_email && (
+                  <Button
+                    onClick={sendPaymentAdvice}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center space-x-2"
+                  >
+                    <Send className="h-4 w-4" />
+                    <span>Send Payment Advice</span>
+                  </Button>
+                )}
               </div>
               
               {/* Results Disclaimer */}
