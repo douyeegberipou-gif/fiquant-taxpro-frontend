@@ -631,6 +631,92 @@ class ComplianceReviewRequest(BaseModel):
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     completed_at: Optional[datetime] = Field(description="When review was completed")
 
+# ============================
+# MESSAGING SYSTEM MODELS
+# ============================
+
+class MessageTemplate(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    channel: MessageChannel
+    subject_template: Optional[str] = None  # For email
+    body_template: str
+    merge_tags: List[str] = []
+    need_approval: bool = False
+    created_by: str
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    is_active: bool = True
+
+class UserSegment(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    description: str
+    filters_json: dict
+    created_by: str
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    estimated_count: int = 0
+
+class Message(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    campaign_name: str
+    channel: MessageChannel
+    template_id: Optional[str] = None
+    subject_template: Optional[str] = None
+    body_template: str
+    segment_id: Optional[str] = None
+    target_user_ids: List[str] = []
+    scheduled_at: Optional[datetime] = None
+    status: MessageStatus = MessageStatus.DRAFT
+    need_approval: bool = False
+    approved_by: Optional[str] = None
+    approved_at: Optional[datetime] = None
+    created_by: str
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    sent_count: int = 0
+    delivered_count: int = 0
+    opened_count: int = 0
+    clicked_count: int = 0
+
+class SendLog(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    message_id: str
+    user_id: str
+    channel: MessageChannel
+    recipient: str  # email or phone
+    subject: Optional[str] = None
+    body: str
+    status: SendStatus = SendStatus.PENDING
+    provider_response: Optional[dict] = None
+    sent_at: Optional[datetime] = None
+    delivered_at: Optional[datetime] = None
+    opened_at: Optional[datetime] = None
+    clicked_at: Optional[datetime] = None
+    failed_reason: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class ComplianceReminder(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str
+    description: str
+    due_date: datetime
+    reminder_days: List[int] = [7, 3, 1]  # Days before due date to send reminders
+    applicable_tiers: List[UserTier] = [UserTier.PREMIUM, UserTier.ENTERPRISE]
+    message_template_id: str
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class MessageAutomation(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    trigger: AutomationTrigger
+    conditions: dict = {}
+    message_template_id: str
+    delay_minutes: int = 0
+    is_active: bool = True
+    created_by: str
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
 class UserAddOnBalance(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     user_id: str = Field(description="User ID")
