@@ -265,13 +265,100 @@ const BulkPaymentCalculator = ({ formatCurrency }) => {
   const downloadTemplate = () => {
     const templateData = [
       ['Payee Name', 'TIN', 'Contract Amount', 'Transaction Type', 'Residency Status', 'Month', 'Year', 'Transaction Details', 'Payee Email'],
-      ['ABC Company Ltd', '12345678901', '1000000', 'professional_services', 'Resident', 'January', '2024', 'Consulting services', 'abc@company.com'],
-      ['XYZ Consultant', '98765432109', '500000', 'rent_lease', 'Non-Resident', 'February', '2024', 'Office rent', 'xyz@consultant.com']
+      ['ABC Company Ltd', '12345678901', '1000000', 'Professional Services (Consulting)', 'Resident', 'January', '2024', 'Consulting services', 'abc@company.com'],
+      ['XYZ Consultant', '98765432109', '500000', 'Rent & Lease Payments', 'Non-Resident', 'February', '2024', 'Office rent', 'xyz@consultant.com']
     ];
     
     const ws = XLSX.utils.aoa_to_sheet(templateData);
+    
+    // Create dropdown options for Transaction Type column (column D, index 3)
+    const transactionTypeOptions = Object.values(transactionTypes).map(type => type.name);
+    
+    // Set dropdown validation for Transaction Type column (column D)
+    // This creates a data validation for rows 2-1000 in column D
+    if (!ws['!dataValidation']) {
+      ws['!dataValidation'] = [];
+    }
+    
+    ws['!dataValidation'].push({
+      type: 'list',
+      allowBlank: false,
+      sqref: 'D2:D1000', // Apply to Transaction Type column from row 2 to 1000
+      formulas: ['"' + transactionTypeOptions.join(',') + '"']
+    });
+    
+    // Set column widths for better readability
+    ws['!cols'] = [
+      { wch: 20 }, // Payee Name
+      { wch: 15 }, // TIN
+      { wch: 15 }, // Contract Amount
+      { wch: 25 }, // Transaction Type (wider for dropdown)
+      { wch: 15 }, // Residency Status
+      { wch: 12 }, // Month
+      { wch: 8 },  // Year
+      { wch: 25 }, // Transaction Details
+      { wch: 25 }  // Payee Email
+    ];
+    
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Payment Template');
+    
+    // Add instructions worksheet
+    const instructionsData = [
+      ['FIQUANT CONSULT - BULK PAYMENT CALCULATOR INSTRUCTIONS'],
+      [''],
+      ['HOW TO USE THIS TEMPLATE:'],
+      [''],
+      ['1. DOWNLOAD & OPEN:'],
+      ['   - This file is downloaded to your computer'],
+      ['   - Open it in Microsoft Excel (recommended) or Google Sheets'],
+      [''],
+      ['2. FILL IN DATA:'],
+      ['   - Replace sample data with your actual payment information'],
+      ['   - Payee Name and Contract Amount are required fields'],
+      ['   - Use the dropdown in Transaction Type column for accurate selection'],
+      [''],
+      ['3. TRANSACTION TYPE DROPDOWN:'],
+      ['   - Click on any cell in the Transaction Type column'],
+      ['   - A dropdown arrow will appear - click it to see options'],
+      ['   - Select the appropriate transaction type from the list'],
+      ['   - DO NOT type manually to avoid errors'],
+      [''],
+      ['4. SAVE & UPLOAD:'],
+      ['   - Save the file (keep as .xlsx format)'],
+      ['   - Return to Fiquant TaxPro website'],
+      ['   - Click "Upload File" button and select this file'],
+      [''],
+      ['5. CALCULATE:'],
+      ['   - Click "Calculate All Payments" to process'],
+      ['   - Review results in the table format'],
+      ['   - Export reports or send payment advices as needed'],
+      [''],
+      ['FIELD DESCRIPTIONS:'],
+      [''],
+      ['• Payee Name: Company or individual name (Required)'],
+      ['• TIN: Tax Identification Number (Optional)'],
+      ['• Contract Amount: Total amount including VAT if applicable (Required)'],
+      ['• Transaction Type: Select from dropdown - determines VAT/WHT rates'],
+      ['• Residency Status: "Resident" or "Non-Resident" (affects WHT rates)'],
+      ['• Month: Transaction month (Optional)'],
+      ['• Year: Transaction year (Optional)'],
+      ['• Transaction Details: Brief description (Optional)'],
+      ['• Payee Email: Email for payment advice (Optional)'],
+      [''],
+      ['TRANSACTION TYPES AVAILABLE:'],
+    ];
+    
+    // Add transaction type descriptions
+    Object.values(transactionTypes).forEach(type => {
+      instructionsData.push([`• ${type.name}: ${type.description}`]);
+    });
+    
+    const instructionsWs = XLSX.utils.aoa_to_sheet(instructionsData);
+    instructionsWs['!cols'] = [{ wch: 80 }]; // Wide column for instructions
+    
+    XLSX.utils.book_append_sheet(wb, instructionsWs, 'Instructions');
+    
     XLSX.writeFile(wb, 'bulk_payment_template.xlsx');
   };
 
