@@ -12,6 +12,24 @@ import { Calculator, Building2, AlertTriangle, Printer, Plus, Trash2 } from 'luc
 import { generateVatReport } from '../utils/pdfGenerator';
 
 const VATCalculator = ({ formatCurrency, hasFeature }) => {
+  const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
+  const { startTrial, requestUpgrade } = useUpgrade();
+
+  const handleUpgrade = async () => {
+    const result = await requestUpgrade('pro');
+    if (result.success) {
+      setShowUpgradePrompt(false);
+    }
+  };
+
+  const handleTrial = async () => {
+    const result = await startTrial('pro');
+    if (result.success) {
+      setShowUpgradePrompt(false);
+    } else {
+      alert(result.message);
+    }
+  };
   const [vatInput, setVatInput] = useState({
     company_name: '',
     tin: '',
