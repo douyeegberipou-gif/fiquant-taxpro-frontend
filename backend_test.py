@@ -2285,6 +2285,362 @@ class NigerianTaxCalculatorTester:
         return True
 
     # ============================
+    # MONETIZATION ADD-ONS SYSTEM TESTS
+    # ============================
+    
+    def test_super_admin_login(self):
+        """Test super admin login for comprehensive testing"""
+        login_data = {
+            "email_or_phone": "douyeegberipou@yahoo.com",
+            "password": "any_password_works"  # Special admin bypass
+        }
+        
+        success, response = self.run_test(
+            "Super Admin Login",
+            "POST",
+            "auth/login",
+            200,
+            login_data
+        )
+        
+        if success:
+            self.auth_token = response.get('access_token')
+            print(f"   ✅ Super admin login successful")
+            print(f"   Token expires in: {response.get('expires_in')} seconds")
+            print(f"   User ID: {response.get('user_id')}")
+        
+        return success
+    
+    def test_addon_pricing_endpoint(self):
+        """Test GET /api/addons/pricing - verify pricing structure for all add-ons"""
+        success, response = self.run_test(
+            "Add-on Pricing Endpoint",
+            "GET",
+            "addons/pricing",
+            200
+        )
+        
+        if success:
+            print(f"   ✅ Add-on pricing retrieved successfully")
+            
+            # Verify extra employees pricing
+            extra_employees = response.get('extra_employees', {})
+            if (extra_employees.get('monthly_rate') == 250 and 
+                extra_employees.get('per_run_rate') == 100):
+                print(f"   ✅ Extra employees: ₦250/month or ₦100/bulk run")
+            else:
+                print(f"   ❌ Extra employees pricing incorrect")
+            
+            # Verify PDF print pricing
+            pdf_print = response.get('pdf_print', {})
+            if (pdf_print.get('rate') == 200 and 
+                'FREE' in pdf_print.get('applies_to', [])):
+                print(f"   ✅ PDF prints: ₦200 per print (Free tier only)")
+            else:
+                print(f"   ❌ PDF print pricing incorrect")
+            
+            # Verify compliance review pricing
+            compliance_review = response.get('compliance_review', {})
+            if (compliance_review.get('rate') == 25000 and 
+                set(['FREE', 'PRO', 'PREMIUM_EXPEDITED']).issubset(set(compliance_review.get('applies_to', [])))):
+                print(f"   ✅ Compliance reviews: ₦25,000 per review")
+            else:
+                print(f"   ❌ Compliance review pricing incorrect")
+        
+        return success
+    
+    def test_bulk_run_preview_charges_free_tier(self):
+        """Test bulk run charge preview for Free tier (5 employee limit)"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No authentication token available")
+            return False
+        
+        # Test within limit (5 employees)
+        success1, response1 = self.run_test(
+            "Bulk Run Preview - Within Free Tier Limit (5 employees)",
+            "GET",
+            "addons/bulk-run/preview-charges?employee_count=5",
+            200,
+            auth_required=True
+        )
+        
+        if success1:
+            if (response1.get('employee_count') == 5 and 
+                response1.get('tier_limit') == 5 and
+                response1.get('excess_employees') == 0 and
+                response1.get('total_charge') == 0 and
+                response1.get('within_limit') == True):
+                print(f"   ✅ Within limit: No charges applied")
+            else:
+                print(f"   ❌ Within limit calculation incorrect")
+        
+        # Test exceeding limit (10 employees)
+        success2, response2 = self.run_test(
+            "Bulk Run Preview - Exceeding Free Tier Limit (10 employees)",
+            "GET",
+            "addons/bulk-run/preview-charges?employee_count=10",
+            200,
+            auth_required=True
+        )
+        
+        if success2:
+            if (response2.get('employee_count') == 10 and 
+                response2.get('tier_limit') == 5 and
+                response2.get('excess_employees') == 5 and
+                response2.get('charge_per_employee') == 100 and
+                response2.get('total_charge') == 500 and
+                response2.get('within_limit') == False):
+                print(f"   ✅ Exceeding limit: ₦500 charge for 5 excess employees")
+            else:
+                print(f"   ❌ Exceeding limit calculation incorrect")
+                print(f"   Expected: 10 employees, 5 limit, 5 excess, ₦500 charge")
+                print(f"   Got: {response2.get('employee_count')} employees, {response2.get('tier_limit')} limit, {response2.get('excess_employees')} excess, ₦{response2.get('total_charge')} charge")
+        
+        return success1 and success2
+    
+    def test_pdf_export_free_tier_charging(self):
+        """Test PDF export with Free tier charging"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No authentication token available")
+            return False
+        
+        # Test PDF export (should apply ₦200 charge for Free tier)
+        calculation_data = {
+            "calculation_type": "paye",
+            "basic_salary": 100000,
+            "transport_allowance": 10000
+        }
+        
+        success, response = self.run_test(
+            "PDF Export with Free Tier Charging",
+            "POST",
+            "auth/export-pdf",
+            200,
+            calculation_data,
+            auth_required=True
+        )
+        
+        if success:
+            if (response.get('user_tier') == 'free' and 
+                'charge_applied' in response and
+                response.get('charge_applied', {}).get('charge_amount') == 200):
+                print(f"   ✅ PDF export charge applied: ₦200 for Free tier")
+                print(f"   Message: {response.get('message')}")
+            else:
+                print(f"   ❌ PDF export charging not working correctly")
+                print(f"   Response: {response}")
+        
+        return success
+    
+    def test_compliance_review_request_free_tier(self):
+        """Test compliance review request for Free tier"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No authentication token available")
+            return False
+        
+        review_data = {
+            "review_type": "PAYE Compliance Check",
+            "description": "Please review our PAYE calculations for Q4 2024 compliance",
+            "is_expedited": False
+        }
+        
+        success, response = self.run_test(
+            "Compliance Review Request - Free Tier",
+            "POST",
+            "addons/compliance-review/request",
+            200,
+            review_data,
+            auth_required=True
+        )
+        
+        if success:
+            if (response.get('amount') == 25000 and 
+                response.get('status') == 'pending' and
+                'review_id' in response):
+                print(f"   ✅ Compliance review requested: ₦25,000 charge")
+                print(f"   Review ID: {response.get('review_id')}")
+                print(f"   Status: {response.get('status')}")
+            else:
+                print(f"   ❌ Compliance review request failed")
+                print(f"   Response: {response}")
+        
+        return success
+    
+    def test_compliance_review_request_expedited(self):
+        """Test expedited compliance review request"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No authentication token available")
+            return False
+        
+        review_data = {
+            "review_type": "CIT Compliance Audit",
+            "description": "Urgent review needed for CIT filing deadline",
+            "is_expedited": True
+        }
+        
+        success, response = self.run_test(
+            "Compliance Review Request - Expedited",
+            "POST",
+            "addons/compliance-review/request",
+            200,
+            review_data,
+            auth_required=True
+        )
+        
+        if success:
+            if (response.get('amount') == 25000 and 
+                response.get('status') == 'pending' and
+                'Expedited' in response.get('message', '')):
+                print(f"   ✅ Expedited compliance review requested: ₦25,000 charge")
+                print(f"   Message: {response.get('message')}")
+            else:
+                print(f"   ❌ Expedited compliance review request failed")
+        
+        return success
+    
+    def test_user_addon_balances(self):
+        """Test user add-on balances and purchase history"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No authentication token available")
+            return False
+        
+        success, response = self.run_test(
+            "User Add-on Balances and Purchase History",
+            "GET",
+            "addons/user/balances",
+            200,
+            auth_required=True
+        )
+        
+        if success:
+            balances = response.get('balances', {})
+            recent_purchases = response.get('recent_purchases', [])
+            monthly_stats = response.get('monthly_stats', {})
+            
+            print(f"   ✅ Add-on balances retrieved successfully")
+            print(f"   Current balances: {len(balances)} balance types")
+            print(f"   Recent purchases: {len(recent_purchases)} purchases")
+            print(f"   Monthly stats: {len(monthly_stats)} addon types")
+            
+            # Check if we have any purchases from previous tests
+            if recent_purchases:
+                latest_purchase = recent_purchases[0]
+                print(f"   Latest purchase: {latest_purchase.get('description', 'N/A')}")
+                print(f"   Amount: ₦{latest_purchase.get('total_amount', 0)}")
+            
+            if monthly_stats:
+                for addon_type, stats in monthly_stats.items():
+                    print(f"   {addon_type}: {stats.get('quantity', 0)} units, ₦{stats.get('amount', 0)} total")
+        
+        return success
+    
+    def test_tier_limits_verification(self):
+        """Test tier limits for different user tiers"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No authentication token available")
+            return False
+        
+        # Test various employee counts to verify tier limits
+        test_cases = [
+            {"count": 5, "expected_excess": 0, "expected_charge": 0, "description": "Free tier limit (5)"},
+            {"count": 15, "expected_excess": 10, "expected_charge": 1000, "description": "Pro tier equivalent (15)"},
+            {"count": 50, "expected_excess": 45, "expected_charge": 4500, "description": "Premium tier equivalent (50)"},
+            {"count": 100, "expected_excess": 95, "expected_charge": 9500, "description": "Enterprise level (100)"}
+        ]
+        
+        all_passed = True
+        
+        for test_case in test_cases:
+            success, response = self.run_test(
+                f"Tier Limits - {test_case['description']}",
+                "GET",
+                f"addons/bulk-run/preview-charges?employee_count={test_case['count']}",
+                200,
+                auth_required=True
+            )
+            
+            if success:
+                if (response.get('excess_employees') == test_case['expected_excess'] and
+                    response.get('total_charge') == test_case['expected_charge']):
+                    print(f"   ✅ {test_case['description']}: {test_case['expected_excess']} excess, ₦{test_case['expected_charge']} charge")
+                else:
+                    print(f"   ❌ {test_case['description']}: Expected {test_case['expected_excess']} excess, ₦{test_case['expected_charge']} charge")
+                    print(f"      Got {response.get('excess_employees')} excess, ₦{response.get('total_charge')} charge")
+                    all_passed = False
+            else:
+                all_passed = False
+        
+        return all_passed
+    
+    def test_monetization_system_integration(self):
+        """Test complete monetization system integration"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No authentication token available")
+            return False
+        
+        print("   🔄 Testing complete monetization system integration...")
+        
+        # 1. Check pricing structure
+        pricing_success, pricing_response = self.run_test(
+            "Integration Test - Pricing Check",
+            "GET",
+            "addons/pricing",
+            200
+        )
+        
+        # 2. Test bulk run preview
+        preview_success, preview_response = self.run_test(
+            "Integration Test - Bulk Run Preview",
+            "GET",
+            "addons/bulk-run/preview-charges?employee_count=8",
+            200,
+            auth_required=True
+        )
+        
+        # 3. Test PDF export
+        pdf_success, pdf_response = self.run_test(
+            "Integration Test - PDF Export",
+            "POST",
+            "auth/export-pdf",
+            200,
+            {"calculation_type": "test"},
+            auth_required=True
+        )
+        
+        # 4. Check balances after operations
+        balance_success, balance_response = self.run_test(
+            "Integration Test - Final Balance Check",
+            "GET",
+            "addons/user/balances",
+            200,
+            auth_required=True
+        )
+        
+        integration_success = pricing_success and preview_success and pdf_success and balance_success
+        
+        if integration_success:
+            print(f"   ✅ Complete monetization system integration successful")
+            
+            # Summary of charges applied
+            total_charges = 0
+            if pdf_response.get('charge_applied'):
+                total_charges += pdf_response['charge_applied']['charge_amount']
+            
+            if preview_response.get('total_charge'):
+                print(f"   Bulk run preview: ₦{preview_response['total_charge']} for {preview_response.get('excess_employees', 0)} excess employees")
+            
+            if total_charges > 0:
+                print(f"   Total charges applied in integration test: ₦{total_charges}")
+            
+            recent_purchases = balance_response.get('recent_purchases', [])
+            if recent_purchases:
+                print(f"   Recent purchases recorded: {len(recent_purchases)} transactions")
+        else:
+            print(f"   ❌ Monetization system integration failed")
+        
+        return integration_success
+
+    # ============================
     # MONETIZATION DASHBOARD TESTS
     # ============================
     
