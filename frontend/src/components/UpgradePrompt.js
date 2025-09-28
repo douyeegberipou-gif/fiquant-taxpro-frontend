@@ -221,72 +221,23 @@ const UpgradePrompt = ({
             </p>
           </div>
 
-          <div className="space-y-4">
-            {/* Tier Benefits */}
-            {/* Tier Benefits */}
-            <div className="border border-gray-200 p-4 rounded-lg">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center">
-                  <Crown className="h-5 w-5 text-yellow-500 mr-2" />
-                  <span className="font-semibold text-gray-800">{config.requiredTier || 'Pro'} Features</span>
-                </div>
-                <Badge className="bg-yellow-400 text-white border-0 text-xs">
-                  Upgrade Required
-                </Badge>
-              </div>
-              <div className="grid grid-cols-2 gap-2 text-xs mb-4">
-                {getTierBenefits((config.requiredTier || 'Pro').toLowerCase()).map((benefit, idx) => (
-                  <div key={idx} className="flex items-center">
-                    <CheckCircle className="h-3 w-3 text-green-500 mr-2 flex-shrink-0" />
-                    <span className="text-gray-700">{benefit}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Pricing */}
-            <div className="text-center border border-gray-200 p-4 rounded-lg">
-              <div className="flex items-center justify-center space-x-4">
-                <div className="text-center">
-                  <div className="text-xl font-bold text-blue-700">₦9,999</div>
-                  <div className="text-xs text-gray-600">per month</div>
-                </div>
-                <div className="text-gray-400">or</div>
-                <div className="text-center">
-                  <div className="text-xl font-bold text-green-700">₦109,990</div>
-                  <div className="text-xs text-gray-600">per year</div>
-                  <div className="text-xs text-green-600 font-semibold">(2 months FREE!)</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-col space-y-3">
-              <Button onClick={onTrial} className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold py-3">
-                <Zap className="h-4 w-4 mr-2" />
-                Start 7-Day Free Trial
-              </Button>
-              <Button onClick={onUpgrade} className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3">
-                <Crown className="h-4 w-4 mr-2" />
-                Upgrade to Pro (₦9,999/month)
-              </Button>
-              <Button variant="outline" onClick={onUpgrade} className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold py-3 border-0">
-                <CreditCard className="h-4 w-4 mr-2" />
-                Get 2 Months Free - Pay Annually
-              </Button>
-              <Button variant="ghost" onClick={handleClose} className="text-gray-600 hover:bg-gray-100">
-                Maybe Later
-              </Button>
-            </div>
-          </div>
-          
-          {/* Trust Elements */}
-          <div className="text-center text-xs text-gray-500 border-t pt-3">
-            <div className="flex items-center justify-center space-x-4">
-              <span>✅ Instant Access</span>
-              <span>🔒 Secure Payment</span>
-              <span>📞 Nigerian Support</span>
-            </div>
+          {/* Action Buttons */}
+          <div className="flex flex-col space-y-3">
+            <Button onClick={onTrial} className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold py-3">
+              <Zap className="h-4 w-4 mr-2" />
+              Start 7-Day Free Trial
+            </Button>
+            <Button onClick={onUpgrade} className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3">
+              <Crown className="h-4 w-4 mr-2" />
+              Upgrade to Pro (₦9,999/month)
+            </Button>
+            <Button variant="outline" onClick={onUpgrade} className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold py-3 border-0">
+              <CreditCard className="h-4 w-4 mr-2" />
+              Get 2 Months Free - Pay Annually
+            </Button>
+            <Button variant="ghost" onClick={handleClose} className="text-gray-600 hover:bg-gray-100">
+              Maybe Later
+            </Button>
           </div>
         </CardContent>
       </Card>
