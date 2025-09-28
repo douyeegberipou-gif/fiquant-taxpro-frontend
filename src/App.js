@@ -1705,17 +1705,23 @@ function AppContent() {
 
           {/* VAT Calculator Tab */}
           <TabsContent value="vat">
-            <VATCalculator formatCurrency={formatCurrency} />
+            <FeatureGate feature="vat_calc">
+              <VATCalculator formatCurrency={formatCurrency} />
+            </FeatureGate>
           </TabsContent>
 
           {/* Payment Processing Calculator Tab */}
           <TabsContent value="payment">
-            <PaymentProcessingCalculator formatCurrency={formatCurrency} />
+            <FeatureGate feature="cgt_calc">
+              <PaymentProcessingCalculator formatCurrency={formatCurrency} />
+            </FeatureGate>
           </TabsContent>
 
           {/* CGT Calculator Tab */}
           <TabsContent value="cgt">
-            <CGTCalculator formatCurrency={formatCurrency} />
+            <FeatureGate feature="cgt_calc">
+              <CGTCalculator formatCurrency={formatCurrency} />
+            </FeatureGate>
           </TabsContent>
         </Tabs>
       </div>
