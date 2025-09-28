@@ -353,11 +353,22 @@ const CGTCalculator = ({ formatCurrency, hasFeature }) => {
 
             <div className="flex space-x-3 pt-4">
               <Button 
-                onClick={calculateCGT} 
+                onClick={() => {
+                  if (!hasFeature || !hasFeature('cgt_calc')) {
+                    setShowUpgradePrompt(true);
+                    return;
+                  }
+                  calculateCGT();
+                }} 
                 disabled={cgtLoading || !cgtInput.taxpayer_name || !cgtInput.disposal_proceeds || !cgtInput.acquisition_cost}
                 className="flex-1 bg-green-600 hover:bg-green-700"
               >
                 {cgtLoading ? 'Calculating...' : 'Calculate CGT'}
+                {hasFeature && !hasFeature('cgt_calc') && (
+                  <Badge variant="outline" className="ml-2 text-xs bg-green-50 text-green-600 border-green-200">
+                    PRO+
+                  </Badge>
+                )}
               </Button>
               <Button 
                 onClick={resetForm} 
