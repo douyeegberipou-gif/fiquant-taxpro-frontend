@@ -1548,15 +1548,17 @@ function AppContent() {
 
           {/* CIT Calculator Tab */}
           <TabsContent value="cit" className="space-y-6">
-            <CITCalculator
-              citInput={citInput}
-              citResult={citResult}
-              citLoading={citLoading}
-              handleCitInputChange={handleCitInputChange}
-              calculateCitTax={calculateCitTax}
-              resetCitForm={resetCitForm}
-              formatCurrency={formatCurrency}
-            />
+            <FeatureGate feature="cit_calc">
+              <CITCalculator
+                citInput={citInput}
+                citResult={citResult}
+                citLoading={citLoading}
+                handleCitInputChange={handleCitInputChange}
+                calculateCitTax={calculateCitTax}
+                resetCitForm={resetCitForm}
+                formatCurrency={formatCurrency}
+              />
+            </FeatureGate>
           </TabsContent>
 
           {/* Tax Information Tab */}
