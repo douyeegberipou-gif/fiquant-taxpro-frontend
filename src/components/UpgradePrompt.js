@@ -191,32 +191,32 @@ const UpgradePrompt = ({
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <Card className="max-w-lg w-full bg-white">
-        <CardHeader className="text-center relative">
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="absolute right-2 top-2 h-6 w-6 p-0"
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 overflow-y-auto">
+      <Card className="max-w-xl w-full bg-gradient-to-br from-purple-50 to-blue-50 shadow-2xl border-2 border-purple-200 max-h-[85vh] overflow-y-auto my-8">
+        <CardHeader className="text-center relative pb-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-t-lg">
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={handleClose}
+            className="absolute right-4 top-4 h-8 w-8 p-0 text-white hover:bg-white/20"
           >
             <X className="h-4 w-4" />
           </Button>
           <div className="flex justify-center mb-2">
-            {config.icon}
+            {feature === 'pdf_export' ? '📄' : '🌟'}
           </div>
-          <CardTitle className="text-xl">
-            {feature === 'pdf_export' ? config.title : '🌟 You\'ve discovered an amazing feature!'}
+          <CardTitle className="text-xl text-white">
+            {feature === 'pdf_export' ? config.title : 'You\'ve discovered an amazing feature!'}
           </CardTitle>
-          <CardDescription className="text-base leading-relaxed">
+          <CardDescription className="text-base leading-relaxed text-purple-100">
             <div dangerouslySetInnerHTML={{ 
               __html: (feature === 'pdf_export' ? config.benefit : 
-                `You've reached the limit of your free tier, but don't worry - we've got you covered! This powerful <strong>${config.title.replace('Unlock ', '').replace('Unlock Professional ', '').replace('Unlock Advanced ', '').replace('Unlock Capital Gains Tax Calculator', 'CGT Calculator')}</strong> tool is just a click away and can save you hours of manual calculations.<br/><br/><strong>Continue your important work for just ₦9,999/month</strong> - and here's the sweet part: get <strong>10% off</strong> when you pay annually!<br/><br/><strong>Want to test-drive first?</strong> Perfect! Start your <strong>7-day free trial</strong> right now and experience all Premium features with zero commitment.<br/><br/>Your success matters to us - choose what works best for you!`
+                `You've reached the limit of your free tier, but don't worry - we've got you covered! This powerful <strong>${config.title.replace('Unlock ', '').replace('Unlock Professional ', '').replace('Unlock Advanced ', '').replace('Unlock Capital Gains Tax Calculator', 'CGT Calculator')}</strong> tool is just a click away and can save you hours of manual calculations.<br/><br/><strong>Continue your important work for just ₦9,999/month</strong> - and here's the sweet part: get <strong>2 months free</strong> when you pay annually!<br/><br/><strong>Want to test-drive first?</strong> Perfect! Start your <strong>7-day free trial</strong> right now and experience all Premium features with zero commitment.<br/><br/>Your success matters to us - choose what works best for you!`
               ).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n\n/g, '<br/><br/>').replace(/\n/g, '<br/>') 
             }} />
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 p-6">
           {/* Tier Benefits */}
           <div className={`bg-${config.tierColor}-50 p-4 rounded-lg border border-${config.tierColor}-200`}>
             <div className="flex items-center justify-between mb-2">
