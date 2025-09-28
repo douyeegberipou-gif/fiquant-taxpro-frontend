@@ -230,13 +230,19 @@ const BulkPaymentCalculator = ({ formatCurrency }) => {
         const sheet = workbook.Sheets[sheetName];
         const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
         
+        // Helper function to convert transaction type name back to key
+        const getTransactionTypeKey = (name) => {
+          const entry = Object.entries(transactionTypes).find(([key, config]) => config.name === name);
+          return entry ? entry[0] : name; // Return key if found, otherwise return original
+        };
+
         // Skip header row and convert to payment objects
         const paymentsData = jsonData.slice(1).map((row, index) => ({
           id: index + 1,
           payee_name: row[0] || '',
           tin: row[1] || '',
           contract_amount: row[2] || '',
-          transaction_type: row[3] || '',
+          transaction_type: getTransactionTypeKey(row[3]) || '',
           is_resident: row[4] !== 'Non-Resident',
           month: row[5] || '',
           year: row[6] || '',
