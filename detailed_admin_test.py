@@ -2,7 +2,7 @@ import requests
 import json
 
 def test_admin_initialization():
-    base_url = "https://paye-payments.preview.emergentagent.com/api"
+    base_url = "https://nigeriapaye.preview.emergentagent.com/api"
     target_email = "douyeegberipou@gmail.com"
     target_name = "Doutimiye Alfred-Egberipou"
     
