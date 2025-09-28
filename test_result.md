@@ -576,15 +576,18 @@ test_plan:
 
   - task: "Messaging Dashboard in Admin Dashboard"
     implemented: true
-    working: "NA"
+    working: false
     file: "components/admin/MessagingDashboard.js"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "New Messaging Dashboard implemented as 8th tab in Admin Dashboard with 5 sub-tabs: Overview (analytics cards), Templates (create/manage email templates with merge tags), Campaigns (create/send campaigns with template/segment selection), Segments (create user segments with tier filters), Compliance (tax filing reminders for PAYE, VAT, CIT). Features include channel selection (email/SMS/in-app), form functionality for creating templates/campaigns/segments, UI with proper icons and status indicators. Ready for comprehensive testing."
+      - working: false
+        agent: "testing"
+        comment: "❌ MESSAGING DASHBOARD TESTING BLOCKED: Admin access denied for douyeegberipou@yahoo.com. ✅ LOGIN VERIFICATION: Special admin login bypass working correctly - user can login with any password. ✅ AUTHENTICATION FLOW: Login process successful, user redirected to main application. ❌ ADMIN PRIVILEGES MISSING: User lacks required admin privileges (admin_enabled: true, admin_role: 'super_admin') to access admin dashboard. ✅ ERROR HANDLING: Proper 'Admin Access Required' message displayed with 'Back to Main App' button. ✅ MESSAGING DASHBOARD IMPLEMENTATION: Code review confirms MessagingDashboard component exists with complete 5-tab structure (Overview, Templates, Campaigns, Segments, Compliance) and all required functionality. SOLUTION NEEDED: Database update to grant admin privileges to douyeegberipou@yahoo.com or use correct admin setup process to enable testing of Messaging Dashboard functionality."
 
 agent_communication:
   - agent: "main"
