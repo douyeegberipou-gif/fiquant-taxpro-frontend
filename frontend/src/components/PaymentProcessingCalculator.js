@@ -548,6 +548,17 @@ const PaymentProcessingCalculator = ({ formatCurrency, hasFeature }) => {
           </Card>
         )}
       </div>
+
+      {/* Upgrade Prompt */}
+      {showUpgradePrompt && (
+        <UpgradePrompt
+          type="feature"
+          feature="payment_calc"
+          onUpgrade={handleUpgrade}
+          onTrial={handleTrial}
+          onClose={() => setShowUpgradePrompt(false)}
+        />
+      )}
     </div>
   );
 };
