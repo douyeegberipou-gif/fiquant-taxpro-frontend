@@ -221,6 +221,13 @@ const BulkPaymentCalculator = ({ formatCurrency, hasFeature }) => {
   };
 
   const calculateAllPayments = () => {
+    // Check if user has the bulk payment feature
+    if (!hasFeature || !hasFeature('bulk_payment_calc')) {
+      setUpgradeContext({ type: 'feature', feature: 'bulk_payment_calc' });
+      setShowUpgradePrompt(true);
+      return;
+    }
+
     setLoading(true);
     
     try {
