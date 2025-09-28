@@ -1673,7 +1673,6 @@ function AppContent() {
                 </CardContent>
               </Card>
             </div>
-            </FeatureGate>
           </TabsContent>
 
           {/* Profile Tab */}
