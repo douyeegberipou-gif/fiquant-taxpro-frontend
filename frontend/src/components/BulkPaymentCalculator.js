@@ -981,6 +981,18 @@ const BulkPaymentCalculator = ({ formatCurrency, hasFeature }) => {
           </CardContent>
         </Card>
       )}
+
+      {/* Upgrade Prompt */}
+      {showUpgradePrompt && (
+        <UpgradePrompt
+          type={upgradeContext.type}
+          feature={upgradeContext.feature}
+          onUpgrade={handleUpgrade}
+          onTrial={handleTrial}
+          onAddon={handleAddon}
+          onClose={() => setShowUpgradePrompt(false)}
+        />
+      )}
     </div>
   );
 };
