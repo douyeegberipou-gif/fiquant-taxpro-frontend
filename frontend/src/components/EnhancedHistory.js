@@ -513,6 +513,17 @@ const EnhancedHistory = ({ history, citHistory, formatCurrency, hasFeature }) =>
           Click on any calculation to view detailed breakdown and print reports
         </div>
       )}
+
+      {/* Upgrade Prompt */}
+      {showUpgradePrompt && (
+        <UpgradePrompt
+          type="feature"
+          feature="pdf_export"
+          onUpgrade={handleUpgrade}
+          onTrial={handleTrial}
+          onClose={() => setShowUpgradePrompt(false)}
+        />
+      )}
     </div>
   );
 };
