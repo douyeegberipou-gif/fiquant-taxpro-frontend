@@ -12,6 +12,9 @@ const Home = ({ onNavigateToTab }) => {
   const [activeTab, setActiveTab] = useState('pro');
   const [expandedFaq, setExpandedFaq] = useState(null);
   
+  // Pricing toggle
+  const [isAnnual, setIsAnnual] = useState(false);
+  
   // Carousel state
   const [carouselSlides, setCarouselSlides] = useState([]);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
