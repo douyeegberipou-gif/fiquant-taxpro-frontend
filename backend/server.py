@@ -2734,6 +2734,11 @@ def get_tier_features(tier: UserTier) -> TierFeatures:
 
 async def get_user_effective_tier_and_features(user_id: str):
     """Get user's current effective tier and features (including active trials)"""
+    # Check if user is admin - admins get enterprise tier access
+    user_data = await db.users.find_one({"id": user_id})
+    if user_data and user_data.get("admin_enabled") and user_data.get("admin_role"):
+        return UserTier.ENTERPRISE, get_tier_features(UserTier.ENTERPRISE)
+    
     # Get subscription
     subscription_data = await db.subscriptions.find_one({"user_id": user_id})
     
