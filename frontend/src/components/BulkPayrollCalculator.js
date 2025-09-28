@@ -1054,6 +1054,18 @@ If the problem persists, please contact Fiquant Consult support with this error 
           </button>
         </div>
       )}
+
+      {/* Upgrade Prompt */}
+      {showUpgradePrompt && (
+        <UpgradePrompt
+          type={upgradeContext.type}
+          feature={upgradeContext.feature}
+          onUpgrade={handleUpgrade}
+          onTrial={handleTrial}
+          onAddon={handleAddon}
+          onClose={() => setShowUpgradePrompt(false)}
+        />
+      )}
     </div>
   );
 };
