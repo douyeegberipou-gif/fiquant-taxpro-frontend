@@ -1676,7 +1676,9 @@ function App() {
   return (
     <AuthProvider>
       <TrialProvider>
-        <AppContent />
+        <AdProvider>
+          <AppContent />
+        </AdProvider>
       </TrialProvider>
     </AuthProvider>
   );
