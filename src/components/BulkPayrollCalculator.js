@@ -8,6 +8,8 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Alert, AlertDescription } from './ui/alert';
 import { generateBulkPayeReport } from '../utils/pdfGenerator';
+import UpgradePrompt from './UpgradePrompt';
+import { useUpgrade } from '../hooks/useUpgrade';
 
 const BulkPayrollCalculator = ({ 
   formatCurrency, 
