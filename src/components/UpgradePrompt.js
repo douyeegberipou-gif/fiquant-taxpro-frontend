@@ -192,53 +192,37 @@ const UpgradePrompt = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
-      <Card className="max-w-4xl w-full bg-gradient-to-br from-slate-50 to-gray-100 shadow-2xl border-2 border-amber-300 max-h-[90vh]">
-        <CardHeader className="text-center relative pb-6 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-t-lg">
+      <Card className="max-w-2xl w-full bg-white shadow-2xl border-2 border-yellow-400 max-h-[85vh] overflow-y-auto">
+        <CardHeader className="text-center relative pb-4">
           <Button
             variant="ghost"
             size="sm"
             onClick={handleClose}
-            className="absolute right-4 top-4 h-8 w-8 p-0 text-white hover:bg-white/20"
+            className="absolute right-4 top-4 h-8 w-8 p-0 text-gray-600 hover:bg-gray-100"
           >
             <X className="h-4 w-4" />
           </Button>
           <div className="flex justify-center mb-3">
             {feature === 'pdf_export' ? '📄' : '⭐'}
           </div>
-          <CardTitle className="text-2xl text-white font-bold">
-            {feature === 'pdf_export' ? config.title : 'Ready to unlock your potential?'}
-          </CardTitle>
         </CardHeader>
-        <CardContent className="p-8">
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="space-y-4">
-              <div className="bg-gradient-to-r from-amber-50 to-orange-50 p-4 rounded-lg border border-amber-200">
-                <p className="text-gray-800 leading-relaxed">
-                  <span className="text-amber-800 font-semibold">You've reached your free tier limit,</span> but don't worry - we've got you covered! This powerful <strong className="text-orange-700">{config.title.replace('Unlock ', '').replace('Unlock Professional ', '').replace('Unlock Advanced ', '').replace('Unlock Capital Gains Tax Calculator', 'CGT Calculator')}</strong> tool can save you hours of manual calculations.
-                </p>
-              </div>
-              
-              <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-lg border border-green-200">
-                <p className="text-gray-800 leading-relaxed">
-                  <strong className="text-green-700 text-lg">Continue your important work for just ₦9,999/month</strong> - and here's the sweet part: get <strong className="text-emerald-600">2 months free</strong> when you pay annually!
-                </p>
-              </div>
-              
-              <div className="bg-gradient-to-r from-purple-50 to-violet-50 p-4 rounded-lg border border-purple-200">
-                <p className="text-gray-800 leading-relaxed">
-                  <strong className="text-purple-700">Want to test-drive first?</strong> Perfect! Start your <strong className="text-violet-600">7-day free trial</strong> right now and experience all Premium features with zero commitment.
-                </p>
-              </div>
-              
-              <div className="bg-gradient-to-r from-rose-50 to-pink-50 p-4 rounded-lg border border-rose-200">
-                <p className="text-rose-700 font-medium italic">
-                  Your success matters to us - choose what works best for you!
-                </p>
-              </div>
-            </div>
-            
-            <div className="space-y-4">
-              {/* Tier Benefits */}
+        <CardContent className="p-6 space-y-6">
+          
+          {/* Main Message */}
+          <div className="text-center space-y-4">
+            <p className="text-gray-800 leading-relaxed text-sm">
+              You've reached your free tier limit, but don't worry - we've got you covered! 
+            </p>
+            <p className="text-gray-800 leading-relaxed text-sm">
+              <strong className="text-blue-700">Continue your important work for just ₦9,999/month</strong> - and here's the sweet part: get <strong className="text-green-600">2 months free</strong> when you pay annually!
+            </p>
+            <p className="text-gray-800 leading-relaxed text-sm">
+              <strong className="text-purple-700">Want to test-drive first?</strong> Perfect! Start your <strong className="text-emerald-600">7-day free trial</strong> right now and experience all Premium features with zero commitment.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {/* Tier Benefits */}
               <div className="bg-gradient-to-r from-indigo-50 to-blue-50 p-5 rounded-lg border border-indigo-200 shadow-sm">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center">
