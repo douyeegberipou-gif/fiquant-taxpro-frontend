@@ -9,8 +9,36 @@ import { Badge } from './ui/badge';
 import { Alert, AlertDescription } from './ui/alert';
 import { Separator } from './ui/separator';
 import { generatePaymentProcessingReport } from '../utils/pdfGenerator';
+import UpgradePrompt from './UpgradePrompt';
+import { useUpgrade } from '../hooks/useUpgrade';
 
-const BulkPaymentCalculator = ({ formatCurrency }) => {
+const BulkPaymentCalculator = ({ formatCurrency, hasFeature }) => {
+  const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
+  const [upgradeContext, setUpgradeContext] = useState({ type: 'feature', feature: 'bulk_payment_calc' });
+  const { startTrial, requestUpgrade, requestAddon } = useUpgrade();
+
+  const handleUpgrade = async () => {
+    const result = await requestUpgrade('pro');
+    if (result.success) {
+      setShowUpgradePrompt(false);
+    }
+  };
+
+  const handleTrial = async () => {
+    const result = await startTrial('pro');
+    if (result.success) {
+      setShowUpgradePrompt(false);
+    } else {
+      alert(result.message);
+    }
+  };
+
+  const handleAddon = async () => {
+    const result = await requestAddon(upgradeContext.feature, 1);
+    if (result.success) {
+      setShowUpgradePrompt(false);
+    }
+  };
   const [payments, setPayments] = useState([
     {
       id: 1,
