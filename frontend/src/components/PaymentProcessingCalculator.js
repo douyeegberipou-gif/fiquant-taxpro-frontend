@@ -3,12 +3,33 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/
 import { Input } from './ui/input.jsx';
 import { Label } from './ui/label.jsx';
 import { Button } from './ui/button.jsx';
+import { Badge } from './ui/badge.jsx';
 import { Separator } from './ui/separator.jsx';
 import { Alert, AlertDescription } from './ui/alert.jsx';
 import { CreditCard, Calculator, AlertTriangle, Printer, Building2, Mail, Send } from 'lucide-react';
 import { generatePaymentProcessingReport } from '../utils/pdfGenerator';
+import UpgradePrompt from './UpgradePrompt';
+import { useUpgrade } from '../hooks/useUpgrade';
 
-const PaymentProcessingCalculator = ({ formatCurrency }) => {
+const PaymentProcessingCalculator = ({ formatCurrency, hasFeature }) => {
+  const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
+  const { startTrial, requestUpgrade } = useUpgrade();
+
+  const handleUpgrade = async () => {
+    const result = await requestUpgrade('pro');
+    if (result.success) {
+      setShowUpgradePrompt(false);
+    }
+  };
+
+  const handleTrial = async () => {
+    const result = await startTrial('pro');
+    if (result.success) {
+      setShowUpgradePrompt(false);
+    } else {
+      alert(result.message);
+    }
+  };
   const [paymentInput, setPaymentInput] = useState({
     payee_name: '',
     tin: '',
