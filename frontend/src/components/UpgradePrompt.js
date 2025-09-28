@@ -58,8 +58,8 @@ const UpgradePrompt = ({
       },
       pdf_export: {
         icon: <FileText className="h-6 w-6 text-gray-600" />,
-        title: "Unlock Unlimited PDF Reports",
-        benefit: "Generate professional tax reports, calculations, and compliance documents instantly",
+        title: "📄 Time to save your hard work!",
+        benefit: "You've done the heavy lifting with your calculations - now let's get you that professional PDF report!\n\nFor just ₦9,999/month, unlock unlimited PDF exports plus all our premium calculation tools. Want to save more? Our annual plan gives you 10% off!\n\nJust need to finish this one task? Start your 7-day free trial right now and download your report immediately!\n\nYour professional reports are just one click away! ✨",
         requiredTier: "Pro",
         tierColor: "gray"
       },
