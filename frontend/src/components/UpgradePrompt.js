@@ -223,76 +223,65 @@ const UpgradePrompt = ({
 
           <div className="space-y-4">
             {/* Tier Benefits */}
-              <div className="bg-gradient-to-r from-indigo-50 to-blue-50 p-5 rounded-lg border border-indigo-200 shadow-sm">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center">
-                    <Crown className="h-6 w-6 text-yellow-500 mr-2" />
-                    <span className="font-bold text-gray-800 text-lg">{config.requiredTier || 'Pro'} Features</span>
+            {/* Tier Benefits */}
+            <div className="border border-gray-200 p-4 rounded-lg">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center">
+                  <Crown className="h-5 w-5 text-yellow-500 mr-2" />
+                  <span className="font-semibold text-gray-800">{config.requiredTier || 'Pro'} Features</span>
+                </div>
+                <Badge className="bg-yellow-400 text-white border-0 text-xs">
+                  Upgrade Required
+                </Badge>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-xs mb-4">
+                {getTierBenefits((config.requiredTier || 'Pro').toLowerCase()).map((benefit, idx) => (
+                  <div key={idx} className="flex items-center">
+                    <CheckCircle className="h-3 w-3 text-green-500 mr-2 flex-shrink-0" />
+                    <span className="text-gray-700">{benefit}</span>
                   </div>
-                  <Badge className="bg-gradient-to-r from-yellow-400 to-amber-500 text-white border-0 font-semibold">
-                    Upgrade Required
-                  </Badge>
-                </div>
-                <div className="grid grid-cols-1 gap-2 text-sm mb-4">
-                  {getTierBenefits((config.requiredTier || 'Pro').toLowerCase()).map((benefit, idx) => (
-                    <div key={idx} className="flex items-center">
-                      <CheckCircle className="h-4 w-4 text-emerald-500 mr-3 flex-shrink-0" />
-                      <span className="text-gray-700 font-medium">{benefit}</span>
-                    </div>
-                  ))}
-                </div>
-                
-                {/* Pricing Highlight */}
-                <div className="bg-gradient-to-r from-teal-50 to-cyan-50 p-4 rounded-lg border border-teal-200">
-                  <div className="flex items-center justify-center space-x-6">
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-teal-700">₦9,999</div>
-                      <div className="text-sm text-teal-600 font-medium">per month</div>
-                    </div>
-                    <div className="text-gray-400 text-xl">or</div>
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-cyan-700">₦109,990</div>
-                      <div className="text-sm text-cyan-600 font-medium">per year</div>
-                      <div className="text-xs text-green-600 font-bold">(2 months FREE!)</div>
-                    </div>
-                  </div>
-                </div>
+                ))}
               </div>
+            </div>
 
-              {/* Trial Highlight */}
-              <div className="bg-gradient-to-r from-emerald-50 to-green-50 p-4 rounded-lg border border-emerald-200 shadow-sm">
-                <div className="flex items-center justify-center space-x-2">
-                  <Zap className="h-5 w-5 text-emerald-600" />
-                  <span className="font-bold text-emerald-800 text-lg">7-Day Free Trial Available</span>
+            {/* Pricing */}
+            <div className="text-center border border-gray-200 p-4 rounded-lg">
+              <div className="flex items-center justify-center space-x-4">
+                <div className="text-center">
+                  <div className="text-xl font-bold text-blue-700">₦9,999</div>
+                  <div className="text-xs text-gray-600">per month</div>
                 </div>
-                <div className="text-center text-sm text-emerald-700 mt-1 font-medium">
-                  Try all {config.requiredTier} features risk-free. Cancel anytime.
+                <div className="text-gray-400">or</div>
+                <div className="text-center">
+                  <div className="text-xl font-bold text-green-700">₦109,990</div>
+                  <div className="text-xs text-gray-600">per year</div>
+                  <div className="text-xs text-green-600 font-semibold">(2 months FREE!)</div>
                 </div>
               </div>
+            </div>
 
-              {/* Action Buttons */}
-              <div className="flex flex-col space-y-3 pt-2">
-                <Button onClick={onTrial} className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold py-4 text-lg shadow-xl transform hover:scale-105 transition-all">
-                  <Zap className="h-5 w-5 mr-3" />
-                  Start 7-Day Free Trial
-                </Button>
-                <Button onClick={onUpgrade} className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold py-4 text-lg shadow-xl transform hover:scale-105 transition-all">
-                  <Crown className="h-5 w-5 mr-3" />
-                  Upgrade to Pro (₦9,999/month)
-                </Button>
-                <Button variant="outline" onClick={onUpgrade} className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-4 text-lg shadow-xl border-0 transform hover:scale-105 transition-all">
-                  <CreditCard className="h-5 w-5 mr-3" />
-                  Get 2 Months Free - Pay Annually
-                </Button>
-                <Button variant="ghost" onClick={handleClose} className="text-gray-600 hover:bg-gray-100 font-medium">
-                  Maybe Later
-                </Button>
-              </div>
+            {/* Action Buttons */}
+            <div className="flex flex-col space-y-3">
+              <Button onClick={onTrial} className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold py-3">
+                <Zap className="h-4 w-4 mr-2" />
+                Start 7-Day Free Trial
+              </Button>
+              <Button onClick={onUpgrade} className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3">
+                <Crown className="h-4 w-4 mr-2" />
+                Upgrade to Pro (₦9,999/month)
+              </Button>
+              <Button variant="outline" onClick={onUpgrade} className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold py-3 border-0">
+                <CreditCard className="h-4 w-4 mr-2" />
+                Get 2 Months Free - Pay Annually
+              </Button>
+              <Button variant="ghost" onClick={handleClose} className="text-gray-600 hover:bg-gray-100">
+                Maybe Later
+              </Button>
             </div>
           </div>
           
           {/* Trust Elements */}
-          <div className="text-center text-xs text-gray-500 border-t pt-3 mt-6">
+          <div className="text-center text-xs text-gray-500 border-t pt-3">
             <div className="flex items-center justify-center space-x-4">
               <span>✅ Instant Access</span>
               <span>🔒 Secure Payment</span>
