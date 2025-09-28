@@ -1864,6 +1864,18 @@ function AppContent() {
       {canShowAds() && (
         <BottomBanner className="mt-8" />
       )}
+
+      {/* Upgrade Prompt */}
+      {showUpgradePrompt && (
+        <UpgradePrompt
+          type={upgradeContext.type}
+          feature={upgradeContext.feature}
+          onUpgrade={handleUpgrade}
+          onTrial={handleTrial}
+          onAddon={handleAddon}
+          onClose={() => setShowUpgradePrompt(false)}
+        />
+      )}
     </div>
   );
 }
