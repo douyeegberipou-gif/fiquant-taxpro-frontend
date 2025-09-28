@@ -59,7 +59,7 @@ const UpgradePrompt = ({
       pdf_export: {
         icon: <FileText className="h-6 w-6 text-gray-600" />,
         title: "📄 Time to save your hard work!",
-        benefit: "You've done the heavy lifting with your calculations - now let's get you that professional PDF report!<br/><br/><strong>For just ₦9,999/month</strong>, unlock unlimited PDF exports plus all our premium calculation tools. Want to save more? Our <strong>annual plan gives you 10% off</strong>!<br/><br/><strong>Just need to finish this one task?</strong> Start your <strong>7-day free trial</strong> right now and download your report immediately!<br/><br/>Your professional reports are just one click away! ✨",
+        benefit: "You've done the heavy lifting with your calculations - now let's get you that professional PDF report!<br/><br/><strong>For just ₦9,999/month</strong>, unlock unlimited PDF exports plus all our premium calculation tools. Want to save more? Our <strong>annual plan gives you 2 months free</strong>!<br/><br/><strong>Just need to finish this one task?</strong> Start your <strong>7-day free trial</strong> right now and download your report immediately!<br/><br/>Your professional reports are just one click away! ✨",
         requiredTier: "Pro",
         tierColor: "gray"
       },
