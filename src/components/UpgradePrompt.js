@@ -160,31 +160,33 @@ const UpgradePrompt = ({
               <X className="h-4 w-4" />
             </Button>
             <div className="flex justify-center mb-2">
-              {config.icon}
+              🎯
             </div>
-            <CardTitle className="text-lg">{config.title}</CardTitle>
-            <CardDescription>{config.benefit}</CardDescription>
+            <CardTitle className="text-lg">You're making great progress!</CardTitle>
+            <CardDescription className="text-sm leading-relaxed">
+              You've used up your monthly quota, which shows you're really putting our tools to work! No worries though - you don't have to stop here.
+              <br/><br/>
+              <strong>Keep the momentum going for just ₦9,999/month</strong> and unlock unlimited runs plus advanced features. Or save big with our <strong>annual plan at 10% off</strong>!
+              <br/><br/>
+              <strong>Not ready to commit yet?</strong> We totally understand! Start your <strong>7-day free trial</strong> and continue your work immediately - no strings attached.
+              <br/><br/>
+              Let's keep you moving forward! 🚀
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
-              <div className="text-center">
-                <div className="font-bold text-blue-900">{config.addonPrice}</div>
-                <div className="text-sm text-blue-700">{config.addonDescription}</div>
-              </div>
-            </div>
-            
             <div className="flex flex-col space-y-2">
-              <Button onClick={onAddOns} className="bg-blue-600 hover:bg-blue-700">
+              <Button onClick={onTrial} className="bg-green-600 hover:bg-green-700">
+                <Zap className="h-4 w-4 mr-2" />
+                Start 7-Day Free Trial
+              </Button>
+              <Button onClick={onUpgrade} className="bg-blue-600 hover:bg-blue-700">
+                <Crown className="h-4 w-4 mr-2" />
+                Upgrade to Pro (₦9,999/month)
+              </Button>
+              <Button onClick={onAddOns} variant="outline">
                 <CreditCard className="h-4 w-4 mr-2" />
-                Buy Add-on Now
+                Save 10% - Pay Annually
               </Button>
-              <Button variant="outline" onClick={handleClose}>
-                Maybe Later
-              </Button>
-            </div>
-            
-            <div className="text-center text-xs text-gray-500">
-              💡 <strong>Tip:</strong> Upgrade to {config.requiredTier || 'Pro'}+ for unlimited access to all features
             </div>
           </CardContent>
         </Card>
