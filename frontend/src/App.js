@@ -1490,7 +1490,8 @@ function AppContent() {
                       <Button
                         onClick={() => {
                           if (!hasFeature('pdf_export')) {
-                            alert('PDF export requires Pro+ tier. Please upgrade your account.');
+                            setUpgradeContext({ type: 'feature', feature: 'pdf_export' });
+                            setShowUpgradePrompt(true);
                             return;
                           }
                           generatePayeReport(taxInput, result);
