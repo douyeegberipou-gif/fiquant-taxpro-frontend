@@ -1021,6 +1021,18 @@ function AppContent() {
                   <span className="text-xs font-semibold tracking-wide">PROFILE</span>
                 </TabsTrigger>
               )}
+              {isAuthenticated() && (
+                <TabsTrigger 
+                  value="addons" 
+                  className="flex-1 md:flex-none bg-gray-50 px-6 py-4 text-gray-700 font-medium rounded-lg hover:bg-gray-100 data-[state=active]:bg-purple-600 data-[state=active]:text-white transition-all duration-200 flex flex-col items-center justify-center space-y-2 shadow-sm hover:shadow-md data-[state=active]:shadow-md"
+                  style={{
+                    boxShadow: activeTab === 'addons' ? '0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)' : '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)'
+                  }}
+                >
+                  <CreditCard className="h-5 w-5" />
+                  <span className="text-xs font-semibold tracking-wide">ADD-ONS</span>
+                </TabsTrigger>
+              )}
               </div>
             </TabsList>
           </div>
