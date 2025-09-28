@@ -1610,6 +1610,28 @@ function AppContent() {
         setShowTerms={setShowTerms}
       />
 
+      {/* Trial Modal */}
+      <TrialModal
+        isOpen={showTrialModal}
+        onClose={() => setShowTrialModal(false)}
+        onTrialStarted={(trialData) => {
+          console.log('Trial started:', trialData);
+          // Optionally refresh user data or show success message
+        }}
+      />
+
+      {/* Trial Expired Modal */}
+      <TrialExpiredModal
+        isOpen={showExpiredModal}
+        onClose={() => setShowExpiredModal(false)}
+        onUpgrade={() => {
+          setShowExpiredModal(false);
+          // Navigate to pricing or open upgrade modal
+          setActiveTab('home'); // Navigate to pricing section
+        }}
+        trialTier={trialStatus?.current_trial?.trial_tier || 'Pro'}
+      />
+
       {/* Password Reset Modal */}
       {showPasswordReset && (
         <PasswordResetForm 
