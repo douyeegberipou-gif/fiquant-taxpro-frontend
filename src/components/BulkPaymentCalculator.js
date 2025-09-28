@@ -555,35 +555,12 @@ const BulkPaymentCalculator = ({ formatCurrency }) => {
                     </div>
                   </div>
 
-                  {/* Individual Result Display */}
-                  {showResults && payment.calculated && payment.result && (
-                    <div className="mt-4 p-4 bg-gray-50 rounded-lg border">
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-                        <div>
-                          <span className="text-gray-600">Net Payment:</span>
-                          <div className="font-bold text-purple-600">
-                            {formatCurrency(payment.result.net_payment)}
-                          </div>
-                        </div>
-                        <div>
-                          <span className="text-gray-600">VAT:</span>
-                          <div className="font-medium text-red-600">
-                            {formatCurrency(payment.result.vat_amount)}
-                          </div>
-                        </div>
-                        <div>
-                          <span className="text-gray-600">WHT:</span>
-                          <div className="font-medium text-orange-600">
-                            {formatCurrency(payment.result.wht_amount)}
-                          </div>
-                        </div>
-                        <div>
-                          <span className="text-gray-600">Total Gov't:</span>
-                          <div className="font-medium text-gray-800">
-                            {formatCurrency(payment.result.total_government_remittance)}
-                          </div>
-                        </div>
-                      </div>
+                  {/* Calculation status indicator only */}
+                  {payment.calculated && (
+                    <div className="mt-2">
+                      <Badge variant="default" className="bg-green-100 text-green-800 text-xs">
+                        ✓ Calculated
+                      </Badge>
                     </div>
                   )}
                 </CardContent>
