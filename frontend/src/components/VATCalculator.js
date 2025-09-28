@@ -325,6 +325,7 @@ const VATCalculator = ({ formatCurrency }) => {
   const resetForm = () => {
     setVatInput({
       company_name: '',
+      tin: '',
       month: '',
       transactions: [
         {
@@ -334,8 +335,7 @@ const VATCalculator = ({ formatCurrency }) => {
           amount: ''
         }
       ],
-      is_registered_business: true,
-      input_vat_paid: ''
+      is_registered_business: true
     });
     setVatResult(null);
   };
