@@ -243,18 +243,6 @@ class CarouselSettingsResponse(BaseModel):
 # SUBSCRIPTION & TIER MODELS  
 # ============================
 
-class UserTier(str, Enum):
-    FREE = "free"
-    PRO = "pro"
-    PREMIUM = "premium"
-    ENTERPRISE = "enterprise"
-
-class SubscriptionStatus(str, Enum):
-    ACTIVE = "active"
-    TRIAL = "trial"
-    EXPIRED = "expired"
-    CANCELLED = "cancelled"
-
 class UserSubscription(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     user_id: str = Field(description="User ID")
