@@ -393,6 +393,10 @@ export const AdminDashboard = () => {
           <TabsContent value="integrations">
             <IntegrationManager />
           </TabsContent>
+
+          <TabsContent value="messaging">
+            <MessagingDashboard />
+          </TabsContent>
         </Tabs>
       </div>
     </div>
