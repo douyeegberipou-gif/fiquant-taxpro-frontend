@@ -1951,6 +1951,306 @@ async def calculate_paye_tax(tax_input: TaxInput):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Calculation error: {str(e)}")
 
+# ============================
+# AUTHENTICATED & FEATURE-GATED CALCULATION ENDPOINTS
+# ============================
+
+@api_router.post("/auth/calculate-paye", response_model=List[TaxCalculationResult])
+async def calculate_paye_authenticated(
+    tax_inputs: List[TaxInput],
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Calculate PAYE tax with authentication and feature gating"""
+    try:
+        # Check if this is a bulk calculation (multiple inputs)
+        is_bulk = len(tax_inputs) > 1
+        
+        if is_bulk:
+            # Check bulk PAYE permissions
+            staff_count = len(tax_inputs)
+            can_bulk, error_msg = await check_bulk_paye_limits(current_user, staff_count)
+            
+            if not can_bulk:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail=create_feature_gate_response("bulk_paye", error_msg)
+                )
+        
+        # Calculate PAYE for all inputs
+        results = []
+        for tax_input in tax_inputs:
+            result = calculate_nigerian_paye_2026(tax_input)
+            results.append(result)
+        
+        # Save to calculation history if enabled for tier
+        has_history, _ = await check_feature_access(current_user, "calculation_history")
+        if has_history:
+            for result in results:
+                calculation_dict = result.dict()
+                calculation_dict['timestamp'] = result.timestamp.isoformat()
+                calculation_dict['user_id'] = current_user.id
+                calculation_dict['calculation_type'] = 'bulk_paye' if is_bulk else 'paye'
+                await db.calculation_history.insert_one(calculation_dict)
+        
+        # Consume bulk run if applicable
+        if is_bulk:
+            await use_bulk_paye_run(current_user)
+        
+        return results
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Calculation error: {str(e)}")
+
+@api_router.post("/auth/calculate-cit", response_model=CITCalculationResult)
+async def calculate_cit_authenticated(
+    cit_input: CITInput,
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Calculate CIT with authentication and feature gating"""
+    try:
+        # Check CIT calculation access
+        has_access, error_msg = await check_feature_access(current_user, "cit_calc")
+        
+        if not has_access:
+            # Check if user has reward-based access for FREE tier
+            tier, _ = await get_user_effective_tier_and_features(current_user.id)
+            if tier == UserTier.FREE:
+                ad_tracking = await db.ad_frequency.find_one({"user_id": current_user.id})
+                if ad_tracking and ad_tracking.get("extra_cit_calcs", 0) > 0:
+                    # User has reward-based access
+                    await use_cit_calculation(current_user, from_reward=True)
+                else:
+                    raise HTTPException(
+                        status_code=status.HTTP_403_FORBIDDEN,
+                        detail=create_feature_gate_response("cit_calc", "CIT calculator requires Pro tier. Watch rewarded ads or upgrade to unlock.")
+                    )
+            else:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail=create_feature_gate_response("cit_calc", error_msg)
+                )
+        
+        # Calculate CIT
+        result = calculate_nigerian_cit_2026(cit_input)
+        
+        # Save to history if enabled
+        has_history, _ = await check_feature_access(current_user, "calculation_history")
+        if has_history:
+            calculation_dict = result.dict()
+            calculation_dict['timestamp'] = result.timestamp.isoformat()
+            calculation_dict['user_id'] = current_user.id
+            calculation_dict['calculation_type'] = 'cit'
+            await db.calculation_history.insert_one(calculation_dict)
+        
+        return result
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Calculation error: {str(e)}")
+
+@api_router.post("/auth/calculate-vat")
+async def calculate_vat_authenticated(
+    vat_data: dict,
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Calculate VAT with authentication and feature gating"""
+    try:
+        # Check VAT calculation access
+        has_access, error_msg = await check_feature_access(current_user, "vat_calc")
+        
+        if not has_access:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=create_feature_gate_response("vat_calc", error_msg)
+            )
+        
+        # VAT calculation logic (simplified - you'd implement full VAT calculation here)
+        total_sales = float(vat_data.get('total_sales', 0))
+        vat_rate = 0.075  # 7.5% current Nigerian VAT rate
+        
+        vat_amount = total_sales * vat_rate
+        net_sales = total_sales - vat_amount
+        
+        result = {
+            "total_sales": total_sales,
+            "vat_rate": vat_rate,
+            "vat_amount": vat_amount,
+            "net_sales": net_sales,
+            "timestamp": datetime.now(timezone.utc)
+        }
+        
+        # Save to history if enabled
+        has_history, _ = await check_feature_access(current_user, "calculation_history")
+        if has_history:
+            calculation_dict = result.copy()
+            calculation_dict['timestamp'] = calculation_dict['timestamp'].isoformat()
+            calculation_dict['user_id'] = current_user.id
+            calculation_dict['calculation_type'] = 'vat'
+            await db.calculation_history.insert_one(calculation_dict)
+        
+        return result
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Calculation error: {str(e)}")
+
+@api_router.get("/auth/calculation-history")
+async def get_calculation_history(
+    current_user: UserProfile = Depends(get_current_user),
+    limit: int = 50
+):
+    """Get user's calculation history with feature gating"""
+    try:
+        # Check calculation history access
+        has_access, error_msg = await check_feature_access(current_user, "calculation_history")
+        
+        if not has_access:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=create_feature_gate_response("calculation_history", error_msg)
+            )
+        
+        # Get user's calculation history
+        calculations = await db.calculation_history.find(
+            {"user_id": current_user.id}
+        ).sort("timestamp", -1).limit(limit).to_list(length=None)
+        
+        return {"calculations": calculations, "total": len(calculations)}
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error retrieving history: {str(e)}")
+
+@api_router.post("/auth/export-pdf")
+async def export_calculation_pdf(
+    calculation_data: dict,
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Export calculation as PDF with feature gating"""
+    try:
+        # Check PDF export access
+        has_access, error_msg = await check_feature_access(current_user, "pdf_export")
+        
+        if not has_access:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=create_feature_gate_response("pdf_export", error_msg)
+            )
+        
+        # PDF generation logic would go here
+        # For now, return success message
+        return {
+            "message": "PDF export functionality enabled",
+            "user_tier": (await get_user_effective_tier_and_features(current_user.id))[0].value,
+            "pdf_url": "/api/generated-pdf-placeholder"
+        }
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"PDF export error: {str(e)}")
+
+@api_router.get("/auth/analytics")
+async def get_advanced_analytics(
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Get advanced analytics with feature gating"""
+    try:
+        # Check advanced analytics access
+        has_access, error_msg = await check_feature_access(current_user, "advanced_analytics")
+        
+        if not has_access:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=create_feature_gate_response("advanced_analytics", error_msg)
+            )
+        
+        # Analytics logic would go here
+        return {
+            "message": "Advanced analytics available",
+            "features": ["departmental_breakdown", "payroll_analytics", "tax_leakage_analysis"],
+            "user_tier": (await get_user_effective_tier_and_features(current_user.id))[0].value
+        }
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Analytics error: {str(e)}")
+
+@api_router.get("/auth/compliance-support")
+async def get_compliance_support(
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Get compliance assistance with feature gating"""
+    try:
+        # Check compliance assistance access
+        has_access, error_msg = await check_feature_access(current_user, "compliance_assistance")
+        
+        if not has_access:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=create_feature_gate_response("compliance_assistance", error_msg)
+            )
+        
+        # Compliance support logic would go here
+        return {
+            "message": "Compliance assistance available",
+            "features": ["priority_support", "quarterly_review", "filing_reminders"],
+            "user_tier": (await get_user_effective_tier_and_features(current_user.id))[0].value
+        }
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Compliance support error: {str(e)}")
+
+@api_router.get("/auth/feature-access")
+async def get_user_feature_access(
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Get user's current feature access status"""
+    try:
+        tier, features = await get_user_effective_tier_and_features(current_user.id)
+        
+        return {
+            "user_tier": tier.value,
+            "features": {
+                "bulk_paye": {
+                    "enabled": features.bulk_paye_enabled,
+                    "max_staff": features.bulk_paye_max_staff,
+                    "monthly_limit": features.bulk_paye_runs_per_month
+                },
+                "calculators": {
+                    "paye": True,  # Always available
+                    "cit": features.cit_enabled,
+                    "vat": features.vat_enabled,
+                    "cgt": features.cgt_enabled
+                },
+                "exports": {
+                    "pdf_export": features.pdf_export,
+                    "calculation_history": features.calculation_history
+                },
+                "premium_features": {
+                    "advanced_analytics": features.advanced_analytics,
+                    "compliance_assistance": features.compliance_assistance,
+                    "api_access": features.api_access,
+                    "priority_support": features.priority_support
+                },
+                "ads": {
+                    "ads_enabled": features.ads_enabled,
+                    "rewarded_ads": features.rewarded_ads
+                }
+            }
+        }
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error retrieving feature access: {str(e)}")
+
 @api_router.get("/tax-brackets")
 async def get_tax_brackets():
     """Get Nigerian 2026 tax brackets information"""
