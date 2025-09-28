@@ -38,6 +38,16 @@ class SubscriptionStatus(str, Enum):
     EXPIRED = "expired"
     CANCELLED = "cancelled"
 
+class TrialType(str, Enum):
+    DEMO = "demo"
+    FULL_TRIAL = "full_trial"
+
+class TrialStatus(str, Enum):
+    NEVER_USED = "never_used"
+    DEMO_USED = "demo_used"
+    TRIAL_ACTIVE = "trial_active"
+    TRIAL_EXPIRED = "trial_expired"
+
 # ============================
 # USER AUTHENTICATION & PROFILE MODELS
 # ============================
