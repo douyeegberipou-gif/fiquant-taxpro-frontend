@@ -1516,13 +1516,27 @@ function AppContent() {
                     
                     {/* Print Report Button */}
                     <div className="pt-4 border-t">
-                      <Button
-                        onClick={() => generatePayeReport(taxInput, result)}
-                        className="w-full bg-gray-900 hover:bg-gray-800 text-white flex items-center justify-center space-x-2"
+                      <FeatureGate 
+                        feature="pdf_export"
+                        fallback={
+                          <Button
+                            disabled
+                            className="w-full bg-gray-300 text-gray-500 cursor-not-allowed flex items-center justify-center space-x-2"
+                          >
+                            <Lock className="h-4 w-4" />
+                            <span>PDF Export (Pro+ Required)</span>
+                          </Button>
+                        }
+                        showUpgradePrompt={false}
                       >
-                        <Printer className="h-4 w-4" />
-                        <span>Print Report (PDF)</span>
-                      </Button>
+                        <Button
+                          onClick={() => generatePayeReport(taxInput, result)}
+                          className="w-full bg-gray-900 hover:bg-gray-800 text-white flex items-center justify-center space-x-2"
+                        >
+                          <Printer className="h-4 w-4" />
+                          <span>Print Report (PDF)</span>
+                        </Button>
+                      </FeatureGate>
                     </div>
                     
                     {/* Results Disclaimer */}
