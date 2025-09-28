@@ -192,7 +192,7 @@ const UpgradePrompt = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
-      <Card className="max-w-4xl w-full bg-gradient-to-br from-slate-50 to-gray-100 shadow-2xl border-2 border-gold-300 max-h-[90vh]">
+      <Card className="max-w-4xl w-full bg-gradient-to-br from-slate-50 to-gray-100 shadow-2xl border-2 border-amber-300 max-h-[90vh]">
         <CardHeader className="text-center relative pb-6 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-t-lg">
           <Button
             variant="ghost"
