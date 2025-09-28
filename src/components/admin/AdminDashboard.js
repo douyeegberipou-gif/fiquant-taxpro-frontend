@@ -271,6 +271,13 @@ export const AdminDashboard = () => {
               <RotateCw className="h-4 w-4 mr-2" />
               Carousel
             </TabsTrigger>
+            <TabsTrigger 
+              value="monetization" 
+              className="data-[state=active]:bg-yellow-50 data-[state=active]:text-yellow-700"
+            >
+              <TrendingUp className="h-4 w-4 mr-2" />
+              Monetization
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
