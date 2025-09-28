@@ -1539,10 +1539,12 @@ function AppContent() {
 
             {/* Bulk Payroll Calculator */}
             {payeMode === 'bulk' && (
-              <BulkPayrollCalculator
-                formatCurrency={formatCurrency}
-                calculatePayeTax={calculatePayeTax}
-              />
+              <FeatureGate feature="bulk_paye">
+                <BulkPayrollCalculator
+                  formatCurrency={formatCurrency}
+                  calculatePayeTax={calculatePayeTax}
+                />
+              </FeatureGate>
             )}
           </TabsContent>
 
