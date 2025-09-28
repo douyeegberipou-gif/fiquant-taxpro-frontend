@@ -26,6 +26,37 @@ import random
 # ENUMS
 # ============================
 
+class MessageChannel(str, Enum):
+    EMAIL = "email"
+    SMS = "sms"
+    IN_APP = "in_app"
+
+class MessageStatus(str, Enum):
+    DRAFT = "draft"
+    PENDING_APPROVAL = "pending_approval"
+    APPROVED = "approved"
+    SCHEDULED = "scheduled"
+    SENDING = "sending"
+    SENT = "sent"
+    FAILED = "failed"
+
+class SendStatus(str, Enum):
+    PENDING = "pending"
+    SENT = "sent"
+    DELIVERED = "delivered"
+    OPENED = "opened"
+    CLICKED = "clicked"
+    BOUNCED = "bounced"
+    FAILED = "failed"
+
+class AutomationTrigger(str, Enum):
+    TAX_FILING_REMINDER = "tax_filing_reminder"
+    PAYMENT_DEADLINE = "payment_deadline"
+    COMPLIANCE_ALERT = "compliance_alert"
+    TRIAL_EXPIRING = "trial_expiring"
+    SIGNUP = "signup"
+    BULK_LIMIT_REACHED = "bulk_limit_reached"
+
 class UserTier(str, Enum):
     FREE = "free"
     PRO = "pro"
