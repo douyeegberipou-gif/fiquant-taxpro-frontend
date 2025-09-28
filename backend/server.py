@@ -325,6 +325,51 @@ class TierPricing(BaseModel):
     recommended_for: str = Field(description="Who this tier is recommended for")
 
 # ============================
+# TRIAL SYSTEM MODELS
+# ============================
+
+class TrialTracking(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str = Field(description="User ID")
+    email: str = Field(description="User email for tracking")
+    phone: Optional[str] = Field(None, description="User phone for tracking")
+    device_fingerprint: Optional[str] = Field(None, description="Device fingerprint for abuse prevention")
+    
+    # Trial state
+    trial_status: TrialStatus = Field(default=TrialStatus.NEVER_USED, description="Current trial status")
+    demo_used: bool = Field(default=False, description="Whether demo mode was used")
+    demo_used_at: Optional[datetime] = None
+    
+    # Full trial tracking
+    trial_tier: Optional[UserTier] = Field(None, description="Which tier trial (PRO/PREMIUM)")
+    trial_started_at: Optional[datetime] = None
+    trial_ends_at: Optional[datetime] = None
+    
+    # Abuse prevention
+    ip_addresses: List[str] = Field(default_factory=list, description="IP addresses used")
+    
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class TrialStartRequest(BaseModel):
+    trial_type: TrialType = Field(description="Type of trial to start")
+    trial_tier: Optional[UserTier] = Field(None, description="For full trials: PRO or PREMIUM")
+    device_fingerprint: Optional[str] = Field(None, description="Browser/device fingerprint")
+
+class TrialStatus_Response(BaseModel):
+    trial_available: bool = Field(description="Whether user can start a trial")
+    demo_available: bool = Field(description="Whether demo mode is available")
+    current_trial: Optional[TrialTracking] = None
+    days_remaining: Optional[int] = Field(None, description="Days remaining in active trial")
+    trial_features: Optional[TierFeatures] = None
+    
+class DemoCalculation(BaseModel):
+    calculation_type: str = Field(description="Type of calculation performed in demo")
+    input_data: dict = Field(description="Calculation inputs")
+    result_data: dict = Field(description="Calculation results")  
+    performed_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# ============================
 # TAX CALCULATION HISTORY MODELS
 # ============================
 
