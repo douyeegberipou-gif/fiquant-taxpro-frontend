@@ -280,6 +280,13 @@ export const AdminDashboard = () => {
               <TrendingUp className="h-4 w-4 mr-2" />
               Monetization
             </TabsTrigger>
+            <TabsTrigger 
+              value="integrations" 
+              className="data-[state=active]:bg-teal-50 data-[state=active]:text-teal-700"
+            >
+              <Zap className="h-4 w-4 mr-2" />
+              Integrations
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
