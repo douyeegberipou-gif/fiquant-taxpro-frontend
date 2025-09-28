@@ -779,6 +779,11 @@ const BulkPaymentCalculator = ({ formatCurrency, hasFeature }) => {
             >
               <Calculator className="h-4 w-4 mr-2" />
               {loading ? 'Processing...' : 'Calculate All Payments'}
+              {hasFeature && !hasFeature('bulk_payment_calc') && (
+                <Badge variant="outline" className="ml-2 text-xs bg-purple-50 text-purple-600 border-purple-200">
+                  PRO+
+                </Badge>
+              )}
             </Button>
             
             {summary.count > 0 && (
