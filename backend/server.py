@@ -2937,6 +2937,335 @@ async def end_trial(
     
     return {"message": "Trial ended successfully", "reverted_to": original_tier.value}
 
+# ============================
+# ADS & MONETIZATION API ENDPOINTS
+# ============================
+
+async def get_or_create_ad_frequency_tracking(user_id: str):
+    """Get or create ad frequency tracking for user"""
+    # Calculate start of current week (Monday)
+    now = datetime.now(timezone.utc)
+    days_since_monday = now.weekday()
+    week_start = (now - timedelta(days=days_since_monday)).replace(hour=0, minute=0, second=0, microsecond=0)
+    
+    # Try to find existing tracking for this week
+    tracking_data = await db.ad_frequency.find_one({
+        "user_id": user_id,
+        "week_start": {"$gte": week_start.isoformat()}
+    })
+    
+    if tracking_data:
+        return AdFrequencyTracking(**tracking_data)
+    
+    # Create new tracking for this week
+    tracking = AdFrequencyTracking(
+        user_id=user_id,
+        week_start=week_start
+    )
+    
+    tracking_dict = tracking.dict()
+    tracking_dict["week_start"] = tracking_dict["week_start"].isoformat()
+    tracking_dict["created_at"] = tracking_dict["created_at"].isoformat()
+    tracking_dict["updated_at"] = tracking_dict["updated_at"].isoformat()
+    if tracking_dict["last_interstitial_at"]:
+        tracking_dict["last_interstitial_at"] = tracking_dict["last_interstitial_at"].isoformat()
+    
+    await db.ad_frequency.insert_one(tracking_dict)
+    return tracking
+
+async def should_show_ads(user: UserProfile) -> bool:
+    """Determine if ads should be shown based on user tier"""
+    # Get current subscription
+    subscription_data = await db.subscriptions.find_one({"user_id": user.id})
+    
+    if subscription_data:
+        subscription = UserSubscription(**subscription_data)
+        
+        # If in active trial, use trial tier to determine ads
+        if subscription.is_trial_active and subscription.trial_ends_at:
+            if datetime.now(timezone.utc) < subscription.trial_ends_at:
+                # In active trial - no ads for Pro/Premium trials
+                return subscription.tier == UserTier.FREE
+        
+        # Use regular subscription tier
+        return subscription.tier == UserTier.FREE
+    
+    # No subscription found - default to FREE tier (show ads)
+    return user.account_tier == UserTier.FREE
+
+@api_router.get("/ads/status", response_model=AdStatusResponse)
+async def get_ad_status(
+    request: Request,
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Get user's ad status and frequency tracking"""
+    
+    # Check if ads should be enabled
+    ads_enabled = await should_show_ads(current_user)
+    
+    # Get frequency tracking
+    tracking = await get_or_create_ad_frequency_tracking(current_user.id)
+    
+    # Calculate remaining rewarded ads
+    max_rewarded = 2  # As per requirements
+    rewarded_remaining = max(0, max_rewarded - tracking.rewarded_ads_this_week)
+    
+    # Calculate calculations until next interstitial
+    interstitial_frequency = 10  # As per requirements
+    calculations_until_interstitial = max(0, interstitial_frequency - tracking.calculations_since_interstitial)
+    
+    ad_config = AdConfig()
+    
+    return AdStatusResponse(
+        ads_enabled=ads_enabled,
+        can_show_rewarded=(ads_enabled and rewarded_remaining > 0),
+        rewarded_ads_remaining=rewarded_remaining,
+        calculations_until_interstitial=calculations_until_interstitial,
+        ad_config=ad_config,
+        extra_runs_available=tracking.extra_bulk_runs,
+        extra_cit_available=tracking.extra_cit_calcs
+    )
+
+@api_router.post("/ads/impression")
+async def record_ad_impression(
+    ad_type: AdType,
+    ad_placement: AdPlacement,
+    request: Request,
+    current_user: UserProfile = Depends(get_current_user),
+    clicked: bool = False,
+    revenue: Optional[float] = None
+):
+    """Record an ad impression"""
+    
+    impression = AdImpression(
+        user_id=current_user.id,
+        ad_type=ad_type,
+        ad_placement=ad_placement,
+        ad_network="mock",  # Would be real ad network in production
+        ad_unit_id=f"test-{ad_placement.value}",
+        revenue=revenue,
+        clicked=clicked,
+        user_agent=request.headers.get('user-agent'),
+        ip_address=request.client.host
+    )
+    
+    impression_dict = impression.dict()
+    impression_dict["timestamp"] = impression_dict["timestamp"].isoformat()
+    
+    await db.ad_impressions.insert_one(impression_dict)
+    
+    return {"message": "Ad impression recorded", "impression_id": impression.id}
+
+@api_router.post("/ads/calculation")
+async def record_calculation_for_ads(
+    calculation_type: str,
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Record a calculation for ad frequency tracking"""
+    
+    # Only track for users who have ads enabled
+    ads_enabled = await should_show_ads(current_user)
+    if not ads_enabled:
+        return {"message": "Ad tracking not applicable for this user tier"}
+    
+    # Get frequency tracking
+    tracking = await get_or_create_ad_frequency_tracking(current_user.id)
+    
+    # Increment calculation counter
+    tracking.calculations_since_interstitial += 1
+    tracking.updated_at = datetime.now(timezone.utc)
+    
+    # Check if interstitial should be shown
+    show_interstitial = False
+    if tracking.calculations_since_interstitial >= 10:  # Every 10th calculation
+        show_interstitial = True
+        tracking.calculations_since_interstitial = 0
+        tracking.last_interstitial_at = datetime.now(timezone.utc)
+    
+    # Save tracking
+    tracking_dict = tracking.dict()
+    tracking_dict["week_start"] = tracking_dict["week_start"].isoformat()
+    tracking_dict["created_at"] = tracking_dict["created_at"].isoformat()
+    tracking_dict["updated_at"] = tracking_dict["updated_at"].isoformat()
+    if tracking_dict["last_interstitial_at"]:
+        tracking_dict["last_interstitial_at"] = tracking_dict["last_interstitial_at"].isoformat()
+    
+    await db.ad_frequency.update_one(
+        {"user_id": current_user.id},
+        {"$set": tracking_dict}
+    )
+    
+    return {
+        "show_interstitial": show_interstitial,
+        "calculations_until_next": 10 - tracking.calculations_since_interstitial if not show_interstitial else 10
+    }
+
+@api_router.post("/ads/rewarded/request")
+async def request_rewarded_ad(
+    reward_request: RewardedAdRequest,
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Request a rewarded ad to unlock extra features"""
+    
+    # Check if ads are enabled
+    ads_enabled = await should_show_ads(current_user)
+    if not ads_enabled:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Rewarded ads not available for your tier"
+        )
+    
+    # Get frequency tracking
+    tracking = await get_or_create_ad_frequency_tracking(current_user.id)
+    
+    # Check weekly limit
+    if tracking.rewarded_ads_this_week >= 2:
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Weekly rewarded ad limit reached (2 per week)"
+        )
+    
+    # Validate reward type
+    if reward_request.reward_type not in ["bulk_run", "cit_calc"]:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid reward type. Must be 'bulk_run' or 'cit_calc'"
+        )
+    
+    return {
+        "ad_available": True,
+        "reward_type": reward_request.reward_type,
+        "ad_unit_id": "ca-app-pub-test/rewarded",
+        "message": f"Watch ad to unlock one extra {reward_request.reward_type.replace('_', ' ')}"
+    }
+
+@api_router.post("/ads/rewarded/complete")
+async def complete_rewarded_ad(
+    completion: RewardedAdCompletion,
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Complete a rewarded ad and grant the reward"""
+    
+    # Verify the request is for the current user
+    if completion.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Invalid user ID"
+        )
+    
+    # Get frequency tracking
+    tracking = await get_or_create_ad_frequency_tracking(current_user.id)
+    
+    # Check if reward can be granted
+    if tracking.rewarded_ads_this_week >= 2:
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Weekly rewarded ad limit already reached"
+        )
+    
+    # Grant reward
+    if completion.reward_type == "bulk_run":
+        tracking.extra_bulk_runs += 1
+    elif completion.reward_type == "cit_calc":
+        tracking.extra_cit_calcs += 1
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid reward type"
+        )
+    
+    # Update tracking
+    tracking.rewarded_ads_this_week += 1
+    tracking.updated_at = datetime.now(timezone.utc)
+    
+    # Save to database
+    tracking_dict = tracking.dict()
+    tracking_dict["week_start"] = tracking_dict["week_start"].isoformat()
+    tracking_dict["created_at"] = tracking_dict["created_at"].isoformat()
+    tracking_dict["updated_at"] = tracking_dict["updated_at"].isoformat()
+    if tracking_dict["last_interstitial_at"]:
+        tracking_dict["last_interstitial_at"] = tracking_dict["last_interstitial_at"].isoformat()
+    
+    await db.ad_frequency.update_one(
+        {"user_id": current_user.id},
+        {"$set": tracking_dict},
+        upsert=True
+    )
+    
+    # Record the ad impression
+    impression = AdImpression(
+        user_id=current_user.id,
+        ad_type=AdType.REWARDED,
+        ad_placement=AdPlacement.REWARDED_UNLOCK,
+        ad_network=completion.ad_network,
+        ad_unit_id=completion.ad_unit_id,
+        watched_to_completion=completion.reward_granted
+    )
+    
+    impression_dict = impression.dict()
+    impression_dict["timestamp"] = impression_dict["timestamp"].isoformat()
+    
+    await db.ad_impressions.insert_one(impression_dict)
+    
+    return {
+        "reward_granted": True,
+        "reward_type": completion.reward_type,
+        "message": f"Reward granted! You now have an extra {completion.reward_type.replace('_', ' ')} available.",
+        "remaining_ads_this_week": 2 - tracking.rewarded_ads_this_week
+    }
+
+@api_router.post("/ads/use-reward")
+async def use_reward(
+    reward_type: str,
+    current_user: UserProfile = Depends(get_current_user)
+):
+    """Use a rewarded ad unlock (bulk run or CIT calc)"""
+    
+    # Get frequency tracking
+    tracking = await get_or_create_ad_frequency_tracking(current_user.id)
+    
+    if reward_type == "bulk_run":
+        if tracking.extra_bulk_runs <= 0:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="No extra bulk runs available"
+            )
+        tracking.extra_bulk_runs -= 1
+    elif reward_type == "cit_calc":
+        if tracking.extra_cit_calcs <= 0:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="No extra CIT calculations available"
+            )
+        tracking.extra_cit_calcs -= 1
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid reward type"
+        )
+    
+    # Update tracking
+    tracking.updated_at = datetime.now(timezone.utc)
+    
+    # Save to database
+    tracking_dict = tracking.dict()
+    tracking_dict["week_start"] = tracking_dict["week_start"].isoformat()
+    tracking_dict["created_at"] = tracking_dict["created_at"].isoformat()
+    tracking_dict["updated_at"] = tracking_dict["updated_at"].isoformat()
+    if tracking_dict["last_interstitial_at"]:
+        tracking_dict["last_interstitial_at"] = tracking_dict["last_interstitial_at"].isoformat()
+    
+    await db.ad_frequency.update_one(
+        {"user_id": current_user.id},
+        {"$set": tracking_dict}
+    )
+    
+    return {
+        "reward_used": True,
+        "reward_type": reward_type,
+        "remaining": tracking.extra_bulk_runs if reward_type == "bulk_run" else tracking.extra_cit_calcs
+    }
+
 # Include the router in the main app
 app.include_router(api_router)
 
