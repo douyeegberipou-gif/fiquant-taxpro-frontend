@@ -269,6 +269,10 @@ class UserSubscription(BaseModel):
     trial_ends_at: Optional[datetime] = None
     expires_at: Optional[datetime] = None
     
+    # Trial state integration
+    is_trial_active: bool = Field(default=False, description="Whether currently in trial period")
+    original_tier: Optional[UserTier] = Field(None, description="Original tier before trial")
+    
     # Usage tracking
     bulk_paye_runs_this_month: int = Field(default=0, description="Number of bulk PAYE runs this month")
     rewarded_ads_this_week: int = Field(default=0, description="Rewarded ads used this week")
