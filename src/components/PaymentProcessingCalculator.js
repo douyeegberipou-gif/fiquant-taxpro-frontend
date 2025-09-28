@@ -160,6 +160,9 @@ const PaymentProcessingCalculator = ({ formatCurrency }) => {
         sirs_due_date: 'By 30th of following month (SIRS)',
         
         month: paymentInput.month,
+        year: paymentInput.year,
+        transaction_details: paymentInput.transaction_details,
+        payee_email: paymentInput.payee_email,
         timestamp: new Date().toISOString()
       };
       
