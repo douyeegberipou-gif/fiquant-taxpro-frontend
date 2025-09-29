@@ -375,50 +375,48 @@ const CGTCalculator = ({ formatCurrency, hasFeature }) => {
               Enter your capital gains tax information
             </CardDescription>
           </CardHeader>
-          <CardContent className="p-6 space-y-6">
-            {/* Taxpayer Information */}
-            <div className="space-y-4">
-              <h3 className="font-semibold text-gray-900 flex items-center">
-                <User className="h-4 w-4 mr-2 text-green-600" />
-                Taxpayer Information
-              </h3>
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="taxpayer_name">Company/Taxpayer Name *</Label>
-                  <Input
-                    id="taxpayer_name"
-                    type="text"
-                    placeholder="John Doe / ABC Company"
-                    value={cgtInput.taxpayer_name}
-                    onChange={(e) => handleInputChange('taxpayer_name', e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="tin">Tax Identification Number (TIN)</Label>
-                  <Input
-                    id="tin"
-                    type="text"
-                    placeholder="12345678901"
-                    value={cgtInput.tin}
-                    onChange={(e) => handleInputChange('tin', e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="year">Year *</Label>
-                  <select
-                    id="year"
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    value={cgtInput.year}
-                    onChange={(e) => handleInputChange('year', e.target.value)}
-                  >
-                    <option value="">Select Year</option>
-                    {years.map(year => (
-                      <option key={year} value={year}>{year}</option>
-                    ))}
-                  </select>
-                </div>
+        <CardContent className="p-6">
+          {/* Common Taxpayer Information */}
+          <div className="space-y-4 mb-6">
+            <h3 className="font-semibold text-gray-900 flex items-center">
+              <User className="h-4 w-4 mr-2 text-green-600" />
+              Taxpayer Information
+            </h3>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="taxpayer_name">Name/Company *</Label>
+                <Input
+                  id="taxpayer_name"
+                  type="text"
+                  placeholder="John Doe / ABC Company"
+                  value={commonInfo.taxpayer_name}
+                  onChange={(e) => setCommonInfo(prev => ({...prev, taxpayer_name: e.target.value}))}
+                />
               </div>
-              
+              <div className="space-y-2">
+                <Label htmlFor="tin">Tax ID Number (TIN)</Label>
+                <Input
+                  id="tin"
+                  type="text"
+                  placeholder="12345678901"
+                  value={commonInfo.tin}
+                  onChange={(e) => setCommonInfo(prev => ({...prev, tin: e.target.value}))}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="year">Tax Year *</Label>
+                <select
+                  id="year"
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  value={commonInfo.year}
+                  onChange={(e) => setCommonInfo(prev => ({...prev, year: e.target.value}))}
+                >
+                  <option value="">Select Year</option>
+                  {Array.from({length: 5}, (_, i) => new Date().getFullYear() - i).map(year => (
+                    <option key={year} value={year}>{year}</option>
+                  ))}
+                </select>
+              </div>
               <div className="space-y-2">
                 <Label>Taxpayer Type *</Label>
                 <div className="flex space-x-4">
@@ -427,8 +425,8 @@ const CGTCalculator = ({ formatCurrency, hasFeature }) => {
                       type="radio"
                       name="taxpayer_type"
                       value="individual"
-                      checked={cgtInput.taxpayer_type === 'individual'}
-                      onChange={(e) => handleInputChange('taxpayer_type', e.target.value)}
+                      checked={commonInfo.taxpayer_type === 'individual'}
+                      onChange={(e) => setCommonInfo(prev => ({...prev, taxpayer_type: e.target.value}))}
                       className="w-4 h-4 text-green-600"
                     />
                     <span className="text-sm">Individual</span>
@@ -438,8 +436,8 @@ const CGTCalculator = ({ formatCurrency, hasFeature }) => {
                       type="radio"
                       name="taxpayer_type"
                       value="company"
-                      checked={cgtInput.taxpayer_type === 'company'}
-                      onChange={(e) => handleInputChange('taxpayer_type', e.target.value)}
+                      checked={commonInfo.taxpayer_type === 'company'}
+                      onChange={(e) => setCommonInfo(prev => ({...prev, taxpayer_type: e.target.value}))}
                       className="w-4 h-4 text-green-600"
                     />
                     <span className="text-sm">Company</span>
@@ -447,129 +445,344 @@ const CGTCalculator = ({ formatCurrency, hasFeature }) => {
                 </div>
               </div>
             </div>
+          </div>
 
-            <Separator />
+          <Separator />
 
-            {/* Asset Information */}
-            <div className="space-y-4">
-              <h3 className="font-semibold text-gray-900">Asset Information</h3>
-              <div className="space-y-2">
-                <Label htmlFor="asset_type">Asset Type *</Label>
-                <select
-                  id="asset_type"
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                  value={cgtInput.asset_type}
-                  onChange={(e) => handleInputChange('asset_type', e.target.value)}
-                >
-                  <option value="">Select Asset Type</option>
-                  {Object.entries(assetTypes).map(([key, config]) => (
-                    <option key={key} value={key}>{config.name}</option>
-                  ))}
-                </select>
+          {/* 3-Module Tabs */}
+          <Tabs value={activeModule} onValueChange={setActiveModule} className="mt-6">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="crypto" className="flex items-center">
+                <Bitcoin className="h-4 w-4 mr-2" />
+                Crypto
+              </TabsTrigger>
+              <TabsTrigger value="shares" className="flex items-center">
+                <LineChart className="h-4 w-4 mr-2" />
+                Shares
+              </TabsTrigger>
+              <TabsTrigger value="assets" className="flex items-center">
+                <Home className="h-4 w-4 mr-2" />
+                Other Assets
+              </TabsTrigger>
+            </TabsList>
+
+            {/* Crypto CGT Module */}
+            <TabsContent value="crypto" className="space-y-4 mt-6">
+              <div className="flex items-center space-x-2 mb-4">
+                <Bitcoin className="h-5 w-5 text-orange-500" />
+                <h3 className="font-semibold text-gray-900">Cryptocurrency CGT Calculator</h3>
+                <HelpCircle className="h-4 w-4 text-gray-400" title={assetTypeInfo.crypto.tooltip} />
               </div>
-              
-              {cgtInput.asset_type && (
-                <Alert className="bg-green-50 border-green-200">
-                  <AlertDescription className="text-green-800 text-sm">
-                    <strong>{assetTypes[cgtInput.asset_type].name}:</strong> {assetTypes[cgtInput.asset_type].description}
-                  </AlertDescription>
-                </Alert>
-              )}
-              
-              <div className="space-y-2">
-                <Label htmlFor="holding_period">Holding Period (Optional)</Label>
-                <Input
-                  id="holding_period"
-                  type="text"
-                  placeholder="e.g., 2 years, 18 months"
-                  value={cgtInput.holding_period}
-                  onChange={(e) => handleInputChange('holding_period', e.target.value)}
-                />
-              </div>
-            </div>
-
-            <Separator />
-
-            {/* Financial Information */}
-            <div className="space-y-4">
-              <h3 className="font-semibold text-gray-900">Financial Details</h3>
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="disposal_proceeds">Disposal Proceeds *</Label>
-                  <Input
-                    id="disposal_proceeds"
-                    type="number"
-                    placeholder="₦50,000,000"
-                    value={cgtInput.disposal_proceeds}
-                    onChange={(e) => handleInputChange('disposal_proceeds', e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="acquisition_cost">Acquisition Cost *</Label>
-                  <Input
-                    id="acquisition_cost"
-                    type="number"
-                    placeholder="₦20,000,000"
-                    value={cgtInput.acquisition_cost}
-                    onChange={(e) => handleInputChange('acquisition_cost', e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2 sm:col-span-2">
-                  <Label htmlFor="allowable_expenses">Allowable Expenses</Label>
-                  <Input
-                    id="allowable_expenses"
-                    type="number"
-                    placeholder="₦2,000,000"
-                    value={cgtInput.allowable_expenses}
-                    onChange={(e) => handleInputChange('allowable_expenses', e.target.value)}
-                  />
-                </div>
-              </div>
-              <Alert className="bg-blue-50 border-blue-200">
-                <AlertDescription className="text-blue-800 text-sm">
-                  <strong>Allowable Expenses:</strong> Legal fees, valuation costs, improvement costs, transaction costs.
+              <Alert>
+                <AlertTriangle className="h-4 w-4" />
+                <AlertDescription className="text-sm">
+                  <strong>NTA 2025:</strong> {assetTypeInfo.crypto.description}. {assetTypeInfo.crypto.exemptions}
                 </AlertDescription>
               </Alert>
-            </div>
-
-            {/* Disclaimer Note */}
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mt-4">
-              <p className="text-xs text-amber-800 flex items-start">
-                <AlertTriangle className="h-4 w-4 mr-2 mt-0.5 flex-shrink-0" />
-                <span>
-                  <strong>Note:</strong> Users are solely responsible for the validity, accuracy and completeness of the financial information they supply.
-                </span>
-              </p>
-            </div>
-
-            <div className="flex space-x-3 pt-4">
+              
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Cryptocurrency Type</Label>
+                  <select
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    value={cryptoInput.cryptoType}
+                    onChange={(e) => setCryptoInput(prev => ({...prev, cryptoType: e.target.value}))}
+                  >
+                    <option value="bitcoin">Bitcoin (BTC)</option>
+                    <option value="ethereum">Ethereum (ETH)</option>
+                    <option value="other">Other Cryptocurrency</option>
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Quantity *</Label>
+                  <Input
+                    type="number"
+                    step="0.00000001"
+                    placeholder="1.5"
+                    value={cryptoInput.quantity}
+                    onChange={(e) => setCryptoInput(prev => ({...prev, quantity: e.target.value}))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Purchase Price per Unit (₦) *</Label>
+                  <Input
+                    type="number"
+                    placeholder="15,000,000"
+                    value={cryptoInput.purchasePrice}
+                    onChange={(e) => setCryptoInput(prev => ({...prev, purchasePrice: e.target.value}))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Sale Price per Unit (₦) *</Label>
+                  <Input
+                    type="number"
+                    placeholder="25,000,000"
+                    value={cryptoInput.salePrice}
+                    onChange={(e) => setCryptoInput(prev => ({...prev, salePrice: e.target.value}))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Purchase Date</Label>
+                  <Input
+                    type="date"
+                    value={cryptoInput.purchaseDate}
+                    onChange={(e) => setCryptoInput(prev => ({...prev, purchaseDate: e.target.value}))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Sale Date</Label>
+                  <Input
+                    type="date"
+                    value={cryptoInput.saleDate}
+                    onChange={(e) => setCryptoInput(prev => ({...prev, saleDate: e.target.value}))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Transaction Fees (₦)</Label>
+                  <Input
+                    type="number"
+                    placeholder="50,000"
+                    value={cryptoInput.transactionFees}
+                    onChange={(e) => setCryptoInput(prev => ({...prev, transactionFees: e.target.value}))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Exchange Fees (₦)</Label>
+                  <Input
+                    type="number"
+                    placeholder="25,000"
+                    value={cryptoInput.exchangeFees}
+                    onChange={(e) => setCryptoInput(prev => ({...prev, exchangeFees: e.target.value}))}
+                  />
+                </div>
+              </div>
+              
               <Button 
-                onClick={() => {
-                  if (!hasFeature || !hasFeature('cgt_calc')) {
-                    setShowUpgradePrompt(true);
-                    return;
-                  }
-                  calculateCGT();
-                }} 
-                disabled={cgtLoading || !cgtInput.taxpayer_name || !cgtInput.disposal_proceeds || !cgtInput.acquisition_cost}
-                className="flex-1 bg-green-600 hover:bg-green-700"
+                onClick={calculateCryptoCGT} 
+                disabled={loading || !cryptoInput.quantity || !cryptoInput.purchasePrice || !cryptoInput.salePrice}
+                className="w-full bg-orange-600 hover:bg-orange-700"
               >
-                {cgtLoading ? 'Calculating...' : 'Calculate CGT'}
-                {hasFeature && !hasFeature('cgt_calc') && (
-                  <Badge variant="outline" className="ml-2 text-xs bg-green-50 text-green-600 border-green-200">
-                    PRO+
-                  </Badge>
-                )}
+                {loading ? 'Calculating...' : 'Calculate Crypto CGT'}
               </Button>
+            </TabsContent>
+
+            {/* Share Sale CGT Module */}
+            <TabsContent value="shares" className="space-y-4 mt-6">
+              <div className="flex items-center space-x-2 mb-4">
+                <LineChart className="h-5 w-5 text-blue-500" />
+                <h3 className="font-semibold text-gray-900">Share Sale CGT Calculator</h3>
+                <HelpCircle className="h-4 w-4 text-gray-400" title={assetTypeInfo.shares.tooltip} />
+              </div>
+              <Alert>
+                <AlertTriangle className="h-4 w-4" />
+                <AlertDescription className="text-sm">
+                  <strong>NTA 2025:</strong> {assetTypeInfo.shares.description}. {assetTypeInfo.shares.exemptions}
+                </AlertDescription>
+              </Alert>
+              
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Company Name</Label>
+                  <Input
+                    type="text"
+                    placeholder="Dangote Cement Plc"
+                    value={shareInput.companyName}
+                    onChange={(e) => setShareInput(prev => ({...prev, companyName: e.target.value}))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Share Type</Label>
+                  <select
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    value={shareInput.shareType}
+                    onChange={(e) => setShareInput(prev => ({...prev, shareType: e.target.value}))}
+                  >
+                    <option value="listed">Listed Shares (NGX)</option>
+                    <option value="unlisted">Unlisted Shares</option>
+                    <option value="etf">ETF/Index Fund</option>
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Number of Shares *</Label>
+                  <Input
+                    type="number"
+                    placeholder="1000"
+                    value={shareInput.quantity}
+                    onChange={(e) => setShareInput(prev => ({...prev, quantity: e.target.value}))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Purchase Price per Share (₦) *</Label>
+                  <Input
+                    type="number"
+                    placeholder="250"
+                    value={shareInput.purchasePrice}
+                    onChange={(e) => setShareInput(prev => ({...prev, purchasePrice: e.target.value}))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Sale Price per Share (₦) *</Label>
+                  <Input
+                    type="number"
+                    placeholder="350"
+                    value={shareInput.salePrice}
+                    onChange={(e) => setShareInput(prev => ({...prev, salePrice: e.target.value}))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Purchase Date</Label>
+                  <Input
+                    type="date"
+                    value={shareInput.purchaseDate}
+                    onChange={(e) => setShareInput(prev => ({...prev, purchaseDate: e.target.value}))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Sale Date</Label>
+                  <Input
+                    type="date"
+                    value={shareInput.saleDate}
+                    onChange={(e) => setShareInput(prev => ({...prev, saleDate: e.target.value}))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Brokerage Fees (₦)</Label>
+                  <Input
+                    type="number"
+                    placeholder="5,000"
+                    value={shareInput.brokerageFees}
+                    onChange={(e) => setShareInput(prev => ({...prev, brokerageFees: e.target.value}))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Stamp Duty (₦)</Label>
+                  <Input
+                    type="number"
+                    placeholder="2,500"
+                    value={shareInput.stampDuty}
+                    onChange={(e) => setShareInput(prev => ({...prev, stampDuty: e.target.value}))}
+                  />
+                </div>
+              </div>
+              
               <Button 
-                onClick={resetForm} 
-                variant="outline"
-                className="border-green-200 text-green-700 hover:bg-green-50"
+                onClick={calculateShareCGT} 
+                disabled={loading || !shareInput.quantity || !shareInput.purchasePrice || !shareInput.salePrice}
+                className="w-full bg-blue-600 hover:bg-blue-700"
               >
-                Reset
+                {loading ? 'Calculating...' : 'Calculate Share CGT'}
               </Button>
-            </div>
-          </CardContent>
+            </TabsContent>
+
+            {/* Other Assets CGT Module */}
+            <TabsContent value="assets" className="space-y-4 mt-6">
+              <div className="flex items-center space-x-2 mb-4">
+                <Home className="h-5 w-5 text-purple-500" />
+                <h3 className="font-semibold text-gray-900">Other Asset CGT Calculator</h3>
+                <HelpCircle className="h-4 w-4 text-gray-400" title={assetTypeInfo.property.tooltip} />
+              </div>
+              <Alert>
+                <AlertTriangle className="h-4 w-4" />
+                <AlertDescription className="text-sm">
+                  <strong>NTA 2025:</strong> {assetTypeInfo.property.description}. {assetTypeInfo.property.exemptions}
+                </AlertDescription>
+              </Alert>
+              
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Asset Type</Label>
+                  <select
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    value={assetInput.assetType}
+                    onChange={(e) => setAssetInput(prev => ({...prev, assetType: e.target.value}))}
+                  >
+                    <option value="property">Real Estate Property</option>
+                    <option value="business_assets">Business Assets</option>
+                    <option value="intellectual_property">Intellectual Property</option>
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Asset Description</Label>
+                  <Input
+                    type="text"
+                    placeholder="3-bedroom house in Lekki"
+                    value={assetInput.assetDescription}
+                    onChange={(e) => setAssetInput(prev => ({...prev, assetDescription: e.target.value}))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Purchase Price (₦) *</Label>
+                  <Input
+                    type="number"
+                    placeholder="50,000,000"
+                    value={assetInput.purchasePrice}
+                    onChange={(e) => setAssetInput(prev => ({...prev, purchasePrice: e.target.value}))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Sale Price (₦) *</Label>
+                  <Input
+                    type="number"
+                    placeholder="80,000,000"
+                    value={assetInput.salePrice}
+                    onChange={(e) => setAssetInput(prev => ({...prev, salePrice: e.target.value}))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Purchase Date</Label>
+                  <Input
+                    type="date"
+                    value={assetInput.purchaseDate}
+                    onChange={(e) => setAssetInput(prev => ({...prev, purchaseDate: e.target.value}))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Sale Date</Label>
+                  <Input
+                    type="date"
+                    value={assetInput.saleDate}
+                    onChange={(e) => setAssetInput(prev => ({...prev, saleDate: e.target.value}))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Improvement Costs (₦)</Label>
+                  <Input
+                    type="number"
+                    placeholder="5,000,000"
+                    value={assetInput.improvementCosts}
+                    onChange={(e) => setAssetInput(prev => ({...prev, improvementCosts: e.target.value}))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Selling Expenses (₦)</Label>
+                  <Input
+                    type="number"
+                    placeholder="1,000,000"
+                    value={assetInput.sellingExpenses}
+                    onChange={(e) => setAssetInput(prev => ({...prev, sellingExpenses: e.target.value}))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Legal Fees (₦)</Label>
+                  <Input
+                    type="number"
+                    placeholder="500,000"
+                    value={assetInput.legalFees}
+                    onChange={(e) => setAssetInput(prev => ({...prev, legalFees: e.target.value}))}
+                  />
+                </div>
+              </div>
+              
+              <Button 
+                onClick={calculateAssetCGT} 
+                disabled={loading || !assetInput.purchasePrice || !assetInput.salePrice}
+                className="w-full bg-purple-600 hover:bg-purple-700"
+              >
+                {loading ? 'Calculating...' : 'Calculate Asset CGT'}
+              </Button>
+            </TabsContent>
+          </Tabs>
+        </CardContent>
         </Card>
 
         {/* Results */}
