@@ -22,6 +22,10 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import random
 
+# Security imports
+from security.encryption import encrypt_pii_data, decrypt_pii_data, mask_sensitive_data, field_encryption
+from security.middleware import SecurityHeadersMiddleware, RateLimitMiddleware, SecurityAuditMiddleware
+
 # ============================
 # ENUMS
 # ============================
