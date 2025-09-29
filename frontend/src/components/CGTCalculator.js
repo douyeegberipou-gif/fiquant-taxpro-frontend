@@ -6,13 +6,15 @@ import { Button } from './ui/button.jsx';
 import { Badge } from './ui/badge.jsx';
 import { Separator } from './ui/separator.jsx';
 import { Alert, AlertDescription } from './ui/alert.jsx';
-import { TrendingUp, Calculator, AlertTriangle, Printer, User } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs.jsx';
+import { Calculator, TrendingUp, AlertTriangle, Building, Coins, TrendingDown, Bitcoin, LineChart, Home, HelpCircle, Printer, User } from 'lucide-react';
 import { generateCgtReport } from '../utils/pdfGenerator';
 import UpgradePrompt from './UpgradePrompt';
 import { useUpgrade } from '../hooks/useUpgrade';
 
 const CGTCalculator = ({ formatCurrency, hasFeature }) => {
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
+  const [activeModule, setActiveModule] = useState('crypto');
   const { startTrial, requestUpgrade } = useUpgrade();
 
   const handleUpgrade = async () => {
