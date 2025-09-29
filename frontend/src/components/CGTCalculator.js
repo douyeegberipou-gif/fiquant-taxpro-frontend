@@ -1044,16 +1044,6 @@ const CGTCalculator = ({ formatCurrency, hasFeature }) => {
         )}
       </div>
 
-      {/* Disclaimer */}
-      <Alert className="bg-gray-50 border-gray-200">
-        <AlertTriangle className="h-4 w-4 text-gray-500" />
-        <AlertDescription className="text-sm text-gray-600">
-          <strong>Disclaimer:</strong> The CGT calculations provided are for informational purposes only and should not be considered as professional tax advice. 
-          Users are solely responsible for the validity, accuracy and completeness of the financial information they supply. 
-          VAT classifications are based on NTA 2026.
-        </AlertDescription>
-      </Alert>
-
       {/* Upgrade Prompt */}
       {showUpgradePrompt && (
         <UpgradePrompt
