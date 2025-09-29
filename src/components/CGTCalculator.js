@@ -785,137 +785,217 @@ const CGTCalculator = ({ formatCurrency, hasFeature }) => {
         </CardContent>
         </Card>
 
-        {/* Results */}
-        {cgtResult && (
+        {/* Results - Dynamic based on active module */}
+        {((activeModule === 'crypto' && cryptoResult) || 
+          (activeModule === 'shares' && shareResult) || 
+          (activeModule === 'assets' && assetResult)) && (
           <Card className="bg-white border-green-100 shadow-lg">
-            <CardHeader className="bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-t-lg">
-              <CardTitle>CGT Calculation Results</CardTitle>
-              <CardDescription className="text-teal-100">
-                Based on Nigerian Tax Act 2025
+            <CardHeader className={`text-white rounded-t-lg ${
+              activeModule === 'crypto' ? 'bg-gradient-to-r from-orange-600 to-red-600' :
+              activeModule === 'shares' ? 'bg-gradient-to-r from-blue-600 to-indigo-600' :
+              'bg-gradient-to-r from-purple-600 to-pink-600'
+            }`}>
+              <CardTitle className="flex items-center space-x-2">
+                {activeModule === 'crypto' && <Bitcoin className="h-5 w-5" />}
+                {activeModule === 'shares' && <LineChart className="h-5 w-5" />}
+                {activeModule === 'assets' && <Home className="h-5 w-5" />}
+                <span>
+                  {activeModule === 'crypto' ? 'Crypto CGT Results' :
+                   activeModule === 'shares' ? 'Share Sale CGT Results' :
+                   'Asset CGT Results'}
+                </span>
+              </CardTitle>
+              <CardDescription className="text-white/90">
+                Based on Nigerian Tax Act 2025 - {commonInfo.taxpayer_type === 'individual' ? 'Individual' : 'Company'} Rates
               </CardDescription>
             </CardHeader>
             <CardContent className="p-6 space-y-6">
-              {/* Summary Cards */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className={`p-4 rounded-lg border col-span-2 ${
-                  cgtResult.is_exempt ? 'bg-blue-50 border-blue-200' : 
-                  cgtResult.is_loss ? 'bg-gray-50 border-gray-200' :
-                  'bg-green-50 border-green-200'
-                }`}>
-                  <p className={`text-sm font-medium ${
-                    cgtResult.is_exempt ? 'text-blue-600' : 
-                    cgtResult.is_loss ? 'text-gray-600' :
-                    'text-green-600'
-                  }`}>
-                    {cgtResult.is_exempt ? 'CGT Exempt' : 
-                     cgtResult.is_loss ? 'Capital Loss' : 
-                     'Capital Gain'}
-                  </p>
-                  <p className={`text-2xl font-bold ${
-                    cgtResult.is_exempt ? 'text-blue-800' : 
-                    cgtResult.is_loss ? 'text-gray-800' :
-                    'text-green-800'
-                  }`}>
-                    {cgtResult.is_loss ? 
-                      formatCurrency(cgtResult.loss_amount) :
-                      formatCurrency(Math.abs(cgtResult.capital_gain))
-                    }
-                  </p>
-                </div>
+              {/* Get current result */}
+              {(() => {
+                const currentResult = activeModule === 'crypto' ? cryptoResult : 
+                                    activeModule === 'shares' ? shareResult : assetResult;
                 
-                {!cgtResult.is_exempt && !cgtResult.is_loss && (
-                  <div className="bg-red-50 p-4 rounded-lg border border-red-200 col-span-2">
-                    <p className="text-sm text-red-600 font-medium">CGT Liability</p>
-                    <p className="text-2xl font-bold text-red-800">
-                      {formatCurrency(cgtResult.cgt_liability)}
-                    </p>
-                    <p className="text-xs text-red-600 mt-1">
-                      Rate: {cgtResult.rate_description}
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              <Separator />
-
-              {/* Detailed Breakdown */}
-              <div className="space-y-4">
-                <h4 className="font-semibold text-gray-900">Calculation Breakdown</h4>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Disposal Proceeds:</span>
-                    <span className="font-medium">{formatCurrency(cgtResult.disposal_proceeds)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Acquisition Cost:</span>
-                    <span className="font-medium">-{formatCurrency(cgtResult.acquisition_cost)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Allowable Expenses:</span>
-                    <span className="font-medium">-{formatCurrency(cgtResult.allowable_expenses)}</span>
-                  </div>
-                  <div className="flex justify-between border-t pt-2">
-                    <span className="text-gray-900 font-medium">
-                      {cgtResult.is_loss ? 'Capital Loss:' : 'Capital Gain:'}
-                    </span>
-                    <span className={`font-bold ${cgtResult.is_loss ? 'text-red-600' : 'text-green-600'}`}>
-                      {formatCurrency(Math.abs(cgtResult.capital_gain))}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Exemption Information */}
-              {cgtResult.is_exempt && (
-                <div className="bg-blue-50 rounded-lg p-4">
-                  <h4 className="font-semibold text-blue-900 mb-2">Exemption Applied</h4>
-                  <p className="text-sm text-blue-800">{cgtResult.exemption_reason}</p>
-                  <p className="text-xs text-blue-700 mt-2">
-                    Exemption applies when proceeds &lt; ₦150M AND gains &lt; ₦10M in 12 months
-                  </p>
-                </div>
-              )}
-
-              {/* Tax Information */}
-              {!cgtResult.is_exempt && !cgtResult.is_loss && (
-                <div className="space-y-3">
-                  <h4 className="font-semibold text-gray-900">Tax Information</h4>
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Taxpayer Type:</span>
-                        <span className="font-medium capitalize">{cgtResult.taxpayer_type}</span>
+                return (
+                  <>
+                    {/* Summary Cards */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className={`p-4 rounded-lg border col-span-2 ${
+                        currentResult.exempt ? 'bg-blue-50 border-blue-200' : 
+                        currentResult.chargeable_gain < 0 ? 'bg-gray-50 border-gray-200' :
+                        'bg-green-50 border-green-200'
+                      }`}>
+                        <p className={`text-sm font-medium ${
+                          currentResult.exempt ? 'text-blue-600' : 
+                          currentResult.chargeable_gain < 0 ? 'text-gray-600' :
+                          'text-green-600'
+                        }`}>
+                          {currentResult.exempt ? 'CGT Exempt' : 
+                           currentResult.chargeable_gain < 0 ? 'Capital Loss' : 
+                           'Capital Gain'}
+                        </p>
+                        <p className={`text-2xl font-bold ${
+                          currentResult.exempt ? 'text-blue-800' : 
+                          currentResult.chargeable_gain < 0 ? 'text-gray-800' :
+                          'text-green-800'
+                        }`}>
+                          {formatCurrency(Math.abs(currentResult.chargeable_gain))}
+                        </p>
                       </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">CGT Rate:</span>
-                        <span className="font-medium">{cgtResult.rate_description}</span>
-                      </div>
-                      <div className="flex justify-between border-t pt-2">
-                        <span className="text-gray-900 font-medium">Total CGT Due:</span>
-                        <span className="font-bold text-red-600">{formatCurrency(cgtResult.cgt_liability)}</span>
+                      
+                      {!currentResult.exempt && currentResult.chargeable_gain > 0 && (
+                        <div className="bg-red-50 p-4 rounded-lg border border-red-200 col-span-2">
+                          <p className="text-sm text-red-600 font-medium">CGT Liability</p>
+                          <p className="text-2xl font-bold text-red-800">
+                            {formatCurrency(currentResult.tax_due)}
+                          </p>
+                          <p className="text-xs text-red-600 mt-1">
+                            Effective Rate: {currentResult.effective_rate.toFixed(2)}%
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    <Separator />
+
+                    {/* Asset-specific Details */}
+                    <div className="space-y-4">
+                      <h4 className="font-semibold text-gray-900">Transaction Details</h4>
+                      <div className="bg-gray-50 rounded-lg p-4">
+                        <div className="space-y-2 text-sm">
+                          {activeModule === 'crypto' && (
+                            <>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">Cryptocurrency:</span>
+                                <span className="font-medium capitalize">{currentResult.cryptoType}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">Quantity:</span>
+                                <span className="font-medium">{currentResult.quantity}</span>
+                              </div>
+                            </>
+                          )}
+                          {activeModule === 'shares' && (
+                            <>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">Company:</span>
+                                <span className="font-medium">{currentResult.companyName || 'N/A'}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">Share Type:</span>
+                                <span className="font-medium capitalize">{currentResult.shareType}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">Quantity:</span>
+                                <span className="font-medium">{currentResult.quantity} shares</span>
+                              </div>
+                            </>
+                          )}
+                          {activeModule === 'assets' && (
+                            <>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">Asset Type:</span>
+                                <span className="font-medium capitalize">{currentResult.assetType?.replace('_', ' ')}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">Description:</span>
+                                <span className="font-medium">{currentResult.assetDescription || 'N/A'}</span>
+                              </div>
+                            </>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              )}
 
-              {/* Print Report Button */}
-              <div className="pt-4 border-t">
-                <Button
-                  onClick={() => generateCgtReport(cgtInput, cgtResult)}
-                  className="w-full bg-gray-900 hover:bg-gray-800 text-white flex items-center justify-center space-x-2"
-                >
-                  <Printer className="h-4 w-4" />
-                  <span>Print Report (PDF)</span>
-                </Button>
-              </div>
-              
-              {/* Results Disclaimer */}
-              <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 mt-4">
-                <p className="text-xs text-gray-600 text-center">
-                  * Users are solely responsible for the validity, accuracy and completeness of the financial information they supply.
-                </p>
-              </div>
+                    {/* Calculation Breakdown */}
+                    <div className="space-y-4">
+                      <h4 className="font-semibold text-gray-900">Calculation Breakdown</h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Total Proceeds:</span>
+                          <span className="font-medium">{formatCurrency(currentResult.totalProceeds)}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Total Cost:</span>
+                          <span className="font-medium">-{formatCurrency(currentResult.totalCost)}</span>
+                        </div>
+                        <div className="flex justify-between border-t pt-2">
+                          <span className="text-gray-900 font-medium">
+                            {currentResult.chargeable_gain < 0 ? 'Capital Loss:' : 'Capital Gain:'}
+                          </span>
+                          <span className={`font-bold ${currentResult.chargeable_gain < 0 ? 'text-red-600' : 'text-green-600'}`}>
+                            {formatCurrency(Math.abs(currentResult.chargeable_gain))}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Exemption Information */}
+                    {currentResult.exempt && (
+                      <div className="bg-blue-50 rounded-lg p-4">
+                        <h4 className="font-semibold text-blue-900 mb-2">Exemption Applied</h4>
+                        <p className="text-sm text-blue-800">
+                          This transaction qualifies for CGT exemption under NTA 2025.
+                        </p>
+                        <p className="text-xs text-blue-700 mt-2">
+                          Exemption applies when proceeds &lt; ₦150M AND gains &lt; ₦10M for individuals
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Tax Information */}
+                    {!currentResult.exempt && currentResult.chargeable_gain > 0 && (
+                      <div className="space-y-3">
+                        <h4 className="font-semibold text-gray-900">Tax Information</h4>
+                        <div className="bg-gray-50 rounded-lg p-4">
+                          <div className="space-y-2 text-sm">
+                            <div className="flex justify-between">
+                              <span className="text-gray-600">Taxpayer Type:</span>
+                              <span className="font-medium capitalize">{commonInfo.taxpayer_type}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-gray-600">Effective CGT Rate:</span>
+                              <span className="font-medium">{currentResult.effective_rate.toFixed(2)}%</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-gray-600">Net Gain After Tax:</span>
+                              <span className="font-medium text-green-600">{formatCurrency(currentResult.net_gain)}</span>
+                            </div>
+                            <div className="flex justify-between border-t pt-2">
+                              <span className="text-gray-900 font-medium">Total CGT Due:</span>
+                              <span className="font-bold text-red-600">{formatCurrency(currentResult.tax_due)}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Print Report Button */}
+                    <div className="pt-4 border-t">
+                      <Button
+                        onClick={() => {
+                          const reportData = {
+                            ...commonInfo,
+                            asset_type: activeModule,
+                            calculation_date: currentResult.calculation_date
+                          };
+                          generateCgtReport(reportData, currentResult);
+                        }}
+                        className="w-full bg-gray-900 hover:bg-gray-800 text-white flex items-center justify-center space-x-2"
+                      >
+                        <Printer className="h-4 w-4" />
+                        <span>Print Report (PDF)</span>
+                      </Button>
+                    </div>
+                    
+                    {/* Results Disclaimer */}
+                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 mt-4">
+                      <p className="text-xs text-gray-600 text-center">
+                        * Users are solely responsible for the validity, accuracy and completeness of the financial information they supply.
+                      </p>
+                    </div>
+                  </>
+                );
+              })()}
             </CardContent>
           </Card>
         )}
