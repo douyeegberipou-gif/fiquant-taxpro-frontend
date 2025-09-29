@@ -4979,10 +4979,19 @@ async def get_messaging_analytics(admin_user: dict = Depends(get_admin_middlewar
 
 app.include_router(messaging_router)
 
+# Security middleware (order matters - last added is first executed)
+app.add_middleware(SecurityAuditMiddleware)
+app.add_middleware(RateLimitMiddleware, max_requests=100, window_seconds=60)
+app.add_middleware(SecurityHeadersMiddleware)
+
 app.add_middleware(
     CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000", 
+        "https://nigeriapaye.preview.emergentagent.com",
+        os.environ.get("FRONTEND_URL", "https://your-vercel-app.vercel.app")
+    ],
     allow_credentials=True,
-    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
     allow_methods=["*"],
     allow_headers=["*"],
 )
