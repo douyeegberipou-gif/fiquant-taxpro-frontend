@@ -605,7 +605,7 @@ const CGTCalculator = ({ formatCurrency, hasFeature }) => {
                 <p className="text-xs text-amber-800 flex items-start">
                   <AlertTriangle className="h-4 w-4 mr-2 mt-0.5 flex-shrink-0" />
                   <span>
-                    <strong>Note:</strong> Users are solely responsible for the validity, accuracy and completeness of the financial information they supply. VAT classifications are based on NTA 2026.
+                    <strong>Note:</strong> Users are solely responsible for the validity, accuracy and completeness of the financial information they supply. CGT classifications are based on NTA 2026.
                   </span>
                 </p>
               </div>
@@ -723,7 +723,7 @@ const CGTCalculator = ({ formatCurrency, hasFeature }) => {
                 <p className="text-xs text-amber-800 flex items-start">
                   <AlertTriangle className="h-4 w-4 mr-2 mt-0.5 flex-shrink-0" />
                   <span>
-                    <strong>Note:</strong> Users are solely responsible for the validity, accuracy and completeness of the financial information they supply. VAT classifications are based on NTA 2026.
+                    <strong>Note:</strong> Users are solely responsible for the validity, accuracy and completeness of the financial information they supply. CGT classifications are based on NTA 2026.
                   </span>
                 </p>
               </div>
@@ -841,7 +841,7 @@ const CGTCalculator = ({ formatCurrency, hasFeature }) => {
                 <p className="text-xs text-amber-800 flex items-start">
                   <AlertTriangle className="h-4 w-4 mr-2 mt-0.5 flex-shrink-0" />
                   <span>
-                    <strong>Note:</strong> Users are solely responsible for the validity, accuracy and completeness of the financial information they supply. VAT classifications are based on NTA 2026.
+                    <strong>Note:</strong> Users are solely responsible for the validity, accuracy and completeness of the financial information they supply. CGT classifications are based on NTA 2026.
                   </span>
                 </p>
               </div>
