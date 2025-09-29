@@ -578,7 +578,7 @@ const CGTCalculator = ({ formatCurrency, hasFeature }) => {
             <CardHeader className="bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-t-lg">
               <CardTitle>CGT Calculation Results</CardTitle>
               <CardDescription className="text-teal-100">
-                Based on Nigerian Tax Act 2026
+                Based on Nigerian Tax Act 2025
               </CardDescription>
             </CardHeader>
             <CardContent className="p-6 space-y-6">
