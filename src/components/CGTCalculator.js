@@ -33,42 +33,113 @@ const CGTCalculator = ({ formatCurrency, hasFeature }) => {
     }
   };
 
-  const [cgtInput, setCgtInput] = useState({
+  // Common taxpayer information for all modules
+  const [commonInfo, setCommonInfo] = useState({
     taxpayer_name: '',
     tin: '',
-    year: '',
-    taxpayer_type: 'individual', // individual or company
-    asset_type: '',
-    disposal_proceeds: '',
-    acquisition_cost: '',
-    allowable_expenses: '',
-    holding_period: ''
+    year: new Date().getFullYear().toString(),
+    taxpayer_type: 'individual' // individual or company
   });
 
-  const [cgtResult, setCgtResult] = useState(null);
-  const [cgtLoading, setCgtLoading] = useState(false);
+  // Crypto CGT Calculator State
+  const [cryptoInput, setCryptoInput] = useState({
+    cryptoType: 'bitcoin',
+    quantity: '',
+    purchasePrice: '',
+    purchaseDate: '',
+    salePrice: '',
+    saleDate: '',
+    transactionFees: '',
+    exchangeFees: ''
+  });
 
-  // Asset types and their characteristics
-  const assetTypes = {
-    'shares': {
-      name: 'Shares & Securities',
-      description: 'Listed and unlisted shares, bonds, securities'
+  // Share Sale CGT Calculator State
+  const [shareInput, setShareInput] = useState({
+    companyName: '',
+    shareType: 'listed', // listed or unlisted
+    quantity: '',
+    purchasePrice: '',
+    purchaseDate: '',
+    salePrice: '',
+    saleDate: '',
+    brokerageFees: '',
+    stampDuty: ''
+  });
+
+  // Other Asset CGT Calculator State
+  const [assetInput, setAssetInput] = useState({
+    assetType: 'property', // property, business_assets, intellectual_property
+    assetDescription: '',
+    purchasePrice: '',
+    purchaseDate: '',
+    salePrice: '',
+    saleDate: '',
+    improvementCosts: '',
+    sellingExpenses: '',
+    legalFees: ''
+  });
+
+  const [cryptoResult, setCryptoResult] = useState(null);
+  const [shareResult, setShareResult] = useState(null);
+  const [assetResult, setAssetResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  // NTA 2025 Tax Rate Configurations
+  const taxRates = {
+    individual: {
+      // Progressive rates for individuals (NTA 2025)
+      bands: [
+        { min: 0, max: 800000, rate: 0 }, // First ₦800,000 exempt
+        { min: 800001, max: 1600000, rate: 7 },
+        { min: 1600001, max: 3200000, rate: 11 },
+        { min: 3200001, max: 6400000, rate: 15 },
+        { min: 6400001, max: 12800000, rate: 19 },
+        { min: 12800001, max: 25600000, rate: 21 },
+        { min: 25600001, max: 51200000, rate: 23 },
+        { min: 51200001, max: Infinity, rate: 25 }
+      ],
+      exemption: {
+        proceeds: 150000000, // ₦150 million
+        gains: 10000000      // ₦10 million
+      }
     },
-    'property': {
-      name: 'Real Estate Property',
-      description: 'Land, buildings, residential and commercial property'
-    },
-    'crypto': {
+    company: {
+      small: { rate: 0, maxTurnover: 100000000 }, // ₦100 million turnover
+      large: { rate: 30 } // 30% for large companies
+    }
+  };
+
+  // Asset type definitions with NTA 2025 specific rules
+  const assetTypeInfo = {
+    crypto: {
       name: 'Cryptocurrency',
-      description: 'Bitcoin, Ethereum and other digital assets'
+      description: 'Bitcoin, Ethereum, and other digital assets - taxed at personal income tax rates under NTA 2025',
+      tooltip: 'Crypto gains are now taxed at progressive rates up to 25% for individuals. All crypto transactions (sales, exchanges, mining, staking) are taxable events.',
+      exemptions: 'Gains under ₦10M and proceeds under ₦150M are exempt for individuals'
     },
-    'business_assets': {
+    shares: {
+      name: 'Share Sales',
+      description: 'Listed and unlisted shares, stocks, ETFs - exempt up to ₦10M gains',
+      tooltip: 'Share sales enjoy significant exemptions under NTA 2025: gains under ₦10M and proceeds under ₦150M are tax-free. Reinvestment relief available.',
+      exemptions: 'Gains under ₦10M and proceeds under ₦150M are exempt. Reinvestment relief available for larger gains.'
+    },
+    property: {
+      name: 'Property & Real Estate',
+      description: 'Land, buildings, residential and commercial property',
+      tooltip: 'Property disposals are taxed at progressive rates for individuals (up to 25%) or 30% for companies under NTA 2025.',
+      exemptions: 'Standard exemption thresholds apply: ₦10M gains, ₦150M proceeds for individuals'
+    },
+    business_assets: {
       name: 'Business Assets',
-      description: 'Plant, machinery, equipment'
+      description: 'Plant, machinery, equipment, and other business assets',
+      tooltip: 'Business asset disposals follow standard CGT rules. Small companies (turnover <₦100M) pay 0% CGT.',
+      exemptions: 'Small companies with turnover under ₦100M are exempt from CGT'
     },
-    'intellectual_property': {
+    intellectual_property: {
       name: 'Intellectual Property',
-      description: 'Patents, copyrights, trademarks'
+      description: 'Patents, copyrights, trademarks, and other IP rights',
+      tooltip: 'IP disposals are subject to standard CGT rates under NTA 2025.',
+      exemptions: 'Standard exemption thresholds apply'
     }
   };
 
