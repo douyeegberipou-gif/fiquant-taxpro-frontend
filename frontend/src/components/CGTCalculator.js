@@ -344,18 +344,61 @@ const CGTCalculator = ({ formatCurrency, hasFeature }) => {
     }, 1500);
   };
 
-  const resetForm = () => {
-    setCgtInput({
-      taxpayer_name: '',
-      year: '',
-      taxpayer_type: 'individual',
-      asset_type: '',
-      disposal_proceeds: '',
-      acquisition_cost: '',
-      allowable_expenses: '',
-      holding_period: ''
+  // Reset functions for each module
+  const resetCrypto = () => {
+    setCryptoInput({
+      cryptoType: 'bitcoin',
+      quantity: '',
+      purchasePrice: '',
+      purchaseDate: '',
+      salePrice: '',
+      saleDate: '',
+      transactionFees: '',
+      exchangeFees: ''
     });
-    setCgtResult(null);
+    setCryptoResult(null);
+  };
+
+  const resetShares = () => {
+    setShareInput({
+      companyName: '',
+      shareType: 'listed',
+      quantity: '',
+      purchasePrice: '',
+      purchaseDate: '',
+      salePrice: '',
+      saleDate: '',
+      brokerageFees: '',
+      stampDuty: ''
+    });
+    setShareResult(null);
+  };
+
+  const resetAssets = () => {
+    setAssetInput({
+      assetType: 'property',
+      assetDescription: '',
+      purchasePrice: '',
+      purchaseDate: '',
+      salePrice: '',
+      saleDate: '',
+      improvementCosts: '',
+      sellingExpenses: '',
+      legalFees: ''
+    });
+    setAssetResult(null);
+  };
+
+  const resetAll = () => {
+    setCommonInfo({
+      taxpayer_name: '',
+      tin: '',
+      year: new Date().getFullYear().toString(),
+      taxpayer_type: 'individual'
+    });
+    resetCrypto();
+    resetShares();
+    resetAssets();
   };
 
   const currentYear = new Date().getFullYear();
