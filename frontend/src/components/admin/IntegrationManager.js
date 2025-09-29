@@ -37,6 +37,92 @@ const IntegrationManager = () => {
 
   // Mock integration configurations
   const integrationCategories = {
+    deployment: {
+      name: 'Deployment & Hosting',
+      icon: Settings,
+      color: 'blue',
+      services: {
+        vercel: {
+          name: 'Vercel (Frontend)',
+          description: 'Frontend deployment on Vercel',
+          status: 'connected',
+          environment: 'production',
+          config: {
+            project_name: 'fiquant-taxpro',
+            root_directory: 'frontend',
+            build_command: 'yarn build',
+            output_directory: 'build',
+            install_command: 'yarn install'
+          },
+          endpoints: {
+            dashboard_url: 'https://vercel.com/dashboard',
+            docs_url: 'https://vercel.com/docs'
+          },
+          environment_vars: {
+            'REACT_APP_BACKEND_URL': '${supabase-backend-url}',
+            'REACT_APP_ENVIRONMENT': 'production'
+          },
+          features: ['Static Site Hosting', 'Auto Deploy', 'Custom Domains', 'Analytics'],
+          lastSync: '2024-01-15T10:30:00Z',
+          requestCount: 0,
+          errorCount: 0
+        },
+        supabase: {
+          name: 'Supabase (Backend + DB)',
+          description: 'Backend API and PostgreSQL database',
+          status: 'connected',
+          environment: 'production',
+          config: {
+            project_name: 'fiquant-taxpro-backend',
+            database_url: 'postgresql://[ref].[region].supabase.co:5432/postgres',
+            api_url: 'https://[ref].supabase.co',
+            anon_key: 'eyJ***',
+            service_role_key: 'eyJ***'
+          },
+          endpoints: {
+            dashboard_url: 'https://supabase.com/dashboard',
+            docs_url: 'https://supabase.com/docs'
+          },
+          environment_vars: {
+            'DATABASE_URL': '${supabase-database-url}',
+            'JWT_SECRET': '${random-secure-key}',
+            'ENCRYPTION_MASTER_KEY': '${base64-encoded-key}',
+            'SUPABASE_URL': '${supabase-api-url}',
+            'SUPABASE_ANON_KEY': '${supabase-anon-key}',
+            'SUPABASE_SERVICE_ROLE_KEY': '${supabase-service-role-key}'
+          },
+          features: ['PostgreSQL DB', 'FastAPI Backend', 'Auth', 'Real-time', 'Storage'],
+          lastSync: '2024-01-15T09:45:00Z',
+          requestCount: 2341,
+          errorCount: 0
+        },
+        security: {
+          name: 'Security Configuration',
+          description: 'Production security settings',
+          status: 'configured',
+          environment: 'production',
+          config: {
+            https_only: true,
+            security_headers: true,
+            rate_limiting: true,
+            field_encryption: true
+          },
+          endpoints: {
+            docs_url: 'https://docs.security-config.com'
+          },
+          environment_vars: {
+            'ENCRYPTION_MASTER_KEY': 'Generate with: python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"',
+            'JWT_SECRET': 'Generate with: python -c "import secrets; print(secrets.token_urlsafe(32))"',
+            'RATE_LIMIT_PER_MINUTE': '100',
+            'ADMIN_IP_WHITELIST': 'comma,separated,ips'
+          },
+          features: ['HTTPS Enforcement', 'Security Headers', 'Rate Limiting', 'PII Encryption'],
+          lastSync: '2024-01-15T11:00:00Z',
+          requestCount: 0,
+          errorCount: 0
+        }
+      }
+    },
     payments: {
       name: 'Payment Processors',
       icon: CreditCard,
