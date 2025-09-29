@@ -633,6 +633,63 @@ const IntegrationManager = () => {
           <TabsTrigger value="logs">Activity Logs</TabsTrigger>
         </TabsList>
 
+        {/* Deployment Tab */}
+        <TabsContent value="deployment" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Settings className="h-5 w-5 mr-2 text-blue-600" />
+                Deployment & Hosting Configuration
+              </CardTitle>
+              <CardDescription>
+                Manage your production deployment settings, environment variables, and hosting configurations
+              </CardDescription>
+            </CardHeader>
+          </Card>
+          
+          <div className="grid grid-cols-1 gap-6">
+            {Object.entries(integrations.deployment?.services || {}).map(([key, service]) =>
+              renderServiceCard('deployment', key, service)
+            )}
+          </div>
+
+          {/* Quick Setup Guide */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Quick Deployment Guide</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="font-semibold text-green-700 mb-2">Vercel Frontend Setup</h4>
+                  <div className="bg-green-50 p-3 rounded text-sm space-y-2">
+                    <div><strong>Root Directory:</strong> <code>frontend</code></div>
+                    <div><strong>Build Command:</strong> <code>yarn build</code></div>
+                    <div><strong>Output Directory:</strong> <code>build</code></div>
+                    <div><strong>Install Command:</strong> <code>yarn install</code></div>
+                  </div>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-purple-700 mb-2">Supabase Backend Setup</h4>
+                  <div className="bg-purple-50 p-3 rounded text-sm space-y-2">
+                    <div><strong>Project Type:</strong> Backend API</div>
+                    <div><strong>Runtime:</strong> Python 3.9+</div>
+                    <div><strong>Start Command:</strong> <code>uvicorn server:app --host 0.0.0.0 --port $PORT</code></div>
+                    <div><strong>Dependencies:</strong> <code>pip install -r requirements.txt</code></div>
+                  </div>
+                </div>
+              </div>
+              
+              <Alert>
+                <Shield className="h-4 w-4" />
+                <AlertDescription>
+                  <strong>Security Note:</strong> Always set ENCRYPTION_MASTER_KEY and JWT_SECRET in production environment variables. Never commit secrets to git.
+                </AlertDescription>
+              </Alert>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         {/* Payments Tab */}
         <TabsContent value="payments" className="space-y-6">
           <Card>
