@@ -718,6 +718,16 @@ const CGTCalculator = ({ formatCurrency, hasFeature }) => {
                 </div>
               </div>
               
+              {/* Disclaimer Note */}
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mt-4">
+                <p className="text-xs text-amber-800 flex items-start">
+                  <AlertTriangle className="h-4 w-4 mr-2 mt-0.5 flex-shrink-0" />
+                  <span>
+                    <strong>Note:</strong> Users are solely responsible for the validity, accuracy and completeness of the financial information they supply. VAT classifications are based on NTA 2026.
+                  </span>
+                </p>
+              </div>
+              
               <Button 
                 onClick={calculateShareCGT} 
                 disabled={loading || !shareInput.quantity || !shareInput.purchasePrice || !shareInput.salePrice}
