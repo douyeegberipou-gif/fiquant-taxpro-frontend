@@ -1084,6 +1084,9 @@ async def register_user(user_data: UserRegistration):
         user_doc["last_login"] = user_doc["last_login"].isoformat()
     user_doc["verification_expires"] = user_doc["verification_expires"].isoformat()
     
+    # Encrypt sensitive PII data before storing
+    user_doc = encrypt_pii_data(user_doc)
+    
     await db.users.insert_one(user_doc)
     
     # Create welcome notification
