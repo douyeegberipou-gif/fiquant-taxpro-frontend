@@ -249,6 +249,30 @@ const IntegrationManager = () => {
           lastSync: null,
           requestCount: 0,
           errorCount: 0
+        },
+        namecheap: {
+          name: 'Namecheap Email',
+          description: 'Custom domain email hosting via Namecheap',
+          status: 'disconnected',
+          environment: 'production',
+          config: {
+            smtp_host: 'mail.privateemail.com',
+            smtp_port: '465',
+            smtp_username: '',
+            smtp_password: '',
+            from_email: '',
+            from_name: 'Fiquant TaxPro',
+            use_ssl: 'true'
+          },
+          endpoints: {
+            smtp_server: 'mail.privateemail.com',
+            webmail_url: 'https://privateemail.com',
+            docs_url: 'https://www.namecheap.com/support/knowledgebase/subcategory/1/email/'
+          },
+          features: ['Custom Domain Email', 'SMTP Sending', 'Email Forwarding', 'Webmail Access'],
+          lastSync: null,
+          requestCount: 0,
+          errorCount: 0
         }
       }
     },
