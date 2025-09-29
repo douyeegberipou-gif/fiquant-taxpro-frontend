@@ -143,87 +143,205 @@ const CGTCalculator = ({ formatCurrency, hasFeature }) => {
     }
   };
 
-  const handleInputChange = (field, value) => {
-    setCgtInput(prev => ({
-      ...prev,
-      [field]: value
-    }));
+  // Helper function to calculate progressive tax for individuals
+  const calculateProgressiveTax = (gain) => {
+    let tax = 0;
+    let remainingGain = gain;
+
+    for (const band of taxRates.individual.bands) {
+      if (remainingGain <= 0) break;
+      
+      const bandAmount = Math.min(remainingGain, band.max - band.min + 1);
+      tax += bandAmount * (band.rate / 100);
+      remainingGain -= bandAmount;
+      
+      if (band.max === Infinity) break;
+    }
+
+    return tax;
   };
 
-  const calculateCGT = () => {
-    setCgtLoading(true);
-    
-    try {
-      const disposalProceeds = parseFloat(cgtInput.disposal_proceeds) || 0;
-      const acquisitionCost = parseFloat(cgtInput.acquisition_cost) || 0;
-      const allowableExpenses = parseFloat(cgtInput.allowable_expenses) || 0;
-      
-      // Calculate capital gain
-      const totalCost = acquisitionCost + allowableExpenses;
-      const capitalGain = disposalProceeds - totalCost;
-      
-      // Check exemption thresholds (NTA 2026)
-      const exemptionProceedsThreshold = 150000000; // ₦150M
-      const exemptionGainsThreshold = 10000000; // ₦10M
-      
-      const isExemptByProceeds = disposalProceeds < exemptionProceedsThreshold;
-      const isExemptByGains = capitalGain < exemptionGainsThreshold;
-      const isExempt = isExemptByProceeds && isExemptByGains;
-      
-      // Determine CGT rate based on taxpayer type (NTA 2026)
-      let cgtRate = 0;
-      let rateDescription = '';
-      
-      if (!isExempt && capitalGain > 0) {
-        if (cgtInput.taxpayer_type === 'company') {
-          cgtRate = 0.30; // 30% for companies
-          rateDescription = '30% (Company Rate)';
-        } else {
-          // For individuals, CGT is now taxed at progressive personal income tax rates (0-25%)
-          // We'll use an average rate of 15% for calculation purposes
-          cgtRate = 0.15; // Average progressive rate
-          rateDescription = 'Progressive Rate (0-25% based on total income)';
-        }
-      }
-      
-      // Calculate CGT liability
-      const cgtLiability = isExempt ? 0 : (capitalGain > 0 ? capitalGain * cgtRate : 0);
-      
-      const result = {
-        taxpayer_name: cgtInput.taxpayer_name,
-        year: cgtInput.year,
-        taxpayer_type: cgtInput.taxpayer_type,
-        asset_type: assetTypes[cgtInput.asset_type]?.name || cgtInput.asset_type,
-        holding_period: cgtInput.holding_period,
-        
-        // Financial details
-        disposal_proceeds: disposalProceeds,
-        acquisition_cost: acquisitionCost,
-        allowable_expenses: allowableExpenses,
-        total_cost: totalCost,
-        capital_gain: capitalGain,
-        
-        // Tax calculation
-        is_exempt: isExempt,
-        exemption_reason: isExempt ? (isExemptByProceeds ? 'Proceeds below ₦150M threshold' : 'Gains below ₦10M threshold') : null,
-        cgt_rate: cgtRate * 100,
-        rate_description: rateDescription,
-        cgt_liability: cgtLiability,
-        
-        // Additional info
-        is_loss: capitalGain < 0,
-        loss_amount: capitalGain < 0 ? Math.abs(capitalGain) : 0,
-        
-        timestamp: new Date().toISOString()
-      };
-      
-      setCgtResult(result);
-    } catch (error) {
-      console.error('Error calculating CGT:', error);
-      alert('Error calculating CGT. Please check your input values.');
-    } finally {
-      setCgtLoading(false);
+  // Check if individual qualifies for exemption
+  const checkIndividualExemption = (proceeds, gain) => {
+    return proceeds < taxRates.individual.exemption.proceeds && 
+           gain < taxRates.individual.exemption.gains;
+  };
+
+  // Crypto CGT Calculation
+  const calculateCryptoCGT = () => {
+    if (!hasFeature || !hasFeature('cgt_calc')) {
+      setShowUpgradePrompt(true);
+      return;
     }
+
+    const quantity = parseFloat(cryptoInput.quantity) || 0;
+    const purchasePrice = parseFloat(cryptoInput.purchasePrice) || 0;
+    const salePrice = parseFloat(cryptoInput.salePrice) || 0;
+    const fees = parseFloat(cryptoInput.transactionFees) || 0;
+    const exchangeFees = parseFloat(cryptoInput.exchangeFees) || 0;
+    
+    if (quantity <= 0 || purchasePrice <= 0 || salePrice <= 0) {
+      alert('Please enter valid quantity, purchase price, and sale price');
+      return;
+    }
+
+    setLoading(true);
+
+    setTimeout(() => {
+      const totalCost = (purchasePrice * quantity) + fees;
+      const totalProceeds = (salePrice * quantity) - exchangeFees;
+      const gain = totalProceeds - totalCost;
+      
+      let taxDue = 0;
+      let effectiveRate = 0;
+
+      if (commonInfo.taxpayer_type === 'individual') {
+        if (checkIndividualExemption(totalProceeds, gain)) {
+          taxDue = 0;
+          effectiveRate = 0;
+        } else {
+          taxDue = calculateProgressiveTax(gain);
+          effectiveRate = gain > 0 ? (taxDue / gain) * 100 : 0;
+        }
+      } else {
+        // Company rates
+        taxDue = gain * 0.30; // 30% for companies
+        effectiveRate = 30;
+      }
+
+      setCryptoResult({
+        cryptoType: cryptoInput.cryptoType,
+        quantity: quantity,
+        totalCost: totalCost,
+        totalProceeds: totalProceeds,
+        chargeable_gain: gain,
+        tax_due: Math.max(0, taxDue),
+        effective_rate: effectiveRate,
+        net_gain: gain - Math.max(0, taxDue),
+        exempt: commonInfo.taxpayer_type === 'individual' && checkIndividualExemption(totalProceeds, gain),
+        calculation_date: new Date().toLocaleDateString('en-NG')
+      });
+
+      setLoading(false);
+    }, 1500);
+  };
+
+  // Share Sale CGT Calculation
+  const calculateShareCGT = () => {
+    if (!hasFeature || !hasFeature('cgt_calc')) {
+      setShowUpgradePrompt(true);
+      return;
+    }
+
+    const quantity = parseFloat(shareInput.quantity) || 0;
+    const purchasePrice = parseFloat(shareInput.purchasePrice) || 0;
+    const salePrice = parseFloat(shareInput.salePrice) || 0;
+    const brokerageFees = parseFloat(shareInput.brokerageFees) || 0;
+    const stampDuty = parseFloat(shareInput.stampDuty) || 0;
+    
+    if (quantity <= 0 || purchasePrice <= 0 || salePrice <= 0) {
+      alert('Please enter valid quantity, purchase price, and sale price');
+      return;
+    }
+
+    setLoading(true);
+
+    setTimeout(() => {
+      const totalCost = (purchasePrice * quantity) + brokerageFees + stampDuty;
+      const totalProceeds = (salePrice * quantity);
+      const gain = totalProceeds - totalCost;
+      
+      let taxDue = 0;
+      let effectiveRate = 0;
+
+      if (commonInfo.taxpayer_type === 'individual') {
+        if (checkIndividualExemption(totalProceeds, gain)) {
+          taxDue = 0;
+          effectiveRate = 0;
+        } else {
+          taxDue = calculateProgressiveTax(gain);
+          effectiveRate = gain > 0 ? (taxDue / gain) * 100 : 0;
+        }
+      } else {
+        taxDue = gain * 0.30; // 30% for companies
+        effectiveRate = 30;
+      }
+
+      setShareResult({
+        companyName: shareInput.companyName,
+        shareType: shareInput.shareType,
+        quantity: quantity,
+        totalCost: totalCost,
+        totalProceeds: totalProceeds,
+        chargeable_gain: gain,
+        tax_due: Math.max(0, taxDue),
+        effective_rate: effectiveRate,
+        net_gain: gain - Math.max(0, taxDue),
+        exempt: commonInfo.taxpayer_type === 'individual' && checkIndividualExemption(totalProceeds, gain),
+        calculation_date: new Date().toLocaleDateString('en-NG')
+      });
+
+      setLoading(false);
+    }, 1500);
+  };
+
+  // Other Asset CGT Calculation  
+  const calculateAssetCGT = () => {
+    if (!hasFeature || !hasFeature('cgt_calc')) {
+      setShowUpgradePrompt(true);
+      return;
+    }
+
+    const purchasePrice = parseFloat(assetInput.purchasePrice) || 0;
+    const salePrice = parseFloat(assetInput.salePrice) || 0;
+    const improvements = parseFloat(assetInput.improvementCosts) || 0;
+    const sellingExpenses = parseFloat(assetInput.sellingExpenses) || 0;
+    const legalFees = parseFloat(assetInput.legalFees) || 0;
+    
+    if (purchasePrice <= 0 || salePrice <= 0) {
+      alert('Please enter valid purchase price and sale price');
+      return;
+    }
+
+    setLoading(true);
+
+    setTimeout(() => {
+      const totalCost = purchasePrice + improvements + legalFees;
+      const totalProceeds = salePrice - sellingExpenses;
+      const gain = totalProceeds - totalCost;
+      
+      let taxDue = 0;
+      let effectiveRate = 0;
+
+      if (commonInfo.taxpayer_type === 'individual') {
+        if (checkIndividualExemption(totalProceeds, gain)) {
+          taxDue = 0;
+          effectiveRate = 0;
+        } else {
+          taxDue = calculateProgressiveTax(gain);
+          effectiveRate = gain > 0 ? (taxDue / gain) * 100 : 0;
+        }
+      } else {
+        // Check if small company (exempt) or large company (30%)
+        taxDue = gain * 0.30; // Assuming large company for now
+        effectiveRate = 30;
+      }
+
+      setAssetResult({
+        assetType: assetInput.assetType,
+        assetDescription: assetInput.assetDescription,
+        totalCost: totalCost,
+        totalProceeds: totalProceeds,
+        chargeable_gain: gain,
+        tax_due: Math.max(0, taxDue),
+        effective_rate: effectiveRate,
+        net_gain: gain - Math.max(0, taxDue),
+        exempt: commonInfo.taxpayer_type === 'individual' && checkIndividualExemption(totalProceeds, gain),
+        calculation_date: new Date().toLocaleDateString('en-NG')
+      });
+
+      setLoading(false);
+    }, 1500);
   };
 
   const resetForm = () => {
