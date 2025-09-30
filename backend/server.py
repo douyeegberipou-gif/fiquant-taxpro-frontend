@@ -5020,19 +5020,106 @@ async def send_quick_email(
             raise HTTPException(status_code=403, detail="Insufficient permissions")
         
         recipient_type = email_data.get("recipient_type", "all")
+        recipient_email = email_data.get("recipient_email", "")
         subject = email_data.get("subject", "")
         message = email_data.get("message", "")
         priority = email_data.get("priority", "normal")
         
-        # Mock sending (in production, this would use actual email service)
-        if recipient_type == "all":
-            sent_count = 150  # Mock all users
+        # Get recipients based on type
+        recipients = []
+        if recipient_type == "individual" and recipient_email:
+            recipients = [recipient_email]
+        elif recipient_type == "all":
+            # Get all user emails from database
+            users = await db.users.find({}, {"email": 1}).to_list(length=None)
+            recipients = [user["email"] for user in users]
         elif recipient_type == "segment":
-            sent_count = 45   # Mock segment users
-        else:
-            sent_count = 1    # Individual user
+            # For now, mock segment users (you can implement actual segment logic later)
+            users = await db.users.find({"account_tier": {"$in": ["pro", "premium"]}}, {"email": 1}).to_list(length=None)
+            recipients = [user["email"] for user in users]
         
-        # Log the email send
+        if not recipients:
+            raise HTTPException(status_code=400, detail="No recipients found")
+        
+        # Get Namecheap SMTP configuration
+        namecheap_config = MOCK_INTEGRATIONS["communications"]["namecheap"]["config"]
+        
+        if not namecheap_config.get("smtp_username") or not namecheap_config.get("smtp_password"):
+            raise HTTPException(status_code=400, detail="Namecheap email not configured. Please configure SMTP settings first.")
+        
+        # Send actual emails using Namecheap SMTP
+        sent_count = 0
+        failed_count = 0
+        
+        for recipient in recipients:
+            try:
+                # Create email
+                msg = MIMEMultipart()
+                msg['From'] = f"{namecheap_config.get('from_name', 'Fiquant TaxPro')} <{namecheap_config.get('smtp_username', 'noreply@fiquantconsult.com')}>"
+                msg['To'] = recipient
+                msg['Subject'] = subject
+                
+                # Add priority header
+                if priority == "high":
+                    msg['X-Priority'] = '2'
+                elif priority == "urgent":
+                    msg['X-Priority'] = '1'
+                
+                # Email body
+                email_body = f"""
+{message}
+
+---
+Best regards,
+Fiquant TaxPro Team
+
+This email was sent from Fiquant TaxPro administration system.
+"""
+                
+                msg.attach(MIMEText(email_body, 'plain'))
+                
+                # Send email via SMTP
+                server = smtplib.SMTP_SSL(namecheap_config.get("smtp_host", "mail.privateemail.com"), 
+                                        int(namecheap_config.get("smtp_port", "465")))
+                server.login(namecheap_config.get("smtp_username"), namecheap_config.get("smtp_password"))
+                server.send_message(msg)
+                server.quit()
+                
+                sent_count += 1
+                
+                # Log individual send
+                email_log = {
+                    "id": str(uuid.uuid4()),
+                    "admin_id": admin_user["id"],
+                    "recipient": recipient,
+                    "subject": subject,
+                    "message": message,
+                    "priority": priority,
+                    "status": "sent",
+                    "sent_at": datetime.now(timezone.utc).isoformat(),
+                    "error_message": None
+                }
+                await db.sent_emails.insert_one(email_log)
+                
+            except Exception as e:
+                failed_count += 1
+                print(f"Failed to send email to {recipient}: {e}")
+                
+                # Log failure
+                email_log = {
+                    "id": str(uuid.uuid4()),
+                    "admin_id": admin_user["id"],
+                    "recipient": recipient,
+                    "subject": subject,
+                    "message": message,
+                    "priority": priority,
+                    "status": "failed",
+                    "sent_at": datetime.now(timezone.utc).isoformat(),
+                    "error_message": str(e)
+                }
+                await db.sent_emails.insert_one(email_log)
+        
+        # Log the overall send activity
         log_entry = {
             "id": str(uuid.uuid4()),
             "admin_id": admin_user["id"],
@@ -5041,23 +5128,50 @@ async def send_quick_email(
                 "recipient_type": recipient_type,
                 "subject": subject,
                 "priority": priority,
-                "sent_count": sent_count
+                "sent_count": sent_count,
+                "failed_count": failed_count
             },
             "timestamp": datetime.now(timezone.utc).isoformat()
         }
         
         await db.admin_logs.insert_one(log_entry)
         
+        result_message = f"Email sent successfully to {sent_count} recipients"
+        if failed_count > 0:
+            result_message += f" ({failed_count} failed)"
+        
         return {
-            "message": "Email sent successfully",
+            "message": result_message,
             "sent_count": sent_count,
+            "failed_count": failed_count,
             "recipient_type": recipient_type
         }
     except HTTPException:
         raise
     except Exception as e:
         print(f"Error sending quick email: {e}")
-        raise HTTPException(status_code=500, detail="Failed to send email")
+        raise HTTPException(status_code=500, detail=f"Failed to send email: {str(e)}")
+
+# Get Sent Emails Log
+@messaging_router.get("/sent-emails")
+async def get_sent_emails(
+    limit: int = 50,
+    admin_user: dict = Depends(get_admin_middleware)
+):
+    """Get sent emails log for review"""
+    try:
+        if admin_user.get("admin_role") not in ["super_admin", "marketer", "auditor"]:
+            raise HTTPException(status_code=403, detail="Insufficient permissions")
+        
+        # Get sent emails from database
+        sent_emails = await db.sent_emails.find().sort("sent_at", -1).limit(limit).to_list(length=None)
+        
+        return sent_emails
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error getting sent emails: {e}")
+        raise HTTPException(status_code=500, detail="Failed to get sent emails")
 
 app.include_router(messaging_router)
 
