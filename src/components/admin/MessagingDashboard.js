@@ -75,6 +75,7 @@ const MessagingDashboard = () => {
   // Compose Email State
   const [composeForm, setComposeForm] = useState({
     recipient_type: 'all',
+    recipient_email: '',
     subject: '',
     message: '',
     priority: 'normal'
