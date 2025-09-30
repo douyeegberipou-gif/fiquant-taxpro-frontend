@@ -5080,12 +5080,28 @@ This email was sent from Fiquant TaxPro administration system.
                 
                 msg.attach(MIMEText(email_body, 'plain'))
                 
-                # Send email via SMTP
-                server = smtplib.SMTP_SSL(namecheap_config.get("smtp_host", "mail.privateemail.com"), 
-                                        int(namecheap_config.get("smtp_port", "465")))
-                server.login(namecheap_config.get("smtp_username"), namecheap_config.get("smtp_password"))
-                server.send_message(msg)
-                server.quit()
+                # Send email via SMTP with detailed error handling
+                try:
+                    print(f"Connecting to SMTP server: {namecheap_config.get('smtp_host')}:{namecheap_config.get('smtp_port')}")
+                    server = smtplib.SMTP_SSL(namecheap_config.get("smtp_host", "mail.privateemail.com"), 
+                                            int(namecheap_config.get("smtp_port", "465")))
+                    
+                    print(f"Logging in with username: {namecheap_config.get('smtp_username')}")
+                    server.login(namecheap_config.get("smtp_username"), namecheap_config.get("smtp_password"))
+                    
+                    print(f"Sending message to: {recipient}")
+                    server.send_message(msg)
+                    server.quit()
+                    print(f"Email sent successfully to {recipient}")
+                    
+                except smtplib.SMTPAuthenticationError as e:
+                    raise Exception(f"SMTP Authentication failed. Please check your email and password. Error: {str(e)}")
+                except smtplib.SMTPConnectError as e:
+                    raise Exception(f"Failed to connect to SMTP server. Please check server settings. Error: {str(e)}")
+                except smtplib.SMTPException as e:
+                    raise Exception(f"SMTP Error: {str(e)}")
+                except Exception as e:
+                    raise Exception(f"Email sending failed: {str(e)}")
                 
                 sent_count += 1
                 
