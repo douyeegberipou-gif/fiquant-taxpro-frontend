@@ -436,7 +436,24 @@ const MessagingDashboard = () => {
           )}
 
           <div className="grid gap-4">
-            {templates.map((template) => (
+            {templates.length === 0 ? (
+              <Card>
+                <CardContent className="p-6 text-center">
+                  <div className="text-gray-500">
+                    <FileText className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                    <h3 className="font-medium text-gray-900 mb-2">No Templates Yet</h3>
+                    <p className="text-sm text-gray-600 mb-4">
+                      Create your first email template to get started with messaging campaigns.
+                    </p>
+                    <Button onClick={() => setShowTemplateForm(true)}>
+                      <Plus className="h-4 w-4 mr-2" />
+                      Create Your First Template
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : (
+              templates.map((template) => (
               <Card key={template.id}>
                 <CardHeader>
                   <div className="flex items-center justify-between">
