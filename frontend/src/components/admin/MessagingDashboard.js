@@ -490,7 +490,11 @@ const MessagingDashboard = () => {
                 <Button 
                   className="bg-blue-600 hover:bg-blue-700 text-white"
                   onClick={sendQuickEmail}
-                  disabled={!composeForm.subject || !composeForm.message}
+                  disabled={
+                    !composeForm.subject || 
+                    !composeForm.message || 
+                    (composeForm.recipient_type === 'individual' && !composeForm.recipient_email)
+                  }
                 >
                   <Send className="h-4 w-4 mr-2" />
                   Send Now
