@@ -446,6 +446,20 @@ const MessagingDashboard = () => {
                 </div>
               </div>
 
+              {/* Individual User Email Field */}
+              {composeForm.recipient_type === 'individual' && (
+                <div>
+                  <Label>Recipient Email Address</Label>
+                  <Input 
+                    type="email"
+                    placeholder="Enter user email address..."
+                    value={composeForm.recipient_email}
+                    onChange={(e) => setComposeForm({...composeForm, recipient_email: e.target.value})}
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Enter the email address of the specific user you want to send to</p>
+                </div>
+              )}
+
               <div>
                 <Label>Subject</Label>
                 <Input 
