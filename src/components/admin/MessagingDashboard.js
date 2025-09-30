@@ -191,6 +191,44 @@ const MessagingDashboard = () => {
     }
   };
 
+  const quickSendTemplate = async (template) => {
+    // Create a quick campaign from template and send immediately
+    const campaignName = `Quick Send: ${template.name} - ${new Date().toLocaleString()}`;
+    
+    if (!window.confirm(`Send "${template.name}" template immediately to all users? This will create and send a campaign.`)) return;
+    
+    try {
+      const token = localStorage.getItem('token');
+      
+      // First create a campaign using the template
+      const campaignData = {
+        campaign_name: campaignName,
+        channel: template.channel,
+        template_id: template.id,
+        subject_template: template.subject_template,
+        body_template: template.body_template,
+        segment_id: '', // Send to all users
+        scheduled_at: '', // Send immediately
+        need_approval: false
+      };
+      
+      const createResponse = await axios.post(`${BACKEND_URL}/api/admin/messaging/campaigns`, campaignData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      // Then send the campaign immediately
+      const sendResponse = await axios.post(`${BACKEND_URL}/api/admin/messaging/campaigns/${createResponse.data.campaign_id}/send`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      alert(`✅ Template "${template.name}" sent successfully to ${sendResponse.data.sent_count} users!`);
+      fetchData(); // Refresh data to show new campaign
+    } catch (error) {
+      console.error('Error with quick send:', error);
+      alert('❌ Failed to send template. Please check your configuration and try again.');
+    }
+  };
+
   const getStatusIcon = (status) => {
     switch (status) {
       case 'sent':
