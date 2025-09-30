@@ -34,6 +34,7 @@ const MessagingDashboard = () => {
   const [campaigns, setCampaigns] = useState([]);
   const [segments, setSegments] = useState([]);
   const [analytics, setAnalytics] = useState({});
+  const [sentEmails, setSentEmails] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // Template Creation State
