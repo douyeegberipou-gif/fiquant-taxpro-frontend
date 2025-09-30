@@ -432,6 +432,14 @@ const MessagingDashboard = () => {
                         <Edit className="h-4 w-4 mr-1" />
                         Edit
                       </Button>
+                      <Button 
+                        size="sm" 
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                        onClick={() => quickSendTemplate(template)}
+                      >
+                        <Send className="h-4 w-4 mr-1" />
+                        Quick Send
+                      </Button>
                     </div>
                   </div>
                 </CardContent>
