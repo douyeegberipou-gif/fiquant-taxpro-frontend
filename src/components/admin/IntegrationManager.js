@@ -430,6 +430,28 @@ const IntegrationManager = () => {
     }
   };
 
+  const saveConfiguration = async (category, service) => {
+    try {
+      const token = localStorage.getItem('token');
+      const serviceConfig = integrations[category].services[service].config;
+      
+      const response = await axios.post(`${BACKEND_URL}/api/admin/integrations/${category}/${service}/config`, serviceConfig, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      // Update service status to connected after successful configuration
+      const updatedIntegrations = { ...integrations };
+      updatedIntegrations[category].services[service].status = 'connected';
+      updatedIntegrations[category].services[service].lastSync = new Date().toISOString();
+      setIntegrations(updatedIntegrations);
+      
+      alert(`✅ ${integrations[category].services[service].name} configuration saved successfully!`);
+    } catch (error) {
+      console.error('Error saving configuration:', error);
+      alert(`❌ Failed to save ${integrations[category].services[service].name} configuration`);
+    }
+  };
+
   const testConnection = async (category, service) => {
     try {
       // Mock connection test
