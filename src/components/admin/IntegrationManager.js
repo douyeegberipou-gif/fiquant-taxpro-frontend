@@ -632,6 +632,7 @@ const IntegrationManager = () => {
           <Button
             variant="outline"
             size="sm"
+            onClick={() => saveConfiguration(category, serviceKey)}
             className="flex-1"
           >
             <Settings className="h-4 w-4 mr-2" />
