@@ -362,6 +362,67 @@ const MessagingDashboard = () => {
           </Card>
         </TabsContent>
 
+        {/* Compose & Send Tab */}
+        <TabsContent value="compose" className="space-y-6">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-semibold">Compose & Send Email</h2>
+          </div>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Quick Email Composer</CardTitle>
+              <CardDescription>Send an email directly to users without creating templates or campaigns</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label>Recipient Type</Label>
+                  <select className="w-full p-2 border rounded-md">
+                    <option value="all">All Users</option>
+                    <option value="segment">Select Segment</option>
+                    <option value="individual">Individual User</option>
+                  </select>
+                </div>
+                <div>
+                  <Label>Priority</Label>
+                  <select className="w-full p-2 border rounded-md">
+                    <option value="normal">Normal</option>
+                    <option value="high">High</option>
+                    <option value="urgent">Urgent</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <Label>Subject</Label>
+                <Input placeholder="Enter email subject..." />
+              </div>
+
+              <div>
+                <Label>Message</Label>
+                <textarea
+                  className="w-full p-3 border rounded-md h-40"
+                  placeholder="Type your message here..."
+                />
+              </div>
+
+              <div className="flex items-center space-x-4">
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                  <Send className="h-4 w-4 mr-2" />
+                  Send Now
+                </Button>
+                <Button variant="outline">
+                  <Eye className="h-4 w-4 mr-2" />
+                  Preview
+                </Button>
+                <Button variant="outline">
+                  Save as Template
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         {/* Templates Tab */}
         <TabsContent value="templates" className="space-y-6">
           <div className="flex justify-between items-center">
