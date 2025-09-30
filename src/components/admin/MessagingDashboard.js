@@ -269,6 +269,7 @@ const MessagingDashboard = () => {
       // Reset form
       setComposeForm({
         recipient_type: 'all',
+        recipient_email: '',
         subject: '',
         message: '',
         priority: 'normal'
