@@ -238,6 +238,42 @@ const MessagingDashboard = () => {
     }
   };
 
+  const sendQuickEmail = async () => {
+    if (!composeForm.subject || !composeForm.message) {
+      alert('Please fill in both subject and message fields.');
+      return;
+    }
+
+    const confirmMessage = `Send email "${composeForm.subject}" to ${
+      composeForm.recipient_type === 'all' ? 'all users' : 
+      composeForm.recipient_type === 'segment' ? 'selected segment' : 'individual user'
+    }?`;
+    
+    if (!window.confirm(confirmMessage)) return;
+
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post(`${BACKEND_URL}/api/admin/messaging/send-quick-email`, composeForm, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      alert(`✅ Email sent successfully to ${response.data.sent_count} users!`);
+      
+      // Reset form
+      setComposeForm({
+        recipient_type: 'all',
+        subject: '',
+        message: '',
+        priority: 'normal'
+      });
+      
+      fetchData(); // Refresh analytics
+    } catch (error) {
+      console.error('Error sending quick email:', error);
+      alert('❌ Failed to send email. Please check your configuration and try again.');
+    }
+  };
+
   const getStatusIcon = (status) => {
     switch (status) {
       case 'sent':
