@@ -257,7 +257,7 @@ class SMTPIntegrationTester:
         success, response = self.run_test(
             "Quick Email Send - With SMTP Credentials",
             "POST",
-            "messaging/send-quick-email",
+            "admin/messaging/send-quick-email",
             [200, 500],  # Could succeed (200) or fail with SMTP error (500)
             email_data,
             auth_required=True
