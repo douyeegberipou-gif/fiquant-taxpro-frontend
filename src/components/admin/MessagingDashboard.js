@@ -72,6 +72,14 @@ const MessagingDashboard = () => {
     }
   });
 
+  // Compose Email State
+  const [composeForm, setComposeForm] = useState({
+    recipient_type: 'all',
+    subject: '',
+    message: '',
+    priority: 'normal'
+  });
+
   useEffect(() => {
     fetchData();
   }, []);
