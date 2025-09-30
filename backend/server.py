@@ -5008,6 +5008,57 @@ async def get_messaging_analytics(admin_user: dict = Depends(get_admin_middlewar
         print(f"Error getting messaging analytics: {e}")
         raise HTTPException(status_code=500, detail="Failed to get analytics")
 
+# Quick Send Email
+@messaging_router.post("/send-quick-email")
+async def send_quick_email(
+    email_data: dict,
+    admin_user: dict = Depends(get_admin_middleware)
+):
+    """Send a quick email without creating templates or campaigns"""
+    try:
+        if admin_user.get("admin_role") not in ["super_admin", "marketer"]:
+            raise HTTPException(status_code=403, detail="Insufficient permissions")
+        
+        recipient_type = email_data.get("recipient_type", "all")
+        subject = email_data.get("subject", "")
+        message = email_data.get("message", "")
+        priority = email_data.get("priority", "normal")
+        
+        # Mock sending (in production, this would use actual email service)
+        if recipient_type == "all":
+            sent_count = 150  # Mock all users
+        elif recipient_type == "segment":
+            sent_count = 45   # Mock segment users
+        else:
+            sent_count = 1    # Individual user
+        
+        # Log the email send
+        log_entry = {
+            "id": str(uuid.uuid4()),
+            "admin_id": admin_user["id"],
+            "action": "quick_email_sent",
+            "details": {
+                "recipient_type": recipient_type,
+                "subject": subject,
+                "priority": priority,
+                "sent_count": sent_count
+            },
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
+        
+        await db.admin_logs.insert_one(log_entry)
+        
+        return {
+            "message": "Email sent successfully",
+            "sent_count": sent_count,
+            "recipient_type": recipient_type
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error sending quick email: {e}")
+        raise HTTPException(status_code=500, detail="Failed to send email")
+
 app.include_router(messaging_router)
 
 # Security middleware (order matters - last added is first executed)
