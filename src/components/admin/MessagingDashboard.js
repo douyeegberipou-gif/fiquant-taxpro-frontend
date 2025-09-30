@@ -421,7 +421,11 @@ const MessagingDashboard = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label>Recipient Type</Label>
-                  <select className="w-full p-2 border rounded-md">
+                  <select 
+                    className="w-full p-2 border rounded-md"
+                    value={composeForm.recipient_type}
+                    onChange={(e) => setComposeForm({...composeForm, recipient_type: e.target.value})}
+                  >
                     <option value="all">All Users</option>
                     <option value="segment">Select Segment</option>
                     <option value="individual">Individual User</option>
@@ -429,7 +433,11 @@ const MessagingDashboard = () => {
                 </div>
                 <div>
                   <Label>Priority</Label>
-                  <select className="w-full p-2 border rounded-md">
+                  <select 
+                    className="w-full p-2 border rounded-md"
+                    value={composeForm.priority}
+                    onChange={(e) => setComposeForm({...composeForm, priority: e.target.value})}
+                  >
                     <option value="normal">Normal</option>
                     <option value="high">High</option>
                     <option value="urgent">Urgent</option>
@@ -439,7 +447,11 @@ const MessagingDashboard = () => {
 
               <div>
                 <Label>Subject</Label>
-                <Input placeholder="Enter email subject..." />
+                <Input 
+                  placeholder="Enter email subject..."
+                  value={composeForm.subject}
+                  onChange={(e) => setComposeForm({...composeForm, subject: e.target.value})}
+                />
               </div>
 
               <div>
@@ -447,11 +459,17 @@ const MessagingDashboard = () => {
                 <textarea
                   className="w-full p-3 border rounded-md h-40"
                   placeholder="Type your message here..."
+                  value={composeForm.message}
+                  onChange={(e) => setComposeForm({...composeForm, message: e.target.value})}
                 />
               </div>
 
               <div className="flex items-center space-x-4">
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                <Button 
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                  onClick={sendQuickEmail}
+                  disabled={!composeForm.subject || !composeForm.message}
+                >
                   <Send className="h-4 w-4 mr-2" />
                   Send Now
                 </Button>
