@@ -500,7 +500,8 @@ const MessagingDashboard = () => {
                   </div>
                 </CardContent>
               </Card>
-            ))}
+              ))
+            )}
           </div>
         </TabsContent>
 
