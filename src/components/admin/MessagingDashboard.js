@@ -88,10 +88,11 @@ const MessagingDashboard = () => {
         axios.get(`${BACKEND_URL}/api/admin/messaging/analytics/dashboard`, { headers })
       ]);
 
-      setTemplates(templatesRes.data);
-      setCampaigns(campaignsRes.data);
-      setSegments(segmentsRes.data);
-      setAnalytics(analyticsRes.data);
+      console.log('Templates loaded:', templatesRes.data); // Debug log
+      setTemplates(templatesRes.data || []);
+      setCampaigns(campaignsRes.data || []);
+      setSegments(segmentsRes.data || []);
+      setAnalytics(analyticsRes.data || {});
     } catch (error) {
       console.error('Error fetching messaging data:', error);
     } finally {
