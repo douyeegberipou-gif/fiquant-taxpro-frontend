@@ -5044,8 +5044,10 @@ async def send_quick_email(
         # Get Namecheap SMTP configuration
         namecheap_config = MOCK_INTEGRATIONS["communications"]["namecheap"]["config"]
         
+        print(f"Namecheap config check: {namecheap_config}")  # Debug log
+        
         if not namecheap_config.get("smtp_username") or not namecheap_config.get("smtp_password"):
-            raise HTTPException(status_code=400, detail="Namecheap email not configured. Please configure SMTP settings first.")
+            raise HTTPException(status_code=400, detail="Namecheap email not configured. Please configure SMTP settings first. Go to Admin → Integrations → Communications → Namecheap Email and enter your SMTP credentials.")
         
         # Send actual emails using Namecheap SMTP
         sent_count = 0
