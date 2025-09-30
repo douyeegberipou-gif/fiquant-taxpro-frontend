@@ -4555,6 +4555,10 @@ async def update_integration_config(
         # Update configuration (mock - in production this would be encrypted and stored securely)
         MOCK_INTEGRATIONS[category][service]["config"].update(config_data)
         
+        # Update status to connected when config is saved
+        MOCK_INTEGRATIONS[category][service]["status"] = "connected"
+        MOCK_INTEGRATIONS[category][service]["lastSync"] = datetime.now(timezone.utc).isoformat()
+        
         # Record activity log
         log_entry = {
             "id": str(uuid.uuid4()),
