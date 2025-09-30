@@ -5184,6 +5184,11 @@ async def get_sent_emails(
         # Get sent emails from database
         sent_emails = await db.sent_emails.find().sort("sent_at", -1).limit(limit).to_list(length=None)
         
+        # Convert ObjectId to string and clean up the response
+        for email in sent_emails:
+            if "_id" in email:
+                email["_id"] = str(email["_id"])
+        
         return sent_emails
     except HTTPException:
         raise
