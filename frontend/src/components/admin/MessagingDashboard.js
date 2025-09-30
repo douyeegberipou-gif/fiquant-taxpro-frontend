@@ -245,9 +245,15 @@ const MessagingDashboard = () => {
       return;
     }
 
+    if (composeForm.recipient_type === 'individual' && !composeForm.recipient_email) {
+      alert('Please enter the recipient email address for individual user sending.');
+      return;
+    }
+
     const confirmMessage = `Send email "${composeForm.subject}" to ${
       composeForm.recipient_type === 'all' ? 'all users' : 
-      composeForm.recipient_type === 'segment' ? 'selected segment' : 'individual user'
+      composeForm.recipient_type === 'segment' ? 'selected segment' : 
+      `${composeForm.recipient_email}`
     }?`;
     
     if (!window.confirm(confirmMessage)) return;
