@@ -197,7 +197,7 @@ class SMTPIntegrationTester:
         success, response = self.run_test(
             "Quick Email Send - Empty SMTP Credentials",
             "POST",
-            "messaging/send-quick-email",
+            "admin/messaging/send-quick-email",
             400,  # Should fail with 400 due to empty credentials
             email_data,
             auth_required=True
