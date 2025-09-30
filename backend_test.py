@@ -6035,20 +6035,25 @@ class NigerianTaxCalculatorTester:
         return self.tests_passed == self.tests_run
 
 def main():
-    print("🚀 Starting Special Admin Access and Notification System Testing...")
+    print("🚀 Starting URGENT Sent Emails Retrieval Testing...")
     print("=" * 80)
+    print("Background: User reports that successfully sent emails are not appearing")
+    print("in the 'Sent Emails' tab in Admin Messaging Dashboard.")
+    print("Testing the complete email flow and database storage...")
+    print()
     
     tester = NigerianTaxCalculatorTester()
     
-    # Run only the special admin and notification tests as requested
-    success = tester.run_special_admin_and_notification_tests()
+    # Run the comprehensive sent emails debugging
+    success = tester.test_comprehensive_sent_emails_debugging()
     
     # Print final results
     print("\n" + "=" * 80)
     print(f"📊 FINAL RESULTS: {tester.tests_passed}/{tester.tests_run} tests passed")
+    print(f"Success Rate: {(tester.tests_passed/tester.tests_run)*100:.1f}%")
     
     if success:
-        print("🎉 All special admin and notification tests passed!")
+        print("🎉 All sent emails tests passed!")
         return 0
     else:
         print(f"❌ {tester.tests_run - tester.tests_passed} tests failed")
