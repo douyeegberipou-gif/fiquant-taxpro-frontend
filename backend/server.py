@@ -4703,6 +4703,12 @@ async def get_message_templates(admin_user: dict = Depends(get_admin_middleware)
             raise HTTPException(status_code=403, detail="Insufficient permissions")
         
         templates = await db.message_templates.find({"is_active": True}).to_list(length=None)
+        
+        # Convert ObjectId to string for JSON serialization
+        for template in templates:
+            if "_id" in template:
+                template["_id"] = str(template["_id"])
+        
         return templates
     except HTTPException:
         raise
