@@ -91,11 +91,12 @@ const MessagingDashboard = () => {
       const token = localStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
 
-      const [templatesRes, campaignsRes, segmentsRes, analyticsRes] = await Promise.all([
+      const [templatesRes, campaignsRes, segmentsRes, analyticsRes, sentEmailsRes] = await Promise.all([
         axios.get(`${BACKEND_URL}/api/admin/messaging/templates`, { headers }),
         axios.get(`${BACKEND_URL}/api/admin/messaging/campaigns`, { headers }),
         axios.get(`${BACKEND_URL}/api/admin/messaging/segments`, { headers }),
-        axios.get(`${BACKEND_URL}/api/admin/messaging/analytics/dashboard`, { headers })
+        axios.get(`${BACKEND_URL}/api/admin/messaging/analytics/dashboard`, { headers }),
+        axios.get(`${BACKEND_URL}/api/admin/messaging/sent-emails`, { headers })
       ]);
 
       console.log('Templates loaded:', templatesRes.data); // Debug log
@@ -103,6 +104,7 @@ const MessagingDashboard = () => {
       setCampaigns(campaignsRes.data || []);
       setSegments(segmentsRes.data || []);
       setAnalytics(analyticsRes.data || {});
+      setSentEmails(sentEmailsRes.data || []);
     } catch (error) {
       console.error('Error fetching messaging data:', error);
     } finally {
