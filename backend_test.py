@@ -741,7 +741,8 @@ class NigerianTaxCalculatorTester:
                 login_response = gmail_response
                 print("   ✅ Gmail account login successful")
             else:
-                print(f"   ⚠️ Gmail account failed: {gmail_response.get('detail', 'Unknown error')}")
+                error_msg = gmail_response.get('detail', 'Unknown error') if isinstance(gmail_response, dict) else str(gmail_response)
+                print(f"   ⚠️ Gmail account failed: {error_msg}")
         
         # If login failed, try to check if account exists by attempting registration
         if not login_success:
