@@ -6846,28 +6846,34 @@ class NigerianTaxCalculatorTester:
         return self.tests_passed == self.tests_run
 
 def main():
-    print("🚀 Starting URGENT Sent Emails Retrieval Testing...")
+    print("🔥 CRITICAL ACCOUNT VERIFICATION SYSTEM INTEGRATION CHECK")
     print("=" * 80)
-    print("Background: User reports that successfully sent emails are not appearing")
-    print("in the 'Sent Emails' tab in Admin Messaging Dashboard.")
-    print("Testing the complete email flow and database storage...")
+    print("URGENT MISSION: User wants to reactivate account verification for ALL accounts")
+    print("now that SMTP email is working. Need comprehensive verification system")
+    print("validation before they reinstate verification requirements.")
     print()
+    print("HIGH-STAKES SCENARIO: If verification system has any issues and they")
+    print("enable it for their admin account, they could lock themselves out.")
+    print("Must ensure 100% functionality.")
+    print("=" * 80)
     
     tester = NigerianTaxCalculatorTester()
     
-    # Run the comprehensive sent emails debugging
-    success = tester.test_comprehensive_sent_emails_debugging()
+    # Run the comprehensive verification system tests
+    success = tester.run_verification_system_tests()
     
     # Print final results
     print("\n" + "=" * 80)
-    print(f"📊 FINAL RESULTS: {tester.tests_passed}/{tester.tests_run} tests passed")
+    print(f"📊 VERIFICATION SYSTEM TEST RESULTS: {tester.tests_passed}/{tester.tests_run} tests passed")
     print(f"Success Rate: {(tester.tests_passed/tester.tests_run)*100:.1f}%")
     
     if success:
-        print("🎉 All sent emails tests passed!")
+        print("✅ VERIFICATION SYSTEM IS PRODUCTION-READY")
+        print("🟢 SAFE TO REACTIVATE VERIFICATION FOR ALL ACCOUNTS")
         return 0
     else:
-        print(f"❌ {tester.tests_run - tester.tests_passed} tests failed")
+        print("❌ VERIFICATION SYSTEM HAS CRITICAL ISSUES")
+        print("🔴 DO NOT REACTIVATE VERIFICATION UNTIL ISSUES ARE FIXED")
         return 1
 
 if __name__ == "__main__":
