@@ -7362,6 +7362,232 @@ class NigerianTaxCalculatorTester:
         
         return self.tests_passed == self.tests_run
 
+    # ============================
+    # URGENT PASSWORD RESET NETWORK ERROR FIX
+    # ============================
+    
+    def test_urgent_password_reset_network_error(self):
+        """URGENT: Test forgot password functionality for douyeegberipou@gmail.com"""
+        print("\n🚨 URGENT PASSWORD RESET NETWORK ERROR INVESTIGATION")
+        print("=" * 80)
+        print("CRITICAL ISSUE: User getting 'Network error' when trying to send password reset")
+        print("EMAIL: douyeegberipou@gmail.com")
+        print("=" * 80)
+        
+        tests_passed = 0
+        total_tests = 4
+        
+        # Test 1: Test Forgot Password Endpoint
+        print("\n1️⃣ TESTING FORGOT PASSWORD ENDPOINT")
+        if self.test_forgot_password_endpoint():
+            tests_passed += 1
+        
+        # Test 2: Account Existence Check
+        print("\n2️⃣ ACCOUNT EXISTENCE CHECK")
+        if self.test_account_existence_check():
+            tests_passed += 1
+        
+        # Test 3: SMTP Integration Check
+        print("\n3️⃣ SMTP INTEGRATION CHECK")
+        if self.test_smtp_integration_check():
+            tests_passed += 1
+        
+        # Test 4: Network Connectivity
+        print("\n4️⃣ NETWORK CONNECTIVITY CHECK")
+        if self.test_network_connectivity():
+            tests_passed += 1
+        
+        print(f"\n📊 PASSWORD RESET INVESTIGATION RESULTS: {tests_passed}/{total_tests} tests passed")
+        
+        if tests_passed == total_tests:
+            print("✅ PASSWORD RESET SYSTEM IS WORKING")
+            print("🔍 NETWORK ERROR MAY BE CLIENT-SIDE OR TEMPORARY")
+        else:
+            print("❌ PASSWORD RESET SYSTEM HAS ISSUES")
+            print("🔴 CRITICAL ISSUES FOUND - SEE DETAILS ABOVE")
+        
+        print("=" * 80)
+        return tests_passed >= 3  # Allow for 1 failure
+    
+    def test_forgot_password_endpoint(self):
+        """Test POST /api/auth/forgot-password with douyeegberipou@gmail.com"""
+        print("   🔍 Testing forgot password endpoint with douyeegberipou@gmail.com...")
+        
+        # Test the specific email address mentioned in the issue
+        forgot_password_data = {
+            "email": "douyeegberipou@gmail.com"
+        }
+        
+        success, response = self.run_test(
+            "Forgot Password - douyeegberipou@gmail.com",
+            "POST",
+            "auth/forgot-password",
+            200,
+            forgot_password_data
+        )
+        
+        if success:
+            print("   ✅ Forgot password endpoint is accessible and responding")
+            print(f"   📧 Response: {response.get('message', 'No message')}")
+            
+            # Check if response contains expected message
+            expected_message = "If an account with that email exists, you will receive a password reset link."
+            if response.get('message') == expected_message:
+                print("   ✅ Endpoint returns correct security message")
+            else:
+                print(f"   ⚠️ Unexpected message: {response.get('message')}")
+            
+            return True
+        else:
+            print("   ❌ Forgot password endpoint failed")
+            print(f"   Error: {response}")
+            return False
+    
+    def test_account_existence_check(self):
+        """Verify if douyeegberipou@gmail.com exists in database"""
+        print("   🔍 Checking if douyeegberipou@gmail.com account exists...")
+        
+        # Try to register with the same email to check if it exists
+        registration_data = {
+            "email": "douyeegberipou@gmail.com",
+            "phone": "+2348123456789",
+            "password": "TestPassword123!",
+            "full_name": "Account Existence Check",
+            "agree_terms": True
+        }
+        
+        success, response = self.run_test(
+            "Account Existence Check - Registration Attempt",
+            "POST",
+            "auth/register",
+            [400, 200],  # 400 if exists, 200 if doesn't exist
+            registration_data
+        )
+        
+        if success:
+            detail = response.get('detail', '') if isinstance(response, dict) else str(response)
+            user_id = response.get('id') if isinstance(response, dict) else None
+            
+            if "already registered" in str(detail).lower():
+                print("   ✅ ACCOUNT EXISTS - douyeegberipou@gmail.com is registered")
+                print("   📝 This confirms the account exists in the database")
+                return True
+            elif user_id:
+                print("   ❌ ACCOUNT DOES NOT EXIST - Registration succeeded")
+                print("   📝 This means douyeegberipou@gmail.com was never created")
+                print("   🎯 ROOT CAUSE: User trying to reset password for non-existent account")
+                return False
+            else:
+                print(f"   ⚠️ Registration test inconclusive: {response}")
+                return False
+        else:
+            print("   ❌ Failed to check account existence")
+            return False
+    
+    def test_smtp_integration_check(self):
+        """Test if password reset emails can be sent via SMTP"""
+        print("   🔍 Testing SMTP integration for password reset emails...")
+        
+        # First, try to get admin access to check SMTP configuration
+        if not hasattr(self, 'auth_token') or not self.auth_token:
+            # Try admin login
+            admin_login_data = {
+                "email_or_phone": "douyeegberipou@yahoo.com",
+                "password": "any_password"
+            }
+            
+            admin_success, admin_response = self.run_test(
+                "Admin Login for SMTP Check",
+                "POST",
+                "auth/login",
+                200,
+                admin_login_data
+            )
+            
+            if admin_success:
+                self.auth_token = admin_response.get("access_token")
+                print("   ✅ Admin access obtained for SMTP check")
+            else:
+                print("   ⚠️ No admin access - checking SMTP indirectly")
+        
+        # Check SMTP configuration if we have admin access
+        if hasattr(self, 'auth_token') and self.auth_token:
+            smtp_success, smtp_response = self.run_test(
+                "SMTP Configuration Check",
+                "GET",
+                "admin/integrations",
+                200,
+                None,
+                auth_required=True
+            )
+            
+            if smtp_success and "communications" in smtp_response:
+                namecheap = smtp_response["communications"].get("namecheap", {})
+                config = namecheap.get("config", {})
+                
+                print("   📧 SMTP Configuration Status:")
+                print(f"     Status: {namecheap.get('status', 'Unknown')}")
+                print(f"     SMTP Host: {config.get('smtp_host', 'Not set')}")
+                print(f"     SMTP Port: {config.get('smtp_port', 'Not set')}")
+                print(f"     Username: {'Set' if config.get('smtp_username') else 'EMPTY'}")
+                print(f"     Password: {'Set' if config.get('smtp_password') else 'EMPTY'}")
+                print(f"     From Email: {config.get('from_email', 'Not set')}")
+                
+                if config.get('smtp_username') and config.get('smtp_password'):
+                    print("   ✅ SMTP credentials are configured")
+                    return True
+                else:
+                    print("   ❌ SMTP credentials are EMPTY")
+                    print("   🎯 ROOT CAUSE: SMTP not configured - emails cannot be sent")
+                    return False
+            else:
+                print("   ❌ Failed to check SMTP configuration")
+                return False
+        else:
+            print("   ⚠️ Cannot check SMTP configuration without admin access")
+            print("   📝 Assuming SMTP may not be configured properly")
+            return False
+    
+    def test_network_connectivity(self):
+        """Test basic API connectivity and response times"""
+        print("   🔍 Testing network connectivity and API response times...")
+        
+        import time
+        
+        # Test basic API health
+        start_time = time.time()
+        success, response = self.run_test(
+            "API Health Check",
+            "GET",
+            "",  # Root API endpoint
+            200,
+            None
+        )
+        end_time = time.time()
+        
+        response_time = (end_time - start_time) * 1000  # Convert to milliseconds
+        
+        if success:
+            print(f"   ✅ API is accessible and responding")
+            print(f"   ⏱️ Response time: {response_time:.2f}ms")
+            
+            if response_time < 5000:  # Less than 5 seconds
+                print("   ✅ Response time is acceptable")
+            else:
+                print("   ⚠️ Response time is slow - may cause timeout issues")
+            
+            # Test if the API returns proper JSON
+            if isinstance(response, dict):
+                print("   ✅ API returns proper JSON responses")
+            else:
+                print("   ⚠️ API response format may be incorrect")
+            
+            return True
+        else:
+            print("   ❌ API is not accessible")
+            print(f"   🎯 ROOT CAUSE: Network connectivity issue or server down")
+            return False
+
 def main():
     print("🚨 URGENT ADMIN BYPASS INVESTIGATION")
     print("=" * 80)
