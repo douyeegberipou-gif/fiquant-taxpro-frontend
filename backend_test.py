@@ -1438,6 +1438,41 @@ class NigerianTaxCalculatorTester:
         
         print(f"   📊 Error Handling & Edge Cases: {tests_passed}/{total_tests} tests passed")
         return tests_passed == total_tests
+    
+    def run_verification_system_tests(self):
+        """Run CRITICAL account verification system tests"""
+        print("🔥 CRITICAL ACCOUNT VERIFICATION SYSTEM TESTING")
+        print("=" * 80)
+        print("PURPOSE: Validate verification system before reactivating for all accounts")
+        print("RISK: Admin lockout if verification system has issues")
+        print("=" * 80)
+        
+        # Reset counters for verification tests
+        verification_tests_run = 0
+        verification_tests_passed = 0
+        
+        # Run comprehensive verification system test
+        if self.test_comprehensive_verification_system():
+            verification_tests_passed += 1
+        verification_tests_run += 1
+        
+        # Print verification-specific results
+        print("\n" + "=" * 80)
+        print(f"🎯 VERIFICATION SYSTEM RESULTS: {verification_tests_passed}/{verification_tests_run} test suites passed")
+        
+        if verification_tests_passed == verification_tests_run:
+            print("✅ VERIFICATION SYSTEM IS PRODUCTION-READY")
+            print("🟢 RECOMMENDATION: SAFE TO REACTIVATE VERIFICATION FOR ALL ACCOUNTS")
+            print("📧 SMTP integration working correctly")
+            print("🔐 Login protection functioning properly")
+            print("👤 Admin account safety confirmed")
+        else:
+            print("❌ VERIFICATION SYSTEM HAS CRITICAL ISSUES")
+            print("🔴 RECOMMENDATION: DO NOT REACTIVATE VERIFICATION UNTIL FIXED")
+            print("⚠️ Risk of admin lockout if verification is enabled")
+        
+        print("=" * 80)
+        return verification_tests_passed == verification_tests_run
 
     # ============================
     # AUTHENTICATION TESTS
