@@ -1152,20 +1152,16 @@ async def login_user(login_data: UserLogin):
             detail="Invalid credentials"
         )
     
-    # Special access for specific admin user - bypass password verification and account verification
-    special_admin_email = "douyeegberipou@yahoo.com"
-    is_special_admin = user_data.get("email", "").lower() == special_admin_email.lower()
-    
-    # Verify password (skip for special admin)
-    if not is_special_admin and not verify_password(login_data.password, user_data["password_hash"]):
+    # Verify password for ALL users (no exceptions)
+    if not verify_password(login_data.password, user_data["password_hash"]):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid credentials"
         )
     
-    # Check verification status (skip for special admin)
+    # Check verification status for ALL users (including admin accounts)
     user_profile = UserProfile(**user_data)
-    if not is_special_admin and not await is_account_verified(user_profile):
+    if not await is_account_verified(user_profile):
         verification_status = []
         if not user_profile.email_verified:
             verification_status.append("email")
