@@ -629,6 +629,272 @@ class NigerianTaxCalculatorTester:
         return tests_passed == total_tests
 
     # ============================
+    # URGENT LOGIN ISSUE TESTS - ADMIN ACCESS PROBLEM
+    # ============================
+    
+    def test_urgent_admin_login_investigation(self):
+        """URGENT: Comprehensive investigation of admin login issue"""
+        print("\n🚨 URGENT LOGIN ISSUE INVESTIGATION - Admin Access Problem")
+        print("=" * 80)
+        
+        tests_passed = 0
+        total_tests = 5
+        
+        # Test 1: Special Admin Bypass (douyeegberipou@yahoo.com)
+        print("\n1️⃣ Testing Special Admin Bypass - douyeegberipou@yahoo.com")
+        if self.test_special_admin_bypass():
+            tests_passed += 1
+        
+        # Test 2: Gmail Account Investigation (douyeegberipou@gmail.com)
+        print("\n2️⃣ Testing Gmail Account - douyeegberipou@gmail.com")
+        if self.test_gmail_account_investigation():
+            tests_passed += 1
+        
+        # Test 3: Admin Users Database Investigation
+        print("\n3️⃣ Investigating Admin Users in Database")
+        if self.test_admin_users_database_investigation():
+            tests_passed += 1
+        
+        # Test 4: Login System Status Check
+        print("\n4️⃣ Testing Login System Status")
+        if self.test_login_system_status():
+            tests_passed += 1
+        
+        # Test 5: Admin Setup Verification
+        print("\n5️⃣ Verifying Admin Setup and Privileges")
+        if self.test_admin_setup_verification():
+            tests_passed += 1
+        
+        print(f"\n📊 URGENT LOGIN INVESTIGATION RESULTS: {tests_passed}/{total_tests} tests completed")
+        print("=" * 80)
+        
+        return tests_passed == total_tests
+    
+    def test_special_admin_bypass(self):
+        """Test douyeegberipou@yahoo.com login with any password (special bypass)"""
+        print("   🔍 Testing special admin bypass functionality...")
+        
+        # Test with multiple different passwords to confirm bypass works
+        test_passwords = ["any_password", "wrong_password", "123456", "", "random_text"]
+        
+        for i, password in enumerate(test_passwords, 1):
+            login_data = {
+                "email_or_phone": "douyeegberipou@yahoo.com",
+                "password": password
+            }
+            
+            success, response = self.run_test(
+                f"Special Admin Bypass Test {i} - Password: '{password}'",
+                "POST",
+                "auth/login",
+                200,
+                login_data
+            )
+            
+            if success:
+                print(f"   ✅ Bypass working with password: '{password}'")
+                if i == 1:  # Store token from first successful login
+                    self.auth_token = response.get("access_token")
+                    print(f"   🔑 Admin token obtained: {response.get('user_id')}")
+                    print(f"   ⏰ Token expires in: {response.get('expires_in')} seconds")
+            else:
+                print(f"   ❌ Bypass failed with password: '{password}'")
+                print(f"   Error: {response}")
+                return False
+        
+        print(f"   ✅ Special admin bypass working correctly for douyeegberipou@yahoo.com")
+        return True
+    
+    def test_gmail_account_investigation(self):
+        """Test if douyeegberipou@gmail.com account exists and its status"""
+        print("   🔍 Investigating douyeegberipou@gmail.com account...")
+        
+        # Try to login with the Gmail account
+        login_data = {
+            "email_or_phone": "douyeegberipou@gmail.com",
+            "password": "test_password"
+        }
+        
+        success, response = self.run_test(
+            "Gmail Account Login Test",
+            "POST",
+            "auth/login",
+            [200, 401, 403],  # Could succeed, fail with invalid creds, or fail with verification
+            login_data
+        )
+        
+        if success and "access_token" in response:
+            print(f"   ✅ Gmail account exists and login successful")
+            print(f"   User ID: {response.get('user_id')}")
+            return True
+        elif "Invalid credentials" in str(response):
+            print(f"   ⚠️ Gmail account exists but password is incorrect")
+            print(f"   This explains the user's 'Invalid credentials' error")
+            return True
+        elif "not verified" in str(response):
+            print(f"   ⚠️ Gmail account exists but is not verified")
+            print(f"   Error: {response.get('detail')}")
+            return True
+        else:
+            print(f"   ❌ Gmail account login failed")
+            print(f"   Response: {response}")
+            return False
+    
+    def test_admin_users_database_investigation(self):
+        """Check both email accounts in database via admin endpoint"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No admin token available")
+            return False
+        
+        print("   🔍 Checking admin users database...")
+        
+        # Get all users to find both accounts
+        success, response = self.run_test(
+            "Get All Users - Admin Endpoint",
+            "GET",
+            "admin/users?limit=100",
+            200,
+            None,
+            auth_required=True
+        )
+        
+        if not success:
+            print(f"   ❌ Failed to access admin users endpoint")
+            return False
+        
+        users = response.get('users', []) if isinstance(response, dict) else response
+        
+        # Look for both email accounts
+        yahoo_account = None
+        gmail_account = None
+        
+        for user in users:
+            email = user.get('email', '').lower()
+            if email == 'douyeegberipou@yahoo.com':
+                yahoo_account = user
+            elif email == 'douyeegberipou@gmail.com':
+                gmail_account = user
+        
+        print(f"   📊 Total users in database: {len(users)}")
+        
+        # Analyze Yahoo account
+        if yahoo_account:
+            print(f"   ✅ Yahoo account found:")
+            print(f"     Email: {yahoo_account.get('email')}")
+            print(f"     Full Name: {yahoo_account.get('full_name')}")
+            print(f"     Admin Role: {yahoo_account.get('admin_role')}")
+            print(f"     Admin Enabled: {yahoo_account.get('admin_enabled')}")
+            print(f"     Email Verified: {yahoo_account.get('email_verified')}")
+            print(f"     Phone Verified: {yahoo_account.get('phone_verified')}")
+            print(f"     Account Status: {yahoo_account.get('account_status')}")
+        else:
+            print(f"   ❌ Yahoo account NOT found in database")
+        
+        # Analyze Gmail account
+        if gmail_account:
+            print(f"   ✅ Gmail account found:")
+            print(f"     Email: {gmail_account.get('email')}")
+            print(f"     Full Name: {gmail_account.get('full_name')}")
+            print(f"     Admin Role: {gmail_account.get('admin_role')}")
+            print(f"     Admin Enabled: {gmail_account.get('admin_enabled')}")
+            print(f"     Email Verified: {gmail_account.get('email_verified')}")
+            print(f"     Phone Verified: {gmail_account.get('phone_verified')}")
+            print(f"     Account Status: {gmail_account.get('account_status')}")
+        else:
+            print(f"   ❌ Gmail account NOT found in database")
+        
+        # Provide recommendations
+        if yahoo_account and gmail_account:
+            print(f"   📝 BOTH accounts exist - user should use the one with admin privileges")
+        elif yahoo_account and not gmail_account:
+            print(f"   📝 Only Yahoo account exists - user should use douyeegberipou@yahoo.com")
+        elif gmail_account and not yahoo_account:
+            print(f"   📝 Only Gmail account exists - user should use douyeegberipou@gmail.com")
+        else:
+            print(f"   ❌ Neither account found - this is a critical issue")
+        
+        return yahoo_account is not None or gmail_account is not None
+    
+    def test_login_system_status(self):
+        """Verify the login endpoint is working correctly"""
+        print("   🔍 Testing login system status...")
+        
+        # Test with a known non-existent account
+        login_data = {
+            "email_or_phone": "nonexistent.test@example.com",
+            "password": "test_password"
+        }
+        
+        success, response = self.run_test(
+            "Login System - Non-existent Account",
+            "POST",
+            "auth/login",
+            401,  # Should return 401 for invalid credentials
+            login_data
+        )
+        
+        if success:
+            print(f"   ✅ Login endpoint working correctly")
+            print(f"   ✅ Properly rejects non-existent accounts with 401")
+            return True
+        else:
+            print(f"   ❌ Login endpoint not working correctly")
+            return False
+    
+    def test_admin_setup_verification(self):
+        """Verify which email address has super_admin role and admin_enabled: true"""
+        if not self.auth_token:
+            print("   ⚠️ Skipping - No admin token available")
+            return False
+        
+        print("   🔍 Verifying admin setup and privileges...")
+        
+        # Test admin access with current token
+        success, response = self.run_test(
+            "Admin Access Test - Current Token",
+            "GET",
+            "admin/users?limit=1",
+            200,
+            None,
+            auth_required=True
+        )
+        
+        if success:
+            print(f"   ✅ Current admin token has valid admin access")
+            
+            # Get current user profile to see which account is logged in
+            profile_success, profile_response = self.run_test(
+                "Get Current Admin Profile",
+                "GET",
+                "auth/me",
+                200,
+                None,
+                auth_required=True
+            )
+            
+            if profile_success:
+                print(f"   ✅ Current admin account details:")
+                print(f"     Email: {profile_response.get('email')}")
+                print(f"     Full Name: {profile_response.get('full_name')}")
+                print(f"     Admin Role: {profile_response.get('admin_role')}")
+                print(f"     Admin Enabled: {profile_response.get('admin_enabled')}")
+                
+                # This tells us which account has admin privileges
+                admin_email = profile_response.get('email')
+                if admin_email:
+                    if 'yahoo.com' in admin_email:
+                        print(f"   📝 RECOMMENDATION: User should use douyeegberipou@yahoo.com for admin access")
+                    elif 'gmail.com' in admin_email:
+                        print(f"   📝 RECOMMENDATION: User should use douyeegberipou@gmail.com for admin access")
+                    else:
+                        print(f"   ⚠️ Admin account is neither Yahoo nor Gmail: {admin_email}")
+            
+            return True
+        else:
+            print(f"   ❌ Admin access failed - token may not have admin privileges")
+            return False
+
+    # ============================
     # AUTHENTICATION TESTS
     # ============================
     
