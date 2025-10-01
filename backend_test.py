@@ -777,8 +777,6 @@ class NigerianTaxCalculatorTester:
         
         # Continue with analysis if we got a token
         if login_success:
-        
-        if login_success:
             print("   ✅ LOGIN SUCCESSFUL - This confirms the bypass is still active")
             self.auth_token = login_response.get("access_token")
             
