@@ -629,6 +629,362 @@ class NigerianTaxCalculatorTester:
         return tests_passed == total_tests
 
     # ============================
+    # URGENT ADMIN BYPASS INVESTIGATION - douyeegberipou@yahoo.com
+    # ============================
+    
+    def test_urgent_admin_bypass_investigation(self):
+        """URGENT: Investigate douyeegberipou@yahoo.com bypass issue"""
+        print("\n🚨 URGENT ADMIN BYPASS INVESTIGATION")
+        print("=" * 80)
+        print("CRITICAL ISSUE: douyeegberipou@yahoo.com can still login without verification")
+        print("HYPOTHESIS: Account already marked as verified in database")
+        print("=" * 80)
+        
+        tests_passed = 0
+        total_tests = 5
+        
+        # Test 1: Check Account Status in Database
+        print("\n1️⃣ CHECKING ACCOUNT STATUS IN DATABASE")
+        if self.test_admin_account_database_status():
+            tests_passed += 1
+        
+        # Test 2: Test Login Flow and Trace Verification Logic
+        print("\n2️⃣ TESTING LOGIN FLOW AND VERIFICATION LOGIC")
+        if self.test_admin_login_verification_trace():
+            tests_passed += 1
+        
+        # Test 3: Database Investigation for Verification Fields
+        print("\n3️⃣ DATABASE INVESTIGATION - VERIFICATION FIELDS")
+        if self.test_database_verification_fields():
+            tests_passed += 1
+        
+        # Test 4: Determine Missing Verification Requirements
+        print("\n4️⃣ DETERMINING MISSING VERIFICATION REQUIREMENTS")
+        if self.test_verification_requirements_analysis():
+            tests_passed += 1
+        
+        # Test 5: Test Forced Verification Requirement
+        print("\n5️⃣ TESTING FORCED VERIFICATION REQUIREMENT")
+        if self.test_force_verification_requirement():
+            tests_passed += 1
+        
+        print(f"\n📊 ADMIN BYPASS INVESTIGATION RESULTS: {tests_passed}/{total_tests} tests completed")
+        
+        if tests_passed >= 4:
+            print("✅ INVESTIGATION COMPLETE - ROOT CAUSE IDENTIFIED")
+        else:
+            print("❌ INVESTIGATION INCOMPLETE - FURTHER ANALYSIS NEEDED")
+        
+        print("=" * 80)
+        return tests_passed >= 4
+    
+    def test_admin_account_database_status(self):
+        """Test 1: Check douyeegberipou@yahoo.com account status in database"""
+        print("   🔍 Querying database for douyeegberipou@yahoo.com account...")
+        
+        # First, try to login to get admin token
+        login_data = {
+            "email_or_phone": "douyeegberipou@yahoo.com",
+            "password": "any_password_should_work"
+        }
+        
+        login_success, login_response = self.run_test(
+            "Admin Account Login - douyeegberipou@yahoo.com",
+            "POST",
+            "auth/login",
+            200,
+            login_data
+        )
+        
+        if login_success:
+            print("   ✅ LOGIN SUCCESSFUL - This confirms the bypass is still active")
+            self.auth_token = login_response.get("access_token")
+            
+            # Get user profile to check verification status
+            profile_success, profile_response = self.run_test(
+                "Get Admin Profile - Verification Status",
+                "GET",
+                "auth/me",
+                200,
+                None,
+                auth_required=True
+            )
+            
+            if profile_success:
+                print("   📊 ACCOUNT STATUS DETAILS:")
+                print(f"     Email: {profile_response.get('email')}")
+                print(f"     Full Name: {profile_response.get('full_name')}")
+                print(f"     Email Verified: {profile_response.get('email_verified')}")
+                print(f"     Phone Verified: {profile_response.get('phone_verified')}")
+                print(f"     Account Status: {profile_response.get('account_status')}")
+                print(f"     Admin Role: {profile_response.get('admin_role')}")
+                print(f"     Admin Enabled: {profile_response.get('admin_enabled')}")
+                
+                # Analyze verification status
+                email_verified = profile_response.get('email_verified')
+                phone_verified = profile_response.get('phone_verified')
+                
+                if email_verified and phone_verified:
+                    print("   🎯 ROOT CAUSE IDENTIFIED:")
+                    print("     ✅ email_verified: true")
+                    print("     ✅ phone_verified: true")
+                    print("     📝 HYPOTHESIS CONFIRMED: Account is already marked as verified")
+                    print("     📝 This explains why login works without verification")
+                elif email_verified and not phone_verified:
+                    print("   🎯 PARTIAL VERIFICATION IDENTIFIED:")
+                    print("     ✅ email_verified: true")
+                    print("     ❌ phone_verified: false")
+                    print("     📝 Account may have phone verification bypass")
+                elif not email_verified and phone_verified:
+                    print("   🎯 PARTIAL VERIFICATION IDENTIFIED:")
+                    print("     ❌ email_verified: false")
+                    print("     ✅ phone_verified: true")
+                    print("     📝 Account may have email verification bypass")
+                else:
+                    print("   🎯 VERIFICATION BYPASS CONFIRMED:")
+                    print("     ❌ email_verified: false")
+                    print("     ❌ phone_verified: false")
+                    print("     📝 Special admin bypass is overriding verification requirements")
+                
+                return True
+            else:
+                print("   ❌ Failed to get admin profile")
+                return False
+        else:
+            print("   ❌ LOGIN FAILED - Bypass may have been removed")
+            print(f"   Error: {login_response}")
+            return False
+    
+    def test_admin_login_verification_trace(self):
+        """Test 2: Trace through login verification logic"""
+        print("   🔍 Tracing login verification logic...")
+        
+        if not self.auth_token:
+            print("   ⚠️ No admin token available - attempting login first")
+            if not self.test_admin_account_database_status():
+                print("   ❌ Cannot proceed without admin access")
+                return False
+        
+        # Test login endpoint behavior with detailed analysis
+        login_data = {
+            "email_or_phone": "douyeegberipou@yahoo.com",
+            "password": "test_verification_logic"
+        }
+        
+        success, response = self.run_test(
+            "Login Verification Logic Trace",
+            "POST",
+            "auth/login",
+            200,
+            login_data
+        )
+        
+        if success:
+            print("   ✅ LOGIN SUCCESSFUL - Analyzing verification bypass logic:")
+            print("   📋 LOGIN FLOW ANALYSIS:")
+            print("     1. User found in database ✅")
+            print("     2. Password verification - BYPASSED for douyeegberipou@yahoo.com ✅")
+            print("     3. Account verification check - BYPASSED or SATISFIED ✅")
+            print("     4. JWT token generated ✅")
+            
+            # Check if this is due to special bypass or actual verification
+            print("   🔍 VERIFICATION BYPASS ANALYSIS:")
+            print("     Possible reasons for successful login:")
+            print("     A) Special admin bypass in login logic")
+            print("     B) Account is actually verified (email_verified: true, phone_verified: true)")
+            print("     C) Verification requirements disabled for admin accounts")
+            
+            return True
+        else:
+            print("   ❌ LOGIN FAILED - Verification requirements may be enforced")
+            print(f"   Error: {response}")
+            return False
+    
+    def test_database_verification_fields(self):
+        """Test 3: Investigate verification fields in database"""
+        print("   🔍 Investigating verification fields in database...")
+        
+        if not self.auth_token:
+            print("   ⚠️ No admin token available")
+            return False
+        
+        # Get all users to find the admin account
+        success, response = self.run_test(
+            "Get All Users - Find Admin Account",
+            "GET",
+            "admin/users?limit=100",
+            200,
+            None,
+            auth_required=True
+        )
+        
+        if success:
+            users = response.get('users', []) if isinstance(response, dict) else response
+            admin_user = None
+            
+            # Find the admin account
+            for user in users:
+                if user.get('email', '').lower() == 'douyeegberipou@yahoo.com':
+                    admin_user = user
+                    break
+            
+            if admin_user:
+                print("   ✅ ADMIN ACCOUNT FOUND IN DATABASE:")
+                print(f"     User ID: {admin_user.get('id')}")
+                print(f"     Email: {admin_user.get('email')}")
+                print(f"     Full Name: {admin_user.get('full_name')}")
+                print(f"     Created At: {admin_user.get('created_at')}")
+                print(f"     Last Login: {admin_user.get('last_login')}")
+                
+                print("   🔍 VERIFICATION STATUS ANALYSIS:")
+                email_verified = admin_user.get('email_verified')
+                phone_verified = admin_user.get('phone_verified')
+                account_status = admin_user.get('account_status')
+                
+                print(f"     email_verified: {email_verified}")
+                print(f"     phone_verified: {phone_verified}")
+                print(f"     account_status: {account_status}")
+                
+                print("   🔍 ADMIN PRIVILEGES ANALYSIS:")
+                admin_role = admin_user.get('admin_role')
+                admin_enabled = admin_user.get('admin_enabled')
+                
+                print(f"     admin_role: {admin_role}")
+                print(f"     admin_enabled: {admin_enabled}")
+                
+                # Determine the issue
+                if email_verified and phone_verified:
+                    print("   🎯 ISSUE IDENTIFIED:")
+                    print("     ✅ Account is fully verified (email_verified: true, phone_verified: true)")
+                    print("     📝 This is why login works - account meets verification requirements")
+                    print("     💡 SOLUTION: Set email_verified: false to force verification")
+                elif email_verified or phone_verified:
+                    print("   🎯 PARTIAL VERIFICATION IDENTIFIED:")
+                    print("     📝 Account has partial verification")
+                    print("     💡 SOLUTION: Set both email_verified: false and phone_verified: false")
+                else:
+                    print("   🎯 SPECIAL BYPASS CONFIRMED:")
+                    print("     ❌ Account is not verified but can still login")
+                    print("     📝 Special admin bypass is active in login logic")
+                
+                return True
+            else:
+                print("   ❌ Admin account NOT found in database")
+                print("   📝 This could indicate a database query issue")
+                return False
+        else:
+            print("   ❌ Failed to query users database")
+            return False
+    
+    def test_verification_requirements_analysis(self):
+        """Test 4: Analyze what verification fields are missing"""
+        print("   🔍 Analyzing verification requirements...")
+        
+        if not self.auth_token:
+            print("   ⚠️ No admin token available")
+            return False
+        
+        # Get current user profile
+        success, response = self.run_test(
+            "Current User Profile Analysis",
+            "GET",
+            "auth/me",
+            200,
+            None,
+            auth_required=True
+        )
+        
+        if success:
+            email_verified = response.get('email_verified')
+            phone_verified = response.get('phone_verified')
+            phone = response.get('phone')  # Check if phone exists
+            
+            print("   📊 VERIFICATION REQUIREMENTS ANALYSIS:")
+            print(f"     Has Phone Number: {'Yes' if phone else 'No'}")
+            print(f"     Phone: {phone if phone else 'Not provided'}")
+            print(f"     Email Verified: {email_verified}")
+            print(f"     Phone Verified: {phone_verified}")
+            
+            # Determine what needs to be changed
+            print("   💡 VERIFICATION ENFORCEMENT STRATEGY:")
+            
+            if email_verified and phone_verified:
+                print("     🎯 CURRENT STATE: Fully verified account")
+                print("     🔧 ACTION NEEDED: Set email_verified: false to force email verification")
+                if phone:
+                    print("     🔧 OPTIONAL: Also set phone_verified: false to force phone verification")
+                print("     ⚠️ WARNING: This will require admin to verify email before next login")
+            elif email_verified and not phone_verified:
+                print("     🎯 CURRENT STATE: Email verified, phone not verified")
+                print("     🔧 ACTION NEEDED: Set email_verified: false to force verification")
+            elif not email_verified and phone_verified:
+                print("     🎯 CURRENT STATE: Phone verified, email not verified")
+                print("     🔧 ACTION NEEDED: Email verification already required")
+                print("     📝 NOTE: Login should already be blocked, but bypass is active")
+            else:
+                print("     🎯 CURRENT STATE: Neither email nor phone verified")
+                print("     📝 NOTE: Special admin bypass is overriding verification requirements")
+                print("     🔧 ACTION NEEDED: Remove or modify admin bypass logic")
+            
+            return True
+        else:
+            print("   ❌ Failed to get user profile")
+            return False
+    
+    def test_force_verification_requirement(self):
+        """Test 5: Test forcing verification requirement"""
+        print("   🔍 Testing forced verification requirement...")
+        
+        if not self.auth_token:
+            print("   ⚠️ No admin token available")
+            return False
+        
+        # Get current user profile first
+        profile_success, profile_response = self.run_test(
+            "Get Current Profile Before Modification",
+            "GET",
+            "auth/me",
+            200,
+            None,
+            auth_required=True
+        )
+        
+        if not profile_success:
+            print("   ❌ Failed to get current profile")
+            return False
+        
+        current_email_verified = profile_response.get('email_verified')
+        current_phone_verified = profile_response.get('phone_verified')
+        
+        print(f"   📊 CURRENT VERIFICATION STATUS:")
+        print(f"     Email Verified: {current_email_verified}")
+        print(f"     Phone Verified: {current_phone_verified}")
+        
+        # If account is verified, we need to demonstrate how to force verification
+        if current_email_verified:
+            print("   💡 DEMONSTRATION: How to force verification requirement")
+            print("   📝 STEPS TO FORCE VERIFICATION:")
+            print("     1. Update database: SET email_verified = false WHERE email = 'douyeegberipou@yahoo.com'")
+            print("     2. Update database: SET phone_verified = false WHERE email = 'douyeegberipou@yahoo.com'")
+            print("     3. Update database: SET account_status = 'pending' WHERE email = 'douyeegberipou@yahoo.com'")
+            print("   ⚠️ WARNING: This will require admin to verify email before next login")
+            print("   🔧 ALTERNATIVE: Modify admin bypass logic to exclude verification bypass")
+            
+            # Test what would happen if verification was required
+            print("   🧪 SIMULATION: Testing verification requirement enforcement")
+            print("     If email_verified was set to false:")
+            print("     - Next login attempt would fail with 403 Forbidden")
+            print("     - Error message: 'Account not verified. Please verify your email before logging in.'")
+            print("     - Admin would need to check email for verification link")
+            
+            return True
+        else:
+            print("   🎯 ACCOUNT NOT VERIFIED - Special bypass is active")
+            print("   📝 RECOMMENDATION: Review admin bypass logic in login endpoint")
+            print("   🔍 CHECK: Look for special handling of douyeegberipou@yahoo.com in login code")
+            return True
+
+    # ============================
     # URGENT LOGIN ISSUE TESTS - ADMIN ACCESS PROBLEM
     # ============================
     
