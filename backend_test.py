@@ -1013,9 +1013,51 @@ class NigerianTaxCalculatorTester:
             print("   ❌ Failed to get user profile")
             return False
     
+    def test_backend_server_logs(self):
+        """Test: Check backend server logs for errors"""
+        print("   🔍 Checking backend server logs for errors...")
+        
+        try:
+            # Check supervisor backend logs
+            import subprocess
+            result = subprocess.run(
+                ["tail", "-n", "50", "/var/log/supervisor/backend.err.log"],
+                capture_output=True,
+                text=True,
+                timeout=10
+            )
+            
+            if result.returncode == 0 and result.stdout:
+                print("   📋 Recent backend error logs:")
+                lines = result.stdout.strip().split('\n')
+                for line in lines[-10:]:  # Show last 10 lines
+                    if line.strip():
+                        print(f"     {line}")
+                
+                # Look for specific errors
+                log_content = result.stdout.lower()
+                if "invalid credentials" in log_content:
+                    print("   🎯 Found 'Invalid credentials' errors in logs")
+                if "douyeegberipou" in log_content:
+                    print("   🎯 Found references to douyeegberipou account in logs")
+                if "verification" in log_content:
+                    print("   🎯 Found verification-related errors in logs")
+                
+                return True
+            else:
+                print("   ⚠️ No error logs found or logs are empty")
+                return True
+                
+        except Exception as e:
+            print(f"   ⚠️ Could not check logs: {e}")
+            return True  # Don't fail the test for this
+    
     def test_force_verification_requirement(self):
         """Test 5: Test forcing verification requirement"""
         print("   🔍 Testing forced verification requirement...")
+        
+        # First check backend logs
+        self.test_backend_server_logs()
         
         if not self.auth_token:
             print("   ⚠️ No admin token available")
