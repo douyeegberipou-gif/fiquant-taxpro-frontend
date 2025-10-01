@@ -765,11 +765,14 @@ class NigerianTaxCalculatorTester:
                 registration_data
             )
             
-            if reg_success and "already registered" in str(reg_response.get('detail', '')):
+            reg_detail = reg_response.get('detail', '') if isinstance(reg_response, dict) else str(reg_response)
+            reg_id = reg_response.get('id') if isinstance(reg_response, dict) else None
+            
+            if reg_success and "already registered" in str(reg_detail):
                 print("   ✅ ACCOUNT EXISTS - Email already registered")
                 print("   📝 This confirms douyeegberipou@yahoo.com account exists in database")
                 print("   🎯 ISSUE: Account exists but login bypass is not working")
-            elif reg_success and reg_response.get('id'):
+            elif reg_success and reg_id:
                 print("   ❌ ACCOUNT DOES NOT EXIST - Registration succeeded")
                 print("   📝 This means douyeegberipou@yahoo.com was never created")
                 return False
