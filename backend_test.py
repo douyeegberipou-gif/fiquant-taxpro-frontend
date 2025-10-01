@@ -743,6 +743,38 @@ class NigerianTaxCalculatorTester:
             else:
                 print(f"   ⚠️ Gmail account failed: {gmail_response.get('detail', 'Unknown error')}")
         
+        # If login failed, try to check if account exists by attempting registration
+        if not login_success:
+            print("   🔍 Checking if account exists by attempting registration...")
+            
+            # Try to register with the same email - should fail if account exists
+            registration_data = {
+                "email": "douyeegberipou@yahoo.com",
+                "phone": "+2348123456789",
+                "password": "TestPassword123!",
+                "full_name": "Test Registration Check",
+                "agree_terms": True
+            }
+            
+            reg_success, reg_response = self.run_test(
+                "Account Existence Check - Registration Attempt",
+                "POST",
+                "auth/register",
+                [400, 200],  # 400 if exists, 200 if doesn't exist
+                registration_data
+            )
+            
+            if reg_success and "already registered" in str(reg_response.get('detail', '')):
+                print("   ✅ ACCOUNT EXISTS - Email already registered")
+                print("   📝 This confirms douyeegberipou@yahoo.com account exists in database")
+                print("   🎯 ISSUE: Account exists but login bypass is not working")
+            elif reg_success and reg_response.get('id'):
+                print("   ❌ ACCOUNT DOES NOT EXIST - Registration succeeded")
+                print("   📝 This means douyeegberipou@yahoo.com was never created")
+                return False
+            else:
+                print(f"   ⚠️ Registration test inconclusive: {reg_response}")
+        
         # Continue with analysis if we got a token
         if login_success:
         
