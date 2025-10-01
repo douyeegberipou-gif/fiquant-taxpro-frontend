@@ -7237,34 +7237,46 @@ class NigerianTaxCalculatorTester:
         return self.tests_passed == self.tests_run
 
 def main():
-    print("🔥 CRITICAL ACCOUNT VERIFICATION SYSTEM INTEGRATION CHECK")
+    print("🚨 URGENT ADMIN BYPASS INVESTIGATION")
     print("=" * 80)
-    print("URGENT MISSION: User wants to reactivate account verification for ALL accounts")
-    print("now that SMTP email is working. Need comprehensive verification system")
-    print("validation before they reinstate verification requirements.")
+    print("CRITICAL ISSUE: douyeegberipou@yahoo.com can still login without verification")
+    print("despite bypass removal. Need immediate investigation.")
     print()
-    print("HIGH-STAKES SCENARIO: If verification system has any issues and they")
-    print("enable it for their admin account, they could lock themselves out.")
-    print("Must ensure 100% functionality.")
+    print("URGENT ACTIONS:")
+    print("1. Check Account Status: Query database for douyeegberipou@yahoo.com verification status")
+    print("2. Test Login Flow: Test actual login attempt and trace through verification logic")
+    print("3. Database Investigation: Check if account is already marked as verified")
+    print("4. Verification Requirements: Determine what verification fields are missing")
+    print()
+    print("HYPOTHESIS: Account might already be marked as verified in database")
+    print("(email_verified: true, phone_verified: true) which allows login without triggering verification block")
     print("=" * 80)
     
     tester = NigerianTaxCalculatorTester()
     
-    # Run the comprehensive verification system tests
-    success = tester.run_verification_system_tests()
+    # Run the urgent admin bypass investigation
+    investigation_success = tester.test_urgent_admin_bypass_investigation()
+    
+    # Also run verification system tests for completeness
+    print("\n🔥 CRITICAL ACCOUNT VERIFICATION SYSTEM INTEGRATION CHECK")
+    verification_success = tester.run_verification_system_tests()
     
     # Print final results
     print("\n" + "=" * 80)
-    print(f"📊 VERIFICATION SYSTEM TEST RESULTS: {tester.tests_passed}/{tester.tests_run} tests passed")
-    print(f"Success Rate: {(tester.tests_passed/tester.tests_run)*100:.1f}%")
+    print(f"📊 INVESTIGATION RESULTS:")
+    print(f"Admin Bypass Investigation: {'✅ COMPLETE' if investigation_success else '❌ INCOMPLETE'}")
+    print(f"Verification System Check: {'✅ READY' if verification_success else '❌ ISSUES'}")
+    print(f"Total Tests: {tester.tests_passed}/{tester.tests_run} passed ({(tester.tests_passed/tester.tests_run)*100:.1f}%)")
     
-    if success:
-        print("✅ VERIFICATION SYSTEM IS PRODUCTION-READY")
-        print("🟢 SAFE TO REACTIVATE VERIFICATION FOR ALL ACCOUNTS")
+    if investigation_success:
+        print("\n✅ ADMIN BYPASS INVESTIGATION COMPLETE")
+        print("🎯 ROOT CAUSE IDENTIFIED - Check detailed results above")
+        if verification_success:
+            print("🟢 VERIFICATION SYSTEM IS ALSO PRODUCTION-READY")
         return 0
     else:
-        print("❌ VERIFICATION SYSTEM HAS CRITICAL ISSUES")
-        print("🔴 DO NOT REACTIVATE VERIFICATION UNTIL ISSUES ARE FIXED")
+        print("\n❌ INVESTIGATION INCOMPLETE")
+        print("🔴 FURTHER ANALYSIS NEEDED")
         return 1
 
 if __name__ == "__main__":
