@@ -12,7 +12,7 @@ export const AdminSetup = () => {
   const [message, setMessage] = useState('');
   const [success, setSuccess] = useState(false);
 
-  const API_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
+  const API_URL = process.env.REACT_APP_BACKEND_URL;
 
   const handleInitializeAdmin = async (e) => {
     e.preventDefault();
