@@ -32,7 +32,11 @@ class AllCalculatorsTester:
             else:
                 raise ValueError(f"Unsupported HTTP method: {method}")
 
-            success = response.status_code == expected_status
+            # Handle multiple expected status codes
+            if isinstance(expected_status, list):
+                success = response.status_code in expected_status
+            else:
+                success = response.status_code == expected_status
                 
             if success:
                 self.tests_passed += 1
@@ -42,7 +46,8 @@ class AllCalculatorsTester:
                 except:
                     return success, response.text
             else:
-                print(f"❌ Failed - Expected {expected_status}, got {response.status_code}")
+                expected_str = str(expected_status) if not isinstance(expected_status, list) else f"one of {expected_status}"
+                print(f"❌ Failed - Expected {expected_str}, got {response.status_code}")
                 print(f"Response: {response.text}")
                 self.failed_tests.append(name)
                 try:
