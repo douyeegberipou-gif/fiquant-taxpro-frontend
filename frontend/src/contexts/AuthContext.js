@@ -1,12 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL, validateAPIConfig } from '../config/api';
 
-const API_URL = process.env.REACT_APP_BACKEND_URL;
-
-// Environment validation
-if (!API_URL) {
-  console.error('REACT_APP_BACKEND_URL environment variable is not set. Please configure it with your Supabase backend URL.');
-}
+const API_URL = API_BASE_URL;
 
 const AuthContext = createContext();
 
