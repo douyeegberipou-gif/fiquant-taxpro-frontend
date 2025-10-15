@@ -501,11 +501,22 @@ function AppContent() {
   // Function for bulk payroll calculator to use existing PAYE calculation
   const calculatePayeTax = async (taxInput) => {
     try {
+      console.log('calculatePayeTax called with:', taxInput);
+      console.log('BACKEND_URL:', BACKEND_URL);
+      console.log('API endpoint:', `${API}/calculate-paye`);
+      
+      if (!BACKEND_URL) {
+        throw new Error('Backend URL not configured');
+      }
+      
       const response = await axios.post(`${API}/calculate-paye`, taxInput);
+      console.log('calculatePayeTax response:', response.data);
       // Backend returns an array, we need the first object
       return response.data[0];
     } catch (error) {
-      console.error('Error calculating PAYE tax:', error);
+      console.error('Error calculating PAYE tax - Full error:', error);
+      console.error('Error response:', error.response?.data);
+      console.error('Error status:', error.response?.status);
       throw error;
     }
   };
