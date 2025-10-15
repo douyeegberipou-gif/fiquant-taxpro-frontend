@@ -10,6 +10,59 @@ class NigerianTaxCalculatorTester:
         self.tests_passed = 0
         self.auth_token = None  # Store JWT token for authenticated requests
         self.test_user_data = None  # Store test user data
+        
+    def test_comprehensive_all_calculators_functionality(self):
+        """COMPREHENSIVE ALL CALCULATORS FUNCTIONALITY TEST - User reports all calculators broken"""
+        print("\n🚨 COMPREHENSIVE ALL CALCULATORS FUNCTIONALITY TEST")
+        print("=" * 80)
+        print("CRITICAL ISSUE: User reports all calculators are broken after removing hardcoded backend URL fallbacks")
+        print("USER INPUTS: Annual Salary: 7000000, Health Insurance: 45000, Rent: 7000000")
+        print("=" * 80)
+        
+        all_tests_passed = 0
+        total_calculator_tests = 6
+        
+        # Test 1: PAYE Calculator
+        print("\n1️⃣ TESTING PAYE CALCULATOR")
+        if self.test_paye_calculator_comprehensive():
+            all_tests_passed += 1
+        
+        # Test 2: CIT Calculator  
+        print("\n2️⃣ TESTING CIT CALCULATOR")
+        if self.test_cit_calculator_comprehensive():
+            all_tests_passed += 1
+        
+        # Test 3: VAT Calculator
+        print("\n3️⃣ TESTING VAT CALCULATOR")
+        if self.test_vat_calculator_comprehensive():
+            all_tests_passed += 1
+        
+        # Test 4: CGT Calculator
+        print("\n4️⃣ TESTING CGT CALCULATOR")
+        if self.test_cgt_calculator_comprehensive():
+            all_tests_passed += 1
+        
+        # Test 5: Bulk PAYE Calculator
+        print("\n5️⃣ TESTING BULK PAYE CALCULATOR")
+        if self.test_bulk_paye_calculator_comprehensive():
+            all_tests_passed += 1
+        
+        # Test 6: Payment Processing Calculator
+        print("\n6️⃣ TESTING PAYMENT PROCESSING CALCULATOR")
+        if self.test_payment_processing_calculator_comprehensive():
+            all_tests_passed += 1
+        
+        print(f"\n📊 ALL CALCULATORS TEST RESULTS: {all_tests_passed}/{total_calculator_tests} calculators working")
+        
+        if all_tests_passed == total_calculator_tests:
+            print("✅ ALL CALCULATORS ARE WORKING CORRECTLY")
+        elif all_tests_passed >= 4:
+            print("⚠️ MOST CALCULATORS WORKING - MINOR ISSUES DETECTED")
+        else:
+            print("❌ CRITICAL CALCULATOR ISSUES - MULTIPLE CALCULATORS BROKEN")
+        
+        print("=" * 80)
+        return all_tests_passed >= 4
 
     def run_test(self, name, method, endpoint, expected_status, data=None, auth_required=False):
         """Run a single API test"""
