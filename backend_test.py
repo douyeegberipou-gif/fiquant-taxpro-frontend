@@ -8208,17 +8208,18 @@ def main():
 if __name__ == "__main__":
     tester = NigerianTaxCalculatorTester()
     
-    # Run the urgent password reset network error test
-    print("🚨 URGENT PASSWORD RESET NETWORK ERROR TESTING")
-    print("=" * 80)
-    tester.test_urgent_password_reset_network_error()
+    print("🚀 Starting URGENT PAYE Calculator API Testing")
+    print("=" * 60)
+    
+    # Run urgent PAYE calculator functionality tests
+    paye_success = tester.test_urgent_paye_calculator_functionality()
     
     print(f"\n📊 Final Results: {tester.tests_passed}/{tester.tests_run} tests passed")
     print(f"Success Rate: {(tester.tests_passed/tester.tests_run)*100:.1f}%")
     
-    if tester.tests_passed >= (tester.tests_run * 0.75):  # Allow 25% failure rate
-        print("✅ Critical tests passed!")
+    if paye_success:
+        print("✅ PAYE Calculator functionality is working!")
         sys.exit(0)
     else:
-        print("❌ Critical tests failed!")
+        print("❌ PAYE Calculator has critical issues!")
         sys.exit(1)
