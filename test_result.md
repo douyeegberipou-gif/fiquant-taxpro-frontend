@@ -617,7 +617,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "URGENT PAYE Calculator Functionality Testing"
+    - "COMPREHENSIVE ALL CALCULATORS FUNCTIONALITY TESTING"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
