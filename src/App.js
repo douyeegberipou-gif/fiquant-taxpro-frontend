@@ -426,7 +426,7 @@ function AppContent() {
     // Check if backend URL is configured
     if (!BACKEND_URL) {
       console.error('BACKEND_URL is not configured!');
-      alert('Backend configuration error. Please check your environment settings.');
+      alert('Backend configuration error. Please set REACT_APP_BACKEND_URL environment variable with your Supabase backend URL.');
       return;
     }
     
