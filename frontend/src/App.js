@@ -40,15 +40,10 @@ import Home from './components/Home';
 import { generatePayeReport, generateBulkPayeReport, generateCitReport } from './utils/pdfGenerator';
 import './App.css';
 
-// Backend URL configuration with environment-specific fallbacks
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 
-  (process.env.NODE_ENV === 'development' ? 'http://localhost:8001' : null);
+import { API_BASE_URL, API_URL, validateAPIConfig } from './config/api';
 
-// Validate backend URL is configured for production
-if (!BACKEND_URL && process.env.NODE_ENV === 'production') {
-  console.error('REACT_APP_BACKEND_URL environment variable is not set in production!');
-}
-const API = `${BACKEND_URL}/api`;
+const BACKEND_URL = API_BASE_URL;
+const API = API_URL;
 
 function AppContent() {
   const { user, logout, isAuthenticated } = useAuth();
