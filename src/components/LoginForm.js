@@ -118,7 +118,7 @@ export const LoginForm = ({ onSwitchToRegister, onClose, setShowTerms }) => {
   const handleResendVerification = async (emailOrPhone) => {
     try {
       setLoading(true);
-      const API_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
+      const API_URL = process.env.REACT_APP_BACKEND_URL;
       
       // Try to resend verification email
       await fetch(`${API_URL}/api/auth/resend-verification`, {
