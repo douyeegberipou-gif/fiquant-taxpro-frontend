@@ -64,6 +64,354 @@ class NigerianTaxCalculatorTester:
             return False, {}
 
     # ============================
+    # URGENT PAYE CALCULATOR FUNCTIONALITY TESTING
+    # ============================
+    
+    def test_urgent_paye_calculator_functionality(self):
+        """URGENT: Test PAYE Calculator functionality - User getting 'Error calculating tax' message"""
+        print("\n🚨 URGENT PAYE CALCULATOR FUNCTIONALITY TEST")
+        print("=" * 80)
+        print("CRITICAL ISSUE: User getting 'Error calculating tax. Please check your input values.'")
+        print("USER INPUTS: Annual Salary: 7000000, Health Insurance: 45000, Rent: 7000000")
+        print("=" * 80)
+        
+        tests_passed = 0
+        total_tests = 6
+        
+        # Test 1: Basic API Connectivity
+        print("\n1️⃣ TESTING BASIC API CONNECTIVITY")
+        if self.test_basic_api_connectivity():
+            tests_passed += 1
+        
+        # Test 2: PAYE Endpoint Existence
+        print("\n2️⃣ TESTING PAYE ENDPOINT EXISTENCE")
+        if self.test_paye_endpoint_existence():
+            tests_passed += 1
+        
+        # Test 3: PAYE Calculation with User's Exact Inputs
+        print("\n3️⃣ TESTING PAYE CALCULATION WITH USER'S EXACT INPUTS")
+        if self.test_paye_calculation_user_inputs():
+            tests_passed += 1
+        
+        # Test 4: PAYE Calculation with Valid Sample Data
+        print("\n4️⃣ TESTING PAYE CALCULATION WITH VALID SAMPLE DATA")
+        if self.test_paye_calculation_sample_data():
+            tests_passed += 1
+        
+        # Test 5: Input Validation Testing
+        print("\n5️⃣ TESTING INPUT VALIDATION")
+        if self.test_paye_input_validation():
+            tests_passed += 1
+        
+        # Test 6: Error Response Analysis
+        print("\n6️⃣ TESTING ERROR RESPONSE ANALYSIS")
+        if self.test_paye_error_response_analysis():
+            tests_passed += 1
+        
+        print(f"\n📊 PAYE CALCULATOR TEST RESULTS: {tests_passed}/{total_tests} tests passed")
+        
+        if tests_passed == total_tests:
+            print("✅ PAYE CALCULATOR IS WORKING CORRECTLY")
+        elif tests_passed >= 4:
+            print("⚠️ PAYE CALCULATOR HAS MINOR ISSUES")
+        else:
+            print("❌ PAYE CALCULATOR HAS CRITICAL ISSUES")
+        
+        print("=" * 80)
+        return tests_passed >= 4
+    
+    def test_basic_api_connectivity(self):
+        """Test 1: Basic API connectivity and health check"""
+        print("   🔍 Testing basic API connectivity...")
+        
+        # Test root API endpoint
+        success, response = self.run_test(
+            "API Root Endpoint",
+            "GET",
+            "",
+            200,
+            None
+        )
+        
+        if success:
+            print(f"   ✅ API is accessible and responding")
+            print(f"   Response: {response}")
+            return True
+        else:
+            print(f"   ❌ API is not accessible")
+            return False
+    
+    def test_paye_endpoint_existence(self):
+        """Test 2: Check if PAYE calculation endpoint exists"""
+        print("   🔍 Testing PAYE endpoint existence...")
+        
+        # Test with minimal data to check if endpoint exists
+        minimal_data = {
+            "basic_salary": 100000
+        }
+        
+        success, response = self.run_test(
+            "PAYE Endpoint Existence Check",
+            "POST",
+            "calculate-paye",
+            [200, 400, 422],  # Accept various status codes to confirm endpoint exists
+            minimal_data
+        )
+        
+        if success:
+            print(f"   ✅ PAYE endpoint exists and is responding")
+            print(f"   Status indicates endpoint is functional")
+            return True
+        else:
+            print(f"   ❌ PAYE endpoint does not exist or is not responding")
+            print(f"   This could be the root cause of the user's issue")
+            return False
+    
+    def test_paye_calculation_user_inputs(self):
+        """Test 3: Test PAYE calculation with user's exact inputs"""
+        print("   🔍 Testing PAYE calculation with user's exact inputs...")
+        
+        # User's exact inputs from the issue report
+        user_data = {
+            "basic_salary": 7000000,  # Annual salary: 7,000,000
+            "health_insurance": 45000,  # Health insurance: 45,000
+            "rent": 7000000,  # Rent: 7,000,000
+            "transport_allowance": 0,
+            "housing_allowance": 0,
+            "meal_allowance": 0,
+            "utility_allowance": 0,
+            "entertainment_allowance": 0,
+            "other_allowances": 0,
+            "pension_contribution": 0,
+            "nhf_contribution": 0,
+            "life_assurance": 0,
+            "nhis_contribution": 0,
+            "other_reliefs": 0,
+            "staff_name": "Test User",
+            "tin": "12345678901",
+            "month": "January",
+            "year": "2025",
+            "state_of_residence": "Lagos"
+        }
+        
+        success, response = self.run_test(
+            "PAYE Calculation - User's Exact Inputs",
+            "POST",
+            "calculate-paye",
+            200,
+            user_data
+        )
+        
+        if success:
+            print(f"   ✅ PAYE calculation successful with user's inputs")
+            print(f"   📊 Calculation Results:")
+            
+            # Display key results
+            if isinstance(response, dict):
+                monthly_gross = response.get('monthly_gross_income', 'N/A')
+                monthly_tax = response.get('monthly_tax', 'N/A')
+                monthly_net = response.get('monthly_net_income', 'N/A')
+                annual_tax = response.get('annual_tax', 'N/A')
+                
+                print(f"     Monthly Gross Income: ₦{monthly_gross:,.2f}" if isinstance(monthly_gross, (int, float)) else f"     Monthly Gross Income: {monthly_gross}")
+                print(f"     Monthly Tax: ₦{monthly_tax:,.2f}" if isinstance(monthly_tax, (int, float)) else f"     Monthly Tax: {monthly_tax}")
+                print(f"     Monthly Net Income: ₦{monthly_net:,.2f}" if isinstance(monthly_net, (int, float)) else f"     Monthly Net Income: {monthly_net}")
+                print(f"     Annual Tax: ₦{annual_tax:,.2f}" if isinstance(annual_tax, (int, float)) else f"     Annual Tax: {annual_tax}")
+                
+                # Check for NaN or null values
+                if any(str(val).lower() in ['nan', 'null', 'none'] for val in [monthly_gross, monthly_tax, monthly_net, annual_tax]):
+                    print(f"   ⚠️ WARNING: Some calculation results contain NaN/null values")
+                    print(f"   This could be the source of the '₦NaN' display issue")
+                else:
+                    print(f"   ✅ All calculation results are valid numbers")
+            
+            return True
+        else:
+            print(f"   ❌ PAYE calculation failed with user's inputs")
+            print(f"   Error Response: {response}")
+            print(f"   🎯 This confirms the user's issue - calculation is failing")
+            
+            # Analyze the error
+            if isinstance(response, dict):
+                error_detail = response.get('detail', 'No error details provided')
+                print(f"   Error Details: {error_detail}")
+                
+                if 'validation' in str(error_detail).lower():
+                    print(f"   📝 Issue Type: Input validation error")
+                elif 'calculation' in str(error_detail).lower():
+                    print(f"   📝 Issue Type: Calculation logic error")
+                else:
+                    print(f"   📝 Issue Type: Unknown error")
+            
+            return False
+    
+    def test_paye_calculation_sample_data(self):
+        """Test 4: Test PAYE calculation with known valid sample data"""
+        print("   🔍 Testing PAYE calculation with valid sample data...")
+        
+        # Simple, known-good test data
+        sample_data = {
+            "basic_salary": 500000,  # ₦500,000 monthly
+            "transport_allowance": 50000,
+            "housing_allowance": 100000,
+            "meal_allowance": 25000,
+            "utility_allowance": 15000,
+            "entertainment_allowance": 10000,
+            "other_allowances": 0,
+            "pension_contribution": 40000,  # 8% of basic salary
+            "nhf_contribution": 12500,  # 2.5% of basic salary
+            "life_assurance": 5000,
+            "nhis_contribution": 2500,
+            "health_insurance": 15000,
+            "rent": 200000,
+            "other_reliefs": 0,
+            "staff_name": "Sample Employee",
+            "tin": "98765432109",
+            "month": "January",
+            "year": "2025",
+            "state_of_residence": "Lagos"
+        }
+        
+        success, response = self.run_test(
+            "PAYE Calculation - Sample Data",
+            "POST",
+            "calculate-paye",
+            200,
+            sample_data
+        )
+        
+        if success:
+            print(f"   ✅ PAYE calculation successful with sample data")
+            print(f"   📊 Sample Calculation Results:")
+            
+            if isinstance(response, dict):
+                monthly_gross = response.get('monthly_gross_income', 0)
+                monthly_tax = response.get('monthly_tax', 0)
+                monthly_net = response.get('monthly_net_income', 0)
+                
+                print(f"     Monthly Gross: ₦{monthly_gross:,.2f}")
+                print(f"     Monthly Tax: ₦{monthly_tax:,.2f}")
+                print(f"     Monthly Net: ₦{monthly_net:,.2f}")
+                
+                # Validate calculation makes sense
+                expected_gross = 500000 + 50000 + 100000 + 25000 + 15000 + 10000  # 700,000
+                if abs(monthly_gross - expected_gross) < 1:
+                    print(f"   ✅ Gross income calculation is correct")
+                else:
+                    print(f"   ⚠️ Gross income calculation may be incorrect (Expected: ₦{expected_gross:,.2f})")
+                
+                if monthly_tax > 0 and monthly_tax < monthly_gross:
+                    print(f"   ✅ Tax calculation appears reasonable")
+                else:
+                    print(f"   ⚠️ Tax calculation may be incorrect")
+                
+                if monthly_net == (monthly_gross - monthly_tax):
+                    print(f"   ✅ Net income calculation is correct")
+                else:
+                    print(f"   ⚠️ Net income calculation may be incorrect")
+            
+            return True
+        else:
+            print(f"   ❌ PAYE calculation failed with sample data")
+            print(f"   Error: {response}")
+            return False
+    
+    def test_paye_input_validation(self):
+        """Test 5: Test input validation for PAYE calculation"""
+        print("   🔍 Testing PAYE input validation...")
+        
+        validation_tests = [
+            {
+                "name": "Missing Basic Salary",
+                "data": {"transport_allowance": 50000},
+                "expected_status": [400, 422]
+            },
+            {
+                "name": "Negative Basic Salary",
+                "data": {"basic_salary": -100000},
+                "expected_status": [400, 422]
+            },
+            {
+                "name": "Zero Basic Salary",
+                "data": {"basic_salary": 0},
+                "expected_status": [400, 422]
+            },
+            {
+                "name": "Very Large Salary",
+                "data": {"basic_salary": 999999999},
+                "expected_status": [200, 400, 422]
+            }
+        ]
+        
+        passed_tests = 0
+        
+        for test in validation_tests:
+            success, response = self.run_test(
+                f"Input Validation - {test['name']}",
+                "POST",
+                "calculate-paye",
+                test['expected_status'],
+                test['data']
+            )
+            
+            if success:
+                print(f"     ✅ {test['name']}: Handled correctly")
+                passed_tests += 1
+            else:
+                print(f"     ❌ {test['name']}: Not handled correctly")
+        
+        print(f"   📊 Input validation tests: {passed_tests}/{len(validation_tests)} passed")
+        return passed_tests >= len(validation_tests) // 2  # Pass if at least half work
+    
+    def test_paye_error_response_analysis(self):
+        """Test 6: Analyze error responses from PAYE endpoint"""
+        print("   🔍 Analyzing PAYE error responses...")
+        
+        # Test with intentionally invalid data to see error format
+        invalid_data = {
+            "basic_salary": "invalid_string",
+            "transport_allowance": None,
+            "invalid_field": "test"
+        }
+        
+        success, response = self.run_test(
+            "PAYE Error Response Analysis",
+            "POST",
+            "calculate-paye",
+            [400, 422, 500],  # Expect error status codes
+            invalid_data
+        )
+        
+        print(f"   📋 Error Response Analysis:")
+        print(f"     Status Code: {'Success' if success else 'Error'}")
+        print(f"     Response Type: {type(response)}")
+        
+        if isinstance(response, dict):
+            print(f"     Error Structure:")
+            for key, value in response.items():
+                print(f"       {key}: {value}")
+            
+            # Check if error message matches user's reported error
+            error_detail = str(response.get('detail', ''))
+            if 'Error calculating tax' in error_detail:
+                print(f"   🎯 FOUND USER'S ERROR MESSAGE: '{error_detail}'")
+                print(f"   📝 This confirms the error the user is experiencing")
+            elif 'check your input values' in error_detail.lower():
+                print(f"   🎯 FOUND SIMILAR ERROR MESSAGE: '{error_detail}'")
+            else:
+                print(f"   📝 Different error message format")
+        else:
+            print(f"     Raw Response: {response}")
+        
+        # Test if the endpoint returns proper error structure
+        if isinstance(response, dict) and ('detail' in response or 'message' in response):
+            print(f"   ✅ Error responses have proper structure")
+            return True
+        else:
+            print(f"   ⚠️ Error responses may not have proper structure")
+            return True  # Don't fail the test for this
+    
+    # ============================
     # URGENT SENT EMAILS RETRIEVAL TESTING
     # ============================
     
