@@ -8258,21 +8258,333 @@ def main():
             print(f"   🎯 ROOT CAUSE: Network connectivity issue or server down")
             return False
 
+    # ============================
+    # COMPREHENSIVE CALCULATOR TESTING METHODS
+    # ============================
+    
+    def test_paye_calculator_comprehensive(self):
+        """Comprehensive PAYE Calculator Testing"""
+        print("   🔍 Testing PAYE Calculator functionality...")
+        
+        # Test with user's exact inputs
+        user_data = {
+            "basic_salary": 7000000,  # Annual salary: 7,000,000
+            "health_insurance": 45000,  # Health insurance: 45,000
+            "rent": 7000000,  # Rent: 7,000,000
+            "transport_allowance": 0,
+            "housing_allowance": 0,
+            "meal_allowance": 0,
+            "utility_allowance": 0,
+            "entertainment_allowance": 0,
+            "other_allowances": 0,
+            "pension_contribution": 0,
+            "nhf_contribution": 0,
+            "life_assurance": 0,
+            "nhis_contribution": 0,
+            "other_reliefs": 0,
+            "staff_name": "Test User",
+            "tin": "12345678901",
+            "month": "January",
+            "year": "2025",
+            "state_of_residence": "Lagos"
+        }
+        
+        success, response = self.run_test(
+            "PAYE Calculator - User's Exact Inputs",
+            "POST",
+            "calculate-paye",
+            200,
+            user_data
+        )
+        
+        if success:
+            print(f"   ✅ PAYE Calculator working correctly")
+            if isinstance(response, dict):
+                monthly_gross = response.get('monthly_gross_income', 'N/A')
+                monthly_tax = response.get('monthly_tax', 'N/A')
+                monthly_net = response.get('monthly_net_income', 'N/A')
+                
+                print(f"     Monthly Gross: ₦{monthly_gross:,.2f}" if isinstance(monthly_gross, (int, float)) else f"     Monthly Gross: {monthly_gross}")
+                print(f"     Monthly Tax: ₦{monthly_tax:,.2f}" if isinstance(monthly_tax, (int, float)) else f"     Monthly Tax: {monthly_tax}")
+                print(f"     Monthly Net: ₦{monthly_net:,.2f}" if isinstance(monthly_net, (int, float)) else f"     Monthly Net: {monthly_net}")
+            return True
+        else:
+            print(f"   ❌ PAYE Calculator FAILED")
+            print(f"   Error: {response}")
+            return False
+    
+    def test_cit_calculator_comprehensive(self):
+        """Comprehensive CIT Calculator Testing"""
+        print("   🔍 Testing CIT Calculator functionality...")
+        
+        # Sample company data
+        company_data = {
+            "company_name": "Test Company Ltd",
+            "tin": "12345678901",
+            "year": "2025",
+            "turnover": 100000000,  # ₦100M turnover
+            "cost_of_sales": 40000000,
+            "administrative_expenses": 15000000,
+            "selling_expenses": 10000000,
+            "other_expenses": 5000000,
+            "capital_allowances": 8000000,
+            "donations": 500000,
+            "wht_credits": 2000000,
+            "previous_losses": 0,
+            "minimum_tax_rate": 0.5,
+            "company_tax_rate": 30
+        }
+        
+        success, response = self.run_test(
+            "CIT Calculator - Sample Company Data",
+            "POST",
+            "calculate-cit",
+            200,
+            company_data
+        )
+        
+        if success:
+            print(f"   ✅ CIT Calculator working correctly")
+            if isinstance(response, dict):
+                taxable_profit = response.get('taxable_profit', 'N/A')
+                net_tax_payable = response.get('net_tax_payable', 'N/A')
+                effective_tax_rate = response.get('effective_tax_rate', 'N/A')
+                
+                print(f"     Taxable Profit: ₦{taxable_profit:,.2f}" if isinstance(taxable_profit, (int, float)) else f"     Taxable Profit: {taxable_profit}")
+                print(f"     Net Tax Payable: ₦{net_tax_payable:,.2f}" if isinstance(net_tax_payable, (int, float)) else f"     Net Tax Payable: {net_tax_payable}")
+                print(f"     Effective Tax Rate: {effective_tax_rate}%" if isinstance(effective_tax_rate, (int, float)) else f"     Effective Tax Rate: {effective_tax_rate}")
+            return True
+        else:
+            print(f"   ❌ CIT Calculator FAILED")
+            print(f"   Error: {response}")
+            return False
+    
+    def test_vat_calculator_comprehensive(self):
+        """Comprehensive VAT Calculator Testing"""
+        print("   🔍 Testing VAT Calculator functionality...")
+        
+        # Test VAT inclusive calculation
+        vat_inclusive_data = {
+            "amount": 1000000,  # ₦1M
+            "vat_rate": 7.5,
+            "calculation_type": "inclusive"
+        }
+        
+        success, response = self.run_test(
+            "VAT Calculator - Inclusive Calculation",
+            "POST",
+            "calculate-vat",
+            200,
+            vat_inclusive_data
+        )
+        
+        if success:
+            print(f"   ✅ VAT Calculator (Inclusive) working correctly")
+            if isinstance(response, dict):
+                net_amount = response.get('net_amount', 'N/A')
+                vat_amount = response.get('vat_amount', 'N/A')
+                total_amount = response.get('total_amount', 'N/A')
+                
+                print(f"     Net Amount: ₦{net_amount:,.2f}" if isinstance(net_amount, (int, float)) else f"     Net Amount: {net_amount}")
+                print(f"     VAT Amount: ₦{vat_amount:,.2f}" if isinstance(vat_amount, (int, float)) else f"     VAT Amount: {vat_amount}")
+                print(f"     Total Amount: ₦{total_amount:,.2f}" if isinstance(total_amount, (int, float)) else f"     Total Amount: {total_amount}")
+            
+            # Test VAT exclusive calculation
+            vat_exclusive_data = {
+                "amount": 1000000,  # ₦1M
+                "vat_rate": 7.5,
+                "calculation_type": "exclusive"
+            }
+            
+            success2, response2 = self.run_test(
+                "VAT Calculator - Exclusive Calculation",
+                "POST",
+                "calculate-vat",
+                200,
+                vat_exclusive_data
+            )
+            
+            if success2:
+                print(f"   ✅ VAT Calculator (Exclusive) working correctly")
+                return True
+            else:
+                print(f"   ⚠️ VAT Calculator (Exclusive) failed")
+                return False
+        else:
+            print(f"   ❌ VAT Calculator FAILED")
+            print(f"   Error: {response}")
+            return False
+    
+    def test_cgt_calculator_comprehensive(self):
+        """Comprehensive CGT Calculator Testing"""
+        print("   🔍 Testing CGT Calculator functionality...")
+        
+        # Test CGT for shares
+        cgt_shares_data = {
+            "asset_type": "shares",
+            "acquisition_cost": 5000000,  # ₦5M
+            "disposal_proceeds": 8000000,  # ₦8M
+            "acquisition_date": "2020-01-01",
+            "disposal_date": "2025-01-01",
+            "expenses": 100000,
+            "cgt_rate": 10
+        }
+        
+        success, response = self.run_test(
+            "CGT Calculator - Shares",
+            "POST",
+            "calculate-cgt",
+            200,
+            cgt_shares_data
+        )
+        
+        if success:
+            print(f"   ✅ CGT Calculator (Shares) working correctly")
+            if isinstance(response, dict):
+                capital_gain = response.get('capital_gain', 'N/A')
+                cgt_payable = response.get('cgt_payable', 'N/A')
+                
+                print(f"     Capital Gain: ₦{capital_gain:,.2f}" if isinstance(capital_gain, (int, float)) else f"     Capital Gain: {capital_gain}")
+                print(f"     CGT Payable: ₦{cgt_payable:,.2f}" if isinstance(cgt_payable, (int, float)) else f"     CGT Payable: {cgt_payable}")
+            
+            # Test CGT for crypto
+            cgt_crypto_data = {
+                "asset_type": "crypto",
+                "acquisition_cost": 2000000,  # ₦2M
+                "disposal_proceeds": 5000000,  # ₦5M
+                "acquisition_date": "2022-01-01",
+                "disposal_date": "2025-01-01",
+                "expenses": 50000,
+                "cgt_rate": 10
+            }
+            
+            success2, response2 = self.run_test(
+                "CGT Calculator - Crypto",
+                "POST",
+                "calculate-cgt",
+                200,
+                cgt_crypto_data
+            )
+            
+            if success2:
+                print(f"   ✅ CGT Calculator (Crypto) working correctly")
+                return True
+            else:
+                print(f"   ⚠️ CGT Calculator (Crypto) failed")
+                return False
+        else:
+            print(f"   ❌ CGT Calculator FAILED")
+            print(f"   Error: {response}")
+            return False
+    
+    def test_bulk_paye_calculator_comprehensive(self):
+        """Comprehensive Bulk PAYE Calculator Testing"""
+        print("   🔍 Testing Bulk PAYE Calculator functionality...")
+        
+        # Sample bulk employee data
+        bulk_data = {
+            "employees": [
+                {
+                    "staff_name": "Employee 1",
+                    "basic_salary": 500000,
+                    "transport_allowance": 50000,
+                    "housing_allowance": 100000,
+                    "pension_contribution": 40000,
+                    "nhf_contribution": 12500,
+                    "health_insurance": 15000,
+                    "rent": 200000
+                },
+                {
+                    "staff_name": "Employee 2", 
+                    "basic_salary": 750000,
+                    "transport_allowance": 75000,
+                    "housing_allowance": 150000,
+                    "pension_contribution": 60000,
+                    "nhf_contribution": 18750,
+                    "health_insurance": 20000,
+                    "rent": 300000
+                }
+            ]
+        }
+        
+        success, response = self.run_test(
+            "Bulk PAYE Calculator - Multiple Employees",
+            "POST",
+            "calculate-bulk-paye",
+            200,
+            bulk_data
+        )
+        
+        if success:
+            print(f"   ✅ Bulk PAYE Calculator working correctly")
+            if isinstance(response, dict):
+                results = response.get('results', [])
+                total_employees = len(results)
+                total_tax = sum(r.get('monthly_tax', 0) for r in results)
+                
+                print(f"     Employees Processed: {total_employees}")
+                print(f"     Total Monthly Tax: ₦{total_tax:,.2f}")
+                
+                if total_employees > 0:
+                    print(f"     Sample Employee 1 Tax: ₦{results[0].get('monthly_tax', 0):,.2f}")
+            return True
+        else:
+            print(f"   ❌ Bulk PAYE Calculator FAILED")
+            print(f"   Error: {response}")
+            return False
+    
+    def test_payment_processing_calculator_comprehensive(self):
+        """Comprehensive Payment Processing Calculator Testing"""
+        print("   🔍 Testing Payment Processing Calculator functionality...")
+        
+        # Sample payment withholding data
+        payment_data = {
+            "payment_type": "professional_services",
+            "gross_amount": 1000000,  # ₦1M
+            "wht_rate": 5,  # 5% WHT
+            "vat_applicable": True,
+            "vat_rate": 7.5
+        }
+        
+        success, response = self.run_test(
+            "Payment Processing Calculator - Professional Services",
+            "POST",
+            "calculate-payment-withholding",
+            200,
+            payment_data
+        )
+        
+        if success:
+            print(f"   ✅ Payment Processing Calculator working correctly")
+            if isinstance(response, dict):
+                net_payment = response.get('net_payment', 'N/A')
+                wht_amount = response.get('wht_amount', 'N/A')
+                vat_amount = response.get('vat_amount', 'N/A')
+                
+                print(f"     Net Payment: ₦{net_payment:,.2f}" if isinstance(net_payment, (int, float)) else f"     Net Payment: {net_payment}")
+                print(f"     WHT Amount: ₦{wht_amount:,.2f}" if isinstance(wht_amount, (int, float)) else f"     WHT Amount: {wht_amount}")
+                print(f"     VAT Amount: ₦{vat_amount:,.2f}" if isinstance(vat_amount, (int, float)) else f"     VAT Amount: {vat_amount}")
+            return True
+        else:
+            print(f"   ❌ Payment Processing Calculator FAILED")
+            print(f"   Error: {response}")
+            return False
+
 if __name__ == "__main__":
     tester = NigerianTaxCalculatorTester()
     
-    print("🚀 Starting URGENT PAYE Calculator API Testing")
-    print("=" * 60)
+    print("🚀 Starting COMPREHENSIVE ALL CALCULATORS FUNCTIONALITY TEST")
+    print("=" * 80)
     
-    # Run urgent PAYE calculator functionality tests
-    paye_success = tester.test_urgent_paye_calculator_functionality()
+    # Run comprehensive all calculators functionality tests
+    all_calculators_success = tester.test_comprehensive_all_calculators_functionality()
     
     print(f"\n📊 Final Results: {tester.tests_passed}/{tester.tests_run} tests passed")
     print(f"Success Rate: {(tester.tests_passed/tester.tests_run)*100:.1f}%")
     
-    if paye_success:
-        print("✅ PAYE Calculator functionality is working!")
+    if all_calculators_success:
+        print("✅ ALL CALCULATORS functionality is working!")
         sys.exit(0)
     else:
-        print("❌ PAYE Calculator has critical issues!")
+        print("❌ CALCULATORS have critical issues!")
         sys.exit(1)
