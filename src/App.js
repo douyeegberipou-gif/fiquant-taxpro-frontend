@@ -40,7 +40,10 @@ import Home from './components/Home';
 import { generatePayeReport, generateBulkPayeReport, generateCitReport } from './utils/pdfGenerator';
 import './App.css';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 
+  (process.env.NODE_ENV === 'production' 
+    ? 'https://your-supabase-backend-url.com' 
+    : 'http://localhost:8001');
 const API = `${BACKEND_URL}/api`;
 
 function AppContent() {
