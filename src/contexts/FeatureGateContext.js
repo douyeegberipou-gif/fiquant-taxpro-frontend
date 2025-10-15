@@ -17,7 +17,7 @@ export const FeatureGateProvider = ({ children }) => {
   const [featureAccess, setFeatureAccess] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const API_URL = process.env.REACT_APP_BACKEND_URL;
+  const API_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
   useEffect(() => {
     if (isAuthenticated()) {
