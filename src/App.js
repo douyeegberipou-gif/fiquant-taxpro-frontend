@@ -40,10 +40,14 @@ import Home from './components/Home';
 import { generatePayeReport, generateBulkPayeReport, generateCitReport } from './utils/pdfGenerator';
 import './App.css';
 
+// Backend URL configuration with environment-specific fallbacks
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 
-  (process.env.NODE_ENV === 'production' 
-    ? 'https://your-supabase-backend-url.com' 
-    : 'http://localhost:8001');
+  (process.env.NODE_ENV === 'development' ? 'http://localhost:8001' : null);
+
+// Validate backend URL is configured for production
+if (!BACKEND_URL && process.env.NODE_ENV === 'production') {
+  console.error('REACT_APP_BACKEND_URL environment variable is not set in production!');
+}
 const API = `${BACKEND_URL}/api`;
 
 function AppContent() {
