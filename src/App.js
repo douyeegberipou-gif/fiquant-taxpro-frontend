@@ -412,7 +412,16 @@ function AppContent() {
     console.log('calculateTax function called');
     console.log('taxInput:', taxInput);
     console.log('loading:', loading);
+    console.log('BACKEND_URL:', BACKEND_URL);
+    console.log('API endpoint:', `${API}/calculate-paye`);
     console.log('basic_salary check:', !taxInput.basic_salary);
+    
+    // Check if backend URL is configured
+    if (!BACKEND_URL) {
+      console.error('BACKEND_URL is not configured!');
+      alert('Backend configuration error. Please check your environment settings.');
+      return;
+    }
     
     setLoading(true);
     try {
@@ -434,8 +443,21 @@ function AppContent() {
       setResult(response.data[0]);
       fetchHistory(); // Refresh history
     } catch (error) {
-      console.error('Error calculating tax:', error);
-      alert('Error calculating tax. Please check your input values.');
+      console.error('Error calculating tax - Full error object:', error);
+      console.error('Error response:', error.response?.data);
+      console.error('Error status:', error.response?.status);
+      console.error('Error message:', error.message);
+      
+      let errorMessage = 'Error calculating tax. Please check your input values.';
+      if (error.response?.data?.detail) {
+        errorMessage = `Error: ${error.response.data.detail}`;
+      } else if (error.message.includes('Network Error')) {
+        errorMessage = 'Network error. Please check your internet connection and try again.';
+      } else if (error.response?.status === 422) {
+        errorMessage = 'Invalid input values. Please check all fields and try again.';
+      }
+      
+      alert(errorMessage);
     } finally {
       setLoading(false);
     }
