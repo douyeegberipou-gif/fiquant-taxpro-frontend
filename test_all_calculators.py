@@ -109,18 +109,21 @@ class AllCalculatorsTester:
         company_data = {
             "company_name": "Test Company Ltd",
             "tin": "12345678901",
-            "year": "2025",
-            "turnover": 100000000,  # ₦100M turnover
-            "cost_of_sales": 40000000,
-            "administrative_expenses": 15000000,
-            "selling_expenses": 10000000,
+            "year_of_assessment": "2025",
+            "tax_year": "2025",
+            "annual_turnover": 100000000,  # ₦100M turnover
+            "gross_income": 100000000,  # Required field
+            "total_fixed_assets": 50000000,
+            "other_income": 0,
+            "cost_of_goods_sold": 40000000,
+            "staff_costs": 15000000,
+            "rent_expenses": 5000000,
+            "professional_fees": 2000000,
+            "depreciation": 8000000,
             "other_expenses": 5000000,
-            "capital_allowances": 8000000,
             "donations": 500000,
             "wht_credits": 2000000,
-            "previous_losses": 0,
-            "minimum_tax_rate": 0.5,
-            "company_tax_rate": 30
+            "previous_losses": 0
         }
         
         success, response = self.run_test(
