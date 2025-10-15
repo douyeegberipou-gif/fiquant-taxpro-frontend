@@ -622,6 +622,10 @@ test_plan:
   test_all: false
   test_priority: "high_first"
 
+agent_communication:
+  - agent: "testing"
+    message: "🚨 CRITICAL ISSUE CONFIRMED: PAYE Calculator frontend-backend connectivity is broken. Backend API is working perfectly (confirmed with direct curl test returning correct results: Monthly Gross: ₦583,333, Monthly Tax: ₦60,874.95, Monthly Net: ₦522,458.05). However, frontend Calculate Tax button clicks are not triggering API calls. Form fills correctly, button is clickable, but no network requests are made to /api/calculate-paye. This confirms user's report that calculators are broken after removing hardcoded backend URL fallbacks. Issue is in frontend JavaScript - calculateTax function not executing properly despite REACT_APP_BACKEND_URL being correctly set to http://localhost:8001. URGENT: Main agent needs to investigate calculateTax function execution and API call logic in App.js."
+
   - task: "Messaging Dashboard in Admin Dashboard - SMTP Email Integration"
     implemented: true
     working: true
