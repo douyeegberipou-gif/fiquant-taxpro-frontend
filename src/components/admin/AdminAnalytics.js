@@ -23,7 +23,7 @@ export const AdminAnalytics = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('7d');
   const [exportLoading, setExportLoading] = useState(false);
 
-  const API_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
+  const API_URL = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
     loadAnalytics();
