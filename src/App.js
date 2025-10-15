@@ -1377,7 +1377,18 @@ function AppContent() {
 
                   <div className="flex space-x-3 pt-4">
                     <Button 
-                      onClick={calculateTax} 
+                      onClick={() => {
+                        console.log('Calculate button clicked');
+                        console.log('Current taxInput:', taxInput);
+                        console.log('basic_salary value:', taxInput.basic_salary);
+                        console.log('basic_salary type:', typeof taxInput.basic_salary);
+                        console.log('Button disabled conditions:', {
+                          loading,
+                          basic_salary_empty: !taxInput.basic_salary,
+                          basic_salary_zero_or_less: parseFloat(taxInput.basic_salary) <= 0
+                        });
+                        calculateTax();
+                      }}
                       disabled={loading || !taxInput.basic_salary || parseFloat(taxInput.basic_salary) <= 0}
                       className="flex-1 bg-emerald-600 hover:bg-emerald-700"
                     >
