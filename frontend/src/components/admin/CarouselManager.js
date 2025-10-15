@@ -33,7 +33,7 @@ export const CarouselManager = () => {
   const [editingSettings, setEditingSettings] = useState(false);
   const [tempSettings, setTempSettings] = useState({ transition_delay: 5, auto_rotation: true });
 
-  const API_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
+  const API_URL = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
     loadSlides();
