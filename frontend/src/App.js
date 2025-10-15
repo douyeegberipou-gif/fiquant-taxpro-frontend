@@ -419,8 +419,7 @@ function AppContent() {
     console.log('basic_salary check:', !taxInput.basic_salary);
     
     // Check if backend URL is configured
-    if (!BACKEND_URL) {
-      console.error('BACKEND_URL is not configured!');
+    if (!validateAPIConfig('PAYE Calculator')) {
       alert('Backend configuration error. Please set REACT_APP_BACKEND_URL environment variable with your Supabase backend URL.');
       return;
     }
