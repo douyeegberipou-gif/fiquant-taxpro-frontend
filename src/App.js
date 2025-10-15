@@ -40,10 +40,9 @@ import Home from './components/Home';
 import { generatePayeReport, generateBulkPayeReport, generateCitReport } from './utils/pdfGenerator';
 import './App.css';
 
-import { API_BASE_URL, API_URL, validateAPIConfig } from './config/api';
-
-const BACKEND_URL = API_BASE_URL;
-const API = API_URL;
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 
+  (process.env.NODE_ENV === 'development' ? 'http://localhost:8001' : null);
+const API = BACKEND_URL ? `${BACKEND_URL}/api` : null;
 
 function AppContent() {
   const { user, logout, isAuthenticated } = useAuth();
