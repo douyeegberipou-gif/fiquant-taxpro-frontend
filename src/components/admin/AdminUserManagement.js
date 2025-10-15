@@ -32,7 +32,7 @@ export const AdminUserManagement = () => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [actionLoading, setActionLoading] = useState(false);
 
-  const API_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
+  const API_URL = process.env.REACT_APP_BACKEND_URL;
   const usersPerPage = 20;
 
   useEffect(() => {
