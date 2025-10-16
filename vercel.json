@@ -1,13 +1,8 @@
 {
+  "version": 2,
   "buildCommand": "yarn build",
   "outputDirectory": "build",
   "installCommand": "yarn install --frozen-lockfile",
-  "framework": null,
-  "functions": {
-    "app/api/**/*.js": {
-      "runtime": "nodejs18.x"
-    }
-  },
   "rewrites": [
     {
       "source": "/(.*)",
@@ -15,23 +10,6 @@
     }
   ],
   "headers": [
-    {
-      "source": "/index.html",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
-        },
-        {
-          "key": "Pragma",
-          "value": "no-cache"
-        },
-        {
-          "key": "Expires",
-          "value": "0"
-        }
-      ]
-    },
     {
       "source": "/static/(.*)",
       "headers": [
