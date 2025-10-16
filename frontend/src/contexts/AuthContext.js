@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
-import { API_BASE_URL, validateAPIConfig } from '../config/api';
 
-const API_URL = API_BASE_URL;
+const API_URL = process.env.REACT_APP_BACKEND_URL || 
+  (process.env.NODE_ENV === 'development' ? 'http://localhost:8001' : '');
 
 const AuthContext = createContext();
 
