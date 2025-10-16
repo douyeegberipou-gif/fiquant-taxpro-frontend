@@ -40,8 +40,24 @@ import Home from './components/Home';
 import { generatePayeReport, generateBulkPayeReport, generateCitReport } from './utils/pdfGenerator';
 import './App.css';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 
-  (process.env.NODE_ENV === 'development' ? 'http://localhost:8001' : null);
+// Environment-aware backend URL configuration
+const getBackendURL = () => {
+  // Production: Use environment variable (set in Vercel)
+  if (process.env.REACT_APP_BACKEND_URL) {
+    return process.env.REACT_APP_BACKEND_URL;
+  }
+  
+  // Development fallback
+  if (process.env.NODE_ENV === 'development') {
+    return 'http://localhost:8001';
+  }
+  
+  // Default fallback - will show error in production if not configured
+  console.error('REACT_APP_BACKEND_URL not configured for production deployment');
+  return null;
+};
+
+const BACKEND_URL = getBackendURL();
 const API = BACKEND_URL ? `${BACKEND_URL}/api` : null;
 
 function AppContent() {
