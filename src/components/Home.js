@@ -146,16 +146,12 @@ const Home = ({ onNavigateToTab }) => {
               {/* Brand Logo */}
               <div className="flex items-center mb-12">
                 <img 
-                  src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/q9xbgjwy_Fiquant%20Consult%20-%20Transparent%20%28Logo%20Only%29.png" 
+                  src="/fiquant-logo-bold-diamond.png" 
                   alt="Fiquant Consult Logo" 
                   className="h-12 w-12 mr-4"
                 />
                 <div>
-                  <img 
-                    src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/aa6pe5bc_Fiquant%20Consult%20-%20Transparent%20%28Name%20only%29.png" 
-                    alt="Fiquant Consult" 
-                    className="h-8 mb-1"
-                  />
+                  <h2 className="text-2xl font-bold text-white mb-1">Fiquant</h2>
                   <p className="text-sm font-semibold text-white">TaxPro 2026</p>
                 </div>
               </div>
