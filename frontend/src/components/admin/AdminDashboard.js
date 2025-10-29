@@ -125,7 +125,7 @@ export const AdminDashboard = () => {
             <div className="flex items-center space-x-4">
               <div className="w-12 h-12 rounded-lg flex items-center justify-center">
                 <img 
-                  src="https://customer-assets.emergentagent.com/job_taxpro-ng/artifacts/i2zrdiwl_Fiquant%20Consult%20-%20Transparent%202.png" 
+                  src="/fiquant-logo-bold-diamond.png" 
                   alt="Fiquant Consult Logo" 
                   className="w-12 h-12 object-contain"
                 />
