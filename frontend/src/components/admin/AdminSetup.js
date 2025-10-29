@@ -57,7 +57,7 @@ export const AdminSetup = () => {
         <CardHeader className="text-center">
           <div className="w-16 h-16 rounded-lg flex items-center justify-center mx-auto mb-4">
             <img 
-              src="https://customer-assets.emergentagent.com/job_taxpro-ng/artifacts/i2zrdiwl_Fiquant%20Consult%20-%20Transparent%202.png" 
+              src="/fiquant-logo-bold-diamond.png" 
               alt="Fiquant Consult Logo" 
               className="w-16 h-16 object-contain"
             />
