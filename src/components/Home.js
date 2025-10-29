@@ -910,7 +910,7 @@ const Home = ({ onNavigateToTab }) => {
             <div className="md:col-span-2">
               <div className="flex items-center mb-6">
                 <img 
-                  src="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/q9xbgjwy_Fiquant%20Consult%20-%20Transparent%20%28Logo%20Only%29.png" 
+                  src="/fiquant-logo-bold-diamond.png" 
                   alt="Fiquant Consult Logo" 
                   className="h-8 w-8 mr-3"
                 />
