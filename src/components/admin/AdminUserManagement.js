@@ -374,6 +374,18 @@ export const AdminUserManagement = () => {
                             Make Admin
                           </Button>
                         )}
+                        
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => resendVerificationEmail(user.email)}
+                          disabled={actionLoading}
+                          className="text-purple-600 border-purple-200 hover:bg-purple-50"
+                          title="Resend verification email"
+                        >
+                          <Mail className="h-3 w-3 mr-1" />
+                          Resend
+                        </Button>
                       </div>
                     </td>
                   </tr>
