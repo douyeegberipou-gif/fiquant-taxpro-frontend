@@ -144,6 +144,40 @@ export const AdminUserManagement = () => {
     }
   };
 
+  const resendVerificationEmail = async (userEmail) => {
+    try {
+      setActionLoading(true);
+      setError(null);
+      
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
+      const response = await fetch(`${API_URL}/api/auth/resend-verification`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: userEmail })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to resend verification email');
+      }
+
+      alert(`Verification email sent to ${userEmail}`);
+      await loadUsers(); // Refresh users list
+    } catch (error) {
+      console.error('Error resending verification email:', error);
+      setError(error.message);
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
     setCurrentPage(1); // Reset to first page when searching
