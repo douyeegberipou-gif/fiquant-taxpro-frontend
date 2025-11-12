@@ -941,22 +941,66 @@ def generate_verification_code() -> str:
     return str(random.randint(100000, 999999))
 
 def send_verification_email(email: str, verification_token: str, full_name: str):
-    """Send verification email (simplified - in production use proper email service)"""
+    """Send verification email using Namecheap SMTP"""
     try:
-        # For development, get the frontend URL from environment
-        frontend_url = os.getenv('FRONTEND_URL', 'http://localhost:3000')
-        verification_link = f"{frontend_url}/verify-email?token={verification_token}&email={email}"
+        # Get Namecheap configuration
+        namecheap_config = MOCK_INTEGRATIONS["communications"]["namecheap"]["config"]
         
-        print(f"\n🔥 IMPORTANT: EMAIL VERIFICATION REQUIRED 🔥")
-        print(f"📧 For user: {full_name} ({email})")
-        print(f"🔗 CLICK THIS LINK TO VERIFY: {verification_link}")
-        print(f"📱 Or manually copy this verification token: {verification_token}")
-        print(f"⏰ Link expires in 24 hours")
-        print(f"=" * 80)
+        # Check if SMTP is configured
+        if not namecheap_config.get("smtp_username") or not namecheap_config.get("smtp_password"):
+            print("SMTP not configured for verification emails")
+            return False
         
-        # TODO: Implement actual email sending using service like SendGrid
-        # For now, prominently display the verification link
+        # Create verification link - use production domain for deployed app
+        verification_link = f"https://fiquanttaxpro.com/?token={verification_token}&email={email}"
+        
+        # Create verification email
+        subject = "Verify Your Account - Fiquant TaxPro"
+        body = f"""
+        <html>
+        <body>
+            <h2>Welcome to Fiquant TaxPro!</h2>
+            <p>Hello {full_name},</p>
+            
+            <p>Thank you for registering with Fiquant TaxPro. To complete your account setup, please verify your email address.</p>
+            
+            <p>Click the button below to verify your account:</p>
+            <p><a href="{verification_link}" style="background-color: #D4AF37; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Verify Account</a></p>
+            
+            <p>Or copy and paste this link in your browser:</p>
+            <p>{verification_link}</p>
+            
+            <p><strong>This link will expire in 24 hours.</strong></p>
+            
+            <p>Once verified, you'll have full access to our Nigerian tax calculators and tools.</p>
+            
+            <p>Best regards,<br>
+            Fiquant TaxPro Team</p>
+        </body>
+        </html>
+        """
+        
+        # Send email using SMTP
+        import smtplib
+        from email.mime.text import MIMEText
+        from email.mime.multipart import MIMEMultipart
+        
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = subject
+        msg['From'] = namecheap_config["from_email"]
+        msg['To'] = email
+        
+        html_part = MIMEText(body, 'html')
+        msg.attach(html_part)
+        
+        # Send via SMTP
+        with smtplib.SMTP_SSL(namecheap_config["smtp_host"], int(namecheap_config["smtp_port"])) as server:
+            server.login(namecheap_config["smtp_username"], namecheap_config["smtp_password"])
+            server.send_message(msg)
+            
+        print(f"Verification email sent to {email}")
         return True
+        
     except Exception as e:
         print(f"Failed to send verification email: {e}")
         return False
