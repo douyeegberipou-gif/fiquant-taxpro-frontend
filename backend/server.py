@@ -1229,6 +1229,8 @@ async def forgot_password(request: PasswordResetRequest):
         # Get Namecheap configuration
         namecheap_config = MOCK_INTEGRATIONS["communications"]["namecheap"]["config"]
         
+        print(f"Password reset - Namecheap config check: {namecheap_config}")  # Debug log
+        
         # Check if SMTP is configured
         if not namecheap_config.get("smtp_username") or not namecheap_config.get("smtp_password"):
             print("SMTP not configured for password reset emails")
