@@ -17,7 +17,8 @@ import {
   Shield,
   ChevronLeft,
   ChevronRight,
-  MoreVertical
+  MoreVertical,
+  Mail
 } from 'lucide-react';
 
 export const AdminUserManagement = () => {
