@@ -119,18 +119,27 @@ class NigerianTaxCalculatorTester:
             print(f"   Response Type: {type(response)}")
             print(f"   Response Content: {response}")
             
-            if isinstance(response, dict):
-                monthly_gross = response.get('monthly_gross_income', 'N/A')
-                monthly_tax = response.get('monthly_tax', 'N/A')
-                monthly_net = response.get('monthly_net_income', 'N/A')
-                annual_tax = response.get('annual_tax', 'N/A')
-                effective_rate = response.get('effective_tax_rate', 'N/A')
+            # Handle both list and dict response formats
+            result_data = None
+            if isinstance(response, list) and len(response) > 0:
+                result_data = response[0]  # Take first item from list
+                print(f"   ✅ Response is a list with {len(response)} item(s)")
+            elif isinstance(response, dict):
+                result_data = response
+                print(f"   ✅ Response is a dictionary")
+            
+            if result_data:
+                monthly_gross = result_data.get('monthly_gross_income', 'N/A')
+                monthly_tax = result_data.get('monthly_tax', 'N/A')
+                monthly_net = result_data.get('monthly_net_income', 'N/A')
+                annual_tax = result_data.get('tax_due', 'N/A')  # Use tax_due instead of annual_tax
+                effective_rate = result_data.get('effective_tax_rate', 'N/A')
                 
                 print(f"     Monthly Gross Income: ₦{monthly_gross:,.2f}" if isinstance(monthly_gross, (int, float)) else f"     Monthly Gross Income: {monthly_gross}")
                 print(f"     Monthly Tax: ₦{monthly_tax:,.2f}" if isinstance(monthly_tax, (int, float)) else f"     Monthly Tax: {monthly_tax}")
                 print(f"     Monthly Net Income: ₦{monthly_net:,.2f}" if isinstance(monthly_net, (int, float)) else f"     Monthly Net Income: {monthly_net}")
                 print(f"     Annual Tax: ₦{annual_tax:,.2f}" if isinstance(annual_tax, (int, float)) else f"     Annual Tax: {annual_tax}")
-                print(f"     Effective Tax Rate: {effective_rate}%" if isinstance(effective_rate, (int, float)) else f"     Effective Tax Rate: {effective_rate}")
+                print(f"     Effective Tax Rate: {effective_rate*100:.2f}%" if isinstance(effective_rate, (int, float)) else f"     Effective Tax Rate: {effective_rate}")
                 
                 # Validate calculation results
                 if isinstance(monthly_gross, (int, float)) and monthly_gross > 0:
@@ -148,7 +157,7 @@ class NigerianTaxCalculatorTester:
                 else:
                     print(f"   ❌ Monthly net income calculation is invalid")
             else:
-                print(f"   ⚠️ Response is not a dictionary: {response}")
+                print(f"   ❌ Unable to extract calculation data from response")
             
             return True
         else:
