@@ -4504,9 +4504,9 @@ MOCK_INTEGRATIONS = {
             "config": {
                 "smtp_host": "mail.privateemail.com",
                 "smtp_port": "465",
-                "smtp_username": "",
-                "smtp_password": "",
-                "from_email": "",
+                "smtp_username": "info@fiquanttaxpro.com",
+                "smtp_password": "Generaldee1",
+                "from_email": "info@fiquanttaxpro.com",
                 "from_name": "Fiquant TaxPro",
                 "use_ssl": "true"
             },
