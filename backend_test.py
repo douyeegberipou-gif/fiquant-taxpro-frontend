@@ -11,6 +11,236 @@ class NigerianTaxCalculatorTester:
         self.auth_token = None  # Store JWT token for authenticated requests
         self.test_user_data = None  # Store test user data
         
+    def test_urgent_emergent_paye_calculator(self):
+        """URGENT: Test PAYE Calculator on Emergent Platform with specific sample data"""
+        print("\n🚨 URGENT EMERGENT PLATFORM PAYE CALCULATOR TEST")
+        print("=" * 80)
+        print("CRITICAL ISSUE: User reports calculators not working in development environment")
+        print("BACKEND URL: https://nigerian-taxapp.preview.emergentagent.com/api")
+        print("SAMPLE DATA: Basic Salary: 7,000,000, Health Insurance: 45,000, Annual Rent: 7,000,000")
+        print("=" * 80)
+        
+        tests_passed = 0
+        total_tests = 4
+        
+        # Test 1: Basic API Connectivity to Emergent Platform
+        print("\n1️⃣ TESTING EMERGENT PLATFORM API CONNECTIVITY")
+        if self.test_emergent_api_connectivity():
+            tests_passed += 1
+        
+        # Test 2: PAYE Endpoint with Sample Data
+        print("\n2️⃣ TESTING PAYE CALCULATOR WITH SAMPLE DATA")
+        if self.test_paye_with_sample_data():
+            tests_passed += 1
+        
+        # Test 3: Response Format Validation
+        print("\n3️⃣ TESTING RESPONSE FORMAT VALIDATION")
+        if self.test_paye_response_format():
+            tests_passed += 1
+        
+        # Test 4: Error Handling Verification
+        print("\n4️⃣ TESTING ERROR HANDLING")
+        if self.test_paye_error_handling():
+            tests_passed += 1
+        
+        print(f"\n📊 EMERGENT PAYE CALCULATOR TEST RESULTS: {tests_passed}/{total_tests} tests passed")
+        
+        if tests_passed == total_tests:
+            print("✅ EMERGENT PLATFORM PAYE CALCULATOR IS WORKING CORRECTLY")
+        elif tests_passed >= 3:
+            print("⚠️ EMERGENT PLATFORM PAYE CALCULATOR HAS MINOR ISSUES")
+        else:
+            print("❌ EMERGENT PLATFORM PAYE CALCULATOR HAS CRITICAL ISSUES")
+        
+        print("=" * 80)
+        return tests_passed >= 3
+    
+    def test_emergent_api_connectivity(self):
+        """Test basic connectivity to Emergent platform API"""
+        print("   🔍 Testing Emergent platform API connectivity...")
+        
+        success, response = self.run_test(
+            "Emergent Platform API Root",
+            "GET",
+            "",
+            200,
+            None
+        )
+        
+        if success:
+            print(f"   ✅ Emergent platform API is accessible")
+            print(f"   Response: {response}")
+            return True
+        else:
+            print(f"   ❌ Emergent platform API is not accessible")
+            print(f"   This could be the root cause of the calculator issues")
+            return False
+    
+    def test_paye_with_sample_data(self):
+        """Test PAYE calculation with the exact sample data from review request"""
+        print("   🔍 Testing PAYE calculation with sample data...")
+        
+        # Exact sample data from the review request
+        sample_data = {
+            "basic_salary": 7000000,
+            "health_insurance": 45000,
+            "annual_rent": 7000000,
+            "pension_contribution": 0,
+            "other_allowances": 0,
+            "month": "December",
+            "year": "2025",
+            # Additional required fields for complete calculation
+            "transport_allowance": 0,
+            "housing_allowance": 0,
+            "meal_allowance": 0,
+            "utility_allowance": 0,
+            "entertainment_allowance": 0,
+            "nhf_contribution": 0,
+            "life_assurance": 0,
+            "nhis_contribution": 0,
+            "rent": 7000000,  # Same as annual_rent
+            "other_reliefs": 0,
+            "staff_name": "Sample Employee",
+            "tin": "12345678901",
+            "state_of_residence": "Lagos"
+        }
+        
+        success, response = self.run_test(
+            "PAYE Calculation - Sample Data",
+            "POST",
+            "calculate-paye",
+            200,
+            sample_data
+        )
+        
+        if success:
+            print(f"   ✅ PAYE calculation successful with sample data")
+            print(f"   📊 Calculation Results:")
+            
+            if isinstance(response, dict):
+                monthly_gross = response.get('monthly_gross_income', 'N/A')
+                monthly_tax = response.get('monthly_tax', 'N/A')
+                monthly_net = response.get('monthly_net_income', 'N/A')
+                annual_tax = response.get('annual_tax', 'N/A')
+                effective_rate = response.get('effective_tax_rate', 'N/A')
+                
+                print(f"     Monthly Gross Income: ₦{monthly_gross:,.2f}" if isinstance(monthly_gross, (int, float)) else f"     Monthly Gross Income: {monthly_gross}")
+                print(f"     Monthly Tax: ₦{monthly_tax:,.2f}" if isinstance(monthly_tax, (int, float)) else f"     Monthly Tax: {monthly_tax}")
+                print(f"     Monthly Net Income: ₦{monthly_net:,.2f}" if isinstance(monthly_net, (int, float)) else f"     Monthly Net Income: {monthly_net}")
+                print(f"     Annual Tax: ₦{annual_tax:,.2f}" if isinstance(annual_tax, (int, float)) else f"     Annual Tax: {annual_tax}")
+                print(f"     Effective Tax Rate: {effective_rate}%" if isinstance(effective_rate, (int, float)) else f"     Effective Tax Rate: {effective_rate}")
+                
+                # Validate calculation results
+                if isinstance(monthly_gross, (int, float)) and monthly_gross > 0:
+                    print(f"   ✅ Monthly gross income calculation is valid")
+                else:
+                    print(f"   ❌ Monthly gross income calculation is invalid")
+                
+                if isinstance(monthly_tax, (int, float)) and monthly_tax >= 0:
+                    print(f"   ✅ Monthly tax calculation is valid")
+                else:
+                    print(f"   ❌ Monthly tax calculation is invalid")
+                
+                if isinstance(monthly_net, (int, float)) and monthly_net > 0:
+                    print(f"   ✅ Monthly net income calculation is valid")
+                else:
+                    print(f"   ❌ Monthly net income calculation is invalid")
+            
+            return True
+        else:
+            print(f"   ❌ PAYE calculation failed with sample data")
+            print(f"   Error Response: {response}")
+            return False
+    
+    def test_paye_response_format(self):
+        """Test that PAYE response format matches frontend expectations"""
+        print("   🔍 Testing PAYE response format...")
+        
+        # Simple test data
+        test_data = {
+            "basic_salary": 500000,
+            "transport_allowance": 50000,
+            "housing_allowance": 100000,
+            "meal_allowance": 25000,
+            "utility_allowance": 15000,
+            "entertainment_allowance": 10000,
+            "other_allowances": 0,
+            "pension_contribution": 40000,
+            "nhf_contribution": 12500,
+            "life_assurance": 5000,
+            "nhis_contribution": 2500,
+            "health_insurance": 15000,
+            "rent": 200000,
+            "other_reliefs": 0,
+            "staff_name": "Test Employee",
+            "tin": "98765432109",
+            "month": "December",
+            "year": "2025",
+            "state_of_residence": "Lagos"
+        }
+        
+        success, response = self.run_test(
+            "PAYE Response Format Validation",
+            "POST",
+            "calculate-paye",
+            200,
+            test_data
+        )
+        
+        if success and isinstance(response, dict):
+            print(f"   ✅ Response is valid JSON object")
+            
+            # Check for expected fields
+            expected_fields = [
+                'monthly_gross_income',
+                'monthly_tax',
+                'monthly_net_income',
+                'annual_tax',
+                'effective_tax_rate'
+            ]
+            
+            missing_fields = []
+            for field in expected_fields:
+                if field not in response:
+                    missing_fields.append(field)
+            
+            if not missing_fields:
+                print(f"   ✅ All expected fields present in response")
+                return True
+            else:
+                print(f"   ❌ Missing fields in response: {missing_fields}")
+                return False
+        else:
+            print(f"   ❌ Invalid response format")
+            return False
+    
+    def test_paye_error_handling(self):
+        """Test PAYE error handling for invalid inputs"""
+        print("   🔍 Testing PAYE error handling...")
+        
+        # Test with invalid data
+        invalid_data = {
+            "basic_salary": -100000,  # Negative salary
+            "transport_allowance": "invalid"  # Invalid type
+        }
+        
+        success, response = self.run_test(
+            "PAYE Error Handling Test",
+            "POST",
+            "calculate-paye",
+            [400, 422],  # Expect validation error
+            invalid_data
+        )
+        
+        if success:
+            print(f"   ✅ Error handling working correctly")
+            if isinstance(response, dict) and 'detail' in response:
+                print(f"   Error message: {response['detail']}")
+            return True
+        else:
+            print(f"   ❌ Error handling not working properly")
+            return False
+
     def test_comprehensive_all_calculators_functionality(self):
         """COMPREHENSIVE ALL CALCULATORS FUNCTIONALITY TEST - User reports all calculators broken"""
         print("\n🚨 COMPREHENSIVE ALL CALCULATORS FUNCTIONALITY TEST")
