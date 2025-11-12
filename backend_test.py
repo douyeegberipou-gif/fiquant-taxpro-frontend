@@ -116,9 +116,10 @@ class NigerianTaxCalculatorTester:
         if success:
             print(f"   ✅ PAYE calculation successful with sample data")
             print(f"   📊 Calculation Results:")
+            print(f"   Response Type: {type(response)}")
+            print(f"   Response Content: {response}")
             
             if isinstance(response, dict):
-                print(f"     Full Response: {response}")
                 monthly_gross = response.get('monthly_gross_income', 'N/A')
                 monthly_tax = response.get('monthly_tax', 'N/A')
                 monthly_net = response.get('monthly_net_income', 'N/A')
@@ -146,6 +147,8 @@ class NigerianTaxCalculatorTester:
                     print(f"   ✅ Monthly net income calculation is valid")
                 else:
                     print(f"   ❌ Monthly net income calculation is invalid")
+            else:
+                print(f"   ⚠️ Response is not a dictionary: {response}")
             
             return True
         else:
