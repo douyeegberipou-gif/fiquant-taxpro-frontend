@@ -4449,7 +4449,7 @@ MOCK_INTEGRATIONS = {
         "stripe": {
             "name": "Stripe",
             "description": "Global payment processing platform",
-            "status": "disconnected",
+            "status": "connected",
             "environment": "sandbox",
             "config": {"publishable_key": "", "secret_key": "", "webhook_secret": "", "currency": "NGN"},
             "endpoints": {"base_url": "https://api.stripe.com/v1", "webhook_url": "/api/webhooks/stripe"},
@@ -4499,7 +4499,7 @@ MOCK_INTEGRATIONS = {
         "namecheap": {
             "name": "Namecheap Email",
             "description": "Custom domain email hosting via Namecheap",
-            "status": "disconnected",
+            "status": "connected",
             "environment": "production",
             "config": {
                 "smtp_host": "mail.privateemail.com",
