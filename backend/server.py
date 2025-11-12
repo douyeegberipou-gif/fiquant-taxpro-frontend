@@ -1224,9 +1224,68 @@ async def forgot_password(request: PasswordResetRequest):
         }}
     )
     
-    # In production, send email here
-    # For now, just log the token (remove in production)
-    print(f"Password reset token for {request.email}: {reset_token}")
+    # Send password reset email
+    try:
+        # Get Namecheap configuration
+        namecheap_config = MOCK_INTEGRATIONS["communications"]["namecheap"]["config"]
+        
+        # Check if SMTP is configured
+        if not namecheap_config.get("smtp_username") or not namecheap_config.get("smtp_password"):
+            print("SMTP not configured for password reset emails")
+            return {"message": "If an account with that email exists, you will receive a password reset link."}
+        
+        # Create password reset email
+        reset_url = f"https://fiquanttaxpro.com/reset-password?token={reset_token}"
+        
+        subject = "Password Reset - Fiquant TaxPro"
+        body = f"""
+        <html>
+        <body>
+            <h2>Password Reset Request</h2>
+            <p>Hello,</p>
+            
+            <p>You have requested to reset your password for your Fiquant TaxPro account.</p>
+            
+            <p>Click the link below to reset your password:</p>
+            <p><a href="{reset_url}" style="background-color: #D4AF37; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Reset Password</a></p>
+            
+            <p>Or copy and paste this link in your browser:</p>
+            <p>{reset_url}</p>
+            
+            <p><strong>This link will expire in 1 hour.</strong></p>
+            
+            <p>If you didn't request this password reset, please ignore this email.</p>
+            
+            <p>Best regards,<br>
+            Fiquant TaxPro Team</p>
+        </body>
+        </html>
+        """
+        
+        # Send email using the same function as other emails
+        import smtplib
+        from email.mime.text import MIMEText
+        from email.mime.multipart import MIMEMultipart
+        
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = subject
+        msg['From'] = namecheap_config["from_email"]
+        msg['To'] = request.email
+        
+        html_part = MIMEText(body, 'html')
+        msg.attach(html_part)
+        
+        # Send via SMTP
+        with smtplib.SMTP_SSL(namecheap_config["smtp_server"], int(namecheap_config["smtp_port"])) as server:
+            server.login(namecheap_config["smtp_username"], namecheap_config["smtp_password"])
+            server.send_message(msg)
+            
+        print(f"Password reset email sent to {request.email}")
+        
+    except Exception as e:
+        print(f"Error sending password reset email: {str(e)}")
+        # Don't reveal the error to user, but still log the token for debugging
+        print(f"Password reset token for {request.email}: {reset_token}")
     
     return {"message": "If an account with that email exists, you will receive a password reset link."}
 
