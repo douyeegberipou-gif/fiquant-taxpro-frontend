@@ -118,6 +118,7 @@ class NigerianTaxCalculatorTester:
             print(f"   📊 Calculation Results:")
             
             if isinstance(response, dict):
+                print(f"     Full Response: {response}")
                 monthly_gross = response.get('monthly_gross_income', 'N/A')
                 monthly_tax = response.get('monthly_tax', 'N/A')
                 monthly_net = response.get('monthly_net_income', 'N/A')
