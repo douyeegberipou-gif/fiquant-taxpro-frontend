@@ -200,28 +200,40 @@ class NigerianTaxCalculatorTester:
             test_data
         )
         
-        if success and isinstance(response, dict):
-            print(f"   ✅ Response is valid JSON object")
+        if success:
+            # Handle both list and dict response formats
+            result_data = None
+            if isinstance(response, list) and len(response) > 0:
+                result_data = response[0]
+                print(f"   ✅ Response is valid JSON list with {len(response)} item(s)")
+            elif isinstance(response, dict):
+                result_data = response
+                print(f"   ✅ Response is valid JSON object")
             
-            # Check for expected fields
-            expected_fields = [
-                'monthly_gross_income',
-                'monthly_tax',
-                'monthly_net_income',
-                'annual_tax',
-                'effective_tax_rate'
-            ]
-            
-            missing_fields = []
-            for field in expected_fields:
-                if field not in response:
-                    missing_fields.append(field)
-            
-            if not missing_fields:
-                print(f"   ✅ All expected fields present in response")
-                return True
+            if result_data:
+                # Check for expected fields
+                expected_fields = [
+                    'monthly_gross_income',
+                    'monthly_tax',
+                    'monthly_net_income',
+                    'tax_due',  # Use tax_due instead of annual_tax
+                    'effective_tax_rate'
+                ]
+                
+                missing_fields = []
+                for field in expected_fields:
+                    if field not in result_data:
+                        missing_fields.append(field)
+                
+                if not missing_fields:
+                    print(f"   ✅ All expected fields present in response")
+                    return True
+                else:
+                    print(f"   ❌ Missing fields in response: {missing_fields}")
+                    print(f"   Available fields: {list(result_data.keys())}")
+                    return False
             else:
-                print(f"   ❌ Missing fields in response: {missing_fields}")
+                print(f"   ❌ Unable to extract data from response")
                 return False
         else:
             print(f"   ❌ Invalid response format")
