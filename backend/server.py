@@ -1237,7 +1237,7 @@ async def forgot_password(request: PasswordResetRequest):
             return {"message": "If an account with that email exists, you will receive a password reset link."}
         
         # Create password reset email
-        reset_url = f"https://fiquanttaxpro.com/reset-password?token={reset_token}"
+        reset_url = f"https://fiquanttaxpro.com/?reset_token={reset_token}"
         
         subject = "Password Reset - Fiquant TaxPro"
         body = f"""
