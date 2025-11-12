@@ -1278,7 +1278,7 @@ async def forgot_password(request: PasswordResetRequest):
         msg.attach(html_part)
         
         # Send via SMTP
-        with smtplib.SMTP_SSL(namecheap_config["smtp_server"], int(namecheap_config["smtp_port"])) as server:
+        with smtplib.SMTP_SSL(namecheap_config["smtp_host"], int(namecheap_config["smtp_port"])) as server:
             server.login(namecheap_config["smtp_username"], namecheap_config["smtp_password"])
             server.send_message(msg)
             
