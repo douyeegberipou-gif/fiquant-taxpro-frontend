@@ -9091,18 +9091,18 @@ def main():
 if __name__ == "__main__":
     tester = NigerianTaxCalculatorTester()
     
-    print("🚀 Starting URGENT EMERGENT PLATFORM PAYE CALCULATOR TEST")
+    print("🚀 Starting URGENT VERIFICATION EMAIL RESEND TEST")
     print("=" * 80)
     
-    # Run urgent PAYE calculator test for Emergent platform
-    paye_success = tester.test_urgent_emergent_paye_calculator()
+    # Run urgent verification email resend test
+    verification_success = tester.test_urgent_verification_email_resend()
     
     print(f"\n📊 Final Results: {tester.tests_passed}/{tester.tests_run} tests passed")
     print(f"Success Rate: {(tester.tests_passed/tester.tests_run)*100:.1f}%")
     
-    if paye_success:
-        print("✅ EMERGENT PLATFORM PAYE CALCULATOR is working!")
+    if verification_success:
+        print("✅ VERIFICATION EMAIL RESEND SYSTEM is working!")
         sys.exit(0)
     else:
-        print("❌ EMERGENT PLATFORM PAYE CALCULATOR has critical issues!")
+        print("❌ VERIFICATION EMAIL RESEND SYSTEM has critical issues!")
         sys.exit(1)
