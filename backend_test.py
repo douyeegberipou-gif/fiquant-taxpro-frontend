@@ -8803,18 +8803,18 @@ def main():
 if __name__ == "__main__":
     tester = NigerianTaxCalculatorTester()
     
-    print("🚀 Starting COMPREHENSIVE ALL CALCULATORS FUNCTIONALITY TEST")
+    print("🚀 Starting URGENT EMERGENT PLATFORM PAYE CALCULATOR TEST")
     print("=" * 80)
     
-    # Run comprehensive all calculators functionality tests
-    all_calculators_success = tester.test_comprehensive_all_calculators_functionality()
+    # Run urgent PAYE calculator test for Emergent platform
+    paye_success = tester.test_urgent_emergent_paye_calculator()
     
     print(f"\n📊 Final Results: {tester.tests_passed}/{tester.tests_run} tests passed")
     print(f"Success Rate: {(tester.tests_passed/tester.tests_run)*100:.1f}%")
     
-    if all_calculators_success:
-        print("✅ ALL CALCULATORS functionality is working!")
+    if paye_success:
+        print("✅ EMERGENT PLATFORM PAYE CALCULATOR is working!")
         sys.exit(0)
     else:
-        print("❌ CALCULATORS have critical issues!")
+        print("❌ EMERGENT PLATFORM PAYE CALCULATOR has critical issues!")
         sys.exit(1)
