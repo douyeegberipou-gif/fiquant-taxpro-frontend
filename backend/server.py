@@ -4626,7 +4626,7 @@ async def get_integrations(admin_user: UserProfile = Depends(get_current_user_or
     """Get all integration configurations"""
     try:
         # Check if user is super admin
-        if admin_user.get("admin_role") != "super_admin":
+        if admin_user.admin_role != "super_admin":
             raise HTTPException(status_code=403, detail="Only super admins can access integrations")
         
         return MOCK_INTEGRATIONS
