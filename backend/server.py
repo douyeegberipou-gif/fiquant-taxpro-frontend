@@ -4646,7 +4646,7 @@ async def toggle_integration(
     """Enable/disable an integration"""
     try:
         # Check if user is super admin
-        if admin_user.get("admin_role") != "super_admin":
+        if admin_user.admin_role != "super_admin":
             raise HTTPException(status_code=403, detail="Only super admins can modify integrations")
         
         if category not in MOCK_INTEGRATIONS or service not in MOCK_INTEGRATIONS[category]:
@@ -4687,7 +4687,7 @@ async def update_integration_config(
     """Update integration configuration"""
     try:
         # Check if user is super admin
-        if admin_user.get("admin_role") != "super_admin":
+        if admin_user.admin_role != "super_admin":
             raise HTTPException(status_code=403, detail="Only super admins can modify integrations")
         
         if category not in MOCK_INTEGRATIONS or service not in MOCK_INTEGRATIONS[category]:
@@ -4730,7 +4730,7 @@ async def test_integration_connection(
     """Test integration connection"""
     try:
         # Check if user is super admin
-        if admin_user.get("admin_role") != "super_admin":
+        if admin_user.admin_role != "super_admin":
             raise HTTPException(status_code=403, detail="Only super admins can test integrations")
         
         if category not in MOCK_INTEGRATIONS or service not in MOCK_INTEGRATIONS[category]:
@@ -4781,7 +4781,7 @@ async def get_integration_logs(
     """Get integration activity logs"""
     try:
         # Check if user is super admin
-        if admin_user.get("admin_role") != "super_admin":
+        if admin_user.admin_role != "super_admin":
             raise HTTPException(status_code=403, detail="Only super admins can view integration logs")
         
         # Get logs from database
@@ -5089,7 +5089,7 @@ async def create_compliance_reminder(
 ):
     """Create a new compliance reminder"""
     try:
-        if admin_user.get("admin_role") != "super_admin":
+        if admin_user.admin_role != "super_admin":
             raise HTTPException(status_code=403, detail="Only super admins can create compliance reminders")
         
         reminder = ComplianceReminder(
@@ -5460,7 +5460,7 @@ async def assign_admin_role(
     """Assign admin role to a user"""
     try:
         # Check if current user is super admin
-        if admin_user.get("admin_role") != "super_admin":
+        if admin_user.admin_role != "super_admin":
             raise HTTPException(status_code=403, detail="Only super admins can assign roles")
         
         admin_role = role_data.get("admin_role")
