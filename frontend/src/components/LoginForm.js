@@ -84,7 +84,7 @@ export const LoginForm = ({ onSwitchToRegister, onClose, setShowTerms }) => {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.REACT_APP_BACKEND_URL}/api/auth/forgot-password`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/forgot-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
