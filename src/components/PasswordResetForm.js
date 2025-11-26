@@ -50,7 +50,7 @@ export const PasswordResetForm = ({ onClose }) => {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.REACT_APP_BACKEND_URL}/api/auth/reset-password`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/reset-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
