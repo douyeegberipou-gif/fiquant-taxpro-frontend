@@ -4622,7 +4622,7 @@ MOCK_INTEGRATIONS = {
 }
 
 @integration_router.get("/")
-async def get_integrations(admin_user: dict = Depends(get_admin_middleware)):
+async def get_integrations(admin_user: UserProfile = Depends(get_current_user_or_api_key)):
     """Get all integration configurations"""
     try:
         # Check if user is super admin
