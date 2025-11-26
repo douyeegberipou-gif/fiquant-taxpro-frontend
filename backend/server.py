@@ -904,6 +904,46 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
     
     return UserProfile(**user_data)
 
+# Static API key for admin endpoints
+ADMIN_API_KEY = "fiquant_admin_2024_secure_key_txpro_123"
+
+async def get_current_user_or_api_key(
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(HTTPBearer(auto_error=False)),
+    x_api_key: Optional[str] = Header(None)
+) -> UserProfile:
+    """Get current user from JWT token OR validate admin API key"""
+    
+    # Check for static API key first (for admin endpoints)
+    if x_api_key:
+        if x_api_key == ADMIN_API_KEY:
+            # Return a special admin user profile
+            return UserProfile(
+                id="admin_api_user",
+                email="admin@fiquanttaxpro.com",
+                full_name="Admin API User",
+                admin_enabled=True,
+                admin_role="super_admin",
+                email_verified=True,
+                phone_verified=True,
+                account_status="active"
+            )
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid API key"
+            )
+    
+    # Fall back to JWT token validation
+    if not credentials:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Missing authorization header",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+        
+    # Use existing JWT validation
+    return await get_current_user(credentials)
+
 def validate_email(email: str) -> bool:
     """Validate email format"""
     pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
