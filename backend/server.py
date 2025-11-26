@@ -4641,7 +4641,7 @@ async def toggle_integration(
     category: str,
     service: str,
     request_data: dict,
-    admin_user: dict = Depends(get_admin_middleware)
+    admin_user: UserProfile = Depends(get_current_user_or_api_key)
 ):
     """Enable/disable an integration"""
     try:
@@ -4682,7 +4682,7 @@ async def update_integration_config(
     category: str,
     service: str,
     config_data: dict,
-    admin_user: dict = Depends(get_admin_middleware)
+    admin_user: UserProfile = Depends(get_current_user_or_api_key)
 ):
     """Update integration configuration"""
     try:
@@ -4725,7 +4725,7 @@ async def update_integration_config(
 async def test_integration_connection(
     category: str,
     service: str,
-    admin_user: dict = Depends(get_admin_middleware)
+    admin_user: UserProfile = Depends(get_current_user_or_api_key)
 ):
     """Test integration connection"""
     try:
@@ -4776,7 +4776,7 @@ async def test_integration_connection(
 @integration_router.get("/logs")
 async def get_integration_logs(
     limit: int = 50,
-    admin_user: dict = Depends(get_admin_middleware)
+    admin_user: UserProfile = Depends(get_current_user_or_api_key)
 ):
     """Get integration activity logs"""
     try:
@@ -4860,7 +4860,7 @@ async def get_message_templates(admin_user: dict = Depends(get_admin_middleware)
 @messaging_router.post("/templates")
 async def create_message_template(
     template_data: dict,
-    admin_user: dict = Depends(get_admin_middleware)
+    admin_user: UserProfile = Depends(get_current_user_or_api_key)
 ):
     """Create a new message template"""
     try:
@@ -4909,7 +4909,7 @@ async def get_user_segments(admin_user: dict = Depends(get_admin_middleware)):
 @messaging_router.post("/segments")
 async def create_user_segment(
     segment_data: dict,
-    admin_user: dict = Depends(get_admin_middleware)
+    admin_user: UserProfile = Depends(get_current_user_or_api_key)
 ):
     """Create a new user segment"""
     try:
@@ -4990,7 +4990,7 @@ async def get_message_campaigns(admin_user: dict = Depends(get_admin_middleware)
 @messaging_router.post("/campaigns")
 async def create_message_campaign(
     campaign_data: dict,
-    admin_user: dict = Depends(get_admin_middleware)
+    admin_user: UserProfile = Depends(get_current_user_or_api_key)
 ):
     """Create a new message campaign"""
     try:
@@ -5028,7 +5028,7 @@ async def create_message_campaign(
 @messaging_router.post("/campaigns/{campaign_id}/send")
 async def send_message_campaign(
     campaign_id: str,
-    admin_user: dict = Depends(get_admin_middleware)
+    admin_user: UserProfile = Depends(get_current_user_or_api_key)
 ):
     """Send a message campaign (mock implementation)"""
     try:
@@ -5085,7 +5085,7 @@ async def get_compliance_reminders(admin_user: dict = Depends(get_admin_middlewa
 @messaging_router.post("/compliance-reminders")
 async def create_compliance_reminder(
     reminder_data: dict,
-    admin_user: dict = Depends(get_admin_middleware)
+    admin_user: UserProfile = Depends(get_current_user_or_api_key)
 ):
     """Create a new compliance reminder"""
     try:
@@ -5159,7 +5159,7 @@ async def get_messaging_analytics(admin_user: dict = Depends(get_admin_middlewar
 @messaging_router.post("/send-quick-email")
 async def send_quick_email(
     email_data: dict,
-    admin_user: dict = Depends(get_admin_middleware)
+    admin_user: UserProfile = Depends(get_current_user_or_api_key)
 ):
     """Send a quick email without creating templates or campaigns"""
     try:
@@ -5321,7 +5321,7 @@ This email was sent from Fiquant TaxPro administration system.
 @messaging_router.get("/sent-emails")
 async def get_sent_emails(
     limit: int = 50,
-    admin_user: dict = Depends(get_admin_middleware)
+    admin_user: UserProfile = Depends(get_current_user_or_api_key)
 ):
     """Get sent emails log for review"""
     try:
@@ -5386,7 +5386,7 @@ async def get_all_users(
     limit: int = 50,
     search: Optional[str] = None,
     status_filter: Optional[str] = None,
-    admin_user: dict = Depends(get_admin_middleware)
+    admin_user: UserProfile = Depends(get_current_user_or_api_key)
 ):
     """Get all users with pagination and filtering"""
     try:
@@ -5455,7 +5455,7 @@ async def assign_admin_role(
     user_id: str,
     role_data: dict,
     request: Request,
-    admin_user: dict = Depends(get_admin_middleware)
+    admin_user: UserProfile = Depends(get_current_user_or_api_key)
 ):
     """Assign admin role to a user"""
     try:
@@ -5505,7 +5505,7 @@ async def update_user_status(
     user_id: str,
     status_data: dict,
     request: Request,
-    admin_user: dict = Depends(get_admin_middleware)
+    admin_user: UserProfile = Depends(get_current_user_or_api_key)
 ):
     """Update user account status"""
     try:
@@ -5551,7 +5551,7 @@ async def update_user_status(
 async def get_dashboard_analytics(
     request: Request,
     period: str = "7d",  # 1d, 7d, 30d
-    admin_user: dict = Depends(get_admin_middleware)
+    admin_user: UserProfile = Depends(get_current_user_or_api_key)
 ):
     """Get dashboard analytics data"""
     try:
@@ -5627,7 +5627,7 @@ async def get_audit_logs(
     page: int = 1,
     limit: int = 50,
     action_filter: Optional[str] = None,
-    admin_user: dict = Depends(get_admin_middleware)
+    admin_user: UserProfile = Depends(get_current_user_or_api_key)
 ):
     """Get audit logs with pagination and filtering"""
     try:
@@ -5802,7 +5802,7 @@ async def reset_owner_password():
 @admin_router.get("/monetization/analytics/dashboard")
 async def get_monetization_dashboard(
     days: int = 30,
-    admin_user: dict = Depends(get_admin_middleware)
+    admin_user: UserProfile = Depends(get_current_user_or_api_key)
 ):
     """Get comprehensive monetization analytics dashboard"""
     try:
@@ -5878,7 +5878,7 @@ async def get_tier_configurations(admin_user: dict = Depends(get_admin_middlewar
 async def update_tier_configuration(
     tier: UserTier,
     config: TierConfiguration,
-    admin_user: dict = Depends(get_admin_middleware)
+    admin_user: UserProfile = Depends(get_current_user_or_api_key)
 ):
     """Update tier configuration"""
     try:
@@ -5901,7 +5901,7 @@ async def get_user_subscriptions(
     page: int = 1,
     limit: int = 50,
     tier_filter: Optional[str] = None,
-    admin_user: dict = Depends(get_admin_middleware)
+    admin_user: UserProfile = Depends(get_current_user_or_api_key)
 ):
     """Get users with subscription information"""
     try:
@@ -5963,7 +5963,7 @@ async def get_user_subscriptions(
 @admin_router.post("/monetization/manual-change")
 async def apply_manual_subscription_change(
     change: ManualSubscriptionChange,
-    admin_user: dict = Depends(get_admin_middleware)
+    admin_user: UserProfile = Depends(get_current_user_or_api_key)
 ):
     """Apply manual subscription change"""
     try:
@@ -6053,7 +6053,7 @@ async def apply_manual_subscription_change(
 async def get_subscription_events(
     days: int = 30,
     event_type: Optional[str] = None,
-    admin_user: dict = Depends(get_admin_middleware)
+    admin_user: UserProfile = Depends(get_current_user_or_api_key)
 ):
     """Get subscription events log"""
     try:
