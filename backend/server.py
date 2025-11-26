@@ -1513,7 +1513,7 @@ async def update_user_profile(
 # ============================
 
 @api_router.post("/auth/verify-email")
-async def verify_email(token: str = None, email: EmailStr = None):
+async def verify_email(token: str = Query(...), email: EmailStr = Query(...)):
     """Verify email address with token"""
     user_data = await db.users.find_one({
         "email": email,
