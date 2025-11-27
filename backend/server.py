@@ -5353,9 +5353,10 @@ app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:3000", 
-        "https://tax-manager-5.preview.emergentagent.com",
-        os.environ.get("FRONTEND_URL", "https://your-vercel-app.vercel.app")
+        "http://localhost:3000",
+        "https://www.fiquanttaxpro.com",
+        "https://fiquanttaxpro.com",
+        os.environ.get("FRONTEND_URL", "*")
     ],
     allow_credentials=True,
     allow_methods=["*"],
