@@ -838,3 +838,63 @@ The Enhanced Payments feature has been successfully implemented with all request
     message: "🎉 COMPREHENSIVE NEW FIELDS TESTING COMPLETED SUCCESSFULLY: Extensive testing of all newly implemented fields completed with 100% success rate. ✅ PAYE CALCULATOR NEW FIELDS: Name of Staff/Taxpayer text input working perfectly, Month dropdown with all 12 months functioning correctly, State of Residence dropdown with all 36 Nigerian states + FCT working properly. ✅ CIT CALCULATOR NEW FIELDS: Year of Assessment number input working correctly, Tax Year number input functioning properly. ✅ INTEGRATION TESTING: All new fields properly integrated with calculation logic - PAYE calculation successful with new fields (₦810,000 gross, ₦114,125 tax, ₦695,875 net), CIT calculation working with company name and year fields displayed in results. ✅ DATA FLOW: Frontend correctly sends new fields to backend via API (confirmed in network requests), Backend processes all new fields correctly, All new fields included in calculation responses. ✅ PDF GENERATION: Both PAYE and CIT PDF generation buttons functional and include new fields. ✅ FORM VALIDATION: Required field validation working correctly, Dropdown selections functioning properly, All 36 Nigerian states + FCT available in state dropdown, All 12 months available in month dropdown. ✅ MOBILE RESPONSIVENESS: All new fields visible and functional on mobile devices. ✅ USER EXPERIENCE: Professional UI design maintained, Clear field labels and placeholders, Intuitive form flow with new fields seamlessly integrated. 🎯 FINAL RESULT: All new fields implementation is PRODUCTION-READY and working perfectly across both calculators with full integration into calculations and PDF reports."
   - agent: "testing"
     message: "🔑 COMPREHENSIVE FORGOT PASSWORD TESTING COMPLETED SUCCESSFULLY: Extensive testing of the complete forgot password functionality completed with 7/7 tests passing (100% success rate). ✅ FORGOT PASSWORD REQUEST ENDPOINT: /api/auth/forgot-password working perfectly with proper email validation, security measures, and consistent responses. Returns 'If an account with that email exists, you will receive a password reset link.' for both existing and non-existing emails to prevent email enumeration attacks. Handles invalid email formats with 422 validation errors. ✅ RESET TOKEN GENERATION & STORAGE: Reset tokens properly generated using secure random methods (secrets.token_urlsafe), stored in database with 1-hour expiry, and prominently displayed in backend console logs for development purposes. Multiple reset requests handled securely without information leakage. ✅ PASSWORD RESET ENDPOINT: /api/auth/reset-password correctly validates reset tokens, enforces password requirements (minimum 8 characters with Pydantic validation), properly hashes new passwords using bcrypt, and removes reset tokens after successful reset. Invalid/expired tokens rejected with 400 Bad Request. ✅ SECURITY FEATURES VERIFIED: Email enumeration protection active (identical responses for existing/non-existing emails), token expiry handling working (1-hour expiry as specified), password validation enforced (minimum 8 characters), multiple reset requests handled without security issues. ✅ EDGE CASES TESTED: Invalid email format rejection (422), expired/invalid token rejection (400), short password rejection (422), non-existent token handling, multiple requests for same email. ✅ COMPLETE FLOW SIMULATION: End-to-end password reset flow tested including user creation, reset request, token generation logging, invalid token testing, and password validation. All security best practices implemented correctly with no information leakage vulnerabilities. SYSTEM STATUS: Forgot password functionality is PRODUCTION-READY and fully compliant with security requirements."
+---
+## 🔄 FRESH DEPLOYMENT PLAN - $(date '+%Y-%m-%d %H:%M:%S')
+
+### Issue Resolved:
+The persistent blank page was caused by:
+1. Vite syntax (`import.meta.env`) in CRA project - **FIXED**
+2. Vercel build cache not being cleared - **User to force rebuild**
+
+### Actions Taken:
+1. ✅ Fixed LoginForm.js (line 87): Changed to `process.env.REACT_APP_BACKEND_URL`
+2. ✅ Fixed PasswordResetForm.js (line 53): Changed to `process.env.REACT_APP_BACKEND_URL`
+3. ✅ Created fresh `vercel.json` with proper SPA configuration
+4. ✅ Simplified `craco.config.js` to remove problematic webpack configs
+5. ✅ Local build test: SUCCESSFUL - No `import.meta` in output
+6. ✅ Created comprehensive deployment guide: `/app/COMPLETE_DEPLOYMENT_GUIDE.md`
+
+### Recommended: Fresh Vercel Deployment
+User decided to create a new Vercel project to avoid cache issues.
+
+### Complete Deployment Configuration:
+
+**VERCEL SETTINGS:**
+- Framework: Create React App
+- Root Directory: `frontend`
+- Build Command: `yarn build`
+- Output Directory: `build`
+- Install Command: `yarn install`
+- Environment Variable: `REACT_APP_BACKEND_URL` = `https://your-backend.onrender.com`
+
+**RENDER BACKEND SETTINGS:**
+- Root Directory: `backend`
+- Build Command: `pip install -r requirements.txt`
+- Start Command: `uvicorn server:app --host 0.0.0.0 --port $PORT`
+- Environment Variables:
+  - `MONGO_URL` = MongoDB Atlas connection string
+  - `DB_NAME` = `fiquant_production`
+  - `JWT_SECRET` = Secure random 32+ char string
+  - `CORS_ORIGINS` = `*` (or specific domains)
+  - `FRONTEND_URL` = Vercel URL
+
+**MONGODB ATLAS:**
+- Create free M0 cluster
+- Configure database user
+- Whitelist all IPs (0.0.0.0/0) for Render access
+- Get connection string
+
+### Files Ready for Deployment:
+- ✅ `/app/frontend/vercel.json` - Proper SPA routing
+- ✅ `/app/frontend/package.json` - Correct homepage setting
+- ✅ `/app/frontend/craco.config.js` - Simplified config
+- ✅ `/app/backend/requirements.txt` - All dependencies (check cryptography)
+- ✅ `/app/COMPLETE_DEPLOYMENT_GUIDE.md` - Full guide
+
+### Testing Required After Fresh Deployment:
+1. Verify new JS bundle has different hash (not main.c3cda3ec.js)
+2. Check browser console for no import.meta errors
+3. Test user registration and email verification
+4. Test all tax calculators
+5. Test admin dashboard
+
