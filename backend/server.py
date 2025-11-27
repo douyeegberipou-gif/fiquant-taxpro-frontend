@@ -6082,6 +6082,36 @@ async def get_subscription_events(
 # Include admin router
 app.include_router(admin_router)
 
+# Debug endpoint to test database connection
+@api_router.get("/debug/db-test")
+async def test_database_connection():
+    """Test endpoint to verify MongoDB connection"""
+    try:
+        # Test database ping
+        await db.command("ping")
+        
+        # Try to count users
+        user_count = await db.users.count_documents({})
+        
+        # Get database name
+        db_name = db.name
+        
+        return {
+            "status": "success",
+            "message": "MongoDB connection successful!",
+            "database_name": db_name,
+            "user_count": user_count,
+            "mongo_url_prefix": mongo_url[:30] + "..." if len(mongo_url) > 30 else mongo_url
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": "MongoDB connection failed",
+            "error": str(e),
+            "error_type": type(e).__name__
+        }
+
+
 # Start the app
 if __name__ == "__main__":
     import uvicorn
