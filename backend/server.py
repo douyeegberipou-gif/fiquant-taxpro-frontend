@@ -728,7 +728,9 @@ class UserAddOnBalance(BaseModel):
     balance: int = Field(default=0, description="Remaining balance/credits")
     last_updated: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 ROOT_DIR = Path(__file__).parent
-load_dotenv(ROOT_DIR / '.env')
+# Only load .env if MONGO_URL is not already set (prioritize Railway env vars)
+if not os.environ.get('MONGO_URL'):
+    load_dotenv(ROOT_DIR / '.env')
 
 # MongoDB connection
 mongo_url = os.environ['MONGO_URL']
