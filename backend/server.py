@@ -1245,9 +1245,11 @@ async def login_user(login_data: UserLogin):
             detail="Invalid credentials"
         )
     
-    # Check verification status for ALL users (including admin accounts)
+    # Check verification status - skip for admin users
     user_profile = UserProfile(**user_data)
-    if not await is_account_verified(user_profile):
+    is_admin = user_data.get("admin_enabled", False) and user_data.get("admin_role")
+    
+    if not is_admin and not await is_account_verified(user_profile):
         verification_status = []
         if not user_profile.email_verified:
             verification_status.append("email")
