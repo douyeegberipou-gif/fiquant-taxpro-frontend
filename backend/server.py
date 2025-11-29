@@ -1316,15 +1316,15 @@ async def forgot_password(request: PasswordResetRequest):
         }}
     )
     
-    # Send password reset email using SendGrid
+    # Send password reset email using Resend
     try:
-        sendgrid_api_key = os.environ.get('SENDGRID_API_KEY')
-        if not sendgrid_api_key:
-            print("SendGrid API key not configured")
+        resend_api_key = os.environ.get('RESEND_API_KEY')
+        if not resend_api_key:
+            print("Resend API key not configured")
             return {"message": "If an account with that email exists, you will receive a password reset link."}
         
-        from sendgrid import SendGridAPIClient
-        from sendgrid.helpers.mail import Mail, Email, To, Content
+        import resend
+        resend.api_key = resend_api_key
         
         # Create password reset link
         reset_url = f"https://fiquanttaxpro.com/?reset_token={reset_token}"
@@ -1357,29 +1357,27 @@ async def forgot_password(request: PasswordResetRequest):
         </html>
         """
         
-        # Send via SendGrid
+        # Get sender email from environment
         from_email_address = os.environ.get('EMAIL_FROM', 'info@fiquanttaxpro.com')
-        message = Mail(
-            from_email=Email(from_email_address, 'Fiquant TaxPro'),
-            to_emails=To(request.email),
-            subject=subject,
-            html_content=Content("text/html", html_content)
-        )
         
-        sg = SendGridAPIClient(sendgrid_api_key)
-        response = sg.send(message)
+        # Send via Resend
+        params = {
+            "from": f"Fiquant TaxPro <{from_email_address}>",
+            "to": [request.email],
+            "subject": subject,
+            "html": html_content
+        }
         
-        print(f"SendGrid response - Status: {response.status_code}, Body: {response.body}, Headers: {response.headers}")
+        response = resend.Emails.send(params)
+        print(f"Resend response: {response}")
         
-        if response.status_code == 202:
-            print(f"✅ Password reset email successfully sent to {request.email}")
+        if response and response.get('id'):
+            print(f"✅ Password reset email successfully sent to {request.email} - ID: {response['id']}")
         else:
-            print(f"⚠️ Unexpected status code: {response.status_code}")
+            print(f"⚠️ Unexpected Resend response: {response}")
         
     except Exception as e:
         print(f"❌ Error sending password reset email: {type(e).__name__}: {str(e)}")
-        if hasattr(e, 'body'):
-            print(f"SendGrid error body: {e.body}")
         print(f"Password reset token for {request.email}: {reset_token}")
     
     return {"message": "If an account with that email exists, you will receive a password reset link."}
