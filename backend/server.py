@@ -983,64 +983,62 @@ def generate_verification_code() -> str:
     return str(random.randint(100000, 999999))
 
 def send_verification_email(email: str, verification_token: str, full_name: str):
-    """Send verification email using Namecheap SMTP"""
+    """Send verification email using SendGrid"""
     try:
-        # Get Namecheap configuration
-        namecheap_config = MOCK_INTEGRATIONS["communications"]["namecheap"]["config"]
-        
-        # Check if SMTP is configured
-        if not namecheap_config.get("smtp_username") or not namecheap_config.get("smtp_password"):
-            print("SMTP not configured for verification emails")
+        # Check if SendGrid API key is configured
+        sendgrid_api_key = os.environ.get('SENDGRID_API_KEY')
+        if not sendgrid_api_key:
+            print("SendGrid API key not configured")
             return False
         
-        # Create verification link - use production domain for deployed app
+        from sendgrid import SendGridAPIClient
+        from sendgrid.helpers.mail import Mail, Email, To, Content
+        
+        # Create verification link
         verification_link = f"https://fiquanttaxpro.com/?token={verification_token}&email={email}"
         
-        # Create verification email
+        # Create email content
         subject = "Verify Your Account - Fiquant TaxPro"
-        body = f"""
+        html_content = f"""
         <html>
-        <body>
-            <h2>Welcome to Fiquant TaxPro!</h2>
-            <p>Hello {full_name},</p>
-            
-            <p>Thank you for registering with Fiquant TaxPro. To complete your account setup, please verify your email address.</p>
-            
-            <p>Click the button below to verify your account:</p>
-            <p><a href="{verification_link}" style="background-color: #D4AF37; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Verify Account</a></p>
-            
-            <p>Or copy and paste this link in your browser:</p>
-            <p>{verification_link}</p>
-            
-            <p><strong>This link will expire in 24 hours.</strong></p>
-            
-            <p>Once verified, you'll have full access to our Nigerian tax calculators and tools.</p>
-            
-            <p>Best regards,<br>
-            Fiquant TaxPro Team</p>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+            <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+                <h2 style="color: #D4AF37;">Welcome to Fiquant TaxPro!</h2>
+                <p>Hello {full_name},</p>
+                
+                <p>Thank you for registering with Fiquant TaxPro. To complete your account setup, please verify your email address.</p>
+                
+                <p style="text-align: center; margin: 30px 0;">
+                    <a href="{verification_link}" style="background-color: #D4AF37; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block;">Verify Account</a>
+                </p>
+                
+                <p>Or copy and paste this link in your browser:</p>
+                <p style="word-break: break-all; color: #0066cc;">{verification_link}</p>
+                
+                <p><strong>This link will expire in 24 hours.</strong></p>
+                
+                <p>Once verified, you'll have full access to our Nigerian tax calculators and tools.</p>
+                
+                <p>Best regards,<br>
+                <strong>Fiquant TaxPro Team</strong></p>
+            </div>
         </body>
         </html>
         """
         
-        # Send email using SMTP
-        import smtplib
-        from email.mime.text import MIMEText
-        from email.mime.multipart import MIMEMultipart
+        # Create SendGrid message
+        message = Mail(
+            from_email=Email('info@fiquanttaxpro.com', 'Fiquant TaxPro'),
+            to_emails=To(email),
+            subject=subject,
+            html_content=Content("text/html", html_content)
+        )
         
-        msg = MIMEMultipart('alternative')
-        msg['Subject'] = subject
-        msg['From'] = namecheap_config["from_email"]
-        msg['To'] = email
+        # Send email via SendGrid
+        sg = SendGridAPIClient(sendgrid_api_key)
+        response = sg.send(message)
         
-        html_part = MIMEText(body, 'html')
-        msg.attach(html_part)
-        
-        # Send via SMTP
-        with smtplib.SMTP_SSL(namecheap_config["smtp_host"], int(namecheap_config["smtp_port"])) as server:
-            server.login(namecheap_config["smtp_username"], namecheap_config["smtp_password"])
-            server.send_message(msg)
-            
-        print(f"Verification email sent to {email}")
+        print(f"Verification email sent to {email} - Status: {response.status_code}")
         return True
         
     except Exception as e:
