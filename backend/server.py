@@ -1575,17 +1575,18 @@ async def verify_phone(verification_data: VerifyCode):
                 detail="Verification code has expired. Please request a new one."
             )
     
-    # Update user verification status
+    # Update user verification status - verifying phone automatically verifies both methods
     await db.users.update_one(
         {"id": user_data["id"]},
         {"$set": {
+            "email_verified": True,  # Set both to true for simplified verification
             "phone_verified": True,
             "phone_verification_code": None,
             "updated_at": datetime.now(timezone.utc).isoformat()
         }}
     )
     
-    return {"message": "Phone number verified successfully"}
+    return {"message": "Phone number verified successfully. You can now login."}
 
 @api_router.post("/auth/resend-verification")
 async def resend_verification(verification_data: EmailVerification):
