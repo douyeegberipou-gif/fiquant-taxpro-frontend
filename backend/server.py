@@ -1039,11 +1039,20 @@ def send_verification_email(email: str, verification_token: str, full_name: str)
         sg = SendGridAPIClient(sendgrid_api_key)
         response = sg.send(message)
         
-        print(f"Verification email sent to {email} - Status: {response.status_code}")
-        return True
+        print(f"SendGrid response - Status: {response.status_code}, Body: {response.body}, Headers: {response.headers}")
+        
+        # 202 = accepted by SendGrid
+        if response.status_code == 202:
+            print(f"✅ Verification email successfully sent to {email}")
+            return True
+        else:
+            print(f"⚠️ Unexpected status code: {response.status_code}")
+            return False
         
     except Exception as e:
-        print(f"Failed to send verification email: {e}")
+        print(f"❌ Failed to send verification email: {type(e).__name__}: {str(e)}")
+        if hasattr(e, 'body'):
+            print(f"SendGrid error body: {e.body}")
         return False
 
 def send_verification_sms(phone: str, verification_code: str):
