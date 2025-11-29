@@ -983,16 +983,16 @@ def generate_verification_code() -> str:
     return str(random.randint(100000, 999999))
 
 def send_verification_email(email: str, verification_token: str, full_name: str):
-    """Send verification email using SendGrid"""
+    """Send verification email using Resend"""
     try:
-        # Check if SendGrid API key is configured
-        sendgrid_api_key = os.environ.get('SENDGRID_API_KEY')
-        if not sendgrid_api_key:
-            print("SendGrid API key not configured")
+        # Check if Resend API key is configured
+        resend_api_key = os.environ.get('RESEND_API_KEY')
+        if not resend_api_key:
+            print("Resend API key not configured")
             return False
         
-        from sendgrid import SendGridAPIClient
-        from sendgrid.helpers.mail import Mail, Email, To, Content
+        import resend
+        resend.api_key = resend_api_key
         
         # Create verification link
         verification_link = f"https://fiquanttaxpro.com/?token={verification_token}&email={email}"
@@ -1026,33 +1026,29 @@ def send_verification_email(email: str, verification_token: str, full_name: str)
         </html>
         """
         
-        # Create SendGrid message
+        # Get sender email from environment
         from_email_address = os.environ.get('EMAIL_FROM', 'info@fiquanttaxpro.com')
-        message = Mail(
-            from_email=Email(from_email_address, 'Fiquant TaxPro'),
-            to_emails=To(email),
-            subject=subject,
-            html_content=Content("text/html", html_content)
-        )
         
-        # Send email via SendGrid
-        sg = SendGridAPIClient(sendgrid_api_key)
-        response = sg.send(message)
+        # Send email via Resend
+        params = {
+            "from": f"Fiquant TaxPro <{from_email_address}>",
+            "to": [email],
+            "subject": subject,
+            "html": html_content
+        }
         
-        print(f"SendGrid response - Status: {response.status_code}, Body: {response.body}, Headers: {response.headers}")
+        response = resend.Emails.send(params)
+        print(f"Resend response: {response}")
         
-        # 202 = accepted by SendGrid
-        if response.status_code == 202:
-            print(f"✅ Verification email successfully sent to {email}")
+        if response and response.get('id'):
+            print(f"✅ Verification email successfully sent to {email} - ID: {response['id']}")
             return True
         else:
-            print(f"⚠️ Unexpected status code: {response.status_code}")
+            print(f"⚠️ Unexpected Resend response: {response}")
             return False
         
     except Exception as e:
         print(f"❌ Failed to send verification email: {type(e).__name__}: {str(e)}")
-        if hasattr(e, 'body'):
-            print(f"SendGrid error body: {e.body}")
         return False
 
 def send_verification_sms(phone: str, verification_code: str):
