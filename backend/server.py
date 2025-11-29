@@ -1359,14 +1359,12 @@ async def forgot_password(request: PasswordResetRequest):
         from_email_address = os.environ.get('EMAIL_FROM', 'info@fiquanttaxpro.com')
         
         # Send via Resend
-        params = {
+        response = resend.Emails.send({
             "from": f"Fiquant TaxPro <{from_email_address}>",
-            "to": [request.email],
+            "to": request.email,
             "subject": subject,
             "html": html_content
-        }
-        
-        response = resend.Emails.send(params)
+        })
         print(f"Resend response: {response}")
         
         if response and response.get('id'):
