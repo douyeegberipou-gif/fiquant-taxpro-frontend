@@ -1597,12 +1597,6 @@ async def resend_verification(verification_data: EmailVerification):
         # Don't reveal if user exists or not for security
         return {"message": "If the email exists in our system, a verification email has been sent."}
     
-    if user_data.get("email_verified"):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Email is already verified"
-        )
-    
     # Generate new verification token
     new_token = generate_verification_token()
     new_expires = datetime.now(timezone.utc) + timedelta(hours=24)
