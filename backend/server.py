@@ -1310,69 +1310,62 @@ async def forgot_password(request: PasswordResetRequest):
         }}
     )
     
-    # Send password reset email
+    # Send password reset email using SendGrid
     try:
-        # Get Namecheap configuration
-        namecheap_config = MOCK_INTEGRATIONS["communications"]["namecheap"]["config"]
-        
-        print(f"Password reset - Namecheap config check: {namecheap_config}")  # Debug log
-        
-        # Check if SMTP is configured
-        if not namecheap_config.get("smtp_username") or not namecheap_config.get("smtp_password"):
-            print("SMTP not configured for password reset emails")
+        sendgrid_api_key = os.environ.get('SENDGRID_API_KEY')
+        if not sendgrid_api_key:
+            print("SendGrid API key not configured")
             return {"message": "If an account with that email exists, you will receive a password reset link."}
         
-        # Create password reset email
+        from sendgrid import SendGridAPIClient
+        from sendgrid.helpers.mail import Mail, Email, To, Content
+        
+        # Create password reset link
         reset_url = f"https://fiquanttaxpro.com/?reset_token={reset_token}"
         
         subject = "Password Reset - Fiquant TaxPro"
-        body = f"""
+        html_content = f"""
         <html>
-        <body>
-            <h2>Password Reset Request</h2>
-            <p>Hello,</p>
-            
-            <p>You have requested to reset your password for your Fiquant TaxPro account.</p>
-            
-            <p>Click the link below to reset your password:</p>
-            <p><a href="{reset_url}" style="background-color: #D4AF37; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Reset Password</a></p>
-            
-            <p>Or copy and paste this link in your browser:</p>
-            <p>{reset_url}</p>
-            
-            <p><strong>This link will expire in 1 hour.</strong></p>
-            
-            <p>If you didn't request this password reset, please ignore this email.</p>
-            
-            <p>Best regards,<br>
-            Fiquant TaxPro Team</p>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+            <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+                <h2 style="color: #D4AF37;">Password Reset Request</h2>
+                <p>Hello,</p>
+                
+                <p>You have requested to reset your password for your Fiquant TaxPro account.</p>
+                
+                <p style="text-align: center; margin: 30px 0;">
+                    <a href="{reset_url}" style="background-color: #D4AF37; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block;">Reset Password</a>
+                </p>
+                
+                <p>Or copy and paste this link in your browser:</p>
+                <p style="word-break: break-all; color: #0066cc;">{reset_url}</p>
+                
+                <p><strong>This link will expire in 1 hour.</strong></p>
+                
+                <p>If you didn't request this password reset, please ignore this email.</p>
+                
+                <p>Best regards,<br>
+                <strong>Fiquant TaxPro Team</strong></p>
+            </div>
         </body>
         </html>
         """
         
-        # Send email using the same function as other emails
-        import smtplib
-        from email.mime.text import MIMEText
-        from email.mime.multipart import MIMEMultipart
+        # Send via SendGrid
+        message = Mail(
+            from_email=Email('info@fiquanttaxpro.com', 'Fiquant TaxPro'),
+            to_emails=To(request.email),
+            subject=subject,
+            html_content=Content("text/html", html_content)
+        )
         
-        msg = MIMEMultipart('alternative')
-        msg['Subject'] = subject
-        msg['From'] = namecheap_config["from_email"]
-        msg['To'] = request.email
+        sg = SendGridAPIClient(sendgrid_api_key)
+        response = sg.send(message)
         
-        html_part = MIMEText(body, 'html')
-        msg.attach(html_part)
-        
-        # Send via SMTP
-        with smtplib.SMTP_SSL(namecheap_config["smtp_host"], int(namecheap_config["smtp_port"])) as server:
-            server.login(namecheap_config["smtp_username"], namecheap_config["smtp_password"])
-            server.send_message(msg)
-            
-        print(f"Password reset email sent to {request.email}")
+        print(f"Password reset email sent to {request.email} - Status: {response.status_code}")
         
     except Exception as e:
         print(f"Error sending password reset email: {str(e)}")
-        # Don't reveal the error to user, but still log the token for debugging
         print(f"Password reset token for {request.email}: {reset_token}")
     
     return {"message": "If an account with that email exists, you will receive a password reset link."}
