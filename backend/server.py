@@ -1538,24 +1538,19 @@ async def verify_email(token: str = Query(...), email: EmailStr = Query(...)):
                 detail="Verification token has expired. Please request a new one."
             )
     
-    # Update user verification status
-    update_data = {
-        "email_verified": True,
-        "verification_token": None,
-        "verification_expires": None,
-        "updated_at": datetime.now(timezone.utc).isoformat()
-    }
-    
-    # If user doesn't have a phone, also set phone_verified to True
-    if not user_data.get("phone"):
-        update_data["phone_verified"] = True
-    
+    # Update user verification status - verifying email automatically verifies both methods
     await db.users.update_one(
         {"id": user_data["id"]},
-        {"$set": update_data}
+        {"$set": {
+            "email_verified": True,
+            "phone_verified": True,  # Set both to true for simplified verification
+            "verification_token": None,
+            "verification_expires": None,
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }}
     )
     
-    return {"message": "Email verified successfully"}
+    return {"message": "Email verified successfully. You can now login."}
 
 @api_router.post("/auth/verify-phone")
 async def verify_phone(verification_data: VerifyCode):
