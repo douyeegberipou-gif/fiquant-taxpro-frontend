@@ -1539,14 +1539,20 @@ async def verify_email(token: str = Query(...), email: EmailStr = Query(...)):
             )
     
     # Update user verification status
+    update_data = {
+        "email_verified": True,
+        "verification_token": None,
+        "verification_expires": None,
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    # If user doesn't have a phone, also set phone_verified to True
+    if not user_data.get("phone"):
+        update_data["phone_verified"] = True
+    
     await db.users.update_one(
         {"id": user_data["id"]},
-        {"$set": {
-            "email_verified": True,
-            "verification_token": None,
-            "verification_expires": None,
-            "updated_at": datetime.now(timezone.utc).isoformat()
-        }}
+        {"$set": update_data}
     )
     
     return {"message": "Email verified successfully"}
