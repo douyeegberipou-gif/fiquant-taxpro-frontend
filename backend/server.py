@@ -1027,8 +1027,9 @@ def send_verification_email(email: str, verification_token: str, full_name: str)
         """
         
         # Create SendGrid message
+        from_email_address = os.environ.get('EMAIL_FROM', 'info@fiquanttaxpro.com')
         message = Mail(
-            from_email=Email('info@fiquanttaxpro.com', 'Fiquant TaxPro'),
+            from_email=Email(from_email_address, 'Fiquant TaxPro'),
             to_emails=To(email),
             subject=subject,
             html_content=Content("text/html", html_content)
