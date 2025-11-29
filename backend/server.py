@@ -1373,10 +1373,17 @@ async def forgot_password(request: PasswordResetRequest):
         sg = SendGridAPIClient(sendgrid_api_key)
         response = sg.send(message)
         
-        print(f"Password reset email sent to {request.email} - Status: {response.status_code}")
+        print(f"SendGrid response - Status: {response.status_code}, Body: {response.body}, Headers: {response.headers}")
+        
+        if response.status_code == 202:
+            print(f"✅ Password reset email successfully sent to {request.email}")
+        else:
+            print(f"⚠️ Unexpected status code: {response.status_code}")
         
     except Exception as e:
-        print(f"Error sending password reset email: {str(e)}")
+        print(f"❌ Error sending password reset email: {type(e).__name__}: {str(e)}")
+        if hasattr(e, 'body'):
+            print(f"SendGrid error body: {e.body}")
         print(f"Password reset token for {request.email}: {reset_token}")
     
     return {"message": "If an account with that email exists, you will receive a password reset link."}
