@@ -1353,7 +1353,7 @@ async def forgot_password(request: PasswordResetRequest):
         
         # Send via SendGrid
         message = Mail(
-            from_email=Email('info@fiquanttaxpro.com', 'Fiquant TaxPro'),
+            from_email=Email('noreply@fiquanttaxpro.com', 'Fiquant TaxPro'),
             to_emails=To(request.email),
             subject=subject,
             html_content=Content("text/html", html_content)
