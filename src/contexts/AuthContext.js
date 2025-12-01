@@ -19,20 +19,26 @@ export const AuthProvider = ({ children }) => {
   // Load user data on app start
   useEffect(() => {
     const initAuth = async () => {
-      if (token) {
+      const storedToken = localStorage.getItem('token');
+
+      if (storedToken) {
+        api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
+        setToken(storedToken);
+
         try {
           const response = await api.get('/api/auth/me');
           setUser(response.data);
         } catch (error) {
           console.error('Failed to load user:', error);
-          logout();
+          // Don't logout on error - could be temporary network issue
         }
       }
+
       setLoading(false);
     };
 
     initAuth();
-  }, [token]);
+  }, []);
 
   const login = async (email, password) => {
     try {
