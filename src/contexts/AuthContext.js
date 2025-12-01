@@ -100,10 +100,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   const refreshUser = async () => {
-    if (token) {
+    const currentToken = token || localStorage.getItem('token');
+    if (currentToken) {
       try {
         const response = await axios.get(`${API_URL}/api/auth/me`, {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${currentToken}` }
         });
         setUser(response.data);
         return { success: true };
