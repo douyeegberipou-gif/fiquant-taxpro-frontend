@@ -61,7 +61,7 @@ const BACKEND_URL = getBackendURL();
 const API = BACKEND_URL ? `${BACKEND_URL}/api` : null;
 
 function AppContent() {
-  const { user, logout, isAuthenticated } = useAuth();
+  const { user, logout, refreshUser, isAuthenticated } = useAuth();
   const { trialStatus, showTrialModal, setShowTrialModal, showExpiredModal, setShowExpiredModal } = useTrial();
   const { showInterstitial, setShowInterstitial, showRewardedAd, setShowRewardedAd, rewardType, canShowAds } = useAds();
   const { hasFeature, getUserTier } = useFeatureGate();
