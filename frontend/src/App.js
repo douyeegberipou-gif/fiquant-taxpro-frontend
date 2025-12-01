@@ -801,6 +801,20 @@ function AppContent() {
                     )}
                   </div>
                   
+                  {!user?.admin_enabled && (
+                    <Button
+                      onClick={async () => {
+                        await refreshUser();
+                      }}
+                      variant="outline"
+                      size="sm"
+                      className="border-blue-600 text-blue-300 hover:bg-blue-800/50 backdrop-blur-sm"
+                      title="Refresh profile data"
+                    >
+                      <RefreshCw className="h-4 w-4 mr-2" />
+                      Refresh
+                    </Button>
+                  )}
                   {user?.admin_enabled && user?.admin_role && (
                     <Button
                       onClick={() => {
