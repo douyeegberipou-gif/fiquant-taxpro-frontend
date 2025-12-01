@@ -1442,6 +1442,18 @@ async def get_current_user_profile(current_user: UserProfile = Depends(get_curre
         admin_enabled=current_user.admin_enabled
     )
 
+
+@api_router.get("/auth/check-admin")
+async def check_admin_status(current_user: UserProfile = Depends(get_current_user)):
+    """Check if current user has admin access"""
+    return {
+        "email": current_user.email,
+        "admin_enabled": current_user.admin_enabled,
+        "admin_role": current_user.admin_role,
+        "has_admin_access": bool(current_user.admin_enabled and current_user.admin_role)
+    }
+
+
 @api_router.put("/profile/update", response_model=UserResponse)
 async def update_user_profile(
     profile_data: dict,
