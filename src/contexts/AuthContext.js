@@ -19,13 +19,18 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [loading, setLoading] = useState(true);
 
-  // Set axios default header
-  useEffect(() => {
-    if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  // Helper function to set axios authorization header
+  const setAuthHeader = (authToken) => {
+    if (authToken) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
     } else {
       delete axios.defaults.headers.common['Authorization'];
     }
+  };
+
+  // Set axios default header when token changes
+  useEffect(() => {
+    setAuthHeader(token);
   }, [token]);
 
   // Load user data on app start
