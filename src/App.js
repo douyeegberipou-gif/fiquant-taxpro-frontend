@@ -95,6 +95,7 @@ function AppContent() {
   const [verificationStatus, setVerificationStatus] = useState(null); // 'verifying', 'success', 'error'
   const [verificationMessage, setVerificationMessage] = useState('');
   const [showAdminDashboard, setShowAdminDashboard] = useState(false);
+  const [showDebugPanel, setShowDebugPanel] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
   
   // Notification state
