@@ -1949,6 +1949,11 @@ function AppContent() {
           onClose={() => setShowUpgradePrompt(false)}
         />
       )}
+
+      {/* User Debug Panel */}
+      {showDebugPanel && (
+        <UserDebugPanel onClose={() => setShowDebugPanel(false)} />
+      )}
     </div>
   );
 }
