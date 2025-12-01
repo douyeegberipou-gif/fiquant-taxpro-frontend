@@ -95,6 +95,21 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const refreshUser = async () => {
+    if (token) {
+      try {
+        const response = await axios.get(`${API_URL}/api/auth/me`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setUser(response.data);
+        return { success: true };
+      } catch (error) {
+        console.error('Failed to refresh user:', error);
+        return { success: false };
+      }
+    }
+  };
+
   const logout = () => {
     setUser(null);
     setToken(null);
