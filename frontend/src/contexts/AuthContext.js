@@ -45,10 +45,12 @@ export const AuthProvider = ({ children }) => {
       const response = await api.post("/api/auth/login", { email, password });
 
       if (response.data?.access_token) {
-        localStorage.setItem("token", response.data.access_token);
+        const token = response.data.access_token;
+        
+        localStorage.setItem("token", token);
+        setToken(token); // Update state
 
-        api.defaults.headers.common["Authorization"] =
-          `Bearer ${response.data.access_token}`;
+        api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
         await getUserProfile(); // calls /auth/me correctly
 
