@@ -53,24 +53,34 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
+      console.log('🔐 Login attempt started...');
       const response = await axios.post(`${API_URL}/api/auth/login`, credentials);
       const { access_token, user_id } = response.data;
+      console.log('✅ Login successful, token received');
       
+      // Set token in state and storage
       setToken(access_token);
       localStorage.setItem('token', access_token);
       localStorage.setItem('user_id', user_id);
       
-      // Get user profile - MUST include Authorization header manually
+      // IMMEDIATELY set axios header to prevent race condition
+      setAuthHeader(access_token);
+      console.log('✅ Authorization header set');
+      
+      // Get user profile with explicit Authorization header as backup
+      console.log('📡 Fetching user profile...');
       const userResponse = await axios.get(`${API_URL}/api/auth/me`, {
         headers: {
           Authorization: `Bearer ${access_token}`
         }
       });
+      console.log('✅ User profile fetched:', userResponse.data);
       setUser(userResponse.data);
       
       return { success: true };
     } catch (error) {
-      console.error('Login failed:', error);
+      console.error('❌ Login failed:', error);
+      console.error('Error response:', error.response?.data);
       const errorMessage = error.response?.data?.detail || 'Login failed';
       
       // Check if the error is about account verification
