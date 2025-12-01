@@ -55,8 +55,12 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('token', access_token);
       localStorage.setItem('user_id', user_id);
       
-      // Get user profile
-      const userResponse = await axios.get(`${API_URL}/api/auth/me`);
+      // Get user profile - MUST include Authorization header manually
+      const userResponse = await axios.get(`${API_URL}/api/auth/me`, {
+        headers: {
+          Authorization: `Bearer ${access_token}`
+        }
+      });
       setUser(userResponse.data);
       
       return { success: true };
