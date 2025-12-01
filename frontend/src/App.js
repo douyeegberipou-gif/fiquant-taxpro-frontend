@@ -25,6 +25,7 @@ import { RewardedAd } from './components/ads/RewardedAd';
 import { UserProfile } from './components/UserProfile';
 import { PasswordResetForm } from './components/PasswordResetForm';
 import { AdminDashboard } from './components/admin/AdminDashboard';
+import { UserDebugPanel } from './components/UserDebugPanel';
 import { AdminSetup } from './components/admin/AdminSetup';
 import TermsAndConditions from './components/TermsAndConditions';
 import TaxInformation from './components/TaxInformation';
