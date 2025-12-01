@@ -147,6 +147,7 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     logout,
+    refreshUser,
     updateProfile,
     hasPermission,
     isAuthenticated
