@@ -1,8 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
-
-const API_URL = process.env.REACT_APP_BACKEND_URL || 
-  (process.env.NODE_ENV === 'development' ? 'http://localhost:8001' : '');
+import api from '../config/api';
 
 const AuthContext = createContext();
 
@@ -19,26 +16,12 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [loading, setLoading] = useState(true);
 
-  // Helper function to set axios authorization header
-  const setAuthHeader = (authToken) => {
-    if (authToken) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
-    } else {
-      delete axios.defaults.headers.common['Authorization'];
-    }
-  };
-
-  // Set axios default header when token changes
-  useEffect(() => {
-    setAuthHeader(token);
-  }, [token]);
-
   // Load user data on app start
   useEffect(() => {
     const initAuth = async () => {
       if (token) {
         try {
-          const response = await axios.get(`${API_URL}/api/auth/me`);
+          const response = await api.get('/api/auth/me');
           setUser(response.data);
         } catch (error) {
           console.error('Failed to load user:', error);
@@ -51,36 +34,25 @@ export const AuthProvider = ({ children }) => {
     initAuth();
   }, [token]);
 
-  const login = async (credentials) => {
+  const login = async (email, password) => {
     try {
-      console.log('🔐 Login attempt started...');
-      const response = await axios.post(`${API_URL}/api/auth/login`, credentials);
-      const { access_token, user_id } = response.data;
-      console.log('✅ Login successful, token received');
-      
-      // Set token in state and storage
-      setToken(access_token);
-      localStorage.setItem('token', access_token);
-      localStorage.setItem('user_id', user_id);
-      
-      // IMMEDIATELY set axios header to prevent race condition
-      setAuthHeader(access_token);
-      console.log('✅ Authorization header set');
-      
-      // Get user profile with explicit Authorization header as backup
-      console.log('📡 Fetching user profile...');
-      const userResponse = await axios.get(`${API_URL}/api/auth/me`, {
-        headers: {
-          Authorization: `Bearer ${access_token}`
-        }
-      });
-      console.log('✅ User profile fetched:', userResponse.data);
-      setUser(userResponse.data);
-      
-      return { success: true };
+      const response = await api.post("/api/auth/login", { email, password });
+
+      if (response.data?.access_token) {
+        localStorage.setItem("token", response.data.access_token);
+
+        api.defaults.headers.common["Authorization"] =
+          `Bearer ${response.data.access_token}`;
+
+        await getUserProfile(); // calls /auth/me correctly
+
+        return { success: true };
+      }
+
+      return { success: false, error: 'No token received' };
+
     } catch (error) {
-      console.error('❌ Login failed:', error);
-      console.error('Error response:', error.response?.data);
+      console.error("Login error:", error);
       const errorMessage = error.response?.data?.detail || 'Login failed';
       
       // Check if the error is about account verification
@@ -95,9 +67,20 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const getUserProfile = async () => {
+    try {
+      const response = await api.get('/api/auth/me');
+      setUser(response.data);
+      return true;
+    } catch (error) {
+      console.error('Failed to fetch user profile:', error);
+      throw error;
+    }
+  };
+
   const register = async (userData) => {
     try {
-      const response = await axios.post(`${API_URL}/api/auth/register`, userData);
+      const response = await api.post('/api/auth/register', userData);
       
       // Don't auto-login after registration - user needs to verify first
       return { 
@@ -118,9 +101,7 @@ export const AuthProvider = ({ children }) => {
     const currentToken = token || localStorage.getItem('token');
     if (currentToken) {
       try {
-        const response = await axios.get(`${API_URL}/api/auth/me`, {
-          headers: { Authorization: `Bearer ${currentToken}` }
-        });
+        const response = await api.get('/api/auth/me');
         setUser(response.data);
         return { success: true };
       } catch (error) {
@@ -135,12 +116,12 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     localStorage.removeItem('token');
     localStorage.removeItem('user_id');
-    delete axios.defaults.headers.common['Authorization'];
+    delete api.defaults.headers.common['Authorization'];
   };
 
   const updateProfile = async (profileData) => {
     try {
-      const response = await axios.put(`${API_URL}/api/profile/update`, profileData);
+      const response = await api.put('/api/profile/update', profileData);
       setUser(response.data);
       return { success: true, user: response.data };
     } catch (error) {
