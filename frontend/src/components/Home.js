@@ -144,16 +144,16 @@ const Home = ({ onNavigateToTab }) => {
           <div className="lg:grid lg:grid-cols-12 lg:gap-8 items-center">
             {/* Left Column - Content */}
             <div className="lg:col-span-7">
-              {/* Brand Logo */}
-              <div className="flex items-center mb-12">
+              {/* Brand Logo - Smaller on mobile */}
+              <div className="flex items-center mb-6 md:mb-12">
                 <img 
                   src="/fiquant-logo-bold-diamond.png" 
                   alt="Fiquant Consult Logo" 
-                  className="h-12 w-12 mr-4"
+                  className="h-8 w-8 md:h-12 md:w-12 mr-3 md:mr-4"
                 />
                 <div>
-                  <h2 className="text-2xl font-bold text-white mb-1">Fiquant</h2>
-                  <p className="text-sm font-semibold text-white">TaxPro 2026</p>
+                  <h2 className="text-lg md:text-2xl font-bold text-white mb-1">Fiquant</h2>
+                  <p className="text-xs md:text-sm font-semibold text-white">TaxPro 2026</p>
                 </div>
               </div>
 
