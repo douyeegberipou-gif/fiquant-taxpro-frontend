@@ -1968,6 +1968,14 @@ function AppContent() {
       {showDebugPanel && (
         <UserDebugPanel onClose={() => setShowDebugPanel(false)} />
       )}
+
+      {/* Mobile Bottom Navigation */}
+      {isMobileOrLargeMobile && (
+        <MobileBottomNav 
+          activeTab={activeTab}
+          onNavigateToTab={setActiveTab}
+        />
+      )}
     </div>
   );
 }
