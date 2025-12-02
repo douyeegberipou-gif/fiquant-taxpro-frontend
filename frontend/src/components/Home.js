@@ -295,14 +295,14 @@ const Home = ({ onNavigateToTab }) => {
       </div>
 
       {/* Feature Panels */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-8 md:py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h3 className="text-2xl font-bold text-gray-800 mb-4">What do you want to do?</h3>
-            <p className="text-gray-600">Choose your calculator and get instant, NTA-compliant results</p>
+          <div className="text-center mb-6 md:mb-12">
+            <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-2 md:mb-4">What do you want to do?</h3>
+            <p className="text-sm md:text-base text-gray-600">Choose your calculator and get instant, NTA-compliant results</p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
             
             {/* PAYE Panel */}
             <div 
