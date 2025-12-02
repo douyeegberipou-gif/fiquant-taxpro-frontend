@@ -4851,7 +4851,7 @@ messaging_router = APIRouter(prefix="/api/admin/messaging", tags=["messaging"])
 async def get_message_templates(admin_user: dict = Depends(get_admin_middleware)):
     """Get all message templates"""
     try:
-        if admin_user.get("admin_role") not in ["super_admin", "marketer"]:
+        if admin_user.admin_role not in ["super_admin", "marketer"]:
             raise HTTPException(status_code=403, detail="Insufficient permissions")
         
         templates = await db.message_templates.find({"is_active": True}).to_list(length=None)
@@ -4875,7 +4875,7 @@ async def create_message_template(
 ):
     """Create a new message template"""
     try:
-        if admin_user.get("admin_role") not in ["super_admin", "marketer"]:
+        if admin_user.admin_role not in ["super_admin", "marketer"]:
             raise HTTPException(status_code=403, detail="Insufficient permissions")
         
         template = MessageTemplate(
@@ -4906,7 +4906,7 @@ async def create_message_template(
 async def get_user_segments(admin_user: dict = Depends(get_admin_middleware)):
     """Get all user segments"""
     try:
-        if admin_user.get("admin_role") not in ["super_admin", "marketer"]:
+        if admin_user.admin_role not in ["super_admin", "marketer"]:
             raise HTTPException(status_code=403, detail="Insufficient permissions")
         
         segments = await db.user_segments.find().to_list(length=None)
@@ -4924,7 +4924,7 @@ async def create_user_segment(
 ):
     """Create a new user segment"""
     try:
-        if admin_user.get("admin_role") not in ["super_admin", "marketer"]:
+        if admin_user.admin_role not in ["super_admin", "marketer"]:
             raise HTTPException(status_code=403, detail="Insufficient permissions")
         
         # Calculate estimated count based on filters
@@ -4987,7 +4987,7 @@ async def calculate_segment_count(filters: dict) -> int:
 async def get_message_campaigns(admin_user: dict = Depends(get_admin_middleware)):
     """Get all message campaigns"""
     try:
-        if admin_user.get("admin_role") not in ["super_admin", "marketer", "auditor"]:
+        if admin_user.admin_role not in ["super_admin", "marketer", "auditor"]:
             raise HTTPException(status_code=403, detail="Insufficient permissions")
         
         campaigns = await db.messages.find().sort("created_at", -1).to_list(length=None)
@@ -5005,7 +5005,7 @@ async def create_message_campaign(
 ):
     """Create a new message campaign"""
     try:
-        if admin_user.get("admin_role") not in ["super_admin", "marketer"]:
+        if admin_user.admin_role not in ["super_admin", "marketer"]:
             raise HTTPException(status_code=403, detail="Insufficient permissions")
         
         message = Message(
@@ -5043,7 +5043,7 @@ async def send_message_campaign(
 ):
     """Send a message campaign (mock implementation)"""
     try:
-        if admin_user.get("admin_role") not in ["super_admin", "marketer"]:
+        if admin_user.admin_role not in ["super_admin", "marketer"]:
             raise HTTPException(status_code=403, detail="Insufficient permissions")
         
         # Get campaign
@@ -5082,7 +5082,7 @@ async def send_message_campaign(
 async def get_compliance_reminders(admin_user: dict = Depends(get_admin_middleware)):
     """Get all compliance reminders"""
     try:
-        if admin_user.get("admin_role") not in ["super_admin", "marketer"]:
+        if admin_user.admin_role not in ["super_admin", "marketer"]:
             raise HTTPException(status_code=403, detail="Insufficient permissions")
         
         reminders = await db.compliance_reminders.find({"is_active": True}).to_list(length=None)
@@ -5130,7 +5130,7 @@ async def create_compliance_reminder(
 async def get_messaging_analytics(admin_user: dict = Depends(get_admin_middleware)):
     """Get messaging analytics dashboard"""
     try:
-        if admin_user.get("admin_role") not in ["super_admin", "marketer", "auditor"]:
+        if admin_user.admin_role not in ["super_admin", "marketer", "auditor"]:
             raise HTTPException(status_code=403, detail="Insufficient permissions")
         
         # Mock analytics data
@@ -5174,7 +5174,7 @@ async def send_quick_email(
 ):
     """Send a quick email without creating templates or campaigns"""
     try:
-        if admin_user.get("admin_role") not in ["super_admin", "marketer"]:
+        if admin_user.admin_role not in ["super_admin", "marketer"]:
             raise HTTPException(status_code=403, detail="Insufficient permissions")
         
         recipient_type = email_data.get("recipient_type", "all")
@@ -5336,7 +5336,7 @@ async def get_sent_emails(
 ):
     """Get sent emails log for review"""
     try:
-        if admin_user.get("admin_role") not in ["super_admin", "marketer", "auditor"]:
+        if admin_user.admin_role not in ["super_admin", "marketer", "auditor"]:
             raise HTTPException(status_code=403, detail="Insufficient permissions")
         
         # Get sent emails from database
