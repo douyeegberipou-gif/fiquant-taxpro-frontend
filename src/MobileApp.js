@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { MobileNav } from './components/mobile/MobileNav';
 import { MobileBottomNav } from './components/mobile/MobileBottomNav';
-import { Home } from './components/Home';
-import { useAuth } from './contexts/AuthContext';
+import Home from './components/Home';
 import { TopBanner } from './components/ads/AdBanner';
 import { useAds } from './contexts/AdContext';
 
