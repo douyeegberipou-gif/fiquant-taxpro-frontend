@@ -931,6 +931,13 @@ const Home = ({ onNavigateToTab }) => {
         </div>
       </section>
 
+      {/* Ad Banner Before Footer */}
+      <div className="bg-white py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <TopBanner placement="before-footer" />
+        </div>
+      </div>
+
       {/* Footer */}
       <footer className="bg-gray-800 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
