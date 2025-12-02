@@ -5404,7 +5404,7 @@ async def get_all_users(
     try:
         # Log admin action
         audit_log = log_admin_action(
-            admin_user["id"], admin_user["email"], "view_users", "user",
+            admin_user.id, admin_user.email, "view_users", "user",
             details={"page": page, "limit": limit, "search": search, "status_filter": status_filter},
             ip_address=request.client.host if request.client else None,
             user_agent=request.headers.get("user-agent")
