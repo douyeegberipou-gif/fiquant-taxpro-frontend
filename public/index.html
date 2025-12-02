@@ -3,42 +3,45 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-        <meta name="theme-color" content="#D4AF37" />
-        
-        <!-- Primary Meta Tags -->
-        <title>Fiquant TaxPro - Nigerian Tax Calculator & Compliance Platform</title>
-        <meta name="title" content="Fiquant TaxPro - Nigerian Tax Calculator & Compliance Platform" />
-        <meta name="description" content="Professional Nigerian tax calculator for PAYE, CIT, VAT, and CGT. NTA 2025 compliant with bulk payroll processing, payment integration, and compliance management. Trusted by 500+ SMEs across Nigeria." />
-        <meta name="version" content="2025-10-15-v2" />
-        <meta name="keywords" content="Nigerian tax calculator, PAYE calculator, CIT calculator, VAT calculator, CGT calculator, NTA 2025, tax compliance, payroll processing, Fiquant Consult" />
-        <meta name="author" content="Fiquant Consult" />
-        <meta name="robots" content="index, follow" />
-        
-        <!-- Open Graph / Facebook -->
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.fiquanttaxpro.com/" />
-        <meta property="og:title" content="Fiquant TaxPro - Nigerian Tax Calculator & Compliance Platform" />
-        <meta property="og:description" content="Professional Nigerian tax calculator for PAYE, CIT, VAT, and CGT. NTA 2025 compliant with bulk payroll processing, payment integration, and compliance management. Trusted by 500+ SMEs across Nigeria." />
-        <meta property="og:image" content="https://www.fiquanttaxpro.com/logo.png" />
-        <meta property="og:site_name" content="Fiquant TaxPro" />
-        
-        <!-- Twitter -->
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://www.fiquanttaxpro.com/" />
-        <meta property="twitter:title" content="Fiquant TaxPro - Nigerian Tax Calculator & Compliance Platform" />
-        <meta property="twitter:description" content="Professional Nigerian tax calculator for PAYE, CIT, VAT, and CGT. NTA 2025 compliant with bulk payroll processing, payment integration, and compliance management. Trusted by 500+ SMEs across Nigeria." />
-        <meta property="twitter:image" content="https://www.fiquanttaxpro.com/logo.png" />
-        
-        <!-- Additional Meta Tags -->
-        <meta name="application-name" content="Fiquant TaxPro" />
-        <meta name="apple-mobile-web-app-title" content="Fiquant TaxPro" />
+        <meta name="theme-color" content="#000000" />
+        <meta name="description" content="Fiquant TaxPro - Nigerian Tax Calculator for PAYE, CIT, VAT, and CGT" />
+        <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         
-        <!-- Favicon -->
-        <link rel="icon" href="%PUBLIC_URL%/fiquant-logo-bold-diamond.png" />
-        <link rel="apple-touch-icon" href="%PUBLIC_URL%/fiquant-logo-bold-diamond.png" />
+        <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+        <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
         <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+        
+        <title>Fiquant TaxPro - Nigerian Tax Calculator</title>
+        
+        <style>
+          /* Critical mobile CSS - loads immediately */
+          @media (max-width: 768px) {
+            .desktop-only {
+              display: none !important;
+            }
+            .mobile-only {
+              display: block !important;
+            }
+          }
+          
+          @media (min-width: 769px) {
+            .desktop-only {
+              display: block !important;
+            }
+            .mobile-only {
+              display: none !important;
+            }
+          }
+          
+          /* Prevent flash of unstyled content */
+          body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+          }
+        </style>
     </head>
     <body>
         <noscript>You need to enable JavaScript to run this app.</noscript>
