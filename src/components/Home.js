@@ -337,7 +337,7 @@ const Home = ({ onNavigateToTab }) => {
 
             {/* CIT Panel */}
             <div 
-              className="relative rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 h-80 cursor-pointer"
+              className="relative rounded-xl md:rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 h-48 md:h-80 cursor-pointer"
               onClick={() => onNavigateToTab('calculator', { mode: 'bulk' })}
               style={{
                 backgroundImage: `linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.3)), url('https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/za762luj_Gemini_Generated_Image_ge8ufyge8ufyge8u.png')`,
@@ -368,7 +368,7 @@ const Home = ({ onNavigateToTab }) => {
 
             {/* VAT Panel */}
             <div 
-              className="relative rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 h-80 cursor-pointer"
+              className="relative rounded-xl md:rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 h-48 md:h-80 cursor-pointer"
               onClick={() => onNavigateToTab('vat')}
               style={{
                 backgroundImage: `linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.3)), url('https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/iakm5flx_Gemini_Generated_Image_k1jwlnk1jwlnk1jw%20%283%29.png')`,
@@ -399,7 +399,7 @@ const Home = ({ onNavigateToTab }) => {
 
             {/* CGT Panel */}
             <div 
-              className="relative rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 h-80 cursor-pointer"
+              className="relative rounded-xl md:rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 h-48 md:h-80 cursor-pointer"
               onClick={() => onNavigateToTab('cgt')}
               style={{
                 backgroundImage: `linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.3)), url('https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/3l8sul24_Gemini_Generated_Image_bhxj3sbhxj3sbhxj.png')`,
@@ -430,7 +430,7 @@ const Home = ({ onNavigateToTab }) => {
 
             {/* Payment Panel */}
             <div 
-              className="relative rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 h-80 cursor-pointer"
+              className="relative rounded-xl md:rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 h-48 md:h-80 cursor-pointer"
               onClick={() => onNavigateToTab('payment')}
               style={{
                 backgroundImage: `linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.3)), url('https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/s7a291fy_Gemini_Generated_Image_rgk3prgk3prgk3pr.png')`,
