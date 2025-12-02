@@ -2005,13 +2005,64 @@ function AppContent() {
   );
 }
 
+function AppWrapper() {
+  const [showMobile, setShowMobile] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    // Client-side only detection
+    setIsClient(true);
+    const checkDevice = () => {
+      // Multiple detection methods
+      const isLibMobile = isMobile || isTablet;
+      const isCustomMobile = isMobileDevice();
+      const isWidthMobile = window.innerWidth <= 768;
+      const isUserAgentMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      
+      // Show mobile if ANY method detects mobile
+      const shouldShowMobile = isLibMobile || isCustomMobile || isWidthMobile || isUserAgentMobile;
+      setShowMobile(shouldShowMobile);
+      
+      console.log('🔍 Device Detection:', {
+        isLibMobile,
+        isCustomMobile,
+        isWidthMobile,
+        isUserAgentMobile,
+        result: shouldShowMobile
+      });
+    };
+
+    checkDevice();
+    window.addEventListener('resize', checkDevice);
+    return () => window.removeEventListener('resize', checkDevice);
+  }, []);
+
+  // Show loading until client-side detection completes
+  if (!isClient) {
+    return (
+      <div style={{ 
+        minHeight: '100vh', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        background: 'linear-gradient(to bottom right, #d1fae5, #ccfbf1, #cffafe)'
+      }}>
+        <div>Loading...</div>
+      </div>
+    );
+  }
+
+  // TRUE CONDITIONAL RENDERING
+  return showMobile ? <MobileApp /> : <AppContent />;
+}
+
 function App() {
   return (
     <AuthProvider>
       <TrialProvider>
         <AdProvider>
           <FeatureGateProvider>
-            <AppContent />
+            <AppWrapper />
           </FeatureGateProvider>
         </AdProvider>
       </TrialProvider>
