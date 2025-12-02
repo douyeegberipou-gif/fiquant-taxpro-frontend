@@ -5603,7 +5603,7 @@ async def get_dashboard_analytics(
         
         # Log admin action
         audit_log = log_admin_action(
-            admin_user["id"], admin_user["email"], "view_analytics", "system",
+            admin_user.id, admin_user.email, "view_analytics", "system",
             details={"period": period},
             ip_address=request.client.host if request.client else None,
             user_agent=request.headers.get("user-agent")
