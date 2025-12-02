@@ -462,6 +462,13 @@ const Home = ({ onNavigateToTab }) => {
         </div>
       </section>
 
+      {/* Ad Banner After Features */}
+      <div className="bg-gray-50 py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <TopBanner placement="after-features" />
+        </div>
+      </div>
+
       {/* Pricing Windows */}
       <section className="relative py-24"
         style={{
