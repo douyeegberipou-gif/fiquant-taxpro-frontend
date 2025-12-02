@@ -4676,7 +4676,7 @@ async def toggle_integration(
             "status": "success",
             "message": f"{MOCK_INTEGRATIONS[category][service]['name']} {'enabled' if enabled else 'disabled'} by admin",
             "timestamp": datetime.now(timezone.utc).isoformat(),
-            "admin_id": admin_user["id"]
+            "admin_id": admin_user.id
         }
         
         await db.integration_logs.insert_one(log_entry)
@@ -4720,7 +4720,7 @@ async def update_integration_config(
             "status": "success",
             "message": f"{MOCK_INTEGRATIONS[category][service]['name']} configuration updated by admin",
             "timestamp": datetime.now(timezone.utc).isoformat(),
-            "admin_id": admin_user["id"]
+            "admin_id": admin_user.id
         }
         
         await db.integration_logs.insert_one(log_entry)
@@ -4760,7 +4760,7 @@ async def test_integration_connection(
             "status": "success",
             "message": f"{MOCK_INTEGRATIONS[category][service]['name']} connection test successful",
             "timestamp": datetime.now(timezone.utc).isoformat(),
-            "admin_id": admin_user["id"]
+            "admin_id": admin_user.id
         }
         
         await db.integration_logs.insert_one(log_entry)
@@ -4779,7 +4779,7 @@ async def test_integration_connection(
             "status": "error",
             "message": f"{MOCK_INTEGRATIONS[category][service]['name']} connection test failed: {str(e)}",
             "timestamp": datetime.now(timezone.utc).isoformat(),
-            "admin_id": admin_user["id"]
+            "admin_id": admin_user.id
         }
         await db.integration_logs.insert_one(log_entry)
         raise HTTPException(status_code=500, detail="Connection test failed")
@@ -4885,7 +4885,7 @@ async def create_message_template(
             body_template=template_data["body_template"],
             merge_tags=template_data.get("merge_tags", []),
             need_approval=template_data.get("need_approval", False),
-            created_by=admin_user["id"]
+            created_by=admin_user.id
         )
         
         template_dict = template.dict()
@@ -4934,7 +4934,7 @@ async def create_user_segment(
             name=segment_data["name"],
             description=segment_data.get("description", ""),
             filters_json=segment_data["filters_json"],
-            created_by=admin_user["id"],
+            created_by=admin_user.id,
             estimated_count=estimated_count
         )
         
@@ -5018,7 +5018,7 @@ async def create_message_campaign(
             target_user_ids=campaign_data.get("target_user_ids", []),
             scheduled_at=datetime.fromisoformat(campaign_data["scheduled_at"]) if campaign_data.get("scheduled_at") else None,
             need_approval=campaign_data.get("need_approval", False),
-            created_by=admin_user["id"]
+            created_by=admin_user.id
         )
         
         message_dict = message.dict()
@@ -5266,7 +5266,7 @@ This email was sent from Fiquant TaxPro administration system.
                 # Log individual send
                 email_log = {
                     "id": str(uuid.uuid4()),
-                    "admin_id": admin_user["id"],
+                    "admin_id": admin_user.id,
                     "recipient": recipient,
                     "subject": subject,
                     "message": message,
@@ -5284,7 +5284,7 @@ This email was sent from Fiquant TaxPro administration system.
                 # Log failure
                 email_log = {
                     "id": str(uuid.uuid4()),
-                    "admin_id": admin_user["id"],
+                    "admin_id": admin_user.id,
                     "recipient": recipient,
                     "subject": subject,
                     "message": message,
@@ -5298,7 +5298,7 @@ This email was sent from Fiquant TaxPro administration system.
         # Log the overall send activity
         log_entry = {
             "id": str(uuid.uuid4()),
-            "admin_id": admin_user["id"],
+            "admin_id": admin_user.id,
             "action": "quick_email_sent",
             "details": {
                 "recipient_type": recipient_type,
@@ -5496,7 +5496,7 @@ async def assign_admin_role(
         
         # Log admin action
         audit_log = log_admin_action(
-            admin_user["id"], admin_user["email"], "role_assigned", "user", user_id,
+            admin_user.id, admin_user.email, "role_assigned", "user", user_id,
             details={"admin_role": admin_role, "admin_enabled": admin_enabled},
             ip_address=request.client.host if request.client else None,
             user_agent=request.headers.get("user-agent")
@@ -5543,7 +5543,7 @@ async def update_user_status(
         
         # Log admin action
         audit_log = log_admin_action(
-            admin_user["id"], admin_user["email"], "user_status_updated", "user", user_id,
+            admin_user.id, admin_user.email, "user_status_updated", "user", user_id,
             details={"new_status": new_status},
             ip_address=request.client.host if request.client else None,
             user_agent=request.headers.get("user-agent")
@@ -5995,7 +5995,7 @@ async def apply_manual_subscription_change(
             to_tier=change.tier,
             reason=change.reason,
             admin_initiated=True,
-            admin_user_id=admin_user["id"]
+            admin_user_id=admin_user.id
         )
         
         # Apply the change
