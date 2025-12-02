@@ -306,7 +306,7 @@ const Home = ({ onNavigateToTab }) => {
             
             {/* PAYE Panel */}
             <div 
-              className="relative rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 h-80 cursor-pointer"
+              className="relative rounded-xl md:rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 h-48 md:h-80 cursor-pointer"
               onClick={() => onNavigateToTab('calculator')}
               style={{
                 backgroundImage: `linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.3)), url('https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/2s52tc3b_Gemini_Generated_Image_k1jwlnk1jwlnk1jw.png')`,
