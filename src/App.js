@@ -70,6 +70,7 @@ function AppContent() {
   const { showInterstitial, setShowInterstitial, showRewardedAd, setShowRewardedAd, rewardType, canShowAds } = useAds();
   const { hasFeature, getUserTier } = useFeatureGate();
   const { startTrial, requestUpgrade, requestAddon } = useUpgrade();
+  const { isMobileOrLargeMobile, isTablet, isDesktop } = useDevice();
 
   const handleUpgrade = async () => {
     const result = await requestUpgrade('pro');
