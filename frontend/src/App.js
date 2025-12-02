@@ -71,7 +71,20 @@ function AppContent() {
   const { showInterstitial, setShowInterstitial, showRewardedAd, setShowRewardedAd, rewardType, canShowAds } = useAds();
   const { hasFeature, getUserTier } = useFeatureGate();
   const { startTrial, requestUpgrade, requestAddon } = useUpgrade();
-  const { isMobileOrLargeMobile, isTablet, isDesktop } = useDevice();
+  
+  // Bulletproof mobile detection
+  const [isMobileView, setIsMobileView] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = isMobile || isTablet || isMobileDevice() || window.innerWidth <= 768;
+      setIsMobileView(mobile);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleUpgrade = async () => {
     const result = await requestUpgrade('pro');
