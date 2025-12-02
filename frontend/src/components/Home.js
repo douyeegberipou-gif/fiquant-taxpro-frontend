@@ -286,6 +286,13 @@ const Home = ({ onNavigateToTab }) => {
         </div>
       </section>
 
+      {/* Ad Banner After Hero Section */}
+      <div className="bg-white py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <TopBanner placement="after-hero" />
+        </div>
+      </div>
+
       {/* Feature Panels */}
       <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
