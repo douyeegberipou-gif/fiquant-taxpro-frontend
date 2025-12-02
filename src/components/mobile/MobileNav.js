@@ -128,5 +128,3 @@ const NavItem = ({ icon: Icon, label, onClick, active, variant = 'default' }) =>
     </button>
   );
 };
-
-import { Building2, Info } from 'lucide-react';
