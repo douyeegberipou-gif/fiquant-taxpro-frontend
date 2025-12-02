@@ -42,12 +42,12 @@ export const MobileNav = ({ activeTab, onNavigateToTab, onOpenAuth, onOpenAdmin 
         <>
           {/* Overlay */}
           <div 
-            className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-40 mt-14"
+            className="fixed inset-0 bg-black bg-opacity-50 z-40 mt-14"
             onClick={() => setIsOpen(false)}
           />
           
           {/* Drawer */}
-          <div className="md:hidden fixed top-14 left-0 right-0 bottom-0 bg-white z-50 overflow-y-auto">
+          <div className="fixed top-14 left-0 right-0 bottom-0 bg-white z-50 overflow-y-auto">
             <div className="p-4 space-y-2">
               {/* User Info */}
               {isAuthenticated() && user && (
