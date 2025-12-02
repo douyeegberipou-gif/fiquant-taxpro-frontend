@@ -163,7 +163,7 @@ const Home = ({ onNavigateToTab }) => {
                   className="carousel-slide"
                   key={`slide-${currentSlideIndex}`}
                 >
-                  <h1 className="text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-8"
+                  <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-4 md:mb-8"
                     style={{
                       fontFamily: "'GT America', 'Satoshi', 'Proxima Nova', sans-serif",
                       letterSpacing: '-0.025em',
@@ -179,7 +179,7 @@ const Home = ({ onNavigateToTab }) => {
                     )}
                   </h1>
                   
-                  <p className="text-xl text-gray-200 mb-12 leading-relaxed max-w-2xl">
+                  <p className="text-sm sm:text-base md:text-xl text-gray-200 mb-6 md:mb-12 leading-relaxed max-w-2xl">
                     {currentSlide.subtitle}
                   </p>
                 </div>
