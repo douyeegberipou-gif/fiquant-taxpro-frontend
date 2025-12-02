@@ -5522,7 +5522,7 @@ async def update_user_status(
     """Update user account status"""
     try:
         # Check permission
-        if not has_admin_permission(admin_user.get("admin_role"), "edit_users"):
+        if not has_admin_permission(admin_user.admin_role, "edit_users"):
             raise HTTPException(status_code=403, detail="Insufficient permissions")
         
         new_status = status_data.get("account_status")
