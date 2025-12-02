@@ -112,6 +112,11 @@ export const AdProvider = ({ children }) => {
   };
 
   const canShowAds = () => {
+    // If not authenticated, show ads (free user)
+    if (!isAuthenticated()) {
+      return true;
+    }
+    // If authenticated, check their ad status
     return adStatus?.ads_enabled || false;
   };
 
