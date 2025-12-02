@@ -471,7 +471,7 @@ const Home = ({ onNavigateToTab }) => {
       </div>
 
       {/* Pricing Windows */}
-      <section className="relative py-24"
+      <section className="relative py-8 md:py-24"
         style={{
           backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.pexels.com/photos/6928997/pexels-photo-6928997.jpeg')`,
           backgroundSize: 'cover',
@@ -479,9 +479,9 @@ const Home = ({ onNavigateToTab }) => {
           backgroundRepeat: 'no-repeat'
         }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h3 className="text-3xl font-bold text-white mb-4">Choose Your Plan</h3>
-            <p className="text-xl text-gray-200">Start free, upgrade when you need more features</p>
+          <div className="text-center mb-6 md:mb-16">
+            <h3 className="text-xl md:text-3xl font-bold text-white mb-2 md:mb-4">Choose Your Plan</h3>
+            <p className="text-sm md:text-xl text-gray-200">Start free, upgrade when you need more features</p>
             
             {/* Monthly/Annual Toggle */}
             <div className="flex items-center justify-center mt-8">
