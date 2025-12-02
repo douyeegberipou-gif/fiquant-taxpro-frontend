@@ -186,17 +186,18 @@ const Home = ({ onNavigateToTab }) => {
               </div>
               
               {/* CTA Row */}
-              <div className="flex flex-col sm:flex-row gap-4 mb-16">
+              <div className="flex flex-col sm:flex-row gap-3 md:gap-4 mb-8 md:mb-16">
                 <Button 
                   onClick={() => onNavigateToTab('calculator')}
-                  className="px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                  className="px-6 py-3 md:px-8 md:py-4 text-sm md:text-lg font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl w-full sm:w-auto"
                   style={{
                     backgroundColor: '#D4AF37',
                     color: 'white',
                     border: 'none'
                   }}
                 >
-                  Calculate My Taxes — Free & NTA-Compliant
+                  <span className="hidden sm:inline">Calculate My Taxes — Free & NTA-Compliant</span>
+                  <span className="sm:hidden">Calculate Taxes - Free</span>
                 </Button>
                 <Button 
                   onClick={() => onNavigateToTab('calculator', { mode: 'bulk' })}
