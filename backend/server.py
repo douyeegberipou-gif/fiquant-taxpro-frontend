@@ -5568,7 +5568,7 @@ async def get_dashboard_analytics(
     """Get dashboard analytics data"""
     try:
         # Check permission
-        if not has_admin_permission(admin_user.get("admin_role"), "view_analytics"):
+        if not has_admin_permission(admin_user.admin_role, "view_analytics"):
             raise HTTPException(status_code=403, detail="Insufficient permissions")
         
         # Calculate date range
