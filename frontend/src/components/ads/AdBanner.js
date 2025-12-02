@@ -14,8 +14,14 @@ export const AdBanner = ({ placement = 'top', className = '' }) => {
   const checkAdStatus = async () => {
     try {
       const token = localStorage.getItem('token');
-      if (!token) return;
+      
+      // If no token (not logged in), show ads by default (free user)
+      if (!token) {
+        setShouldShow(true);
+        return;
+      }
 
+      // If logged in, check their ad status (premium users won't see ads)
       const response = await axios.get(`${API_URL}/api/ads/status`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -27,6 +33,8 @@ export const AdBanner = ({ placement = 'top', className = '' }) => {
       }
     } catch (error) {
       console.error('Error checking ad status:', error);
+      // On error, show ads (safer to show than hide)
+      setShouldShow(true);
     }
   };
 
