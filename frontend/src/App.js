@@ -26,6 +26,7 @@ import { MobileNav } from './components/mobile/MobileNav';
 import { MobileBottomNav } from './components/mobile/MobileBottomNav';
 import { isMobile, isTablet } from 'react-device-detect';
 import { isMobileDevice } from './utils/deviceDetection';
+import { MobileApp } from './MobileApp';
 import { UserProfile } from './components/UserProfile';
 import { PasswordResetForm } from './components/PasswordResetForm';
 import { AdminDashboard } from './components/admin/AdminDashboard';
