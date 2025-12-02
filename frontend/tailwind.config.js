@@ -6,19 +6,22 @@ module.exports = {
     "./public/index.html"
   ],
   safelist: [
+    {
+      pattern: /^(md|sm|lg|xl):(hidden|block|flex|grid|pt-|pb-|py-|px-|text-)/,
+      variants: ['sm', 'md', 'lg', 'xl'],
+    },
+    'hidden',
     'md:hidden',
     'md:block',
-    'hidden',
-    'block',
-    'md:pt-8',
-    'md:pb-8',
-    'md:py-24',
-    'md:text-5xl',
-    'md:text-xl',
-    'pt-16',
-    'pb-20',
   ],
   theme: {
+    screens: {
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+    },
   	extend: {
   		borderRadius: {
   			lg: 'var(--radius)',
