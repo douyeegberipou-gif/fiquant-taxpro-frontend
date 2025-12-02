@@ -14,6 +14,13 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #f8fafc;
+  overflow-x: hidden;
+}
+
+/* Prevent text overflow globally */
+* {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 /* Custom scrollbar */
