@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, Home, Calculator, TrendingUp, FileText, Receipt, Wallet, User, Settings, LogOut } from 'lucide-react';
+import { Menu, X, Home, Calculator, TrendingUp, FileText, Receipt, Wallet, User, Settings, LogOut, Building2, Info, LogIn } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
 export const MobileNav = ({ activeTab, onNavigateToTab, onOpenAuth, onOpenAdmin }) => {
