@@ -133,7 +133,7 @@ const Home = ({ onNavigateToTab }) => {
       </div>
 
       {/* Hero Section */}
-      <section className="relative pt-16 pb-24 overflow-hidden"
+      <section className="relative pt-8 pb-12 md:pt-16 md:pb-24 overflow-hidden"
         style={{
           backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')`,
           backgroundSize: 'cover',
