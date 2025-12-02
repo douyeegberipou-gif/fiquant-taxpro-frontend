@@ -5,6 +5,19 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
     "./public/index.html"
   ],
+  safelist: [
+    'md:hidden',
+    'md:block',
+    'hidden',
+    'block',
+    'md:pt-8',
+    'md:pb-8',
+    'md:py-24',
+    'md:text-5xl',
+    'md:text-xl',
+    'pt-16',
+    'pb-20',
+  ],
   theme: {
   	extend: {
   		borderRadius: {
