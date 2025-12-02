@@ -46,5 +46,11 @@
     <body>
         <noscript>You need to enable JavaScript to run this app.</noscript>
         <div id="root"></div>
+        <script>
+          // Mark body as loaded to prevent flash
+          window.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.add('loaded');
+          });
+        </script>
     </body>
 </html>
