@@ -681,25 +681,28 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50">
-      {/* Mobile Navigation - Show only on screens < 768px */}
-      <div className="md:hidden">
-        <MobileNav 
-          activeTab={activeTab}
-          onNavigateToTab={setActiveTab}
-          onOpenAuth={() => setAuthModalOpen(true)}
-          onOpenAdmin={() => setShowAdminDashboard(true)}
-        />
-      </div>
+      {/* Mobile Navigation - Show on mobile devices */}
+      {isMobileView && (
+        <div className="mobile-only">
+          <MobileNav 
+            activeTab={activeTab}
+            onNavigateToTab={setActiveTab}
+            onOpenAuth={() => setAuthModalOpen(true)}
+            onOpenAdmin={() => setShowAdminDashboard(true)}
+          />
+        </div>
+      )}
 
-      {/* Top Banner Ad - Hide on mobile */}
-      {canShowAds() && (
-        <div className="hidden md:block">
+      {/* Top Banner Ad - Desktop only */}
+      {canShowAds() && !isMobileView && (
+        <div className="desktop-only">
           <TopBanner className="sticky top-0 z-40" />
         </div>
       )}
       
-      {/* Header - Hidden on mobile, visible on tablet+ */}
-      <div className="hidden md:block relative overflow-hidden">
+      {/* Header - Desktop only */}
+      {!isMobileView && (
+        <div className="desktop-only relative overflow-hidden">
         {/* Background with black and gold gradient */}
         <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-black to-gray-800"></div>
         <div className="absolute inset-0 opacity-20">
