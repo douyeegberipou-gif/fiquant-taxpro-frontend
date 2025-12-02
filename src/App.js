@@ -1988,13 +1988,15 @@ function AppContent() {
         <UserDebugPanel onClose={() => setShowDebugPanel(false)} />
       )}
 
-      {/* Mobile Bottom Navigation - Show only on screens < 768px */}
-      <div className="md:hidden">
-        <MobileBottomNav 
-          activeTab={activeTab}
-          onNavigateToTab={setActiveTab}
-        />
-      </div>
+      {/* Mobile Bottom Navigation - Mobile only */}
+      {isMobileView && (
+        <div className="mobile-only">
+          <MobileBottomNav 
+            activeTab={activeTab}
+            onNavigateToTab={setActiveTab}
+          />
+        </div>
+      )}
     </div>
   );
 }
