@@ -898,7 +898,8 @@ function AppContent() {
         
         {/* Bottom accent line */}
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-yellow-600 via-yellow-400 to-yellow-600"></div>
-      </div>
+        </div>
+      )}
 
       <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${
         isMobileView ? 'pt-16 pb-20 py-4' : 'py-8'
