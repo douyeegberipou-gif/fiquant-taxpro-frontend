@@ -5644,7 +5644,7 @@ async def get_audit_logs(
     """Get audit logs with pagination and filtering"""
     try:
         # Check permission
-        if not has_admin_permission(admin_user.get("admin_role"), "view_logs"):
+        if not has_admin_permission(admin_user.admin_role, "view_logs"):
             raise HTTPException(status_code=403, detail="Insufficient permissions")
         
         # Build query
