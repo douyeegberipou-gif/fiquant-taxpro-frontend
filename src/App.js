@@ -883,9 +883,7 @@ function AppContent() {
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-yellow-600 via-yellow-400 to-yellow-600"></div>
       </div>
 
-      <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 ${
-        isMobileOrLargeMobile ? 'pt-16 pb-20' : ''
-      }`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:pt-8 md:pb-8 pt-16 pb-20">
         {/* Email Verification Status */}
         {verificationStatus && (
           <Alert className={`mb-6 ${
