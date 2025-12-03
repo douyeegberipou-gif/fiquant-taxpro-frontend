@@ -572,21 +572,29 @@ function AppContent() {
     try {
       const numericInput = {};
       Object.keys(citInput).forEach(key => {
-        if (key === 'company_name' || key === 'year_of_assessment' || key === 'tax_year') {
-          numericInput[key] = citInput[key];
-        } else if (key === 'is_professional_service' || key === 'is_multinational') {
-          numericInput[key] = citInput[key];
-        } else {
-          numericInput[key] = parseFloat(citInput[key]) || 0;
+        // String fields
+        if (key === 'company_name' || key === 'tin' || key === 'year_of_assessment' || key === 'tax_year' || key === 'global_revenue_eur') {
+          numericInput[key] = citInput[key] || '';
+        } 
+        // Boolean fields
+        else if (key === 'is_professional_service' || key === 'is_multinational') {
+          numericInput[key] = Boolean(citInput[key]);
+        } 
+        // Numeric fields
+        else {
+          const value = parseFloat(citInput[key]);
+          numericInput[key] = isNaN(value) ? 0 : value;
         }
       });
 
+      console.log('Sending CIT data:', numericInput);
       const response = await axios.post(`${API}/calculate-cit`, numericInput);
       setCitResult(response.data);
       fetchCitHistory(); // Refresh history
     } catch (error) {
       console.error('Error calculating CIT:', error);
-      alert('Error calculating CIT. Please check your input values.');
+      console.error('Error details:', error.response?.data);
+      alert(`Error calculating CIT: ${error.response?.data?.detail || 'Please check your input values.'}`);
     } finally {
       setCitLoading(false);
     }
