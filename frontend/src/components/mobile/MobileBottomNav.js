@@ -108,33 +108,37 @@ export const MobileBottomNav = ({ activeTab, onNavigateToTab }) => {
         </>
       )}
 
-      {/* Bottom Navigation Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 safe-area-inset-bottom">
-        <nav className="flex justify-around items-center px-1 py-2">
+      {/* Bottom Navigation Bar - 4 Static Buttons */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 safe-area-inset-bottom shadow-lg">
+        <nav className="grid grid-cols-4 gap-0 px-2 py-3">
           {navItems.map((item) => (
             <button
               key={item.id}
               onClick={() => handleNavClick(item)}
-              className={`flex flex-col items-center justify-center min-w-0 flex-1 px-2 py-2 rounded-lg transition-colors relative ${
+              className={`flex flex-col items-center justify-center px-3 py-2 rounded-lg transition-all duration-200 relative ${
                 (activeTab === item.id || (item.isDropdown && showCalculatorMenu))
-                  ? 'text-blue-600 bg-blue-50'
+                  ? 'text-blue-600 bg-blue-50 scale-105'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
               aria-label={item.label}
             >
               {item.isDropdown && showCalculatorMenu ? (
-                <ChevronUp className="h-6 w-6 mb-1 stroke-2" />
+                <ChevronUp className="h-6 w-6 mb-1.5 stroke-2 animate-pulse" />
               ) : (
-                <item.icon className={`h-6 w-6 mb-1 ${
+                <item.icon className={`h-6 w-6 mb-1.5 ${
                   activeTab === item.id ? 'stroke-2' : 'stroke-1.5'
                 }`} />
               )}
-              <span className="text-xs font-medium truncate w-full text-center">{item.label}</span>
+              <span className={`text-xs font-medium ${
+                activeTab === item.id ? 'font-semibold' : 'font-normal'
+              }`}>
+                {item.label}
+              </span>
               
               {/* Active indicator for calculator submenu */}
               {item.isDropdown && ['paye', 'cit', 'vat', 'cgt'].includes(activeTab) && (
-                <div className="absolute top-1 right-1">
-                  <div className="h-2 w-2 rounded-full bg-blue-600"></div>
+                <div className="absolute top-1.5 right-1.5">
+                  <div className="h-2 w-2 rounded-full bg-blue-600 animate-pulse"></div>
                 </div>
               )}
             </button>
