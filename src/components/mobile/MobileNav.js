@@ -69,10 +69,13 @@ export const MobileNav = ({ activeTab, onNavigateToTab, onOpenAuth, onOpenAdmin 
 
               {/* Navigation Items */}
               <NavItem icon={Home} label="Home" onClick={() => handleNavigation('home')} active={activeTab === 'home'} />
-              <NavItem icon={Calculator} label="PAYE Calculator" onClick={() => handleNavigation('paye')} active={activeTab === 'paye'} />
-              <NavItem icon={Building2} label="CIT Calculator" onClick={() => handleNavigation('cit')} active={activeTab === 'cit'} />
-              <NavItem icon={Receipt} label="VAT Calculator" onClick={() => handleNavigation('vat')} active={activeTab === 'vat'} />
-              <NavItem icon={TrendingUp} label="CGT Calculator" onClick={() => handleNavigation('cgt')} active={activeTab === 'cgt'} />
+              
+              {/* Calculators Section */}
+              <CalculatorSection 
+                activeTab={activeTab}
+                onNavigate={handleNavigation}
+              />
+              
               <NavItem icon={Wallet} label="Payments" onClick={() => handleNavigation('payments')} active={activeTab === 'payments'} />
               <NavItem icon={FileText} label="History" onClick={() => handleNavigation('history')} active={activeTab === 'history'} />
               <NavItem icon={Info} label="Tax Info" onClick={() => handleNavigation('tax-info')} active={activeTab === 'tax-info'} />
