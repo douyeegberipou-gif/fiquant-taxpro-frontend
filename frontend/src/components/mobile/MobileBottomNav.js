@@ -19,14 +19,9 @@ export const MobileBottomNav = ({ activeTab, onNavigateToTab }) => {
   const navItems = [
     { id: 'home', icon: Home, label: 'Home' },
     { id: 'calculator', icon: Calculator, label: 'Calculate', isDropdown: true },
-    { id: 'history', icon: FileText, label: 'History' },
-    { id: 'profile', icon: User, label: isAuthenticated() ? 'Profile' : 'Login' }
+    { id: 'tax-info', icon: Info, label: 'Info' },
+    { id: 'profile', icon: User, label: 'Account' }
   ];
-
-  // Add admin button if user is admin
-  if (user?.admin_enabled && user?.admin_role) {
-    navItems.push({ id: 'admin', icon: User, label: 'Admin' });
-  }
 
   const handleNavClick = (item) => {
     if (item.isDropdown) {
