@@ -112,6 +112,57 @@ export const MobileNav = ({ activeTab, onNavigateToTab, onOpenAuth, onOpenAdmin 
   );
 };
 
+const CalculatorSection = ({ activeTab, onNavigate }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  
+  const calculators = [
+    { id: 'paye', icon: Calculator, label: 'PAYE Calculator' },
+    { id: 'cit', icon: Building2, label: 'CIT Calculator' },
+    { id: 'vat', icon: Receipt, label: 'VAT Calculator' },
+    { id: 'cgt', icon: TrendingUp, label: 'CGT Calculator' }
+  ];
+
+  const isCalculatorActive = calculators.some(calc => calc.id === activeTab);
+
+  return (
+    <div className="mb-2">
+      {/* Calculator Section Header */}
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors font-medium ${
+          isCalculatorActive ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50'
+        }`}
+      >
+        <div className="flex items-center space-x-3">
+          <Calculator className="h-5 w-5" />
+          <span>Tax Calculators</span>
+        </div>
+        <ChevronUp className={`h-5 w-5 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+      </button>
+
+      {/* Expandable Calculator List */}
+      {isExpanded && (
+        <div className="ml-8 mt-1 space-y-1">
+          {calculators.map((calc) => (
+            <button
+              key={calc.id}
+              onClick={() => onNavigate(calc.id)}
+              className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors text-sm ${
+                activeTab === calc.id
+                  ? 'bg-blue-100 text-blue-700 font-medium'
+                  : 'text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              <calc.icon className="h-4 w-4" />
+              <span>{calc.label}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 const NavItem = ({ icon: Icon, label, onClick, active, variant = 'default' }) => {
   const baseClasses = "w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors font-medium";
   const variantClasses = {
