@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, Calculator, FileText, User, ChevronUp, X, DollarSign, Building2, Receipt, TrendingUp } from 'lucide-react';
+import { Home, Calculator, User, ChevronUp, X, DollarSign, Building2, Receipt, TrendingUp, Info } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
 /**
