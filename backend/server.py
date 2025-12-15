@@ -1798,11 +1798,11 @@ class CITInput(BaseModel):
     year_of_assessment: Optional[str] = Field(default="", description="Year of assessment")
     tax_year: Optional[str] = Field(default="", description="Tax year")
     # Financial Information
-    annual_turnover: float = Field(gt=0, description="Annual gross turnover")
+    annual_turnover: float = Field(ge=0, description="Annual gross turnover")
     total_fixed_assets: float = Field(default=0, description="Total fixed assets value")
     
     # Revenue and Income
-    gross_income: float = Field(gt=0, description="Total gross income/revenue")
+    gross_income: float = Field(ge=0, description="Total gross income/revenue")
     other_income: float = Field(default=0, description="Other income (dividends, rental, etc.)")
     
     # Deductible Expenses
