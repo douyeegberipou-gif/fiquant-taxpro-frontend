@@ -74,20 +74,22 @@ export const MobileHome = ({ onNavigate }) => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Compact Header with Bold Logo */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-6 text-white">
+      {/* Premium Header - Black with Gold Accents */}
+      <div className="bg-black px-4 py-6">
         <div className="flex items-center justify-center mb-4">
           <img 
-            src="https://customer-assets.emergentagent.com/job_taxpro-ng/artifacts/i2zrdiwl_Fiquant%20Consult%20-%20Transparent%202.png"
+            src="https://customer-assets.emergentagent.com/job_95506f1f-f280-448b-bce0-6221f9e9533d/artifacts/jdh4b8ji_Fiquant%20Logo%20-%20Bold%20Diamond.png"
             alt="Fiquant TaxPro"
-            className="h-12 w-12"
+            className="h-14 w-14"
           />
           <div className="ml-3">
-            <h1 className="text-2xl font-bold">Fiquant</h1>
-            <p className="text-sm text-blue-100">TaxPro 2026</p>
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 bg-clip-text text-transparent">
+              Fiquant
+            </h1>
+            <p className="text-sm text-yellow-400 font-light">TaxPro 2026</p>
           </div>
         </div>
-        <p className="text-center text-sm text-blue-100">
+        <p className="text-center text-sm text-gray-300">
           Nigerian Tax Calculators - Fast & Accurate
         </p>
       </div>
