@@ -38,7 +38,15 @@ export const MobileApp = () => {
         return <MobileHome onNavigate={setActiveTab} />;
       
       case 'paye':
-        return <PAYECalculator />;
+        return (
+          <div className="p-4 bg-white min-h-screen">
+            <h2 className="text-xl font-bold mb-4">PAYE Calculator</h2>
+            <p className="text-gray-600 mb-4">Calculate employee income tax</p>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <p className="text-sm text-blue-800">PAYE calculator will be integrated here. For now, please use the desktop version.</p>
+            </div>
+          </div>
+        );
       
       case 'cit':
         return <CITCalculator />;
