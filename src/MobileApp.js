@@ -6,11 +6,11 @@ import { TopBanner } from './components/ads/AdBanner';
 import { useAds } from './contexts/AdContext';
 import { useAuth } from './contexts/AuthContext';
 
-// Import calculator components (using desktop components for now)
-const PAYECalculator = React.lazy(() => import('./components/PAYECalculator'));
-const CITCalculator = React.lazy(() => import('./components/CITCalculator'));
-const VATCalculator = React.lazy(() => import('./components/VATCalculator'));
-const CGTCalculator = React.lazy(() => import('./components/CGTCalculator'));
+// Import calculator components directly (they work on mobile too)
+import PAYECalculator from './components/PAYECalculator';
+import CITCalculator from './components/CITCalculator';
+import VATCalculator from './components/VATCalculator';
+import CGTCalculator from './components/CGTCalculator';
 
 /**
  * MOBILE-ONLY APPLICATION
