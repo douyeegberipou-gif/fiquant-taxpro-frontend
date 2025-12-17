@@ -1,38 +1,132 @@
 import React, { useState } from 'react';
 import { MobileNav } from './components/mobile/MobileNav';
 import { MobileBottomNav } from './components/mobile/MobileBottomNav';
-import Home from './components/Home';
+import { MobileHome } from './components/mobile/MobileHome';
 import { TopBanner } from './components/ads/AdBanner';
 import { useAds } from './contexts/AdContext';
+import { useAuth } from './contexts/AuthContext';
+
+// Import calculator components (using desktop components for now)
+const PAYECalculator = React.lazy(() => import('./components/PAYECalculator'));
+const CITCalculator = React.lazy(() => import('./components/CITCalculator'));
+const VATCalculator = React.lazy(() => import('./components/VATCalculator'));
+const CGTCalculator = React.lazy(() => import('./components/CGTCalculator'));
 
 /**
  * MOBILE-ONLY APPLICATION
  * Completely separate render tree for mobile devices
+ * Tile-based interface with direct access to features
  */
 export const MobileApp = () => {
   const [activeTab, setActiveTab] = useState('home');
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const { canShowAds } = useAds();
+  const { isAuthenticated } = useAuth();
+
+  const renderContent = () => {
+    // Show loading fallback for lazy-loaded components
+    const LoadingFallback = () => (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+
+    switch (activeTab) {
+      case 'home':
+        return <MobileHome onNavigate={setActiveTab} />;
+      
+      case 'paye':
+        return (
+          <React.Suspense fallback={<LoadingFallback />}>
+            <PAYECalculator />
+          </React.Suspense>
+        );
+      
+      case 'cit':
+        return (
+          <React.Suspense fallback={<LoadingFallback />}>
+            <CITCalculator />
+          </React.Suspense>
+        );
+      
+      case 'vat':
+        return (
+          <React.Suspense fallback={<LoadingFallback />}>
+            <VATCalculator />
+          </React.Suspense>
+        );
+      
+      case 'cgt':
+        return (
+          <React.Suspense fallback={<LoadingFallback />}>
+            <CGTCalculator />
+          </React.Suspense>
+        );
+      
+      case 'profile':
+        return isAuthenticated() ? (
+          <div className="p-4">
+            <h2 className="text-xl font-bold mb-4">Profile</h2>
+            <p>Profile page coming soon...</p>
+          </div>
+        ) : (
+          <MobileHome onNavigate={setActiveTab} />
+        );
+      
+      case 'history':
+        return (
+          <div className="p-4">
+            <h2 className="text-xl font-bold mb-4">History</h2>
+            <p>History page coming soon...</p>
+          </div>
+        );
+      
+      case 'tax-info':
+        return (
+          <div className="p-4">
+            <h2 className="text-xl font-bold mb-4">Tax Information</h2>
+            <p>Tax info page coming soon...</p>
+          </div>
+        );
+      
+      case 'payments':
+        return (
+          <div className="p-4">
+            <h2 className="text-xl font-bold mb-4">Payments</h2>
+            <p>Payment page coming soon...</p>
+          </div>
+        );
+      
+      default:
+        return <MobileHome onNavigate={setActiveTab} />;
+    }
+  };
 
   return (
-    <div className="mobile-app min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50">
-      {/* Mobile Navigation */}
-      <MobileNav 
-        activeTab={activeTab}
-        onNavigateToTab={setActiveTab}
-        onOpenAuth={() => {}}
-        onOpenAdmin={() => {}}
-      />
+    <div className="mobile-app min-h-screen bg-gray-50">
+      {/* Mobile Navigation (Hamburger) - Only show on non-home pages */}
+      {activeTab !== 'home' && (
+        <MobileNav 
+          activeTab={activeTab}
+          onNavigateToTab={setActiveTab}
+          onOpenAuth={() => setShowAuthModal(true)}
+          onOpenAdmin={() => {}}
+        />
+      )}
 
-      {/* Mobile Ad Banner */}
-      {canShowAds() && (
-        <div className="px-4 py-2">
+      {/* Mobile Ad Banner - Only on home */}
+      {canShowAds() && activeTab === 'home' && (
+        <div className="px-4 py-2 bg-white">
           <TopBanner placement="mobile-top" />
         </div>
       )}
 
-      {/* Main Content with mobile padding */}
-      <div className="pt-16 pb-20 px-4">
-        <Home onNavigateToTab={setActiveTab} onOpenAuth={() => {}} />
+      {/* Main Content */}
+      <div className={activeTab !== 'home' ? 'pt-16 pb-20' : 'pb-20'}>
+        {renderContent()}
       </div>
 
       {/* Mobile Bottom Navigation */}
