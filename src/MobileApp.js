@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 import { MobileBottomNav } from './components/mobile/MobileBottomNav';
-import Home from './components/Home';
-import { TopBanner } from './components/ads/AdBanner';
-import { useAds } from './contexts/AdContext';
 import { MobileHome } from './components/mobile/MobileHome';
 import { MobileHeader } from './components/mobile/MobileHeader';
 import { MobilePAYECalculator } from './components/mobile/MobilePAYECalculator';
@@ -10,6 +7,8 @@ import { MobileCITCalculator } from './components/mobile/MobileCITCalculator';
 import { MobileVATCalculator } from './components/mobile/MobileVATCalculator';
 import { MobileCGTCalculator } from './components/mobile/MobileCGTCalculator';
 import { MobilePageWrapper } from './components/mobile/MobileCalculatorWrapper';
+import { TopBanner } from './components/ads/AdBanner';
+import { useAds } from './contexts/AdContext';
 import { useAuth } from './contexts/AuthContext';
 import { AuthModal } from './components/AuthModal';
 import { Users, Building2, Receipt, TrendingUp, CreditCard, History, User, Info, Wallet } from 'lucide-react';
@@ -21,6 +20,7 @@ import { Users, Building2, Receipt, TrendingUp, CreditCard, History, User, Info,
  */
 export const MobileApp = () => {
   const [activeTab, setActiveTab] = useState('home');
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const { canShowAds } = useAds();
   const { isAuthenticated, user } = useAuth();
 
@@ -171,14 +171,6 @@ export const MobileApp = () => {
   const currentConfig = pageConfigs[activeTab];
 
   return (
-    <div className="mobile-app min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50">
-      {/* Mobile Navigation */}
-      <MobileNav 
-        activeTab={activeTab}
-        onNavigateToTab={setActiveTab}
-        onOpenAuth={() => {}}
-        onOpenAdmin={() => {}}
-      />
     <div className="mobile-app min-h-screen bg-gray-900">
       {/* Black & Gold Header - Only show on non-home pages */}
       {activeTab !== 'home' && currentConfig && (
@@ -193,16 +185,13 @@ export const MobileApp = () => {
         />
       )}
 
-      {/* Mobile Ad Banner */}
-      {canShowAds() && (
-        <div className="px-4 py-2">
+      {/* Mobile Ad Banner - Only on home */}
+      {canShowAds() && activeTab === 'home' && (
+        <div className="px-4 py-2 bg-white">
           <TopBanner placement="mobile-top" />
         </div>
       )}
 
-      {/* Main Content with mobile padding */}
-      <div className="pt-16 pb-20 px-4">
-        <Home onNavigateToTab={setActiveTab} onOpenAuth={() => {}} />
       {/* Main Content */}
       <div className={activeTab !== 'home' ? 'pb-20' : 'pb-20'}>
         {renderContent()}
