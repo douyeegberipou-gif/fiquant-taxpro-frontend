@@ -47,31 +47,13 @@ export const MobileApp = () => {
         return <MobilePAYECalculator />;
       
       case 'cit':
-        return (
-          <MobileCalculatorWrapper backgroundImage="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/za762luj_Gemini_Generated_Image_ge8ufyge8ufyge8u.png">
-            <div className="mobile-dark-theme">
-              <CITCalculator />
-            </div>
-          </MobileCalculatorWrapper>
-        );
+        return <MobileCITCalculator />;
       
       case 'vat':
-        return (
-          <MobileCalculatorWrapper backgroundImage="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/iakm5flx_Gemini_Generated_Image_k1jwlnk1jwlnk1jw%20%283%29.png">
-            <div className="mobile-dark-theme">
-              <VATCalculator />
-            </div>
-          </MobileCalculatorWrapper>
-        );
+        return <MobileVATCalculator />;
       
       case 'cgt':
-        return (
-          <MobileCalculatorWrapper backgroundImage="https://customer-assets.emergentagent.com/job_naija-taxcalc/artifacts/3l8sul24_Gemini_Generated_Image_bhxj3sbhxj3sbhxj.png">
-            <div className="mobile-dark-theme">
-              <CGTCalculator />
-            </div>
-          </MobileCalculatorWrapper>
-        );
+        return <MobileCGTCalculator />;
       
       case 'profile':
         return (
