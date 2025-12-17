@@ -39,32 +39,16 @@ export const MobileApp = () => {
         return <MobileHome onNavigate={setActiveTab} />;
       
       case 'paye':
-        return (
-          <React.Suspense fallback={<LoadingFallback />}>
-            <PAYECalculator />
-          </React.Suspense>
-        );
+        return <PAYECalculator />;
       
       case 'cit':
-        return (
-          <React.Suspense fallback={<LoadingFallback />}>
-            <CITCalculator />
-          </React.Suspense>
-        );
+        return <CITCalculator />;
       
       case 'vat':
-        return (
-          <React.Suspense fallback={<LoadingFallback />}>
-            <VATCalculator />
-          </React.Suspense>
-        );
+        return <VATCalculator />;
       
       case 'cgt':
-        return (
-          <React.Suspense fallback={<LoadingFallback />}>
-            <CGTCalculator />
-          </React.Suspense>
-        );
+        return <CGTCalculator />;
       
       case 'profile':
         return isAuthenticated() ? (
