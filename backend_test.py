@@ -4,7 +4,7 @@ from datetime import datetime
 import json
 
 class NigerianTaxCalculatorTester:
-    def __init__(self, base_url="https://taxnigeria.preview.emergentagent.com/api"):
+    def __init__(self, base_url="https://taxpro-mobile.preview.emergentagent.com/api"):
         self.base_url = base_url
         self.tests_run = 0
         self.tests_passed = 0
@@ -16,7 +16,7 @@ class NigerianTaxCalculatorTester:
         print("\n🚨 URGENT EMERGENT PLATFORM PAYE CALCULATOR TEST")
         print("=" * 80)
         print("CRITICAL ISSUE: User reports calculators not working in development environment")
-        print("BACKEND URL: https://taxnigeria.preview.emergentagent.com/api")
+        print("BACKEND URL: https://taxpro-mobile.preview.emergentagent.com/api")
         print("SAMPLE DATA: Basic Salary: 7,000,000, Health Insurance: 45,000, Annual Rent: 7,000,000")
         print("=" * 80)
         

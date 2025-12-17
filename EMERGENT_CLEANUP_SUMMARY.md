@@ -9,7 +9,7 @@ Cleaned up all Emergent development references from the codebase to ensure the a
 
 ### 1. Frontend Environment Configuration
 **File: `/app/frontend/.env`**
-- ✅ **BEFORE:** `REACT_APP_BACKEND_URL=https://taxnigeria.preview.emergentagent.com`
+- ✅ **BEFORE:** `REACT_APP_BACKEND_URL=https://taxpro-mobile.preview.emergentagent.com`
 - ✅ **AFTER:** `REACT_APP_BACKEND_URL=https://fiquant-taxpro-backend-production.up.railway.app`
 
 ### 2. Code Review Results
