@@ -3,17 +3,15 @@ import { MobileBottomNav } from './components/mobile/MobileBottomNav';
 import { MobileHome } from './components/mobile/MobileHome';
 import { MobileHeader } from './components/mobile/MobileHeader';
 import { MobilePAYECalculator } from './components/mobile/MobilePAYECalculator';
-import { MobileCalculatorWrapper, MobilePageWrapper } from './components/mobile/MobileCalculatorWrapper';
+import { MobileCITCalculator } from './components/mobile/MobileCITCalculator';
+import { MobileVATCalculator } from './components/mobile/MobileVATCalculator';
+import { MobileCGTCalculator } from './components/mobile/MobileCGTCalculator';
+import { MobilePageWrapper } from './components/mobile/MobileCalculatorWrapper';
 import { TopBanner } from './components/ads/AdBanner';
 import { useAds } from './contexts/AdContext';
 import { useAuth } from './contexts/AuthContext';
 import { AuthModal } from './components/AuthModal';
-import { Users, Building2, Receipt, TrendingUp, CreditCard, History, User, Info, FileText, Wallet } from 'lucide-react';
-
-// Import calculator components
-import CITCalculator from './components/CITCalculator';
-import VATCalculator from './components/VATCalculator';
-import CGTCalculator from './components/CGTCalculator';
+import { Users, Building2, Receipt, TrendingUp, CreditCard, History, User, Info, Wallet } from 'lucide-react';
 
 /**
  * MOBILE-ONLY APPLICATION
