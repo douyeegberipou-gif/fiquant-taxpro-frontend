@@ -6,8 +6,7 @@ import { TopBanner } from './components/ads/AdBanner';
 import { useAds } from './contexts/AdContext';
 import { useAuth } from './contexts/AuthContext';
 
-// Import calculator components directly (they work on mobile too)
-import PAYECalculator from './components/PAYECalculator';
+// Import calculator components
 import CITCalculator from './components/CITCalculator';
 import VATCalculator from './components/VATCalculator';
 import CGTCalculator from './components/CGTCalculator';
