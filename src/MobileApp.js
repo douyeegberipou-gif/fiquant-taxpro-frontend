@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { MobileBottomNav } from './components/mobile/MobileBottomNav';
-<<<<<<< HEAD
 import Home from './components/Home';
 import { TopBanner } from './components/ads/AdBanner';
 import { useAds } from './contexts/AdContext';
-=======
 import { MobileHome } from './components/mobile/MobileHome';
 import { MobileHeader } from './components/mobile/MobileHeader';
 import { MobilePAYECalculator } from './components/mobile/MobilePAYECalculator';
@@ -17,21 +15,15 @@ import { useAds } from './contexts/AdContext';
 import { useAuth } from './contexts/AuthContext';
 import { AuthModal } from './components/AuthModal';
 import { Users, Building2, Receipt, TrendingUp, CreditCard, History, User, Info, Wallet } from 'lucide-react';
->>>>>>> 82d959802b17b75986002cc2d4f52f79dc2d5025
 
 /**
  * MOBILE-ONLY APPLICATION
  * Completely separate render tree for mobile devices
-<<<<<<< HEAD
-=======
  * Features black & gold header, glassmorphism effects, and optimized touch UI
->>>>>>> 82d959802b17b75986002cc2d4f52f79dc2d5025
  */
 export const MobileApp = () => {
   const [activeTab, setActiveTab] = useState('home');
   const { canShowAds } = useAds();
-<<<<<<< HEAD
-=======
   const { isAuthenticated, user } = useAuth();
 
   // Page configurations for header
@@ -177,12 +169,10 @@ export const MobileApp = () => {
         return <MobileHome onNavigate={setActiveTab} />;
     }
   };
->>>>>>> 82d959802b17b75986002cc2d4f52f79dc2d5025
 
   const currentConfig = pageConfigs[activeTab];
 
   return (
-<<<<<<< HEAD
     <div className="mobile-app min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50">
       {/* Mobile Navigation */}
       <MobileNav 
@@ -191,7 +181,6 @@ export const MobileApp = () => {
         onOpenAuth={() => {}}
         onOpenAdmin={() => {}}
       />
-=======
     <div className="mobile-app min-h-screen bg-gray-900">
       {/* Black & Gold Header - Only show on non-home pages */}
       {activeTab !== 'home' && currentConfig && (
@@ -205,7 +194,6 @@ export const MobileApp = () => {
           onOpenAuth={() => setShowAuthModal(true)}
         />
       )}
->>>>>>> 82d959802b17b75986002cc2d4f52f79dc2d5025
 
       {/* Mobile Ad Banner */}
       {canShowAds() && (
@@ -214,15 +202,12 @@ export const MobileApp = () => {
         </div>
       )}
 
-<<<<<<< HEAD
       {/* Main Content with mobile padding */}
       <div className="pt-16 pb-20 px-4">
         <Home onNavigateToTab={setActiveTab} onOpenAuth={() => {}} />
-=======
       {/* Main Content */}
       <div className={activeTab !== 'home' ? 'pb-20' : 'pb-20'}>
         {renderContent()}
->>>>>>> 82d959802b17b75986002cc2d4f52f79dc2d5025
       </div>
 
       {/* Mobile Bottom Navigation */}
