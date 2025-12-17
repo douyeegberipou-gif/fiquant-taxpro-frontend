@@ -213,3 +213,146 @@
     transition: none !important;
   }
 }
+
+
+/* ============================================
+   MOBILE-ONLY DARK THEME STYLES
+   Applied to calculator components on mobile
+   ============================================ */
+
+/* Mobile Dark Theme Container */
+.mobile-dark-theme {
+  /* Override card backgrounds */
+}
+
+.mobile-dark-theme .bg-white,
+.mobile-dark-theme [class*="bg-white"] {
+  background: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.mobile-dark-theme .bg-gradient-to-br {
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Text colors for dark theme */
+.mobile-dark-theme .text-gray-800,
+.mobile-dark-theme .text-gray-900,
+.mobile-dark-theme [class*="text-gray-8"],
+.mobile-dark-theme [class*="text-gray-9"] {
+  color: white !important;
+}
+
+.mobile-dark-theme .text-gray-600,
+.mobile-dark-theme .text-gray-700,
+.mobile-dark-theme [class*="text-gray-6"],
+.mobile-dark-theme [class*="text-gray-7"] {
+  color: #d1d5db !important;
+}
+
+.mobile-dark-theme .text-gray-500 {
+  color: #9ca3af !important;
+}
+
+/* Border colors */
+.mobile-dark-theme .border-gray-200,
+.mobile-dark-theme .border-gray-100,
+.mobile-dark-theme [class*="border-gray"] {
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Input styling for dark theme */
+.mobile-dark-theme input,
+.mobile-dark-theme select,
+.mobile-dark-theme textarea {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
+}
+
+.mobile-dark-theme input::placeholder,
+.mobile-dark-theme textarea::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.mobile-dark-theme input:focus,
+.mobile-dark-theme select:focus,
+.mobile-dark-theme textarea:focus {
+  border-color: rgba(234, 179, 8, 0.5) !important;
+  box-shadow: 0 0 0 2px rgba(234, 179, 8, 0.2) !important;
+}
+
+/* Labels */
+.mobile-dark-theme label {
+  color: #d1d5db !important;
+}
+
+/* Cards and containers */
+.mobile-dark-theme [class*="shadow-"] {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+.mobile-dark-theme .rounded-lg,
+.mobile-dark-theme .rounded-xl {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Button styling */
+.mobile-dark-theme button[class*="bg-emerald"],
+.mobile-dark-theme button[class*="bg-teal"],
+.mobile-dark-theme button[class*="bg-green"] {
+  background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%) !important;
+  color: black !important;
+}
+
+/* Alert/info boxes */
+.mobile-dark-theme [class*="bg-blue-50"],
+.mobile-dark-theme [class*="bg-emerald-50"],
+.mobile-dark-theme [class*="bg-green-50"] {
+  background: rgba(59, 130, 246, 0.15) !important;
+  border-color: rgba(59, 130, 246, 0.3) !important;
+}
+
+.mobile-dark-theme [class*="text-blue-8"],
+.mobile-dark-theme [class*="text-emerald-8"],
+.mobile-dark-theme [class*="text-green-8"] {
+  color: #93c5fd !important;
+}
+
+/* Dividers */
+.mobile-dark-theme hr,
+.mobile-dark-theme [class*="border-t"] {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Card headers with gradients */
+.mobile-dark-theme [class*="from-emerald"],
+.mobile-dark-theme [class*="from-teal"] {
+  background: linear-gradient(135deg, rgba(234, 179, 8, 0.3) 0%, rgba(202, 138, 4, 0.2) 100%) !important;
+}
+
+.mobile-dark-theme [class*="text-emerald-100"],
+.mobile-dark-theme [class*="text-teal-100"] {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Results styling */
+.mobile-dark-theme .result-card,
+.mobile-dark-theme [class*="bg-gradient-to-r"][class*="emerald"] {
+  background: rgba(234, 179, 8, 0.15) !important;
+  border: 1px solid rgba(234, 179, 8, 0.3) !important;
+}
+
+/* Mobile calculator content wrapper */
+.mobile-calculator-content {
+  /* Ensure proper spacing and overflow handling */
+  overflow-x: hidden;
+  padding-bottom: 2rem;
+}
+
+.mobile-calculator-content > div {
+  max-width: 100%;
+}
+
