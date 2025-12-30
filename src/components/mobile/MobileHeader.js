@@ -26,10 +26,10 @@ export const MobileHeader = ({ title, subtitle, icon: Icon, onBack, activeTab, o
             <div className="flex items-center space-x-3">
               <button
                 onClick={onBack}
-                className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+                className="p-2.5 rounded-lg hover:bg-white/10 transition-colors"
                 aria-label="Go back"
               >
-                <ArrowLeft className="h-5 w-5 text-white" />
+                <ArrowLeft className="h-7 w-7 text-white" />
               </button>
               <img 
                 src="https://customer-assets.emergentagent.com/job_95506f1f-f280-448b-bce0-6221f9e9533d/artifacts/jdh4b8ji_Fiquant%20Logo%20-%20Bold%20Diamond.png"

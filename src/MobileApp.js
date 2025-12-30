@@ -41,7 +41,7 @@ export const MobileApp = () => {
   const renderContent = () => {
     switch (activeTab) {
       case 'home':
-        return <MobileHome onNavigate={setActiveTab} />;
+        return <MobileHome onNavigate={setActiveTab} onOpenAuth={() => setShowAuthModal(true)} />;
       
       case 'paye':
         return <MobilePAYECalculator />;
