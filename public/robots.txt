@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.fiquanttaxpro.com/sitemap.xml
+
+# Fiquant TaxPro - Nigerian Tax Calculator & Compliance Platform
+# Professional tax calculation services for Nigerian businesses

@@ -1,0 +1,29 @@
+{
+  "short_name": "Fiquant TaxPro",
+  "name": "Fiquant TaxPro - Nigerian Tax Calculator & Compliance Platform",
+  "description": "Professional Nigerian tax calculator for PAYE, CIT, VAT, and CGT. NTA 2025 compliant with bulk payroll processing and compliance management.",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "fiquant-logo-bold-diamond.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "fiquant-logo-bold-diamond.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#D4AF37",
+  "background_color": "#ffffff",
+  "categories": ["finance", "business", "productivity"],
+  "scope": "/",
+  "orientation": "portrait-primary"
+}
