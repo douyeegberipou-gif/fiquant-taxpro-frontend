@@ -1,0 +1,113 @@
+/**
+ * CRITICAL MOBILE OVERRIDES
+ * This CSS FORCES mobile layout on small screens
+ * Independent of JavaScript - works immediately
+ */
+
+/* Force hide desktop on mobile */
+@media (max-width: 768px) {
+  /* Hide desktop header completely */
+  header:not(.mobile-only),
+  .desktop-header,
+  nav:not(.mobile-nav),
+  .desktop-nav {
+    display: none !important;
+  }
+
+  /* Force mobile navigation to show */
+  .mobile-only {
+    display: block !important;
+  }
+
+  /* Ensure mobile nav is visible */
+  .mobile-nav,
+  [class*="MobileNav"],
+  [class*="MobileBottom"] {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  /* Compact sections */
+  section {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
+
+  /* Responsive typography */
+  h1 {
+    font-size: 1.75rem !important;
+  }
+
+  h2 {
+    font-size: 1.5rem !important;
+  }
+
+  h3 {
+    font-size: 1.25rem !important;
+  }
+
+  /* Full width buttons */
+  button:not(.icon-only) {
+    width: 100%;
+    padding: 0.875rem 1rem;
+  }
+
+  /* Stack columns */
+  .grid,
+  [class*="grid-cols"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* No horizontal scroll */
+  body,
+  html {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+  }
+
+  * {
+    max-width: 100% !important;
+  }
+
+  /* Container adjustments */
+  .container,
+  [class*="max-w-"] {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+}
+
+/* Force show desktop on larger screens */
+@media (min-width: 769px) {
+  .mobile-only {
+    display: none !important;
+  }
+
+  .desktop-only {
+    display: block !important;
+  }
+
+  /* Ensure desktop nav shows */
+  .desktop-header,
+  .desktop-nav {
+    display: block !important;
+  }
+
+  /* Hide mobile components */
+  .mobile-nav,
+  [class*="MobileNav"],
+  [class*="MobileBottom"] {
+    display: none !important;
+  }
+}
+
+/* Critical - prevent flash of wrong layout */
+body {
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+
+body.loaded {
+  opacity: 1;
+}
